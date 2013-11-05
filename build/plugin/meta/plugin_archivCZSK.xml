@@ -1,0 +1,16 @@
+<default>
+	  <prerequisites>
+                    <tag type="Software"/>
+	  </prerequisites>
+          <info>
+                    <author>mx3L</author>
+                    <name>archivCZSK</name>
+                    <packagename>enigma2-plugin-extensions-archivczsk</packagename>
+                    <shortdescription>Plugin for watching cz/sk tv archives</shortdescription>
+                    <license>GNU GPLv2</license>
+          </info>
+
+	  <files type="package"> <!-- without version, without .ipk -->
+		<file type="package" name="enigma2-plugin-extensions-archivczsk" />
+	  </files>
+</default>

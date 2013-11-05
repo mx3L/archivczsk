@@ -1,0 +1,236 @@
+#!/bin/sh
+
+GSTREAMER='/usr/lib/gstreamer-0.10'
+ARCHIVCZSK='/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK'
+TMP='/tmp/archivczsk'
+
+check_py ()
+{
+if [ -e $1o -o -e $1 ]
+then 
+	echo '0'
+else
+	echo '1'
+fi
+}
+
+get_oe ()
+{
+if [ -f /lib/libcrypto.so.1.0.0 ]
+then
+        oe="OE4"
+else
+        oe="OE16-3"
+fi
+echo  $oe
+}
+
+
+get_platform ()
+{
+local platform=$(uname -m)
+
+if [ "$platform" == "sh4" ]
+then
+	platform="sh4"
+else
+	if [ `ls -al /usr/lib/python2.7 | grep urllib.pyo | wc -l` -gt 0 ]; 
+	then
+		platform="mips32el"
+	else
+		platform="mipsel"
+	fi
+fi
+echo $platform
+}
+
+get_arch (){
+local arch=$(get_platform)
+if [ "$arch" == "misp32el" ]
+then
+	arch="mipsel"
+fi
+echo $arch
+}
+
+sh4_install ()
+{
+echo 'Installing librtmp'
+if [ -f /usr/lib/librtmp.so.0 ] || [ -f /usr/lib/librtmp.so.1 ];
+then
+	echo "found librtmp, not need to install"
+else
+	cp $TMP/sh4/rtmpdump/librtmp.so.0 /usr/lib/librtmp.so.0
+	ln -s /usr/lib/librtmp.so.0 /usr/lib/librtmp.so
+	chmod 755 /usr/lib/librtmp.so.0
+	chmod 755 /usr/lib/librtmp.so
+fi
+
+rm -R $ARCHIVCZSK/script
+
+if [ -d $GSTREAMER ]; 
+then
+	echo "Found gstreamer"
+	if [ -e $GSTREAMER/libgstrtmp.so ]
+	then
+		echo "found libgstrtmp.so"
+	else
+		echo "installing libgstrtmp.so"
+		cp $TMP/sh4/gst_rtmp_plugin/libgstrtmp.so $GSTREAMER/libgstrtmp.so
+		chmod 755 $GSTREAMER/libgstrtmp.so
+	fi
+		
+else
+	rm $ARCHIVCZSK/engine/player/servicemp4.so
+	echo "Gstreamer not found, removing servicemp4.so"
+fi
+}
+
+
+install_py ()
+{
+if [ "$(check_py $2)" == '1' ]
+   then
+	echo "Installing $1 ..."
+   	cp $1 $2
+fi
+}
+
+PLATFORM=$(get_platform)
+OE=$(get_oe)
+
+echo "Installation for $PLATFORM platform"
+
+echo 'Installing rtmpdump'
+if [ "$PLATFORM" == "sh4" ]; then
+	cp $TMP/$PLATFORM/rtmpdump/rtmpdump /usr/bin/
+	cp $TMP/$PLATFORM/rtmpdump/rtmpgw /usr/bin/
+else 
+	if [ "$OE" == "OE4" ]; then
+		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpdump /usr/bin
+		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpgw /usr/bin
+		
+	else
+		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpdump /usr/bin
+		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpgw /usr/bin
+	fi
+fi
+chmod 755 /usr/bin/rtmpdump
+chmod 755 /usr/bin/rtmpgw
+
+echo 'Installing pngquant...'
+if [ "$PLATFORM" == "sh4"  ]; then
+	cp $TMP/$PLATFORM/pngquant/pngquant /usr/bin/
+else
+	if [ "OE" == "OE4" ]; then
+		echo 'skipping...'
+	else
+		cp $TMP/mipsel/pngquant/OE16/pngquant /usr/bin
+	fi
+fi
+chmod 755 /usr/bin/pngquant
+
+echo 'Installing servicemp4...'
+E2VER=$(python $TMP/getenigma2ver)
+echo ".....found enigma2 for $PLATFORM platform, version: $E2VER"
+E2VER=${E2VER:0:6}
+if [ $E2VER -gt 201304 ] &&  [ "$PLATFORM" == "mips32el" ]
+   then
+	echo ".....version for new images will be used"
+	cp $TMP/mipsel/servicemp4/e2_052013/servicemp4.so $ARCHIVCZSK/engine/player/
+   else
+	echo ".....version for old images will be used"
+	cp $TMP/mipsel/servicemp4/e2_122012/servicemp4.so $ARCHIVCZSK/engine/player/
+fi
+
+if [ "$PLATFORM" == "sh4" ]
+then sh4_install
+fi
+
+chmod -r 755 $ARCHIVCZSK/script
+
+echo 'Installing neccessary Python libraries'
+if [ -d /usr/lib/python2.6 ]
+then
+	echo "found Python 2.6"
+	cd  $TMP/python2.6  
+	install_py ./hex_codec.py /usr/lib/python2.6/encodings/hex_codec.py
+	install_py ./latin_1.py /usr/lib/python2.6/encodings/latin_1.py
+	install_py ./utf_16.py /usr/lib/python2.6/encodings/utf_16.py 
+	install_py ./string_escape.py /usr/lib/python2.6/encodings/string_escape.py
+	install_py ./idna.py /usr/lib/python2.6/encodings/idna.py
+	install_py ./iso8859_2.py /usr/lib/python2.6/encodings/iso8859_2.py
+	install_py ./cp1250.py /usr/lib/python2.6/encodings/cp1250.py
+	install_py ./decimal.py /usr/lib/python2.6/decimal.py
+	install_py ./formatter.py /usr/lib/python2.6/formatter.py
+	install_py ./htmlentitydefs.py /usr/lib/python2.6/htmlentitydefs.py
+	install_py ./markupbase.py /usr/lib/python2.6/markupbase.py
+	install_py ./htmlentitydefs.py /usr/lib/python2.6/htmlentitydefs.py
+	install_py ./htmllib.py /usr/lib/python2.6/htmllib.py
+	install_py ./markupbase.py /usr/lib/python2.6/markupbase.py
+	install_py ./sgmllib.py /usr/lib/python2.6/sgmllib.py
+	install_py ./stringprep.py /usr/lib/python2.6/stringprep.py
+	install_py ./subprocess.py /usr/lib/python2.6/subprocess.py 
+	install_py ./numbers.py /usr/lib/python2.6/numbers.py
+	install_py ./_LWPCookieJar.py /usr/lib/python2.6/_LWPCookieJar.py
+	install_py ./_MozillaCookieJar.py /usr/lib/python2.6/_MozillaCookieJar.py
+	install_py ./cookielib.py /usr/lib/python2.6/cookielib.py
+	install_py ./shutil.py /usr/lib/python2.6/shutil.py
+	install_py ./fnmatch.py /usr/lib/python2.6/fnmatch.py
+	install_py ./threading.py /usr/lib/python2.6/threading.py
+	install_py ./zipfile.py /usr/lib/python2.6/zipfile.py
+	install_py ./stat.py /usr/lib/python2.6/stat.py
+	install_py ./httplib.py /usr/lib/python2.6/httplib.py
+#	if [ ! -f /usr/lib/python2.6/lib-dynload/zlib.so ]; 
+#	then
+#	    cp ./zlib.so /usr/lib/python2.6/lib-dynload/zlib.so
+#	    chmod 755 /usr/lib/python2.6/lib-dynload/zlib.so
+#	fi
+	
+fi
+
+if [ -d /usr/lib/python2.7 ]
+then
+	echo "found Python 2.7"  
+	cd $TMP/python2.7
+	install_py ./hex_codec.py /usr/lib/python2.7/encodings/hex_codec.py
+	install_py ./latin_1.py /usr/lib/python2.7/encodings/latin_1.py
+	install_py ./utf_16.py /usr/lib/python2.7/encodings/utf_16.py
+	install_py ./iso8859_2.py /usr/lib/python2.7/encodings/iso8859_2.py
+	install_py ./cp1250.py /usr/lib/python2.7/encodings/cp1250.py 
+	install_py ./string_escape.py /usr/lib/python2.7/encodings/string_escape.py
+	install_py ./idna.py /usr/lib/python2.7/encodings/idna.py
+	install_py ./decimal.py /usr/lib/python2.7/decimal.py
+	install_py ./formatter.py /usr/lib/python2.7/formatter.py
+	install_py ./htmlentitydefs.py /usr/lib/python2.7/htmlentitydefs.py
+	install_py ./markupbase.py /usr/lib/python2.7/markupbase.py
+	install_py ./htmlentitydefs.py /usr/lib/python2.7/htmlentitydefs.py
+	install_py ./htmllib.py /usr/lib/python2.7/htmllib.py
+	install_py ./HTMLParser.py /usr/lib/python2.7/HTMLParser.py
+	install_py ./markupbase.py /usr/lib/python2.7/markupbase.py
+	install_py ./stringprep.py /usr/lib/python2.7/stringprep.py
+	install_py ./sgmllib.py /usr/lib/python2.7/sgmllib.py
+	install_py ./subprocess.py /usr/lib/python2.7/subprocess.py 
+	install_py ./numbers.py /usr/lib/python2.7/numbers.py
+	install_py ./fnmatch.py /usr/lib/python2.7/fnmatch.py
+	install_py ./_LWPCookieJar.py /usr/lib/python2.7/_LWPCookieJar.py
+	install_py ./_MozillaCookieJar.py /usr/lib/python2.7/_MozillaCookieJar.py
+	install_py ./cookielib.py /usr/lib/python2.7/cookielib.py
+	install_py ./shutil.py /usr/lib/python2.7/shutil.py
+	install_py ./threading.py /usr/lib/python2.7/threading.py
+	install_py ./zipfile.py /usr/lib/python2.7/zipfile.py
+	install_py ./stat.py /usr/lib/python2.7/stat.py
+	install_py ./httplib.py /usr/lib/python2.7/httplib.py
+#	if [ ! -f /usr/lib/python2.7/lib-dynload/zlib.so ]; 
+#	then
+#	    cp ./zlib.so /usr/lib/python2.7/lib-dynload/zlib.so
+#	    chmod 755 /usr/lib/python2.7/lib-dynload/zlib.so
+#	fi
+fi
+
+echo "Clearing temp folder..."
+rm -r $TMP
+
+echo "Installation of archivCZSK was successfull"
+
+exit 0

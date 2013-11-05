@@ -1,0 +1,8 @@
+ipkg.deps
+*.ipk
+*.pyo
+*.pyc
+*.so
+*.la
+*.mo
+*.swp

@@ -1,0 +1,69 @@
+<keymap>
+	
+	<map context="DownloadActions">
+		<key id="KEY_REFRESH" mapto="showDownloadListView" flags="m" />
+		<key id="KEY_RECORD" mapto="showDownloadListView" flags="m" />
+		<key id="KEY_RADIO" mapto="showDownloadListView" flags="m" />
+	</map>
+
+	<map context="archivCZSKActions">
+		<key id="KEY_RED" mapto="red" flags="m" />
+		<key id="KEY_GREEN" mapto="green" flags="m" />
+		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
+		<key id="KEY_BLUE" mapto="blue" flags="m" />
+		<key id="KEY_INFO" mapto="info" flags="m" />
+		<key id="KEY_ESC" mapto="cancel" flags="m" />
+		<key id="KEY_EXIT" mapto="cancel" flags="m" />
+		<key id="KEY_MENU" mapto="menu" flags="m" />
+		<key id="KEY_HOME" mapto="cancel" flags="m" />
+		<key id="KEY_OK" mapto="ok" flags="m" />
+		<key id="KEY_UP" mapto="up" flags="m" />
+		<key id="KEY_DOWN" mapto="down" flags="m" />
+		<key id="KEY_LEFT" mapto="left" flags="m" />
+		<key id="KEY_RIGHT" mapto="right" flags="m" />
+		<key id="KEY_5" mapto="csfd" flags="m" />
+	</map>
+	
+	<map context="ArchivCZSKMoviePlayerActions">
+		<key id="KEY_RED" mapto="red" flags="m" />
+		<key id="KEY_GREEN" mapto="green" flags="m" />
+		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
+		<key id="KEY_BLUE" mapto="blue" flags="m" />
+		<key id="KEY_ESC" mapto="cancel" flags="m" />
+		<key id="KEY_EXIT" mapto="leavePlayer" flags="m" />
+		<key id="KEY_STOP" mapto="leavePlayer" flags="m" />
+		<key id="KEY_ESC" mapto="leavePlayer" flags="m" />
+		<key id="KEY_HOME" mapto="cancel" flags="m" />
+		<key id="KEY_OK" mapto="ok" flags="m" />
+		<key id="KEY_UP" mapto="up" flags="m" />
+		<key id="KEY_DOWN" mapto="down" flags="m" />
+		<key id="KEY_LEFT" mapto="left" flags="m" />
+		<key id="KEY_RIGHT" mapto="right" flags="m" />
+		<key id="KEY_INFO" mapto="toggleShow" flags="m" />
+		<key id="KEY_OK" mapto="toggleShow" flags="m" />
+	</map>
+	
+	<map context="InfobarAspectChangeActions">
+		<key id="KEY_ZOOM" mapto="aspectChange" flags="m" />
+		<key id="KEY_5" mapto="aspectChange" flags="m" /> 
+	</map>
+	
+	<map context="InfobarAudioSelectionActions">
+		<key id="KEY_AUDIO" mapto="audioSelection" flags="m" />
+	</map>
+	
+	<map context="StreamActions">
+		<key id="KEY_1" mapto="incBuffer" flags="m" />
+		<key id="KEY_4" mapto="decBuffer" flags="m" />
+		<key id="KEY_2" mapto="incPlayDelay" flags="m" />
+		<key id="KEY_5" mapto="decPlayDelay" flags="m" />
+	</map>
+	
+	<map context="SubtitlesActions">
+		<key id="KEY_SUBTITLE" mapto="subtitles" flags="m" />
+		<key id="KEY_TEXT" mapto="subtitles" flags="m" />
+		<key id="KEY_RIGHT" mapto="subsDelayInc" flags="m" />
+		<key id="KEY_LEFT" mapto="subsDelayDec" flags="m" />
+	</map>
+
+</keymap>

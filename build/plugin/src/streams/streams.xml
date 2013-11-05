@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	group -nazov kategorie
+	
+	 	channel - nazov streamu [povinne]
+	 	stream_url - adresa streamu [povinne]
+	 	picon - cesta k obrazku(256x256x8), ktory sa zobrazi v media playery (momentalne nepodporovane) [volitelne]
+	 	app - parameter rtmp streamu [volitelne]
+	  	swfUrl - parameter rtmp streamu [volitelne]
+	  	pageUrl - parameter rtmp streamu [volitelne]
+	  	playpath - parameter rtmp streamu [volitelne]
+	  	advanced - dodatocne parametre k rtmp streamu [volitelne]
+	  	liveStream - stream je zive vysielanie, implicitna volba aj bez uvedeneho parametra, ak nie je zive je potrebne zadat "false"[volitelne]
+	  	playerBuffer - velkost bufferu(KB) pre mipsel prehravac, pouzije sa uvedeny buffer[volitelne(default=8000)]
+	  	rtmpBuffer - velkost bufferu(KB) pre rtmp streamy [volitelne(default=7000)]
+	  	rtmpTimeout - cas do akeho sa musi nacitat rtmp stream [volitelne(default=)]
+	  	playDelay - pocet sekund do spustenia streamu po zacati stahovania pri volbe "Prehravat a stahovat"[volitelne]
+		
+		ostatne parametre su ignorovane...
+		
+!-->
+
+<iptvstreams_list>
+	<group> 
+		<name>SOPCAST</name>
+		<channel>
+			<name>SOPCAST1</name>
+			<stream_url>http://192.168.7.107:8902/stream</stream_url>	
+		</channel>
+		<channel>
+			<name>SOPCAST2</name>
+			<stream_url>http://192.168.7.111:8902/tv.mpeg</stream_url>	
+		</channel>
+	</group>	
+	<group> 
+		<name>HD</name>
+		<channel>
+			<name>RTMP_STREAM_HD</name>
+			<stream_url>rtmp://s6.webport.tv/live</stream_url>
+			<playpath>z050228.stream</playpath>	
+			<swfUrl>http://www.tvsector.com/wp-content/uploads/jw-player-plugin-for-wordpress/player/player.swf</swfUrl>
+			<pageUrl>http://www.tvsector.com</pageUrl>
+		</channel>
+		<channel>
+			<name>RTMP_STREAM_HD2</name>
+			<picon>dummy.png</picon>
+			<stream_url>rtmp://s7.webport.tv/live</stream_url>
+			<playpath>z050230.stream</playpath>	
+			<swfUrl>http://www.tvsector.com/wp-content/uploads/jw-player-plugin-for-wordpress/player/player.swf</swfUrl>
+			<pageUrl>http://www.tvsector.com</pageUrl>
+		</channel>
+	</group>
+</iptvstreams_list>
