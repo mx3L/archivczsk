@@ -1,4 +1,6 @@
 ipkg.deps
+.project
+.pydevproject
 *.ipk
 *.pyo
 *.pyc
