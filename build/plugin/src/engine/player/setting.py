@@ -32,6 +32,8 @@ class VideoPlaySettingsProvider(object):
     def setExtraHeaders(self, dictHeaders):
         if not self.__config.servicemp4.getValue():
             headersString = '|'.join([(key + ':' + value) for key, value in dictHeaders.iteritems()])
+            if not hasattr(config.mediaplayer, 'extraHeaders'):
+                config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
             config.mediaplayer.extraHeaders.setValue(headersString)
         else:
             headersString = '#'.join([(key + ':' + value) for key, value in dictHeaders.iteritems()])
