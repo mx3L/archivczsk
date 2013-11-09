@@ -36,23 +36,26 @@ LIBDIR="/usr/lib"
 BINDIR="/usr/bin"
 GSTDIR="$LIBDIR/gstreamer-0.10/"
 
-mkdir -p /tmp/
-wget -O /tmp/$MIPS
-tar -xzf /tmp/mipsel_$MIPS_V.tar.gz
+echo "RTMP plugin pre archivCZSK"
+
+wget -O /tmp/mipsel_$MIPS_V.tar.gz $MIPS
+tar -C /tmp -xzf /tmp/mipsel_$MIPS_V.tar.gz
 
 if [ "$OE" == "OE40" ]; then
-	cp /tmp/mipsel/gst_rtmp_plugin/OE40/libgstrtmp.so $GSTDIR
-	cp /tmp/mipsel/rtmpdump/OE40_KSV/librtmp.so.1 $LIBDIR	
-	cp /tmp/mipsel/rtmpdump/OE40_KSV/rtmpdump $BINDIR
-	cp /tmp/mipsel/rtmpdump/OE40_KSV/rtmpgw $BINDIR
+	cp /tmp/mipsel/gst_rtmp_plugin/OE4_seekingfix/libgstrtmp.so $GSTDIR
+	cp /tmp/mipsel/rtmpdump/OE4_KSV/librtmp.so.1 $LIBDIR	
+	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpdump $BINDIR
+	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpgw $BINDIR
 
 else
 	cp /tmp/mipsel/gst_rtmp_plugin/OE16-3/libgstrtmp.so $GSTDIR
-	cp /tmp/mipsel/rtmpdump/OE16-3/librtmp.so.1 $LIBDIR	
+	cp /tmp/mipsel/rtmpdump/OE16-3/librtmp.so.0 $LIBDIR
+        if [ ! -e $LIBDIR/librtmp.so ]; then
+		ln -s $LIBDIR/librtmp.so.0 $LIBDIR/librtmp.so
+	fi
 	cp /tmp/mipsel/rtmpdump/OE16-3/rtmpdump $BINDIR
 	cp /tmp/mipsel/rtmpdump/OE16-3/rtmpgw $BINDIR
-	
-echo "RTMP plugin pre archivCZSK"
+fi
 
 chmod 755 $LIBDIR/librtmp*
 chmod 755 $GSTDIR/libgstrtmp.so
