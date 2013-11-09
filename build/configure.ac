@@ -80,6 +80,7 @@ plugin/src/engine/player/subtitles/parsers/Makefile
 plugin/src/engine/player/servicemp4/Makefile
 plugin/src/resources/Makefile
 plugin/src/resources/repositories/Makefile
+plugin/src/resources/repositories/custom/Makefile
 plugin/src/resources/repositories/dmd_czech/Makefile
 plugin/src/resources/repositories/xbmc_doplnky/Makefile
 plugin/src/resources/libraries/Makefile

@@ -8,9 +8,9 @@
   </requires>
   <extension point="xbmc.addon.repository"
               name="repozitář českých a slovenských doplňků">
-    <info compressed="false">http://archivy-czsk.googlecode.com/svn/branches/update/ver_0.7_alpha12/xbmc_doplnky/addons.xml</info>
-    <checksum>http://xbmc-doplnky.googlecode.com/git/addons.xml.md5</checksum>
-    <datadir zip="true">http://archivy-czsk.googlecode.com/svn/branches/update/ver_0.7_alpha12/xbmc_doplnky</datadir>
+    <info compressed="false">https://raw.github.com/mx3L/archivczsk-doplnky/master/xbmc-doplnky/addons.xml</info>
+    <checksum>https://raw.github.com/mx3L/archivczsk-doplnky/master/xbmc-doplnky/addons.xml.md5</checksum>
+    <datadir zip="false">https://raw.github.com/mx3L/archivczsk-doplnky/master/xbmc-doplnky/repo</datadir>
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>XBMC Doplňky (CZ &amp; SK)</summary>
