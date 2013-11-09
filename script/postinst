@@ -147,7 +147,7 @@ if [ "$PLATFORM" == "sh4" ]
 then sh4_install
 fi
 
-chmod -r 755 $ARCHIVCZSK/script
+chmod 755 $ARCHIVCZSK/script/*.sh
 
 echo 'Installing neccessary Python libraries'
 if [ -d /usr/lib/python2.6 ]

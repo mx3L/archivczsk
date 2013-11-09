@@ -17,7 +17,8 @@ pushd ${D} &> /dev/null
 PVER="0.7"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
-VER=$PVER-$DSTAGE-$GITVER
+DSTAGEVER="4"
+VER=$PVER-$DSTAGE-$DSTAGEVER-$GITVER
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_mipsel.ipk
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
@@ -105,13 +106,9 @@ rm -rf ${P}${PLUGINPATH}/converter
 rm -rf ${P}${PLUGINPATH}/engine/player/servicemp4
 
 echo "downloading addons"
-${D}/script/getaddons xbmc_doplnky ${P}
-${D}/script/getaddons dmd_czech ${P}
-
-# this is hack for voyocz, since these pre-compiled files aren't yet in voyocz plugin
-# TODO put sources in repository
-cp -p ${D}/script/voyocz/*.pyo ${P}${PLUGINPATH}/resources/repositories/dmd_czech/plugin.video.dmd-czech.voyo/resources/lib/
-cp -p ${D}/script/voyocz/*.pyc ${P}${PLUGINPATH}/resources/repositories/dmd_czech/plugin.video.dmd-czech.voyo/resources/lib/ 
+${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P}
+${D}/build/plugin/src/script/getaddons.py dmd_czech ${P}
+${D}/build/plugin/src/script/getaddons.py custom ${P}
 
 mkdir -p ${P}/tmp/archivczsk/python2.7
 mkdir -p ${P}/tmp/archivczsk/python2.6

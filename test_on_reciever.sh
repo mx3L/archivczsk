@@ -50,13 +50,9 @@ find ${P} -name Makefile.am -exec rm {} \;
 rm -rf ${P}${PLUGINPATH}/converter
 rm -rf ${P}${PLUGINPATH}/engine/player/servicemp4
 
-${D}/script/getaddons xbmc_doplnky ${P}
-${D}/script/getaddons dmd_czech ${P}
-
-# this is hack for voyocz, since these pre-compiled files aren't yet in voyocz plugin
-# TODO put sources in repository
-cp ${D}/script/voyocz/*.pyo ${P}${PLUGINPATH}/resources/repositories/dmd_czech/plugin.video.dmd-czech.voyo/resources/lib/
-cp ${D}/script/voyocz/*.pyc ${P}${PLUGINPATH}/resources/repositories/dmd_czech/plugin.video.dmd-czech.voyo/resources/lib/
+${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P}
+${D}/build/plugin/src/script/getaddons.py dmd_czech ${P}
+${D}/build/plugin/src/script/getaddons.py custom ${P}
 
 tar -C ${P} -czf archivyczsk.tar.gz .
 
@@ -76,7 +72,7 @@ echo "installing archivCZSK on $HOST"
 sshpass -p $PASSWORD ssh $USERNAME@$HOST << EOFSSH
 rm -rf $PLUGINPATH
 tar -C / -xzf /tmp/archivyczsk.tar.gz
-rm archivyczsk.tar.gz
+rm /tmp/archivyczsk.tar.gz
 killall enigma2
 EOFSSH
 
