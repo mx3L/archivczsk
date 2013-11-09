@@ -359,7 +359,7 @@ class AddonSettings(object):
             setting = getattr(self.main, '%s' % setting_id)
         except (ValueError, KeyError):
             log.debug('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
-            return None
+            return ""
         else:
             if isinstance(setting, ConfigIP):
                 return setting.getText()
