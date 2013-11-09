@@ -22,23 +22,6 @@ from engine.addon import VideoAddon, XBMCAddon
 from engine.exceptions.updater import UpdateXMLVersionError
 from engine.tools.task import Task
 
-ta3 = 'plugin.video.ta3'
-nova = 'plugin.video.dmd-czech.voyo'
-btv = 'plugin.video.dmd-czech.btv'
-huste = 'plugin.video.dmd-czech.huste'
-ct = 'plugin.video.dmd-czech.ivysilani'
-metropol = 'plugin.video.dmd-czech.metropol'
-muvi = 'plugin.video.dmd-czech.muvi'
-joj = 'plugin.video.dmd-czech.joj'
-prima = 'plugin.video.dmd-czech.prima'
-stream = 'plugin.video.dmd-czech.stream'
-stv = 'plugin.video.dmd-czech.stv'
-voyosk = 'plugin.video.voyosk'
-barrandov = 'plugin.video.barrandov'
-
-tv_archives = [stv, joj, ct, ta3, prima, nova, huste, muvi, metropol, btv, voyosk, stream, barrandov]
-
-
 class ArchivCZSK():
     
     __loaded = False
@@ -218,14 +201,13 @@ class ArchivCZSK():
             if (not config.plugins.archivCZSK.showBrokenAddons.getValue()
                 and addon.get_info('broken')):
                 continue
-            if key in tv_archives:
+            if addon.get_setting('tv_addon'):
                 tv_video_addon.append(PVideoAddon(addon))
                 log.debug('adding %s addon to tv group' , key)
             else:
                 video_addon.append(PVideoAddon(addon))
                 log.debug('adding %s addon to video group', key)
                 
-       
         tv_video_addon.sort(key=lambda addon:addon.name)
         video_addon.sort(key=lambda addon:addon.name)
         # first screen to open when starting plugin, so we start worker thread where we can run our tasks(ie. loading archives)
@@ -248,14 +230,14 @@ class ArchivCZSK():
         filelist = [ f for f in os.listdir("/tmp") if f.endswith(".url") ]
         for f in filelist:
             try:
-                os.remove(f)
+                os.remove(os.path.join('/tmp',f))
             except OSError:
                 continue
         filelist = [ f for f in os.listdir("/tmp") if f.endswith(".png") ]
         for f in filelist:
             try:
-                os.remove(f)
-            except OSerror:
+                os.remove(os.path.join('/tmp',f))
+            except OSError:
                 continue
         shutil.rmtree("/tmp/archivCZSK", True)
         
