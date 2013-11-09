@@ -19,6 +19,7 @@ def getCapabilities():
     list = []
     #list.append((_('Search in') + ' ' + 'OnlineFiles', 'plugin.video.online-files', 'all'))
     list.append((_('Search in') + ' ' + 'Befun.cz', 'plugin.video.befun.cz', 'all'))
+    list.append((_('Search in') + ' ' + 'Koukni.cz', 'plugin.video.koukni.cz', 'koukni.cz'))
     list.append((_('Search in') + ' ' + 'Ulozto.cz', 'plugin.video.online-files', 'ulozto.cz'))
     list.append((_('Search in') + ' ' + 'Bezvadata.cz', 'plugin.video.online-files', 'bezvadata.cz'))
     list.append((_('Search in') + ' ' + 'Hellspy.cz', 'plugin.video.online-files', 'hellspy.cz'))
@@ -155,6 +156,8 @@ def getSearcher(session, addon_name, archivczsk, succ_cb, err_cb):
         return OnlineFilesSearch(session, archivczsk, succ_cb, err_cb)
     elif addon_name == 'plugin.video.befun.cz':
         return BefunSearch(session, archivczsk, succ_cb, err_cb)
+    elif addon_name == 'plugin.video.koukni.cz':
+        return KoukniSearch(session, archivczsk, succ_cb, err_cb)
     else:
         return None
             
@@ -215,16 +218,23 @@ class OnlineFilesSearch(Search):
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
         
     def fastshare_search(self, search_exp):
-        params = {'cp':'fasthshare.cz', 'search':search_exp, 'search-no-history':True}
+        params = {'cp':'fastshare.cz', 'search':search_exp, 'search-no-history':True}
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
         
     def webshare_search(self, search_exp):
-        params = {'cp':'webshshare.cz', 'search':search_exp, 'search-no-history':True}
+        params = {'cp':'webshare.cz', 'search':search_exp, 'search-no-history':True}
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
         
         
 class BefunSearch(Search):
     addon_id = 'plugin.video.befun.cz'
+    
+    def search(self, search_exp, mode='all'):
+        params = {'search':search_exp, 'search-no-history':True}
+        self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
+        
+class KoukniSearch(Search):
+    addon_id = 'plugin.video.koukni.cz'
     
     def search(self, search_exp, mode='all'):
         params = {'search':search_exp, 'search-no-history':True}
