@@ -58,7 +58,7 @@ sh4_install ()
 echo 'Installing librtmp'
 if [ -f /usr/lib/librtmp.so.0 ] || [ -f /usr/lib/librtmp.so.1 ];
 then
-	echo "found librtmp, not need to install"
+	echo "Found librtmp, not needed to install"
 else
 	cp $TMP/sh4/rtmpdump/librtmp.so.0 /usr/lib/librtmp.so.0
 	ln -s /usr/lib/librtmp.so.0 /usr/lib/librtmp.so
@@ -73,9 +73,9 @@ then
 	echo "Found gstreamer"
 	if [ -e $GSTREAMER/libgstrtmp.so ]
 	then
-		echo "found libgstrtmp.so"
+		echo "Found libgstrtmp.so"
 	else
-		echo "installing libgstrtmp.so"
+		echo "Installing libgstrtmp.so"
 		cp $TMP/sh4/gst_rtmp_plugin/libgstrtmp.so $GSTREAMER/libgstrtmp.so
 		chmod 755 $GSTREAMER/libgstrtmp.so
 	fi
@@ -147,7 +147,7 @@ if [ "$PLATFORM" == "sh4" ]
 then sh4_install
 fi
 
-chmod 755 $ARCHIVCZSK/script/*.sh
+chmod 755 $ARCHIVCZSK/script/*.sh 2>/dev/null
 
 echo 'Installing neccessary Python libraries'
 if [ -d /usr/lib/python2.6 ]
@@ -202,8 +202,6 @@ then
 	install_py ./idna.py /usr/lib/python2.7/encodings/idna.py
 	install_py ./decimal.py /usr/lib/python2.7/decimal.py
 	install_py ./formatter.py /usr/lib/python2.7/formatter.py
-	install_py ./htmlentitydefs.py /usr/lib/python2.7/htmlentitydefs.py
-	install_py ./markupbase.py /usr/lib/python2.7/markupbase.py
 	install_py ./htmlentitydefs.py /usr/lib/python2.7/htmlentitydefs.py
 	install_py ./htmllib.py /usr/lib/python2.7/htmllib.py
 	install_py ./HTMLParser.py /usr/lib/python2.7/HTMLParser.py

@@ -18,7 +18,7 @@ PVER="0.7"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
 DSTAGEVER="4"
-VER=$PVER-$DSTAGE-$DSTAGEVER-$GITVER
+VER=$PVER_$DSTAGE_$DSTAGEVER_$GITVER
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_mipsel.ipk
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
@@ -119,6 +119,7 @@ cp -rp ${DP}/mipsel ${P}/tmp/archivczsk
 cp -p ${D}/script/getenigma2ver ${P}/tmp/archivczsk
 
 cp -p ${DP}/Python-2.6/Lib/encodings/hex_codec.py ${P}/tmp/archivczsk/python2.6/hex_codec.py
+cp -p ${DP}/Python-2.6/Lib/encodings/string_escape.py ${P}/tmp/archivczsk/python2.7/string_escape.py
 cp -p ${DP}/Python-2.6/Lib/encodings/latin_1.py ${P}/tmp/archivczsk/python2.6/latin_1.py
 cp -p ${DP}/Python-2.6/Lib/encodings/utf_16.py ${P}/tmp/archivczsk/python2.6/utf_16.py
 cp -p ${DP}/Python-2.6/Lib/encodings/idna.py ${P}/tmp/archivczsk/python2.6/idna.py
@@ -132,6 +133,7 @@ cp -p ${DP}/Python-2.6/Lib/htmlentitydefs.py ${P}/tmp/archivczsk/python2.6/htmle
 cp -p ${DP}/Python-2.6/Lib/htmllib.py ${P}/tmp/archivczsk/python2.6/htmllib.py
 cp -p ${DP}/Python-2.6/Lib/sgmllib.py ${P}/tmp/archivczsk/python2.6/sgmllib.py
 cp -p ${DP}/Python-2.6/Lib/stringprep.py ${P}/tmp/archivczsk/python2.6/stringprep.py
+cp -p ${DP}/Python-2.6/Lib/numbers.py ${P}/tmp/archivczsk/python2.6/numbers.py
 cp -p ${DP}/Python-2.6/Lib/subprocess.py ${P}/tmp/archivczsk/python2.6/subprocess.py
 cp -p ${DP}/Python-2.6/Lib/_LWPCookieJar.py ${P}/tmp/archivczsk/python2.6/_LWPCookieJar.py
 cp -p ${DP}/Python-2.6/Lib/_MozillaCookieJar.py ${P}/tmp/archivczsk/python2.6/_MozillaCookieJar.py
@@ -144,6 +146,7 @@ cp -p ${DP}/Python-2.6/Lib/httplib.py ${P}/tmp/archivczsk/python2.6/httplib.py
 cp -p ${DP}/Python-2.6/Lib/stat.py ${P}/tmp/archivczsk/python2.6/stat.py
 
 cp -p ${DP}/Python-2.7/Lib/encodings/hex_codec.py ${P}/tmp/archivczsk/python2.7/hex_codec.py
+cp -p ${DP}/Python-2.7/Lib/encodings/string_escape.py ${P}/tmp/archivczsk/python2.7/string_escape.py
 cp -p ${DP}/Python-2.7/Lib/encodings/latin_1.py ${P}/tmp/archivczsk/python2.7/latin_1.py
 cp -p ${DP}/Python-2.7/Lib/encodings/utf_16.py ${P}/tmp/archivczsk/python2.7/utf_16.py
 cp -p ${DP}/Python-2.7/Lib/encodings/idna.py ${P}/tmp/archivczsk/python2.7/idna.py
@@ -157,6 +160,7 @@ cp -p ${DP}/Python-2.7/Lib/htmlentitydefs.py ${P}/tmp/archivczsk/python2.7/htmle
 cp -p ${DP}/Python-2.7/Lib/htmllib.py ${P}/tmp/archivczsk/python2.7/htmllib.py
 cp -p ${DP}/Python-2.7/Lib/sgmllib.py ${P}/tmp/archivczsk/python2.7/sgmllib.py
 cp -p ${DP}/Python-2.7/Lib/stringprep.py ${P}/tmp/archivczsk/python2.7/stringprep.py
+cp -p ${DP}/Python-2.7/Lib/numbers.py ${P}/tmp/archivczsk/python2.7/numbers.py
 cp -p ${DP}/Python-2.7/Lib/subprocess.py ${P}/tmp/archivczsk/python2.7/subprocess.py
 cp -p ${DP}/Python-2.7/Lib/_LWPCookieJar.py ${P}/tmp/archivczsk/python2.7/_LWPCookieJar.py
 cp -p ${DP}/Python-2.7/Lib/_MozillaCookieJar.py ${P}/tmp/archivczsk/python2.7/_MozillaCookieJar.py
