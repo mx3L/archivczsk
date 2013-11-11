@@ -1,0 +1,9 @@
+dmd_czech/*
+!dmd_czech/addon.xml
+!dmd_czech/Makefile.am
+xbmc_doplnky/*
+!xbmc_doplnky/addon.xml
+!xbmc_doplnky/Makefile.am
+custom/*
+!custom/addon.xml
+!custom/Makefile.am

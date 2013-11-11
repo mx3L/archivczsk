@@ -211,6 +211,8 @@ def download_addons(repository, base):
         print "ERROR: cannot parse - %s repository"%repository
         return
     addons_xml_path = os.path.join(TMP_PATH, "addons.xml")
+    os.system("find %s -mindepth 1 -type d -exec rm -rf {} \;"% os.path.split(repository_path)[0])
+    os.system("find %s -type l -exec rm -rf {} \;"% os.path.split(repository_path)[0]) 
     os.system("mkdir -p %s" % TMP_PATH)
     os.system("wget -O %s %s" % (addons_xml_path, repo["repo_addons_url"]))
     remote_addons = XBMCMultiAddonXMLParser(addons_xml_path).parse_addons()
