@@ -14,11 +14,11 @@ MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
 pushd ${D} &> /dev/null
 
-PVER="0.7"
+PVER="0.70"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
 DSTAGEVER="4"
-VER=$PVER_$DSTAGE_$DSTAGEVER_$GITVER
+VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_mipsel.ipk
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
