@@ -3,14 +3,13 @@ Created on 10.9.2012
 
 @author: marko
 '''
-import Queue
-import threading
 
+from threading import Thread
 from twisted.internet import defer
-from twisted.python import log, context, failure
+from twisted.python import log, failure
+from Queue import Queue
 
-from enigma import eTimer
-from Components.config import config
+from enigma import ePythonMessagePump
 from Plugins.Extensions.archivCZSK import log
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonThreadException
         
@@ -18,24 +17,34 @@ from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonThreadExc
 WorkerStop = object()
 
 # queue for function to be executed in workerThread
-fnc_queue = Queue.Queue(1)
+fnc_queue = Queue(1)
 
 # input queue to send results from reactor thread to running function in workerThread
-fnc_in_queue = Queue.Queue(1)
+fnc_in_queue = Queue(1)
 
 #output queue to send function decorated by callFromThread from workerThread to reactor thread and run it there
-fnc_out_queue = Queue.Queue(1)
+fnc_out_queue = Queue(1)
 
+def run_in_main_thread(val):
+    #print 'run_in_main_thread -', currentThread().getName()
+    fnc_out_queue.get()()
+    
+m_pump = ePythonMessagePump()
+m_pump.recv_msg.get().append(run_in_main_thread)
+    
 
 def callFromThread(func):
-    """calls function from child thread in main(reactor) thread, and wait(in child thread) for result. Used mainly for GUI calls"""
+    """calls function from child thread in main(reactor) thread, 
+        and wait(in child thread) for result. Used mainly for GUI calls
+        """
     def wrapped(*args, **kwargs):
         
         def _callFromThread():
             result = defer.maybeDeferred(func, *args, **kwargs)
             result.addBoth(fnc_in_queue.put)
-            
+        
         fnc_out_queue.put(_callFromThread)
+        m_pump.send(0)
         result = fnc_in_queue.get()
         log.debug("result is %s" % str(result))
         if isinstance(result, failure.Failure):
@@ -45,56 +54,43 @@ def callFromThread(func):
 
 
 
-class WorkerThread(threading.Thread):
-    """WorkerThread for running user tasks"""
-    def __init__(self, fnc_queue):
-        threading.Thread.__init__(self)
-        self.q = fnc_queue
+class WorkerThread(Thread):
+    
+    def __init__(self):
+        Thread.__init__(self)
+        self.name = "ArchivCZSK-workerThread"
 
     def run(self):
-        log.debug("WorkerThread, waiting for function to execute")
-        o = self.q.get()
-        log.debug("getting function")
+        o = fnc_queue.get()
         while o is not WorkerStop:
-            ctx, function, args, kwargs, onResult = o
+            function, args, kwargs, onResult = o
             del o
             try:
-                result = context.call(ctx, function, *args, **kwargs)
+                result = function(*args, **kwargs)
                 success = True
             except:
                 success = False
-                if onResult is None:
-                    context.call(ctx, log.err)
-                    result = None
-                else:
-                    result = failure.Failure()
-
+                result = failure.Failure()
             del function, args, kwargs
-
-            if onResult is not None:
-                try:
-                    context.call(ctx, onResult, success, result)
-                except:
-                    context.call(ctx, log.err)
-
-            del ctx, onResult, result
-
-            o = self.q.get()
-        log.debug("working thread stopped")
+            try:
+                onResult(success, result)
+            except:
+                log.err()
+            del onResult, result
+            o = fnc_queue.get()
+        log.debug("worker thread stopped")
             
     def stop(self):
         log.debug("stopping working thread")
-        self.q.put(WorkerStop)  
-        
-        
-        
-        
+        fnc_queue.put(WorkerStop)
 
-class Task():
-    """Class for running single python task at time in worker thread"""
+
+class Task(object):
+    """Class for running single python task 
+        at time in worker thread"""
+        
     instance = None
     worker_thread = None
-    polling_interval = 200#ms
     
     @staticmethod
     def getInstance():
@@ -103,7 +99,7 @@ class Task():
     @staticmethod
     def startWorkerThread():
         log.debug("[Task] starting workerThread")
-        Task.worker_thread = WorkerThread(fnc_queue)
+        Task.worker_thread = WorkerThread()
         Task.worker_thread.start()
         
     @staticmethod   
@@ -121,56 +117,30 @@ class Task():
     def __init__(self, callback, fnc, *args, **kwargs):
         log.debug('[Task] initializing')
         Task.instance = self
-        self._running = False
-        self._finishing = False
-        self._aborted = False
         self.callback = callback
         self.fnc = fnc
         self.args = args
         self.kwargs = kwargs
-        self.timer = eTimer()
-        self.timer.callback.append(self.check_fnc_callback)
-        
+        self._running = False
+        self._aborted = False
           
     def run(self):
         log.debug('[Task] running')
         self._running = True
-        self._finishing = False
         self._aborted = False
         
-        ctx = context.theContextTracker.currentContext().contexts[-1]
-        o = (ctx, self.fnc, self.args, self.kwargs, self.onComplete)
+        o = (self.fnc, self.args, self.kwargs, self.onComplete)
         fnc_queue.put(o)
-        self.timer.start(self.polling_interval) 
-        self.check_fnc_callback()
         
-    #poll this function in reactor thread
-    def check_fnc_callback(self):
-        """
-        check non-blockingly in reactor thread if function executed in workerThread 
-        didnt send function which wants to call in reactor thread. 
-        If there is an function, than call it.
-        """
-        if self._running:
-            log.debug("[Task] checking function in thread callback")
-            try:
-                fnc_out_queue.get(block=False)()
-            except Queue.Empty:
-                log.debug("[Task] nothing in queue")
-            else:
-                if self._finishing:
-                    self._running = False
-        else:
-            self.timer.stop()
         
     def setResume(self):
         log.debug("[Task] resuming")
         self._aborted = False
     
     def setCancel(self):
-        """
-        setting flag to abort executing compatible task(ie. controlling this flag in task execution)
-        """
+        """ setting flag to abort executing compatible task
+             (ie. controlling this flag in task execution) """
+             
         log.debug('[Task] cancelling...')
         self._aborted = True
             
@@ -178,27 +148,19 @@ class Task():
         return self._aborted
 
     def onComplete(self, success, result):
+        def wrapped_finish():
+            Task.instance = None
+            self.callback(success, result)
+        
         if success:
             log.debug('[Task] completed with success')
         else:
             log.debug('[Task] completed with failure')
-        #To make sure that, when we abort processing of task, that its always the same type of failure
+            
+        # To make sure that, when we abort processing of task,
+        # that its always the same type of failure
         if self._aborted:
             success = False
             result = failure.Failure(AddonThreadException())
-        self.finish(success, result)
-            
-    def finish(self, success, result):
-        def wrapped_finish():
-            self.callback(success, result)
-        Task.instance = None
-        
-        # set finishing flag to stop polling in reactor thread
-        self._finishing = True    
-        
-        # finish execution in reactor thread
         fnc_out_queue.put(wrapped_finish)
-        
-            
-    
-
+        m_pump.send(0)
