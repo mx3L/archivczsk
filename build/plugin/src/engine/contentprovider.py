@@ -15,6 +15,7 @@ from Plugins.Extensions.archivCZSK import version as aczsk
 from Plugins.Extensions.archivCZSK import log
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
+from Plugins.Extensions.archivCZSK.engine.player.player import Player, StreamPlayer
 import xmlshortcuts
 from tools import task, util
 from downloader import DownloadManager
@@ -58,7 +59,7 @@ class ContentProvider(object):
     """
     
     def __init__(self):
-        self._capabilities = []
+        self.capabilities = []
         self.on_start = []
         self.on_stop = []
         
@@ -69,7 +70,7 @@ class ContentProvider(object):
         return True
     
     def get_capabilities(self):
-        return self._capabilities
+        return self.capabilities
     
     def get_content(self, params={}):
         """get content with help of params
@@ -83,11 +84,45 @@ class ContentProvider(object):
     def stop(self):
         for f in self.on_stop:
             f()
+
+
+class Media(object):
+    def __init__(self, player_cls, allowed_download=True):
+        self.player = None
+        self.player_cls = player_cls
+        self.player_cfg = config.plugins.archivCZSK.videoPlayer
+        self.capabilities.append('play')
+        if allowed_download:
+            self.capabilities.append('play_and_download')
+            #self.capabilities.append('play_and_download_gst')
+        self.on_stop.append(self.__delete_player)
+            
+    def __delete_player(self):
+        self.player = None
+        
+    def play(self, session, item, mode, cb=None):
+        if not self.player:
+            use_video_controller = self.player_cfg.useVideoController.value
+            self.player = self.player_cls(session, cb, use_video_controller)
+        seekable = self.is_seekable()
+        pausable = self.is_pausable()
+        self.player.setMediaItem(item, seekable=seekable, pausable=pausable)
+        self.player.setContentProvider(self)
+        if mode in self.capabilities:
+            if mode == 'play':
+                self.player.play()
+            elif mode == 'play_and_download':
+                self.player.playAndDownload()
+            elif mode == 'play_and_download_gst':
+                self.player.playAndDownload(True)
+        else:
+            log.info('Invalid playing mode - %s', str(mode))
           
         
 class Favorites(object):
     def __init__(self, shortcuts_path):
         self.shortcuts = xmlshortcuts.ShortcutXML(shortcuts_path)
+        self.capabilities.append('favorites')
         
     def create_shortcut(self, item):
         return self.shortcuts.createShortcut(item)
@@ -103,8 +138,10 @@ class Favorites(object):
         
         
 class Downloads(object):
-    def __init__(self, downloads_path):
+    def __init__(self, downloads_path, allowed_download):
         self.downloads_path = downloads_path
+        if allowed_download:
+            self.capabilities.append('download')
         
     def get_downloads(self):
         video_lst = []
@@ -169,7 +206,7 @@ class Downloads(object):
             log.info('cannot remove item %s from disk, not PDownload instance', str(item))
             
 
-class VideoAddonContentProvider(ContentProvider, Downloads, Favorites):
+class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
 
     __resolving_provider = None    
     __gui_item_list = [[], None, {}] #[0] for items, [1] for command to GUI [2] arguments for command
@@ -185,13 +222,15 @@ class VideoAddonContentProvider(ContentProvider, Downloads, Favorites):
     
     @classmethod
     def get_resolving_addon(cls):
-        return cls.__resolving_provider.addon
+        return cls.__resolving_provider.video_addon
 
     def __init__(self, video_addon, downloads_path, shortcuts_path):
-        ContentProvider.__init__(self)
-        Downloads.__init__(self,downloads_path)
-        Favorites.__init__(self,shortcuts_path)
+        allowed_download = not video_addon.get_setting('!download')
         self.video_addon = video_addon
+        ContentProvider.__init__(self)
+        Media.__init__(self, Player, allowed_download)
+        Downloads.__init__(self,downloads_path, allowed_download)
+        Favorites.__init__(self,shortcuts_path)
         self._dependencies = []
         self.on_start.append(self.__set_resolving_provider)
         self.on_stop.append(self.__unset_resolving_provider)
@@ -311,11 +350,12 @@ class VideoAddonContentProvider(ContentProvider, Downloads, Favorites):
     
     
     
-class StreamContentProvider(ContentProvider, Downloads):
+class StreamContentProvider(ContentProvider, Media, Downloads):
     
     def __init__(self, downloads_path, streams_path):
         ContentProvider.__init__(self)
-        Downloads.__init__(self, downloads_path)
+        Media.__init__(self, StreamPlayer, False)
+        Downloads.__init__(self, downloads_path, False)
         self.streams_path = streams_path
         self.stream_root = None
         self.groups = []
