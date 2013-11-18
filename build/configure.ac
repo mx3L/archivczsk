@@ -73,6 +73,7 @@ plugin/src/gui/icon/buttons/Makefile
 plugin/src/engine/Makefile
 plugin/src/engine/tools/Makefile
 plugin/src/engine/exceptions/Makefile
+plugin/src/engine/handlers/Makefile
 plugin/src/engine/player/Makefile
 plugin/src/engine/player/subtitles/Makefile
 plugin/src/engine/player/subtitles/fonts/Makefile
