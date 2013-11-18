@@ -134,9 +134,9 @@ class PDownload(PVideo):
         self.finish_time = os.path.getmtime(path)
         
         
-class PExit(PFolder):
+class PExit(PItem):
     def __init__(self):
-        PFolder.__init__(self)
+        PItem.__init__(self)
         self.thumb = PNG_PATH + '/up.png'
         self.name = u'..'
 
