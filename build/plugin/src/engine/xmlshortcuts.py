@@ -6,11 +6,9 @@ Created on 20.3.2012
 '''
 import os
 import items
-import logging
 from  xml.etree.cElementTree import ElementTree, Element, SubElement
-
 from Components.config import config
-log = logging.getLogger(__name__)
+from Plugins.Extensions.archivCZSK import log
 
 class mainXML(object):
     
