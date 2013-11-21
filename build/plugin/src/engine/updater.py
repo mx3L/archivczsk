@@ -138,7 +138,11 @@ class Updater(object):
         
         local_file = os.path.join(tmp_base, zip_filename)
         remote_file = remote_base + '/' + zip_filename
-
+        
+        # hack for https github urls
+        # since some receivers have have problems with https 
+        if remote_file.find('https://raw.github.com') == 0:
+            remote_file = remote_file.replace('https://raw.github.com', 'http://rawgithub.com')
         try:
             util.download_to_file(remote_file, local_file, debugfnc=log.debug)
         except:
@@ -149,8 +153,13 @@ class Updater(object):
             
     def _download_update_xml(self):
         """downloads update xml of repository"""
+        
+        # hack for https github urls
+        # since some receivers have have problems with https
+        if self.update_xml_url.find('https://raw.github.com') == 0:
+            update_xml_url = self.update_xml_url.replace('https://raw.github.com', 'http://rawgithub.com')
         try:
-            util.download_to_file(self.update_xml_url, self.update_xml_file, debugfnc=log.debug)
+            util.download_to_file(update_xml_url, self.update_xml_file, debugfnc=log.debug)
         except Exception:
             log.debug('cannot download %s update xml', self.repository.name)
             raise UpdateXMLVersionError()
