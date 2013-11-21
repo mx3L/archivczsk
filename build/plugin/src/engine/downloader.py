@@ -41,6 +41,24 @@ def resetUrllib2Opener():
 def url2name(url):
     return os.path.basename(urlsplit(url)[2])
 
+def sanitizeFilename(s):
+    """Sanitizes a string so it could be used as part of a filename."""
+    def replace_insane(char):
+        if char == '?' or ord(char) < 32 or ord(char) == 127:
+            return ''
+        elif char == '"':
+            return '\''
+        elif char == ':':
+            return ' -'
+        elif char in '\\/|*<>':
+            return '-'
+        return char
+
+    result = u''.join(map(replace_insane, s))
+    while '--' in result:
+        result = result.replace('--', '-')
+    return result.strip('-')
+
 def getFileInfo(url, localFileName=None, headers={}):    
     resetUrllib2Opener()
     
@@ -81,7 +99,7 @@ def getFileInfo(url, localFileName=None, headers={}):
     if os.path.splitext(localName)[1] not in MEDIA_EXTENSIONS:
         localName = os.path.splitext(localName)[0] + '.mp4'
         
-    localName = localName.replace(' ', '_')
+    localName = sanitizeFilename(localName)
     #localName = util.removeDiacritics(localName)
     return localName, length
 
@@ -338,10 +356,7 @@ class RTMPDownloadE2(Download):
     def __init__(self, name, url, destDir, filename=None, live=False, quiet=False):
         if not filename:
             filename = name + '.flv'
-            filename = filename.replace(' ', '_')
-            filename = filename.replace('/', '')
-            filename = filename.replace('(', '')
-            filename = filename.replace(')', '')
+            filename = sanitizeFilename(filename)
         Download.__init__(self, name, url, destDir, filename, quiet)
         self.pp = eConsoleAppContainer()
         #self.pp.dataAvail.append(self.__startCB)
