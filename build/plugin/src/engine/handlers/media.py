@@ -17,11 +17,17 @@ class MediaItemHandler(ItemHandler):
         
     def play_item(self, item, mode='play', *args, **kwargs):
         def end_play():
+            self.content_provider.resume()
             self.content_screen.workingFinished()
             
         @PlayExceptionHandler(self.session)
         def start_play(item, mode):
-            self.content_provider.play(self.session, item, mode, end_play)
+            self.content_provider.pause()
+            try:
+                self.content_provider.play(self.session, item, mode, end_play)
+            except Exception:
+                self.content_provider.resume()
+                raise
         self.content_screen.workingStarted()
         start_play(item, mode)
         
