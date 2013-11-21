@@ -158,6 +158,7 @@ class Updater(object):
         # since some receivers have have problems with https
         if self.update_xml_url.find('https://raw.github.com') == 0:
             update_xml_url = self.update_xml_url.replace('https://raw.github.com', 'http://rawgithub.com')
+        else: update_xml_url = self.update_xml_url
         try:
             util.download_to_file(update_xml_url, self.update_xml_file, debugfnc=log.debug)
         except Exception:
