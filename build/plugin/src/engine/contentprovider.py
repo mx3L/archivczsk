@@ -62,6 +62,13 @@ class ContentProvider(object):
         self.capabilities = []
         self.on_start = []
         self.on_stop = []
+        self.on_pause = []
+        self.on_resume = []
+        self.__started = False
+        self.__paused = False
+        
+    def __str__(self):
+        return "%s"% self.__class__.__name__
         
     def is_seekable(self):
         return True
@@ -78,12 +85,48 @@ class ContentProvider(object):
         pass
     
     def start(self):
+        if self.__started:
+            log.info("[%s] cannot start, provider is already started",self)
+            return
+        self.__started = True
+        self.__paused = False
         for f in self.on_start:
             f()
+        log.info("[%s] started", self)
         
     def stop(self):
+        if not self.__started:
+            log.info("[%s] cannot stop, provider is already stopped",self)
+            return
+        self.__started = False
+        self.__paused = False
         for f in self.on_stop:
             f()
+        log.info("[%s] stopped", self)
+    
+    def resume(self):
+        if not self.__started:
+            log.info("[%s] cannot resume, provider not started yet",self)
+            return
+        if not self.__paused:
+            log.info("[%s] cannot resume, provider is already running",self)
+            return
+        self.__paused = False
+        for f in self.on_resume:
+            f()
+        log.info("[%s] resumed", self)
+            
+    def pause(self):
+        if not self.__started:
+            log.info("[%s] cannot pause, provider not started yet",self)
+            return
+        if self.__paused:
+            log.info("[%s] cannot pause, provider is already paused",self)
+            return
+        self.__paused = True
+        for f in self.on_pause:
+            f()
+        log.info("[%s] paused", self)
 
 
 class Media(object):
@@ -234,6 +277,8 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         self._dependencies = []
         self.on_start.append(self.__set_resolving_provider)
         self.on_stop.append(self.__unset_resolving_provider)
+        self.on_pause.append(self.__pause_resolving_provider)
+        self.on_resume.append(self.__resume_resolving_provider)
         
     def __set_resolving_provider(self):
         VideoAddonContentProvider.__resolving_provider = self
@@ -247,6 +292,17 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         VideoAddonContentProvider.__addon_sys.clear_addons()
         self.video_addon.deinclude()
         self.release_dependencies()
+        
+    def __pause_resolving_provider(self):
+        self.video_addon.deinclude()
+        for addon in self._dependencies:
+            addon.deinclude()
+        
+    def __resume_resolving_provider(self):
+        self.video_addon.include()
+        for addon in self._dependencies:
+            addon.include()
+        
         
     def __clear_list(self):
         del VideoAddonContentProvider.__gui_item_list[0][:]
