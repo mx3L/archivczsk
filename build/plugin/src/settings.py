@@ -118,17 +118,17 @@ config.plugins.archivCZSK.videoPlayer.playDelay = ConfigSelection(default="20", 
 choicelist = []
 for i in range(10, 240, 5):
     choicelist.append(("%d" % i, "%d s" % i))
-config.plugins.archivCZSK.videoPlayer.rtmpTimeout = ConfigSelection(default="60", choices=choicelist)
+config.plugins.archivCZSK.videoPlayer.rtmpTimeout = ConfigSelection(default="20", choices=choicelist)
 
 choicelist = []
 for i in range(1000, 50000, 1000):
     choicelist.append(("%d" % i, "%d ms" % i))
-config.plugins.archivCZSK.videoPlayer.archiveBuffer = ConfigSelection(default="15000", choices=choicelist)
+config.plugins.archivCZSK.videoPlayer.archiveBuffer = ConfigSelection(default="10000", choices=choicelist)
 
 choicelist = []
 for i in range(1000, 50000, 1000):
     choicelist.append(("%d" % i, "%d ms" % i))
-config.plugins.archivCZSK.videoPlayer.liveBuffer = ConfigSelection(default="15000", choices=choicelist)
+config.plugins.archivCZSK.videoPlayer.liveBuffer = ConfigSelection(default="10000", choices=choicelist)
 
 
 ############ Main config #################
