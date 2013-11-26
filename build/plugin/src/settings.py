@@ -178,7 +178,6 @@ def get_player_settings():
     useServiceMP4 = config.plugins.archivCZSK.videoPlayer.servicemp4.getValue()
     useServiceMRUA = config.plugins.archivCZSK.videoPlayer.servicemrua.getValue()
     buffer_mode = config.plugins.archivCZSK.videoPlayer.bufferMode.getValue()
-    list.append(getConfigListEntry(_("Detected player"), config.plugins.archivCZSK.videoPlayer.detectedType))
     list.append(getConfigListEntry(_("Show more info about player"), config.plugins.archivCZSK.videoPlayer.info))
     list.append(getConfigListEntry(_("Video player"), config.plugins.archivCZSK.videoPlayer.type))
     if player == 'custom':
