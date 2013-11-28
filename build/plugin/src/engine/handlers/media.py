@@ -91,7 +91,12 @@ class PlaylistItemHandler(MediaItemHandler):
         self.content_screen.load(content)
         
     def _init_menu(self, item, *args, **kwargs):
-        MediaItemHandler._init_menu(self, item)
+        provider = self.content_provider
+        if 'play' in provider.capabilities:
+            item.add_context_menu_item(_("Play"),
+                                                        action=self.play_item,
+                                                        params={'item':item,
+                                                        'mode':'play'})
         item.add_context_menu_item(_("Show playlist"),
                                    action=self.show_playlist,
                                    params={'item':item})
