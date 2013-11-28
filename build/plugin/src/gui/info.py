@@ -29,12 +29,14 @@ def showChangelog(session, changelog_title, changelog_text):
 def showItemInfo(session, item):
 	Info(session, item)
 	
-def showCSFDInfo(session, name):
+def showCSFDInfo(session, item):
 	try:
 		from Plugins.Extensions.CSFD.plugin import CSFD
 	except ImportError:
 		showInfoMessage(session, _("Plugin CSFD is not installed."))
 	else:
+		name = item.name
+		name = name.replace('.', ' ').replace('_', ' ').replace('-', ' ')
 		session.open(CSFD, name, False)
 	
 	
