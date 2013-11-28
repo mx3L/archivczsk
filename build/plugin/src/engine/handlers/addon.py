@@ -1,7 +1,7 @@
 from item import ItemHandler
 from content import ContentHandler
 from folder import FolderItemHandler
-from media import VideoItemHandler
+from media import VideoItemHandler, PlaylistItemHandler
 from context import ContextMenuItemHandler
 
 from Plugins.Extensions.archivCZSK import _
@@ -86,6 +86,7 @@ class VideoAddonContentHandler(ContentHandler):
         handlers = []
         handlers.append(FolderItemHandler(session, content_screen, content_provider))
         handlers.append(VideoItemHandler(session, content_screen, content_provider))
+        handlers.append(PlaylistItemHandler(session, content_screen, content_provider))
         handlers.append(ContextMenuItemHandler(session, content_screen, content_provider))
         ContentHandler.__init__(self, session, content_screen, content_provider, handlers)
             
