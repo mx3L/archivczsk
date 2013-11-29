@@ -1,3 +1,11 @@
+## Verzia 0.70 beta 5
+**Vseobecne**
+
+* zlepsena podpora pre DMM image (nahodne GS, aktualizacie)
+* opravy kontextovych ponuk (zalozky, playlist)
+* oprava stahovania (befun)
+* znizeny rtmp buffer pre plynule prehravanie na niektorych STB
+
 ## Verzia 0.70 beta 4
 **Vseobecne**
 
