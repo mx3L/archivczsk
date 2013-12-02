@@ -2,8 +2,7 @@ from item import ItemHandler
 from content import ContentHandler
 from context import ContextMenuItemHandler
 from folder import FolderItemHandler
-from media import VideoItemHandler, PlaylistItemHandler
-from context import ContextMenuItemHandler
+from media import VideoResolvedItemHandler, VideoNotResolvedItemHandler, PlaylistItemHandler
 
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
@@ -93,9 +92,9 @@ class VideoAddonContentHandler(ContentHandler):
     def __init__(self, session, content_screen, content_provider):
         handlers = []
         handlers.append(FolderItemHandler(session, content_screen, content_provider))
-        handlers.append(VideoItemHandler(session, content_screen, content_provider))
+        handlers.append(VideoResolvedItemHandler(session, content_screen, content_provider))
+        handlers.append(VideoNotResolvedItemHandler(session, content_screen, content_provider))
         handlers.append(PlaylistItemHandler(session, content_screen, content_provider))
-        handlers.append(ContextMenuItemHandler(session, content_screen, content_provider))
         ContentHandler.__init__(self, session, content_screen, content_provider, handlers)
             
     def exit_item(self):

@@ -94,6 +94,7 @@ class PVideo(PItem):
         self.filename = None
         self.subs = None 
         self.picon = None
+        self.quality = None
         #stream object, can be stream/rtmp stream
         self.stream = None
         #download object, provides additional info for downloading
@@ -104,6 +105,15 @@ class PVideo(PItem):
     
     def add_stream(self, stream):
         self.stream = stream
+        
+class PVideoResolved(PVideo):
+    def __init__(self):
+        PVideo.__init__(self)
+        
+class PVideoNotResolved(PVideo):
+    def __init__(self):
+        PVideo.__init__(self)
+        self.thumb = PNG_PATH + '/movie.png'
                
 class PNotSupportedVideo(PVideo):
     def __init__(self):

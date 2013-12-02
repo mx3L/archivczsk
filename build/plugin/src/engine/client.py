@@ -15,7 +15,7 @@ from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonConte
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.engine.tools.task import callFromThread, Task
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonInfoError, AddonWarningError, AddonError, AddonThreadException
-from Plugins.Extensions.archivCZSK.engine.items import PFolder, PVideo, PPlaylist, PNotSupportedVideo, PSearch, PSearchItem, PContextMenuItem, Stream
+from Plugins.Extensions.archivCZSK.engine.items import PFolder, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist, PNotSupportedVideo, PSearch, PSearchItem, PContextMenuItem, Stream
 
 
 GItem_lst = VideoAddonContentProvider.get_shared_itemlist()
@@ -112,9 +112,10 @@ def refresh_screen():
     set_command('refreshnow')
     
     
-def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False):
+def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False):
     if search_item: it = PSearchItem()
     elif search_folder: it = PSearch()
+    elif video_item: it = PVideoNotResolved()
     else: it = PFolder()
     
     if isinstance(name, str): it.name = unicode(name, 'utf-8', 'ignore')
@@ -148,7 +149,7 @@ def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}
     
 
 def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={}, filename=None, live=False, stream=None, settings=None):
-    it = PVideo()
+    it = PVideoResolved()
     
     if isinstance(name, str): it.name = unicode(name, 'utf-8', 'ignore')
     else: it.name = name 
@@ -204,11 +205,12 @@ def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={
                 settings['extra-headers'] = {}
             log.debug("Settings: %s", settings)
             it.settings = settings
+    it.resolved = True
             
     return it
 
 @abortTask
-def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False):
+def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False):
     """adds directory item to content screen
     
         @param name : name of the directory
@@ -224,7 +226,8 @@ def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_fol
                              infoLabels=infoLabels,
                              menuItems=menuItems,
                              search_folder=search_folder,
-                             search_item=search_item)
+                             search_item=search_item,
+                             video_item=video_item)
     GItem_lst[0].append(it)
 
 @abortTask
@@ -264,10 +267,3 @@ def add_playlist(name, media_list=[]):
     for media in media_list:
         playlist.add(media)
     GItem_lst[0].append(playlist)
-    
-    
-    
-    
-        
-
-
