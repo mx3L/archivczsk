@@ -23,7 +23,7 @@ from Plugins.Extensions.archivCZSK.engine.items import (PItem, PFolder, PPlaylis
                                                         PVideo, PContextMenuItem, PSearch, PSearchItem, 
                                                         PDownload, PVideoAddon, Stream, RtmpStream)
 from Plugins.Extensions.archivCZSK.engine.contentprovider import StreamContentProvider, VideoAddonContentProvider
-from Plugins.Extensions.archivCZSK.engine.handlers import VideoAddonItemHandler, VideoAddonContentHandler, StreamContentHandler
+from Plugins.Extensions.archivCZSK.engine.handlers import VideoAddonMainContentHandler, VideoAddonContentHandler, StreamContentHandler
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
 
 PanelListEntry = PanelListEntryHD
@@ -185,7 +185,7 @@ class VideoAddonsContentScreen(BaseContentScreen, DownloadList, TipBar):
     CONTEXT_TIP = (KEY_MENU_IMG, _("show menu of current addon"))
        
     def __init__(self, session, tv_video_addon, video_addon):
-        item_handler = VideoAddonItemHandler(session, self)
+        item_handler = VideoAddonMainContentHandler(session, self)
         BaseContentScreen.__init__(self, session, item_handler, tv_video_addon)
         
         self.tv_video_addon = tv_video_addon

@@ -1,5 +1,6 @@
 from item import ItemHandler
 from content import ContentHandler
+from context import ContextMenuItemHandler
 from folder import FolderItemHandler
 from media import VideoItemHandler, PlaylistItemHandler
 from context import ContextMenuItemHandler
@@ -78,7 +79,14 @@ class VideoAddonItemHandler(ItemHandler):
                                    action=addon.open_shortcuts,
                                    params={'session':self.session,
                                            'cb':self.open_shortcuts_cb})
-        
+
+
+class VideoAddonMainContentHandler(ContentHandler):
+    def __init__(self, session, content_screen):
+        handlers = []
+        handlers.append(VideoAddonItemHandler(session, content_screen))
+        ContentHandler.__init__(self, session, content_screen, handlers = handlers)
+
 
 class VideoAddonContentHandler(ContentHandler):
     
@@ -97,7 +105,3 @@ class VideoAddonContentHandler(ContentHandler):
         else:
             self.content_provider.save_shortcuts()
             self.content_screen.close(self.content_provider)
-            
-    def close_screen(self):
-        self.content_provider.save_shortcuts()
-        self.content_screen_close()

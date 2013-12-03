@@ -1,4 +1,4 @@
-from addon import VideoAddonItemHandler, VideoAddonContentHandler
+from addon import VideoAddonMainContentHandler, VideoAddonContentHandler
 from stream import StreamContentHandler
 
-__all__= ['VideoAddonItemHandler', 'VideoAddonContentHandler', 'StreamContentHandler']
+__all__= ['VideoAddonMainContentHandler', 'VideoAddonContentHandler', 'StreamContentHandler']

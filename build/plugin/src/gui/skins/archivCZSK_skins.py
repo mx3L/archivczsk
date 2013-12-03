@@ -196,10 +196,10 @@ VideoPlayerInfoScreen_SD = """
 
 
 ContextMenuScreen = """
-        <screen name="ContextMenuScreen" position="center,center" size="500,300">
-            <widget name="img" position="10,13" size="35,25" alphatest="on" />
-            <widget name="name" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 23" />
-            <widget name="menu" position="1,81" scrollbarMode="showOnDemand" size="500,226" />
+        <screen name="ContextMenuScreen" position="center,center" size="500,350">
+            <widget name="item_pixmap" position="10,13" size="35,25" alphatest="on" />
+            <widget name="item_label" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 21" />
+            <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
         </screen> """
         
 SearchClient = """
