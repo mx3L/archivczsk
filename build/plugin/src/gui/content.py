@@ -42,6 +42,8 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
         self.loadingScreen = session.instantiateDialog(LoadingScreen)
         
         self.lst_items = lst_items
+        # screen context items
+        self.ctx_items = []
         self.refresh = False
         self.refreshing = False
         self.parent_it = PFolder()
@@ -173,7 +175,7 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
             
     def menu(self):
         if not self.working and len(self.lst_items) > 0:
-            self.item_handler.menu_item(self.getSelectedItem())
+            self.item_handler.menu_item(self.getSelectedItem(), self.ctx_items)
             
     def info(self, mode):
         if not self.working and len(self.lst_items) > 0:
@@ -311,7 +313,6 @@ class ContentScreen(BaseContentScreen, DownloadList, TipBar):
         item_handler = VideoAddonContentHandler(session, self, addon.provider)
         BaseContentScreen.__init__(self, session, item_handler, lst_items)
 
-        
         #include DownloadList
         DownloadList.__init__(self)
         

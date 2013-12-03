@@ -229,6 +229,10 @@ class DownloadStatusScreen(BaseArchivCZSKScreen):
 
 class DownloadList:
     def __init__(self):
+        try:
+            self.ctx_items.append((_("Show recent downloads"), None, self.showDownloadListScreen))
+        except AttributeError:
+            pass
         self["DownloadListActions"] = HelpableActionMap(self, "DownloadActions",
             {
                 "showDownloadListView": (self.showDownloadListScreen, _("show download list")),
