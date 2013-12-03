@@ -8,8 +8,8 @@ from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PPlaylist
 class MediaItemHandler(ItemHandler):
     """ Template class - handles Media Item interaction """
     
-    def __init__(self, session, content_screen, content_provider, info_methods=None):
-        ItemHandler.__init__(self, session, content_screen, info_methods)
+    def __init__(self, session, content_screen, content_provider, info_modes):
+        ItemHandler.__init__(self, session, content_screen, info_modes)
         self.content_provider = content_provider
         
     def _open_item(self, item, mode='play', *args, **kwargs):
@@ -40,7 +40,6 @@ class MediaItemHandler(ItemHandler):
         start_download(mode)
         
     def _init_menu(self, item):
-        ItemHandler._init_menu(self, item)
         provider = self.content_provider
         if 'play' in provider.capabilities:
             item.add_context_menu_item(_("Play"),
@@ -70,16 +69,16 @@ class MediaItemHandler(ItemHandler):
 class VideoItemHandler(MediaItemHandler):
     handles = (PVideo, )
     def __init__(self, session, content_screen, content_provider):
-        info_handlers = ['csfd','item']
-        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)
+        info_modes = ['item','csfd']
+        MediaItemHandler.__init__(self, session, content_screen, content_provider, ['item','csfd'])
         
 
 class PlaylistItemHandler(MediaItemHandler):
     handles = (PPlaylist, )
-    def __init__(self, session, content_screen, content_provider, info_handlers=None):
-        if not info_handlers:
-            info_handlers = ['csfd','item']
-        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)
+    def __init__(self, session, content_screen, content_provider, info_modes=None):
+        if not info_modes:
+            info_modes = ['item','csfd']
+        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_modes)
 
     def show_playlist(self, item):
         self.content_screen.save()

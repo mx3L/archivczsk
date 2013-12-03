@@ -10,7 +10,8 @@ class FolderItemHandler(ItemHandler):
     handles = (PFolder, )
     
     def __init__(self, session, content_screen, content_provider):
-        ItemHandler.__init__(self, session, content_screen)
+        info_modes = ['item','csfd']
+        ItemHandler.__init__(self, session, content_screen, info_modes)
         self.content_provider = content_provider
         
     def is_search(self, item):

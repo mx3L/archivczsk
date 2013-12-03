@@ -6,8 +6,8 @@ from Plugins.Extensions.archivCZSK.engine.items import PFolder, PVideo, PPlaylis
 class StreamVideoItemHandler(MediaItemHandler):
     handles = (PVideo, )
     def __init__(self, session, content_screen, content_provider):
-        info_handlers = ['item']
-        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)
+        info_modes = ['item']
+        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_modes)
         
     def init_menu(self, item):
         MediaItemHandler.init_menu(item)
@@ -28,8 +28,8 @@ class StreamVideoItemHandler(MediaItemHandler):
 class StreamPlaylistItemHandler(PlaylistItemHandler):
     handles = (PPlaylist, )
     def __init__(self, session, content_screen, content_provider):
-        info_handlers = ['item']
-        PlaylistItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)
+        info_modes = ['item']
+        PlaylistItemHandler.__init__(self, session, content_screen, content_provider, info_modes)
 
 
 class StreamContentHandler(ContentHandler):
