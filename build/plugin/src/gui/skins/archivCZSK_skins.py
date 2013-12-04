@@ -198,7 +198,15 @@ VideoPlayerInfoScreen_SD = """
 ContextMenuScreen = """
         <screen name="ContextMenuScreen" position="center,center" size="500,350">
             <widget name="item_pixmap" position="10,13" size="35,25" alphatest="on" />
-            <widget name="item_label" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 21" />
+            <widget name="item_label" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 22" />
+            <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
+        </screen> """
+        
+SelectSource = """
+        <screen name="ContextMenuScreen" position="center,center" size="500,350">
+            <!-- <widget name="item_pixmap" position="10,13" size="35,25" alphatest="on" /> -->
+            <widget name="item_label" position="10,10" size="480,30" halign="center" foregroundColor="#e5b243" font="Regular; 22" />
+            <eLabel position="10,50" size="480,1" backgroundColor="#999999" />
             <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
         </screen> """
         

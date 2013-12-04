@@ -26,7 +26,7 @@ class ContextMenuList(MenuList):
     def __init__(self):
         MenuList.__init__(self, [], False, eListboxPythonMultiContent)
         self.l.setItemHeight(24)
-        self.l.setFont(0, gFont("Regular", 18))
+        self.l.setFont(0, gFont("Regular", 19))
 
 
 def ContextEntry(name, idx, png='', separator=False):
@@ -47,7 +47,7 @@ class ContextMenuScreen(BaseArchivCZSKScreen):
         self.ctxItems = items or []
         self.globalCtxItems = globalItems or []
         name = name.encode('utf-8', 'ignore')
-        img = img.endswith(('.jpg', '.png')) and img
+        img = img and img.endswith(('.jpg', '.png')) and img
         img = img and LoadPixmap(cached=True, path=img)
         self.img = img or None
         self.itemListDisabled = not (items and len(items) > 0)
@@ -119,3 +119,8 @@ class ContextMenuScreen(BaseArchivCZSKScreen):
     
     def cancel(self):
         self.close(None)
+        
+class SelectSource(ContextMenuScreen):
+    def __init__(self, session, sources):
+        ContextMenuScreen.__init__(self, session, _("Select source"), None, sources, None)
+
