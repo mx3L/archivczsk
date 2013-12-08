@@ -813,6 +813,7 @@ class Player(DownloadSupport, RTMPGWSupport):
 			self.videoPlayer.sref = sref
 			self.videoPlayer.playService()
 			if hasattr(self.videoPlayer, 'loadSubs'):
+				self.videoPlayer.resetSubs(True)
 				self.videoPlayer.loadSubs(subtitlesURL)
 		# create new media player
 		else:
