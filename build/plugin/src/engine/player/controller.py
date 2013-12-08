@@ -771,6 +771,7 @@ class RTMPController(BaseVideoPlayerController):
             current_pts = self._base_pts
         else:
             current_pts = play_pts
+        self._seek_pts = current_pts
         time = self.pts_to_sec(current_pts) * 1000
         self.rtmp_seek(time)
     
