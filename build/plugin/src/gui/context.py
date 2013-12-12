@@ -46,7 +46,7 @@ class ContextMenuScreen(BaseArchivCZSKScreen):
         BaseArchivCZSKScreen.__init__(self, session)
         self.ctxItems = items or []
         self.globalCtxItems = globalItems or []
-        name = name.encode('utf-8', 'ignore')
+        name = isinstance(name,unicode) and name.encode('utf-8') or name
         img = img and img.endswith(('.jpg', '.png')) and img
         img = img and LoadPixmap(cached=True, path=img)
         self.img = img or None

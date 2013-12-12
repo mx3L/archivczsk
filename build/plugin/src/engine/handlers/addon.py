@@ -95,6 +95,7 @@ class VideoAddonContentHandler(ContentHandler):
         handlers.append(VideoResolvedItemHandler(session, content_screen, content_provider))
         handlers.append(VideoNotResolvedItemHandler(session, content_screen, content_provider))
         handlers.append(PlaylistItemHandler(session, content_screen, content_provider))
+        handlers.append(ContextMenuItemHandler(session, content_screen, content_provider))
         ContentHandler.__init__(self, session, content_screen, content_provider, handlers)
             
     def exit_item(self):
