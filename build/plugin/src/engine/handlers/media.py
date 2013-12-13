@@ -98,6 +98,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
     def download_item(self, item, mode="", *args, **kwargs):
         def wrapped(res_item):
             MediaItemHandler.download_item(self, res_item, mode)
+            self.content_screen.workingFinished()
         self._resolve_video(item, wrapped)
         
     def _filter_by_quality(self, items):
