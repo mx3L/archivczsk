@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: archivCZSK 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-09 14:30+0100\n"
-"PO-Revision-Date: 2013-11-09 14:31+0100\n"
+"POT-Creation-Date: 2013-12-14 12:46+0100\n"
+"PO-Revision-Date: 2013-12-14 12:53+0100\n"
 "Last-Translator: mx3L <mx3Lmail@gmail.com>\n"
 "Language-Team: mx3L <mxfitsat@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -50,130 +50,126 @@ msgid "debug"
 msgstr ""
 
 #: settings.py:181
-msgid "Detected player"
-msgstr "Detekovaný prehrávač"
-
-#: settings.py:182
 msgid "Show more info about player"
 msgstr "Zobraziť informácie o prehrávači"
 
-#: settings.py:183
+#: settings.py:182
 msgid "Video player"
 msgstr "Video prehrávač"
 
-#: settings.py:185
+#: settings.py:184
 msgid "Use video controller"
 msgstr "Použiť video kontrolér"
 
-#: settings.py:186
+#: settings.py:185
 msgid "Use default skin"
 msgstr "Použiť pôvodný skin"
 
-#: settings.py:188
+#: settings.py:187
 msgid "Exit fix"
 msgstr "Oprava ukončenia prehrávania"
 
-#: settings.py:190
+#: settings.py:189
 msgid "Buffer size"
 msgstr "Velkosť bufferu"
 
-#: settings.py:193
+#: settings.py:192
 msgid "Use servicemrua (AZBOX)"
 msgstr "Použiť servicemrua(AZBOX)"
 
-#: settings.py:195
+#: settings.py:194
 msgid "Use servicemp4"
 msgstr "Použiť servicemp4"
 
-#: settings.py:197
+#: settings.py:196
 msgid "HTTP Timeout"
 msgstr "HTTP Timeout"
 
-#: settings.py:198
+#: settings.py:197
 msgid "Buffer Mode"
 msgstr "Buffer mód"
 
-#: settings.py:199
+#: settings.py:198
 msgid "Buffer duration"
 msgstr "Bufferovať (s)"
 
-#: settings.py:201
+#: settings.py:200
 msgid "Buffer size on HDD"
 msgstr "Velkosť bufferu na HDD"
 
-#: settings.py:202
+#: settings.py:201
 msgid "RTMP Timeout"
 msgstr "RTMP Timeout"
 
-#: settings.py:203
+#: settings.py:202
 msgid "Video player with RTMP support"
 msgstr "Video prehrávač s RTMP podporou"
 
-#: settings.py:204
+#: settings.py:203
 msgid "TV archive rtmp buffer"
 msgstr "Buffer pre tv archívy"
 
-#: settings.py:205
+#: settings.py:204
 msgid "Default live rtmp streams buffer"
 msgstr "Buffer pre streamy"
 
-#: settings.py:207
+#: settings.py:206
 msgid "Play after"
 msgstr "Začať prehrávať po"
 
-#: settings.py:212
+#: settings.py:211
 msgid "Allow auto-update"
 msgstr "Povoliť automatickú kontrolu aktualizácií"
 
-#: settings.py:214
+#: settings.py:213
 msgid "Debug mode"
 msgstr "Debug mód"
 
-#: settings.py:215
+#: settings.py:214
 msgid "Add to extensions menu"
 msgstr "Pridať do menu rozšírení"
 
-#: settings.py:216
+#: settings.py:215
 msgid "Add to main menu"
 msgstr "Pridať do hlavného menu"
 
-#: settings.py:217
+#: settings.py:216
 msgid "Add search option in epg menu"
 msgstr "Pridať vyhľadávanie do EPG menu"
 
-#: settings.py:222
+#: settings.py:221
 msgid "Data path"
 msgstr "Data"
 
-#: settings.py:223
+#: settings.py:222
 msgid "Downloads path"
 msgstr "Sťahovanie"
 
-#: settings.py:224
+#: settings.py:223
 msgid "Subtitles path"
 msgstr "Titulky"
 
-#: settings.py:229
+#: settings.py:228
 msgid "Show broken addons"
 msgstr "Zobraziť nefunkčné doplnky"
 
-#: settings.py:230
+#: settings.py:229
 msgid "Convert captcha images to 8bit"
 msgstr "Konvertovať captcha obrázky"
 
-#: settings.py:231
+#: settings.py:230
 msgid "Drop caches on exit"
 msgstr "Vymazať medzipamäť po ukončení"
 
-#: settings.py:234
+#: settings.py:233
 msgid "Use link verification"
 msgstr "Používať verifikáciu video linku"
 
-#: settings.py:236
+#: settings.py:235
 msgid "Verification timeout"
 msgstr "timeout verifikácie"
 
-#: settings.py:238
+#: settings.py:237
 msgid "Amiko HDMU fix"
 msgstr ""
 
@@ -217,21 +213,21 @@ msgstr "Nasledúce doplnky boli aktualizované:"
 msgid "You need to restart E2. Do you want to restart it now?"
 msgstr "Zmeny sa prejavia po reštarte E2. Chcete reštartovať E2 teraz?"
 
-#: engine/items.py:132
-#: engine/downloader.py:291
+#: engine/items.py:142
+#: engine/downloader.py:309
 msgid "succesfully finished"
 msgstr "úspešne skončilo"
 
-#: engine/downloader.py:272
-#: engine/downloader.py:300
+#: engine/downloader.py:290
+#: engine/downloader.py:318
 msgid "unknown"
 msgstr "??? MB"
 
-#: engine/downloader.py:294
+#: engine/downloader.py:312
 msgid "not succesfully finished"
 msgstr "neúspešne skončilo"
 
-#: engine/downloader.py:297
+#: engine/downloader.py:315
 msgid "downloading"
 msgstr "sťahujem..."
 
@@ -243,13 +239,76 @@ msgstr "Obecné"
 msgid "Please set your search expression"
 msgstr "Prosím vložte hľadaný výraz"
 
-#: engine/contentprovider.py:229
+#: engine/contentprovider.py:324
 msgid "You need to update archivCZSK at least to"
 msgstr "Musíte aktualizovať ArchivCZSK aspoň na"
 
-#: engine/contentprovider.py:229
+#: engine/contentprovider.py:324
 msgid "version"
 msgstr "verziu"
+
+#: engine/handlers/media.py:49
+#: engine/handlers/media.py:190
+msgid "Play"
+msgstr "Prehrať"
+
+#: engine/handlers/media.py:55
+msgid "Play and Download"
+msgstr "Prehrávaj a sťahuj"
+
+#: engine/handlers/media.py:61
+#, fuzzy
+msgid "Play and download (Gstreamer)"
+msgstr "Prehrávaj a sťahuj (GStreamer)"
+
+#: engine/handlers/media.py:67
+msgid "Download"
+msgstr "Stiahnuť"
+
+#: engine/handlers/media.py:89
+msgid "Resolve videos"
+msgstr ""
+
+#: engine/handlers/media.py:194
+msgid "Show playlist"
+msgstr "Zobraziť playlist"
+
+#: engine/handlers/folder.py:57
+msgid "Open"
+msgstr "Otvoriť položku"
+
+#: engine/handlers/folder.py:59
+#: engine/handlers/folder.py:61
+msgid "Add Shortcut"
+msgstr "Pridať záložku"
+
+#: engine/handlers/folder.py:66
+msgid "Do you want to add"
+msgstr "Chcete pridať"
+
+#: engine/handlers/folder.py:66
+msgid "shortcut?"
+msgstr "záložku?"
+
+#: engine/handlers/stream.py:17
+msgid "Not implemented yet"
+msgstr "Zatial neimplementované"
+
+#: engine/handlers/addon.py:67
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: engine/handlers/addon.py:70
+msgid "Changelog"
+msgstr "Zmeny"
+
+#: engine/handlers/addon.py:73
+msgid "Downloads"
+msgstr "Stiahnuté súbory"
+
+#: engine/handlers/addon.py:77
+msgid "Shortcuts"
+msgstr "Záložky"
 
 #: engine/player/player.py:128
 msgid "leave player?"
@@ -374,6 +433,7 @@ msgid "Download was succesfully saved"
 msgstr "Sťahovanie bolo úspešne uložené"
 
 #: engine/player/infobar.py:41
+#: engine/player/subtitles/subtitles.py:141
 msgid "0"
 msgstr ""
 
@@ -551,7 +611,6 @@ msgid "loading"
 msgstr "Načitavanie"
 
 #: resources/repositories/config.py:26
-#, fuzzy
 msgid "timeout"
 msgstr "HTTP Timeout"
 
@@ -601,369 +660,290 @@ msgstr "Zmazať záložku"
 msgid "Do you want to delete"
 msgstr "Chcete zmazať"
 
-#: gui/content.py:133
-#: gui/content.py:610
-#: gui/content.py:733
-#: gui/menu.py:277
-msgid "Settings"
-msgstr "Nastavenia"
-
-#: gui/content.py:134
-#: gui/menu.py:53
-msgid "Changelog"
-msgstr "Zmeny"
-
-#: gui/content.py:135
-#: gui/content.py:731
-#: gui/content.py:831
-#: gui/download.py:358
-msgid "Downloads"
-msgstr "Stiahnuté súbory"
-
-#: gui/content.py:136
-#: gui/content.py:732
-msgid "Shortcuts"
-msgstr "Záložky"
-
-#: gui/content.py:290
-#: gui/content.py:390
-msgid "Open"
-msgstr "Otvoriť položku"
-
-#: gui/content.py:291
-msgid "Add Shortcut"
-msgstr "Pridať záložku"
-
-#: gui/content.py:294
-#: gui/content.py:298
-#: gui/content.py:393
-#: gui/content.py:397
-#: gui/download.py:247
-msgid "Play"
-msgstr "Prehrať"
-
-#: gui/content.py:295
-#: gui/content.py:394
-msgid "Show playlist"
-msgstr "Zobraziť playlist"
-
-#: gui/content.py:299
-#: gui/content.py:398
-msgid "Play and Download"
-msgstr "Prehrávaj a sťahuj"
-
-#: gui/content.py:301
-msgid "Play and Download (GStreamer)"
-msgstr "Prehrávaj a sťahuj (GStreamer)"
-
-#: gui/content.py:303
-#: gui/content.py:400
-msgid "Download (wget)"
-msgstr "Stiahnuť (wget)"
-
-#: gui/content.py:304
-#: gui/content.py:401
-msgid "Download (Twisted)"
-msgstr "Stiahnuť (Twisted)"
-
-#: gui/content.py:306
-#: gui/content.py:403
-msgid "Download (rtmpdump)"
-msgstr "Stiahnuť (rtmpdump)"
-
-#: gui/content.py:350
-msgid "Do you want to add"
-msgstr "Chcete pridať"
-
-#: gui/content.py:350
-msgid "shortcut?"
-msgstr "záložku?"
-
-#: gui/content.py:404
-#: gui/content.py:830
-#: gui/download.py:248
-#: gui/download.py:354
-msgid "Remove"
-msgstr "Zmazať"
-
-#: gui/content.py:408
-msgid "Not implemented yet"
-msgstr "Zatial neimplementované"
-
-#: gui/content.py:455
+#: gui/content.py:73
 msgid "Loading"
 msgstr "Načítavam..."
 
-#: gui/content.py:579
+#: gui/content.py:187
 msgid "show menu of current addon"
 msgstr "zobrazí možnosti doplnku"
 
-#: gui/content.py:607
+#: gui/content.py:215
 msgid "TV archives"
 msgstr "TV archívy"
 
-#: gui/content.py:608
+#: gui/content.py:216
 msgid "Video archives"
 msgstr "Video archívy"
 
-#: gui/content.py:609
+#: gui/content.py:217
 msgid "Live streams"
 msgstr "Živé vysielanie"
 
-#: gui/content.py:669
+#: gui/content.py:271
 msgid "Author: "
 msgstr "Autor:"
 
-#: gui/content.py:670
+#: gui/content.py:272
 msgid "Version: "
 msgstr "Verzia:"
 
-#: gui/content.py:682
+#: gui/content.py:284
 msgid "Canceling..."
 msgstr "Prerušujem načitavanie..."
 
-#: gui/content.py:686
+#: gui/content.py:288
 msgid "Loading..."
 msgstr "Načítavam..."
 
-#: gui/content.py:696
+#: gui/content.py:298
 msgid "Do you want to exit ArchivCZSK?"
 msgstr "Chcete ukončiť archivCZSK?"
 
-#: gui/content.py:705
+#: gui/content.py:307
 msgid "show info in CSFD"
 msgstr "zobrazí informácie o vybranej položke v CSFD doplnku"
 
-#: gui/content.py:706
+#: gui/content.py:308
 msgid "show additional info"
 msgstr "zobrazí dodatočné informácie o vybranej položke"
 
-#: gui/content.py:707
-#: gui/content.py:814
+#: gui/content.py:309
+#: gui/content.py:414
 msgid "show menu of current item"
 msgstr "zobrazí možnosti vybranej položky"
 
-#: gui/content.py:835
+#: gui/content.py:427
+#: gui/download.py:252
+#: gui/download.py:358
+msgid "Remove"
+msgstr "Zmazať"
+
+#: gui/content.py:432
 msgid "Stream player"
 msgstr "Prehrávač streamov"
 
-#: gui/content.py:836
+#: gui/content.py:433
 msgid "STREAM INFO"
 msgstr "Informácie o streame"
 
-#: gui/content.py:838
+#: gui/content.py:435
 msgid "PROTOCOL:"
 msgstr "Protokol:"
 
-#: gui/content.py:840
+#: gui/content.py:437
 msgid "PLAY DELAY:"
 msgstr "Prehrávať po:"
 
-#: gui/content.py:843
+#: gui/content.py:440
 msgid "RTMP BUFFER:"
 msgstr "RTMP Buffer:"
 
-#: gui/content.py:845
+#: gui/content.py:442
 msgid "PLAYER BUFFER:"
 msgstr "Buffer prehrávača"
+
+#: gui/context.py:125
+msgid "Select source"
+msgstr "Vyberte zdroj"
 
 #: gui/info.py:36
 msgid "Plugin CSFD is not installed."
 msgstr "Doplnok CSFD nie je nainštalovaný."
 
-#: gui/info.py:136
+#: gui/info.py:138
 msgid "Genre: "
 msgstr "Žáner:"
 
-#: gui/info.py:137
+#: gui/info.py:139
 msgid "Year: "
 msgstr "Rok:"
 
-#: gui/info.py:138
+#: gui/info.py:140
 msgid "Rating: "
 msgstr "Hodnotenie:"
 
-#: gui/info.py:185
+#: gui/info.py:187
 msgid "Install GStreamer plugins"
 msgstr "Inštalovať GStreamer pluginy"
 
-#: gui/info.py:186
+#: gui/info.py:188
 msgid "Install RTMP plugins"
 msgstr "Inštalovať RTMP pluginy"
 
-#: gui/info.py:187
+#: gui/info.py:189
 msgid "Re-Install GStreamer plugins"
 msgstr "Preinštalovať GStreamer pluginy"
 
-#: gui/info.py:188
+#: gui/info.py:190
 msgid "Refresh"
 msgstr "Aktualizovať zoznam"
 
-#: gui/info.py:194
+#: gui/info.py:196
 msgid "Detected player:"
 msgstr "Prehrávač:"
 
-#: gui/info.py:196
+#: gui/info.py:198
 msgid "Supported protocols:"
 msgstr "Podporované protokoly:"
 
-#: gui/info.py:198
+#: gui/info.py:200
 msgid "Supported containers:"
 msgstr "Podporované kontajnery:"
 
-#: gui/info.py:222
+#: gui/info.py:224
 msgid "VideoPlayer Info"
 msgstr "Informácie o Video Prehrávači"
 
-#: gui/info.py:240
+#: gui/info.py:242
 msgid "* If some of the tests FAIL you should"
 msgstr "* Ak niektoré testy skončia neúspešne"
 
-#: gui/info.py:241
+#: gui/info.py:243
 msgid "try to install Gstreamer plugins in following order:"
 msgstr "pokúste sa nainštalovať Gstreamer pluginy v nasledujúcom poradí"
 
-#: gui/info.py:242
+#: gui/info.py:244
 msgid "1. Press Red, If it doesnt help go to point 2"
 msgstr "1. Stlačte červené tlačidlo, ak to nepomôže choďte na bod 2"
 
-#: gui/info.py:243
+#: gui/info.py:245
 msgid "2. Press Green, If it doesnt help go to point 3"
 msgstr "2. Stlačte zelené tlačidlo, ak to nepomôže choďte na bod 3"
 
-#: gui/info.py:244
+#: gui/info.py:246
 msgid "3. Press Yellow"
 msgstr "3. Stlačte žlté tlačidlo"
 
-#: gui/info.py:246
+#: gui/info.py:248
 msgid "* Status UNKNOWN means, that I dont know how to get info,"
 msgstr "* Stav NEZNÁMY znamená, že neviem ako získať potrebné informácie,"
 
-#: gui/info.py:247
+#: gui/info.py:249
 msgid "it doesnt mean that protocol or container isn't supported"
 msgstr "neznamená to že protokol alebo kontajner nie je podporovaný"
 
-#: gui/info.py:249
+#: gui/info.py:251
 msgid "* Videos are encoded by various codecs"
 msgstr "* Videá sú kódované  rôznymi kodekmi"
 
-#: gui/info.py:250
+#: gui/info.py:252
 msgid "to play them you need to have HW support of your receiver to decode them"
 msgstr "pre ich prehratie je potrebné, aby mal váš príjmač hardvérovú podporu na ich dekódovanie"
 
-#: gui/info.py:251
+#: gui/info.py:253
 msgid "For example if you have ASF(WMV) - OK state"
 msgstr "Napríklad ak sa vám zobrazuje stav ASF(WMV) - NAINŠTALOVANÝ"
 
-#: gui/info.py:252
+#: gui/info.py:254
 msgid "it doesnt already mean that you can play WMV file"
 msgstr "tak to ešte neznamená že môžete prehrávať WMV videá"
 
-#: gui/info.py:253
+#: gui/info.py:255
 msgid "it just means that player can open WMV container and get ENCODED video out of it"
 msgstr "znamená to len že váš prehrávač je schopný otvoriť WMV kontajner a získať z neho zakódované video"
 
-#: gui/info.py:254
+#: gui/info.py:256
 msgid "In WMV container is used VC1 encoded video"
 msgstr "Vo WMV kontajnery je použitý VC1 kodek"
 
-#: gui/info.py:255
+#: gui/info.py:257
 msgid "If your player cannot decode VC1 codec, than you cannot play this video."
 msgstr "Ak váš prehrávač nedokáže dekódovať VC1 kodek, tak toto video neprehráte."
 
-#: gui/info.py:260
+#: gui/info.py:262
 msgid "HTTP Protocol"
 msgstr "HTTP protokol"
 
-#: gui/info.py:261
+#: gui/info.py:263
 msgid "HLS Protocol"
 msgstr "HLS protokol"
 
-#: gui/info.py:262
+#: gui/info.py:264
 msgid "MMS Protocol"
 msgstr "MMS protokol"
 
-#: gui/info.py:263
+#: gui/info.py:265
 msgid "RTMP Protocol"
 msgstr "RTMP protokol"
 
-#: gui/info.py:264
+#: gui/info.py:266
 msgid "RTSP Protocol"
 msgstr "RTSP protokol"
 
-#: gui/info.py:269
+#: gui/info.py:271
 msgid "3GP container"
 msgstr "3GP kontajner"
 
-#: gui/info.py:270
+#: gui/info.py:272
 msgid "ASF(WMV) Container"
 msgstr "ASF(WMW) kontajner"
 
-#: gui/info.py:271
+#: gui/info.py:273
 msgid "AVI Container"
 msgstr "AVI kontajner"
 
-#: gui/info.py:272
+#: gui/info.py:274
 msgid "FLV Container"
 msgstr "FLV kontajner"
 
-#: gui/info.py:273
+#: gui/info.py:275
 msgid "MKV Container"
 msgstr "MKV kontajner"
 
-#: gui/info.py:274
+#: gui/info.py:276
 msgid "MP4 Container"
 msgstr "MP4 kontajner"
 
-#: gui/info.py:280
+#: gui/info.py:282
 msgid "UNKNOWN"
 msgstr "NEZNÁMY"
 
-#: gui/info.py:282
+#: gui/info.py:284
 msgid "OK"
 msgstr "NAINŠTALOVANÝ"
 
-#: gui/info.py:284
+#: gui/info.py:286
 msgid "FAIL"
 msgstr "NENAINŠTALOVANÝ"
 
-#: gui/info.py:296
+#: gui/info.py:298
 msgid "Do you want to install gstreamer plugins?"
 msgstr "Chcete nainštalovať GStreamer pluginy?"
 
-#: gui/info.py:303
+#: gui/info.py:305
 msgid "Do you want to re-install gstreamer plugins?"
 msgstr "Chcete preinštalovať GStreamer pluginy?"
 
-#: gui/info.py:310
+#: gui/info.py:312
 msgid "ATTENTION: Installation of this plugin can cause"
 msgstr "UPOZORNENIE: Inštalácia tohto pluginu môže spôsobiť"
 
-#: gui/info.py:311
+#: gui/info.py:313
 msgid "crash of Enigma2."
 msgstr "pád Enigmy2."
 
-#: gui/info.py:315
+#: gui/info.py:317
 msgid "It looks like RTMP plugin is already installed"
 msgstr "RTMP plugin je už nainštalovaný"
 
-#: gui/info.py:316
+#: gui/info.py:318
 msgid "Do you want to reinstall it?"
 msgstr "Chcete ho preinštalovať?"
 
-#: gui/info.py:319
+#: gui/info.py:321
 msgid "Do you want to continue?"
 msgstr "Chcete pokračovať?"
 
-#: gui/info.py:347
+#: gui/info.py:349
 msgid "Its highly recommended to restart Enigma2"
 msgstr "Po inštalácii Gstreamer pluginov"
 
-#: gui/info.py:348
+#: gui/info.py:350
 msgid "after installation of gstreamer plugins"
 msgstr "je potrebné reštartovať grafické rozhranie"
 
-#: gui/info.py:350
+#: gui/info.py:352
 msgid "Do you want to restart Enigma2 now?"
 msgstr "Chcete reštartovať grafické rozhranie?"
 
@@ -989,7 +969,7 @@ msgid "started."
 msgstr "začalo."
 
 #: gui/download.py:72
-#: gui/download.py:314
+#: gui/download.py:318
 msgid "The file"
 msgstr "Súbor"
 
@@ -1030,44 +1010,48 @@ msgstr "neukončené"
 msgid "downloaded"
 msgstr "stiahnutých"
 
-#: gui/download.py:234
+#: gui/download.py:233
+msgid "Show recent downloads"
+msgstr "Zobraziť sťahované súbory"
+
+#: gui/download.py:238
 msgid "show download list"
 msgstr "zobraziť aktuálne sťahované súbory"
 
-#: gui/download.py:255
+#: gui/download.py:259
 msgid "Recent downloads"
 msgstr "Sťahované súbory"
 
-#: gui/download.py:286
+#: gui/download.py:290
 msgid "Do you want to cancel"
 msgstr "Chcete prerušiť"
 
-#: gui/download.py:298
-#: gui/download.py:384
+#: gui/download.py:302
+#: gui/download.py:388
 msgid "Do you want to remove"
 msgstr "Chcete zmazať"
 
-#: gui/download.py:299
+#: gui/download.py:303
 msgid "from disk"
 msgstr "z disku?"
 
-#: gui/download.py:314
+#: gui/download.py:318
 msgid "is not downloaded yet. Do you want to play it anyway?"
 msgstr "zatiaľ nie je dosťahovaný. Chcete ho aj napriek tomu prehrať?"
 
-#: gui/download.py:346
+#: gui/download.py:350
 msgid "Sort alphabetically"
 msgstr "Podľa [A-Z]"
 
-#: gui/download.py:347
+#: gui/download.py:351
 msgid "Sort by date"
 msgstr "Podľa dátumu"
 
-#: gui/download.py:348
+#: gui/download.py:352
 msgid "Sort by size"
 msgstr "Podľa velkosťi"
 
-#: gui/download.py:349
+#: gui/download.py:353
 msgid "Sort by state"
 msgstr "Podľa stavu"
 
@@ -1249,4 +1233,13 @@ msgstr "Nemôžem odstrániť diakritiku, chýba unicodedata.so knižnica."
 #: gui/search.py:108
 msgid "Set your search expression"
 msgstr "Prosím vložte hľadaný výraz"
+
+#~ msgid "Detected player"
+#~ msgstr "Detekovaný prehrávač"
+#~ msgid "Download (wget)"
+#~ msgstr "Stiahnuť (wget)"
+#~ msgid "Download (Twisted)"
+#~ msgstr "Stiahnuť (Twisted)"
+#~ msgid "Download (rtmpdump)"
+#~ msgstr "Stiahnuť (rtmpdump)"
 
