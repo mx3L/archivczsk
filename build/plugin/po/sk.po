@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: archivCZSK 0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-14 12:46+0100\n"
-"PO-Revision-Date: 2013-12-14 12:53+0100\n"
+"PO-Revision-Date: 2013-12-18 10:06+0100\n"
 "Last-Translator: mx3L <mx3Lmail@gmail.com>\n"
 "Language-Team: mx3L <mxfitsat@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -267,7 +267,7 @@ msgstr "Stiahnuť"
 
 #: engine/handlers/media.py:89
 msgid "Resolve videos"
-msgstr ""
+msgstr "Načítaj videá"
 
 #: engine/handlers/media.py:194
 msgid "Show playlist"

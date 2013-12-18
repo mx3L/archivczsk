@@ -16,6 +16,8 @@ from Components.Pixmap import Pixmap
 from Tools.Directories import fileExists
 from Tools.LoadPixmap import LoadPixmap
 
+from Plugins.Extensions.archivCZSK import _
+
 
 from base import  BaseArchivCZSKScreen
 def showContextMenu(session, name, img, items, globalItems, cb):
