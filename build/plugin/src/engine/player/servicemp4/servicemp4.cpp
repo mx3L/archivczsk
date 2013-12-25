@@ -747,8 +747,7 @@ RESULT eServiceMP4::seekToImpl(pts_t to)
 {
 		/* convert pts to nanoseconds */
 	gint64 time_nanoseconds = to * 11111LL;
-	//GST_SEEK_FLAG_KEY_UNIT(GstSeekFlags)
-	if (!gst_element_seek (m_gst_playbin, m_currentTrickRatio, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH,
+	if (!gst_element_seek (m_gst_playbin, m_currentTrickRatio, GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
 		GST_SEEK_TYPE_SET, time_nanoseconds,
 		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
 	{
