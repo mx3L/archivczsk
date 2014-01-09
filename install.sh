@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 D=$(pushd $(dirname $0) &> /dev/null; pwd; popd &> /dev/null)
 PLUGINPATH="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK"
@@ -34,7 +34,7 @@ bye
 EOFFTP
 
 echo "installing archivCZSK on $E2_HOST"
-sshpass -p $E2_PASSWORD ssh $E2_USERNAME@$E2_HOST << EOFSSH
+sshpass -p $E2_PASSWORD ssh -t $E2_USERNAME@$E2_HOST << EOFSSH
 opkg remove enigma2-plugin-extensions-archivczsk
 opkg install /tmp/$IPK_NAME
 rm /tmp/$IPK_NAME
