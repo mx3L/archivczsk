@@ -1756,7 +1756,7 @@ void eServiceMP4::gstBusCall(GstMessage *msg)
 			{
 				GstBufferingMode mode;
 				gst_message_parse_buffering(msg, &(m_bufferInfo.bufferPercent));
-				eDebug("Buffering %u percent done", m_bufferInfo.bufferPercent);
+				//eDebug("Buffering %u percent done", m_bufferInfo.bufferPercent);
 				gst_message_parse_buffering_stats(msg, &mode, &(m_bufferInfo.avgInRate), &(m_bufferInfo.avgOutRate), &(m_bufferInfo.bufferingLeft));
                 m_event((iPlayableService*)this, evBuffering);
 				/*
