@@ -25,7 +25,7 @@ echo  $oe
 }
 
 SH4_V="0.1"
-MIPS_V="0.1"
+MIPS_V="0.2"
 SH4="http://dl.bintray.com/mx3l/generic/sh4_$SH4_V.tar.gz"
 MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
@@ -43,7 +43,7 @@ tar -C /tmp -xzf /tmp/mipsel_$MIPS_V.tar.gz
 
 if [ "$OE" == "OE40" ]; then
 	cp /tmp/mipsel/gst_rtmp_plugin/OE4_seekingfix/libgstrtmp.so $GSTDIR
-	cp /tmp/mipsel/rtmpdump/OE4_KSV/librtmp.so.1 $LIBDIR	
+	cp /tmp/mipsel/rtmpdump/OE4_KSV/librtmp.so.1 $LIBDIR
 	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpdump $BINDIR
 	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpgw $BINDIR
 

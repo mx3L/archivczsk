@@ -8,7 +8,7 @@ P26="http://www.python.org/ftp/python/2.6/Python-2.6.tgz"
 P27="http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz"
 
 SH4_V="0.1"
-MIPS_V="0.1"
+MIPS_V="0.2"
 SH4="http://dl.bintray.com/mx3l/generic/sh4_$SH4_V.tar.gz"
 MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
@@ -35,7 +35,7 @@ else
 	echo "downloading neccesary python packages..."
 	wget -O ${DP}/Python-2.6.tgz $P26
 	wget -O ${DP}/Python-2.7.5.tgz $P27
-	tar -C ${DP} -xzf ${DP}/Python-2.6.tgz 
+	tar -C ${DP} -xzf ${DP}/Python-2.6.tgz
 	tar -C ${DP} -xzf ${DP}/Python-2.7.5.tgz
 	mv ${DP}/Python-2.7.5 ${DP}/Python-2.7
 fi
