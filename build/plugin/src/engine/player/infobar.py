@@ -11,7 +11,8 @@ from Components.Sources.StaticText import StaticText
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
 from Components.ServiceEventTracker import ServiceEventTracker
 from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, eListboxPythonMultiContent, gFont
-from enigma import iPlayableService
+from enigma import iPlayableService, eTimer, getDesktop
+from skin import parseColor
 
 from Plugins.Extensions.archivCZSK import _, settings, log
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKMenuListScreen
@@ -119,8 +120,46 @@ class ArchivCZSKMoviePlayerSummary(Screen):
     def updateOLED(self, what):
         self["item"].setText(what)
 
+class StatusScreen(Screen):
 
-class InfoBarAspectChange:
+    def __init__(self, session):
+        desktop = getDesktop(0)
+        size = desktop.size()
+        self.sc_width = size.width()
+        self.sc_height = size.height()
+
+        statusPositionX = 50
+        statusPositionY = 100
+        self.delayTimer = eTimer()
+        self.delayTimer.callback.append(self.hideStatus)
+        self.delayTimerDelay = 1500
+
+        self.skin = """
+            <screen name="StatusScreen" position="%s,%s" size="%s,90" zPosition="0" backgroundColor="transparent" flags="wfNoBorder">
+                    <widget name="status" position="0,0" size="%s,70" valign="center" halign="left" font="Regular;22" transparent="1" foregroundColor="yellow" shadowColor="#40101010" shadowOffset="3,3" />
+            </screen>""" % (str(statusPositionX), str(statusPositionY), str(self.sc_width), str(self.sc_width))
+
+        Screen.__init__(self, session)
+        self.stand_alone = True
+        self["status"] = Label("")
+        self.onClose.append(self.__onClose)
+
+    def setStatus(self, text, color="yellow"):
+        self['status'].setText(text)
+        self['status'].instance.setForegroundColor(parseColor(color))
+        self.show()
+        self.delayTimer.start(self.delayTimerDelay, True)
+
+    def hideStatus(self):
+        self.hide()
+        self['status'].setText("")
+
+    def __onClose(self):
+        print 'closing StatusScreen'
+        self.delayTimer.stop()
+        del self.delayTimer
+
+class InfoBarAspectChange(object):
     """
     Simple aspect ratio changer
     """
@@ -210,35 +249,6 @@ class InfoBarAspectChange:
         if self.aspectChanged:
             self.setAspect(self.defaultAspect, self.defaultPolicy, self.defaultPolicy2)
 
-
-class PlayerSettingsSupport(object):
-    def __init__(self):
-        self.onPlayService.append(self.__updateSettings)
-        self.__updateSettings()
-
-    def __updateSettings(self):
-        path = self.sref.getPath()
-        headers = path.split(' ')[-1]
-        headers = dict((key, value) for key, value in [head.split(':') for head in headers.split('|')])
-        log.debug('[PlayerSettingsSupport] __updateSettings: %s', str(headers))
-        userAgent = ''
-        extraHeaders = {}
-        if 'User-Agent:' in headers:
-            userAgent = headers['User-Agent']
-            del headers['User-Agent']
-        if userAgent or extraHeaders:
-            self.sref = self.__createSref()
-            setting.loadSettings(userAgent, headers)
-
-    def __createSref(self):
-        ref = ServiceReference(self.sref)
-        sid = ref.getType()
-        name = ref.getName()
-        path = ref.getPath()
-        path = path[:path.find(path.split(' ')[-1])]
-        sref = eServiceReference(sid, 0, path)
-        sref.setName(name)
-        return sref
 
 class PlaylistPanelList(PanelList):
     def __init__(self, list):

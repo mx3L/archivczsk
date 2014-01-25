@@ -25,10 +25,9 @@ from ServiceReference import ServiceReference
 from subtitles.subtitles import SubsSupport
 from controller import VideoPlayerController, GStreamerDownloadController, RTMPController
 from info import videoPlayerInfo
-from infobar import ArchivCZSKMoviePlayerInfobar, ArchivCZSKMoviePlayerSummary, InfoBarAspectChange, InfoBarPlaylist
+from infobar import ArchivCZSKMoviePlayerInfobar, ArchivCZSKMoviePlayerSummary, InfoBarAspectChange, InfoBarPlaylist, StatusScreen
 from util import Video, getBufferInfo, setBufferSize
 import setting
-
 
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK import settings
@@ -148,7 +147,8 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 			iPlayableService.evUser + 11: self.__evVideoDecodeError,
 			iPlayableService.evUser + 12: self.__evPluginError,
 		})
-
+		self.statusDialog = session.instantiateDialog(StatusScreen)
+		self.onClose.append(self.statusDialog.doClose)
 		self.isStream = self.sref.getPath().find('://') != -1
 		self.returning = False
 
@@ -184,6 +184,11 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 
 	def _serviceNotStarted(self, failure):
 		log.info('cannot get service reference')
+
+	def aspectChange(self):
+		super(ArchivCZSKMoviePlayer,self).aspectChange()
+		aspectStr = self.getAspectStr()
+		self.statusDialog.setStatus(aspectStr, "#00ff00")
 
 	# override InfobarShowhide method
 	def epg(self):
