@@ -17,7 +17,7 @@ pushd ${D} &> /dev/null
 PVER="0.70"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
-DSTAGEVER="6"
+DSTAGEVER="7"
 VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all.ipk
