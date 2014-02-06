@@ -2,1014 +2,461 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SubsSupport\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-04 16:51+0100\n"
-"PO-Revision-Date: 2012-11-05 11:54+0100\n"
+"POT-Creation-Date: 2014-02-25 13:33+0100\n"
+"PO-Revision-Date: 2014-02-25 13:35+0100\n"
 "Last-Translator: mx3L <mxfitsat@gmail.com>\n"
 "Language-Team: mx3L <mxfitsat@gmail.com>\n"
+"Language: sk_SK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-KeywordsList: __\n"
 "X-Poedit-Basepath: ../../../\n"
-"X-Poedit-Language: Slovak\n"
-"X-Poedit-Country: SLOVAKIA\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: plugin.py:141
-msgid "Artist"
-msgstr ""
-
-#: plugin.py:143
-#, fuzzy
-msgid "Title"
-msgstr "Súbor"
-
-#: plugin.py:145
-msgid "Album"
-msgstr ""
-
-#: plugin.py:147
-#, fuzzy
-msgid "Year"
-msgstr "Rok:"
-
-#: plugin.py:149
-#, fuzzy
-msgid "Genre"
-msgstr "Žáner:"
-
-#: plugin.py:169
-msgid "add file to playlist"
-msgstr ""
-
-#: plugin.py:170
-msgid "exit mediaplayer"
-msgstr ""
-
-#: plugin.py:175
-msgid "show csfd info"
-msgstr ""
-
-#: plugin.py:176
-#, fuzzy
-msgid "play entry"
-msgstr "Začať prehrávať po"
-
-#: plugin.py:177
-msgid "pause"
-msgstr ""
-
-#: plugin.py:178
-msgid "stop entry"
-msgstr ""
-
-#: plugin.py:179
-msgid "play from previous playlist entry"
-msgstr ""
-
-#: plugin.py:180
-msgid "play from next playlist entry"
-msgstr ""
-
-#: plugin.py:181
-msgid "menu"
-msgstr ""
-
-#: plugin.py:182
-msgid "jump to listbegin"
-msgstr ""
-
-#: plugin.py:183
-msgid "jump to listend"
-msgstr ""
-
-#: plugin.py:184
-#: plugin.py:541
-msgid "switch to playlist"
-msgstr ""
-
-#: plugin.py:185
-#: plugin.py:543
-msgid "switch to filelist"
-msgstr ""
-
-#: plugin.py:186
-#, fuzzy
-msgid "delete playlist entry"
-msgstr "Vyberte adresár"
-
-#: plugin.py:187
-#: plugin.py:544
-msgid "clear playlist"
-msgstr ""
-
-#: plugin.py:188
-#: plugin.py:547
-msgid "shuffle playlist"
-msgstr ""
-
-#: plugin.py:194
-#, fuzzy
-msgid "show event details"
-msgstr "aktuálne sťahované súbory"
-
-#: plugin.py:266
-#, fuzzy
-msgid "Do you really want to exit?"
-msgstr "Chcete vypnúť prehrávanie streamu?"
-
-#: plugin.py:269
-#: plugin.py:1127
-#, fuzzy
-msgid "No"
-msgstr "žiadne"
-
-#: plugin.py:270
-#: plugin.py:1126
-msgid "Yes"
-msgstr ""
-
-#: plugin.py:271
-msgid "save playlist before exit?"
-msgstr ""
-
-#: plugin.py:324
-#: plugin.py:330
-#, python-format
-msgid "This Dreambox can't decode %s streams!"
-msgstr ""
-
-#: plugin.py:534
-#: plugin.py:1256
-msgid "Play Audio-CD..."
-msgstr ""
-
-#: plugin.py:538
-msgid "add directory to playlist"
-msgstr ""
-
-#: plugin.py:540
-msgid "add files to playlist"
-msgstr ""
-
-#: plugin.py:545
-#, fuzzy
-msgid "Delete entry"
-msgstr "Vyberte adresár"
-
-#: plugin.py:549
-msgid "PicturePlayer"
-msgstr ""
-
-#: plugin.py:551
-#, fuzzy
-msgid "delete file"
-msgstr "Súbor"
-
-#: plugin.py:552
-#, fuzzy
-msgid "hide player"
-msgstr "Video prehrávač"
-
-#: plugin.py:553
-msgid "load playlist"
-msgstr ""
-
-#: plugin.py:555
-#, fuzzy
-msgid "save playlist"
-msgstr "ukončiť prehrávač?"
-
-#: plugin.py:556
-msgid "delete saved playlist"
-msgstr ""
-
-#: plugin.py:557
-#, fuzzy
-msgid "Edit settings"
-msgstr "Nastavenie tituliek"
-
-#: plugin.py:558
-msgid "add/remove bookmarks (locationbox)"
-msgstr ""
-
-#: plugin.py:560
-msgid "---------------------- bookmarks -------------------"
-msgstr ""
-
-#: plugin.py:619
-msgid "Please select the path..."
-msgstr ""
-
-#: plugin.py:680
-msgid "Please enter filename (empty = use current date)"
-msgstr ""
-
-#: plugin.py:680
-msgid "Save Playlist"
-msgstr ""
-
-#: plugin.py:701
-msgid "Please select a playlist..."
-msgstr ""
-
-#: plugin.py:722
-msgid "Please select a playlist to delete..."
-msgstr ""
-
-#: plugin.py:727
-#: plugin.py:781
-#, fuzzy, python-format
-msgid "Do you really want to delete %s?"
-msgstr "Chcete zmazať"
-
-#: plugin.py:734
-#, python-format
-msgid "Delete failed!, %s"
-msgstr ""
-
-#: plugin.py:783
-msgid "You cannot delete this!"
-msgstr ""
-
-#: plugin.py:795
-msgid "Delete failed!"
-msgstr ""
-
-#: plugin.py:1060
-#, fuzzy
-msgid "changing aspect"
-msgstr "mením aspekt"
-
-#: plugin.py:1061
-#, fuzzy
-msgid "leave movie player..."
-msgstr "ukončiť prehrávač?"
-
-#: plugin.py:1062
-#: plugin.py:1069
-#, fuzzy
-msgid "Subtitle selection"
-msgstr "Nastavenia tituliek"
-
-#: plugin.py:1067
-msgid "play from previous mark or playlist entry"
-msgstr ""
-
-#: plugin.py:1068
-msgid "play from next mark or playlist entry"
-msgstr ""
-
-#: plugin.py:1070
-msgid "AspectRatioChange"
-msgstr ""
-
-#: plugin.py:1129
-msgid "No, but restart from begin"
-msgstr ""
-
-#: plugin.py:1130
-msgid "Stop playing this movie?"
-msgstr ""
-
-#: plugin.py:1186
-#: plugin.py:1265
-#, fuzzy
-msgid "Media player"
-msgstr "ukončiť prehrávač?"
-
-#: plugin.py:1225
-msgid "View Movies..."
-msgstr ""
-
-#: plugin.py:1235
-msgid "View Video CD..."
-msgstr ""
-
-#: plugin.py:1244
-msgid "Play Music..."
-msgstr ""
-
-#: plugin.py:1274
-msgid "Play back media files with subtitles"
-msgstr "Prehrávač s podporou tituliek"
-
-#: settings.py:33
-#: subtitles.py:546
-#: subtitles2.py:508
-#: periscope/subtitles.py:507
-msgid "Cancel"
-msgstr "Zrušiť"
-
-#: settings.py:34
-#: subtitles.py:545
-#: subtitles2.py:507
-#: periscope/subtitles.py:506
-msgid "Save"
-msgstr "Uložiť"
-
-#: settings.py:54
-msgid "repeat playlist"
-msgstr ""
-
-#: settings.py:55
-msgid "save playlist on exit"
-msgstr ""
-
-#: settings.py:56
-msgid "ask on exit"
-msgstr "spýtať sa pri ukončení"
-
-#: settings.py:57
-#, fuzzy
-msgid "save last directory on exit"
-msgstr "Vyberte adresár"
-
-#: settings.py:58
-msgid "show in extensions menu"
-msgstr "pridať do menu rozšírení"
-
-#: settings.py:59
-msgid "replace default MediaPlayer in main menu"
-msgstr "nahradiť pôvodný MediaPlayer v hlavnej ponuke"
-
-#: settings.py:61
-#, fuzzy
-msgid "start directory"
-msgstr "Vyberte adresár"
-
-#: settings.py:71
-msgid "Please select the path for the Startdirectory"
-msgstr ""
-
-#: subtitles.py:76
-#: subtitles2.py:78
-#: periscope/subtitles.py:61
-msgid "red"
-msgstr "červená"
-
-#: subtitles.py:77
-#, fuzzy
-msgid "grey"
-msgstr "zelená"
-
-#: subtitles.py:78
-#: subtitles2.py:79
-#: periscope/subtitles.py:62
-msgid "green"
-msgstr "zelená"
-
-#: subtitles.py:79
-#: subtitles2.py:80
-#: periscope/subtitles.py:63
-msgid "purple"
-msgstr "fialová"
-
-#: subtitles.py:80
-#: subtitles2.py:81
-#: periscope/subtitles.py:64
-msgid "yellow"
-msgstr "žltá"
-
-#: subtitles.py:81
-#: subtitles2.py:82
-#: periscope/subtitles.py:65
-msgid "white"
-msgstr "biela"
-
-#: subtitles.py:82
-#: subtitles2.py:83
-#: periscope/subtitles.py:66
-msgid "blue"
-msgstr "modrá"
-
-#: subtitles.py:426
-#: subtitles2.py:397
-#: periscope/subtitles.py:386
-msgid "Currently choosed subtitles"
-msgstr "Momentálne vybraté titulky"
-
-#: subtitles.py:431
-#: subtitles.py:505
-#: subtitles2.py:402
-#: subtitles2.py:466
-#: periscope/subtitles.py:391
-#: periscope/subtitles.py:465
-msgid "None"
-msgstr "žiadne"
-
-#: subtitles.py:433
-#: subtitles2.py:404
-#: periscope/subtitles.py:393
-msgid "Subtitles"
-msgstr "Titulky"
-
-#: subtitles.py:434
-#: subtitles2.py:405
-#: periscope/subtitles.py:394
-msgid "Choose subtitles"
-msgstr "Vybrať titulky"
-
-#: subtitles.py:434
-#: subtitles2.py:405
-#: periscope/subtitles.py:394
-msgid "Subtitles settings"
-msgstr "Nastavenie tituliek"
-
-#: subtitles.py:536
-#: subtitles.py:553
-#: subtitles2.py:497
-#: subtitles2.py:515
-#: periscope/subtitles.py:496
-#: periscope/subtitles.py:514
-msgid "Subtitles setting"
-msgstr "Nastavenia tituliek"
-
-#: subtitles.py:557
-#: subtitles2.py:522
-#: periscope/subtitles.py:521
-msgid "Show subtitles"
-msgstr "Zobraziť titulky"
-
-#: subtitles.py:558
-#: subtitles2.py:523
-#: periscope/subtitles.py:522
-msgid "Font size"
-msgstr "Velkosť písma"
-
-#: subtitles.py:559
-#: subtitles2.py:524
-#: periscope/subtitles.py:523
-msgid "Position"
-msgstr "Pozícia"
-
-#: subtitles.py:560
-#: subtitles2.py:525
-#: periscope/subtitles.py:524
-msgid "Color"
-msgstr "Farba"
-
-#: subtitles.py:660
-#: periscope/subtitles.py:623
-msgid "List of Storage Devices"
-msgstr ""
-
-#: subtitles.py:662
-#: periscope/subtitles.py:625
-#, fuzzy
-msgid "Parent Directory"
-msgstr "Vyberte adresár"
-
-#: subtitles.py:725
-#: subtitles2.py:597
-#: periscope/subtitles.py:686
-msgid "Choose Subtitles"
-msgstr "Vybrať titulky"
-
-#: subtitles/subtitles.py:68
-#: subtitles/subtitles.py:120
+#: e2_utils.py:51
+msgid "Language selection"
+msgstr "Výber jazyka"
+
+#: e2_utils.py:111
+msgid "Type text of picture"
+msgstr "Opíšte text obrázku"
+
+#: e2_utils.py:411
+msgid "unpack error: cannot get subname"
+msgstr "chyba rozbalovania"
+
+#: e2_utils.py:427
+msgid "unpack error: cannot open archive"
+msgstr "chyba rozbalovania: nemôžem otvoriť archív"
+
+#: subtitles.py:106 subtitles.py:227
 msgid "Central and Eastern Europe"
 msgstr "Stredná a východná Európa"
 
-#: subtitles/subtitles.py:69
+#: subtitles.py:107
 msgid "Western Europe"
 msgstr "Západná Európa"
 
-#: subtitles/subtitles.py:70
+#: subtitles.py:108
 msgid "Russia"
 msgstr "Rusko"
 
-#: subtitles/subtitles.py:190
-#, fuzzy
-msgid "show subtitles menu"
-msgstr "Zobraziť titulky"
+#: subtitles.py:109
+msgid "Arabic"
+msgstr ""
 
-#: subtitles/subtitles.py:267
+#: subtitles.py:110
+msgid "Turkish"
+msgstr ""
+
+#: subtitles.py:111
+msgid "Greek"
+msgstr ""
+
+#: subtitles.py:250
+msgid "red"
+msgstr "červená"
+
+#: subtitles.py:251
+msgid "grey"
+msgstr "šedá"
+
+#: subtitles.py:252
+msgid "green"
+msgstr "zelená"
+
+#: subtitles.py:253
+msgid "purple"
+msgstr "fialová"
+
+#: subtitles.py:254
+msgid "yellow"
+msgstr "žltá"
+
+#: subtitles.py:255
+msgid "white"
+msgstr "biela"
+
+#: subtitles.py:256
+msgid "blue"
+msgstr "modrá"
+
+#: subtitles.py:257
+msgid "black"
+msgstr "čierna"
+
+#: subtitles.py:276
+msgid "offset"
+msgstr "odchýlka"
+
+#: subtitles.py:276
+msgid "border"
+msgstr "orámovanie"
+
+#: subtitles.py:290
+msgid "Block"
+msgstr ""
+
+#: subtitles.py:290
+msgid "Row (experimental)"
+msgstr ""
+
+#: subtitles.py:324 subtitles.py:2172
+msgid "Language"
+msgstr "Jazyk"
+
+#: subtitles.py:324 subtitles.py:2172
+msgid "Provider"
+msgstr "Poskytovateľ"
+
+#: subtitles.py:449
+msgid "show subtitles menu"
+msgstr ""
+
+#: subtitles.py:708
+#, fuzzy
+msgid "Cannot load subtitles. Invalid path"
+msgstr "Chyba načítania tituliek"
+
+#: subtitles.py:712
 msgid "Cannot decode subtitles. Try another encoding group"
 msgstr "Nemôžem dekódovať titulky. Skúste použiť inú skupinu kódovaní."
 
-#: subtitles/subtitles.py:274
-msgid "Cannot parse subtitles"
+#: subtitles.py:716
+#, fuzzy
+msgid "Cannot parse subtitles. Not supported subtitles format"
 msgstr "Chyba načítania tituliek"
 
-#: subtitles/subtitles.py:599
-msgid "encoding"
-msgstr "Kódovanie"
+#: subtitles.py:720
+#, fuzzy
+msgid "Cannot parse subtitles. Invalid subtitles format"
+msgstr "Chyba načítania tituliek"
 
-#: subtitles/subtitles.py:603
+#: subtitles.py:1431
+msgid "Currently choosed subtitles"
+msgstr "Momentálne vybraté titulky"
+
+#: subtitles.py:1449
+msgid "Subtitles Menu"
+msgstr "Menu"
+
+#: subtitles.py:1458
+msgid "Embedded Subtitles"
+msgstr "Vnorené titulky"
+
+#: subtitles.py:1469 subtitles.py:1472
+msgid "Encoding:"
+msgstr "Kódovanie:"
+
+#: subtitles.py:1472
 msgid "cannot decode"
 msgstr "nemôžem dekódovať"
 
-#: subtitles/subtitles.py:611
+#: subtitles.py:1474
+msgid "None"
+msgstr "žiadne"
+
+#: subtitles.py:1479 subtitles.py:1852
+msgid "Choose subtitles"
+msgstr "Vybrať titulky"
+
+#: subtitles.py:1482
 msgid "Change encoding"
 msgstr "Zmeniť kódovanie"
 
-#: subtitles/subtitles.py:729
+#: subtitles.py:1483
+msgid "Subtitles settings"
+msgstr "Nastavenie tituliek"
+
+#: subtitles.py:1485
+msgid "Subtitles settings (embedded)"
+msgstr "Nastavenie tituliek (vnorené)"
+
+#: subtitles.py:1487
+msgid "Turn off subtitles"
+msgstr "Vypnúť titulky"
+
+#: subtitles.py:1546
+msgid "Subtitles setting"
+msgstr "Nastavenia tituliek"
+
+#: subtitles.py:1556 subtitles.py:2486 subtitles.py:2642
+msgid "Save"
+msgstr "Uložiť"
+
+#: subtitles.py:1557 subtitles.py:2487 subtitles.py:2643
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: subtitles.py:1558 subtitles.py:2488 subtitles.py:2644
+msgid "Reset Defaults"
+msgstr "Pôvodné nastavenie"
+
+#: subtitles.py:1565
+msgid "External subtitles setting"
+msgstr "Nastavenia externých tituliek"
+
+#: subtitles.py:1572
+msgid "Parsing/Rendering"
+msgstr ""
+
+#: subtitles.py:1573
 msgid "Font type"
 msgstr "Font"
 
-#: subtitles/subtitles.py:733
+#: subtitles.py:1574
+msgid "Font size"
+msgstr "Velkosť písma"
+
+#: subtitles.py:1575
+msgid "Position"
+msgstr "Pozícia"
+
+#: subtitles.py:1576
+msgid "Color"
+msgstr "Farba"
+
+#: subtitles.py:1577
+msgid "Shadow type"
+msgstr "Typ tieňovania"
+
+#: subtitles.py:1579
+msgid "Shadow X-offset"
+msgstr "Horizontálna odchýlka"
+
+#: subtitles.py:1580
+msgid "Shadow Y-offset"
+msgstr "Vertikálna odchýlka"
+
+#: subtitles.py:1582
+msgid "Shadow size"
+msgstr "Šírka orámovania"
+
+#: subtitles.py:1583
+msgid "Shadow color"
+msgstr "Farba tieňovania"
+
+#: subtitles.py:1584
 msgid "Encoding"
 msgstr "Skupina kódovaní"
 
-#~ msgid ""
-#~ "The CSFD plugin is not installed!\n"
-#~ "Please install it."
-#~ msgstr ""
-#~ "CSFD plugin nie je nainštalovaný!\n"
-#~ "Prosím nainštalujte ho."
+#: subtitles.py:1585
+msgid "Show expert settings"
+msgstr ""
 
-#~ msgid "Do you want to update/add archives/tools: "
-#~ msgstr "Chcete aktualizovať/pridať nasledujúce archívy/nástroje:"
+#: subtitles.py:1587
+#, fuzzy
+msgid "Hide delay"
+msgstr "Video prehrávač"
 
-#~ msgid "Following items were successfully updated:"
-#~ msgstr "Nasledúce položky boli úspešne aktualizované:"
+#: subtitles.py:1588
+#, fuzzy
+msgid "Sync delay"
+msgstr "Začať prehrávať po"
 
-#~ msgid "Problems appeared during updating, try again later..."
-#~ msgstr ""
-#~ "Vyskytli sa problémy pri aktualizácii, skúste aktualizovať neskôr..."
+#: subtitles.py:1589
+#, fuzzy
+msgid "Player delay"
+msgstr "Začať prehrávať po"
 
-#~ msgid ""
-#~ "The changes will appear after restart of E2. Do you want to restart E2 "
-#~ "now? "
-#~ msgstr "Zmeny sa prejavia po reštarte E2. Chcete reštartovať E2 teraz?"
+#: subtitles.py:1590
+#, fuzzy
+msgid "Refresh delay"
+msgstr "Zobraziť titulky"
 
-#~ msgid "ArchivCZSK"
-#~ msgstr "ArchívCZSK"
+#: subtitles.py:1591
+msgid "PTS check delay"
+msgstr ""
 
-#~ msgid "Playing CZ/SK archives"
-#~ msgstr "prehrávanie CZ/SK archívov"
+#: subtitles.py:1693
+msgid "List of Storage Devices"
+msgstr ""
 
-#~ msgid "TV archives"
-#~ msgstr "TV archívy"
+#: subtitles.py:1695
+msgid "Parent Directory"
+msgstr "Vyberte adresár"
 
-#~ msgid "Video archives"
-#~ msgstr "Video archívy"
+#: subtitles.py:1739
+msgid "Choose from embedded subtitles"
+msgstr "Vybrať z \"vnorených\" tituliek"
 
-#~ msgid "Live streams"
-#~ msgstr "Živé vysielanie"
+#: subtitles.py:1744
+msgid "Search subtitles"
+msgstr "Vyhľadať titulky"
 
-#~ msgid "Settings"
-#~ msgstr "Nastavenia"
+#: subtitles.py:1790
+msgid "Choose Subtitles"
+msgstr "Vybrať titulky"
 
-#~ msgid "Archiv CZSK"
-#~ msgstr "ArchívCZSK"
+#: subtitles.py:1886
+msgid "unknown"
+msgstr ""
 
-#~ msgid "Author: "
-#~ msgstr "Autor:"
+#: subtitles.py:2136
+msgid "Subtitles search"
+msgstr "Vyhladávanie tituliek"
 
-#~ msgid "Version: "
-#~ msgstr "Verzia:"
+#: subtitles.py:2141
+msgid "Title"
+msgstr "Názov"
 
-#~ msgid "In this moment, archive is not available, try later"
-#~ msgstr "V tomto momente, archív nie je dostupný, skúste neskôr.."
+#: subtitles.py:2142 subtitles.py:2172
+msgid "Size"
+msgstr "Veľkosť"
 
-#~ msgid "Do you want to exit ArchivCZSK?"
-#~ msgstr "Chcete ukončiť archivCZSK?"
+#: subtitles.py:2153 subtitles.py:2157
+msgid "N/A"
+msgstr ""
 
-#~ msgid "Type text of picture"
-#~ msgstr "Opíšte text obrázku"
+#: subtitles.py:2167
+msgid "Search Expression:"
+msgstr "Hľadaný výraz:"
 
-#~ msgid "Please enter search expression"
-#~ msgstr "Prosím vložte hľadaný výraz"
+#: subtitles.py:2168
+msgid "Preferred languages:"
+msgstr "Preferované jazyky:"
 
-#~ msgid "Downloads"
-#~ msgstr "Stiahnuté súbory"
+#: subtitles.py:2172
+msgid "Release"
+msgstr ""
 
-#~ msgid "Shortcuts"
-#~ msgstr "Záložky"
+#: subtitles.py:2186
+msgid "Update Expression"
+msgstr "Aktualizovať hl. výraz"
 
-#~ msgid "Update"
-#~ msgstr "Aktualizovať"
+#: subtitles.py:2188
+msgid "Reload"
+msgstr "Znovu načítať"
 
-#~ msgid "Error in updating list"
-#~ msgstr "Chyba v aktualizovaní zoznamu"
+#: subtitles.py:2190
+msgid "Settings"
+msgstr "Nastavenia"
 
-#~ msgid "Error loading: Not accessible/supported show"
-#~ msgstr "Chyba načítania: nedostupná/nepodporovaná relácia"
+#: subtitles.py:2279
+msgid "loading subtitles list..."
+msgstr "načítavam zoznam tituliek..."
 
-#~ msgid "Unknown error: Not supported show"
-#~ msgstr "Neznáma chyba, nepodporovaná relácia"
+#: subtitles.py:2299
+msgid "No subtitles found :("
+msgstr "Nenašli sa žiadne titulky :("
 
-#~ msgid "Loaded list is empty"
-#~ msgstr "Načítaný zoznam je prázdny"
+#: subtitles.py:2300
+msgid "Try update(simplify) search expression and try again.."
+msgstr "Skúste aktualizovať (zjednodušiť) hľadaný výraz.."
 
-#~ msgid "Additional informations are available"
-#~ msgstr "Sú dostupné ďaľšie informácie"
+#: subtitles.py:2319
+msgid "downloading subtitles..."
+msgstr "sťahujem titulky..."
 
-#~ msgid "show posibilities of current item"
-#~ msgstr "zobrazí možnosti vybranej položky"
+#: subtitles.py:2340
+msgid "cannot unpack rar sub-archive, unrar not find, please install it"
+msgstr "nemôžem rozbaliť rar-archív unrar nie je nainštalovaný"
 
-#~ msgid "Open item"
-#~ msgstr "Otvoriť položku"
+#: subtitles.py:2341
+msgid "opkg install unrar"
+msgstr ""
 
-#~ msgid "Add shortcut"
-#~ msgstr "Pridať záložku"
+#: subtitles.py:2344
+msgid "unpacking..."
+msgstr "rozbaľujem"
 
-#~ msgid "Play"
-#~ msgstr "Prehrať"
+#: subtitles.py:2354
+msgid "captcha doesn't match, try again..."
+msgstr "zle opísaný obrázok, skúste znova..."
 
-#~ msgid "Play and download"
-#~ msgstr "Prehrávaj a sťahuj"
+#: subtitles.py:2368
+msgid ""
+"There are more subtitles in unpacked archive\n"
+" please select which one you want to use"
+msgstr ""
+"V balíčku sa nachádza viac tituliek\n"
+" vyberte tie ktoré chcete použiť"
 
-#~ msgid "Download"
-#~ msgstr "Stiahnuť"
+#: subtitles.py:2402
+msgid ""
+"Subtitles with this name already exist\n"
+"Do you want to override them"
+msgstr ""
+"Titulky s týmto menom už existujú\n"
+"Chcete ich prepísať?"
 
-#~ msgid "Shortcut was successfully added"
-#~ msgstr "Záložka bola úspešne pridaná"
+#: subtitles.py:2418
+msgid "Subtitles will be downloaded in"
+msgstr "Titulky sa stiahnu za "
 
-#~ msgid "Please enter tag name"
-#~ msgstr "Prosím vložte názov tag-u"
+#: subtitles.py:2418
+msgid "seconds"
+msgstr "sekúnd"
 
-#~ msgid "finished"
-#~ msgstr "ukončené"
+#: subtitles.py:2421
+msgid "Set search expression"
+msgstr "Zvolte hľadaný výraz"
 
-#~ msgid "finished with errors"
-#~ msgstr "ukončené s chybami"
+#: subtitles.py:2506 subtitles.py:2507 subtitles.py:2508
+msgid "Preferred Language"
+msgstr "Preferovaný jazyk"
 
-#~ msgid "Do you want to save"
-#~ msgstr "Chcete uložiť"
+#: subtitles.py:2509
+msgid "Sort by"
+msgstr "Zoradiť podľa"
 
-#~ msgid "to disk?"
-#~ msgstr "na disk?"
+#: subtitles.py:2510
+msgid "Download to movie directory"
+msgstr "Stiahnuť do adresára prehrávaného videa"
 
-#~ msgid "Do you want to continue downloading"
-#~ msgstr "Chcete pokračovavat v sťahovaní"
+#: subtitles.py:2512
+msgid "Save as movie name"
+msgstr "Premenovať titulky podľa názvu videa"
 
-#~ msgid "Video starts playing in few seconds..."
-#~ msgstr "Video sa začne prehrávať o pár sekúnd"
+#: subtitles.py:2513
+msgid "Ask when overriding existing subtitles"
+msgstr "Spýtať sa pri prepisovaní tituliek"
 
-#~ msgid "ArchivCZSK - Download:"
-#~ msgstr "ArchívCZSK - Sťahovanie:"
+#: subtitles.py:2515
+msgid "Download Path"
+msgstr "Sťahovať do"
 
-#~ msgid "successfully finished."
-#~ msgstr "úspešne skončilo."
+#: subtitles.py:2516
+msgid "Temp Path"
+msgstr "Dočasné úložisko"
 
-#~ msgid "finished with errors."
-#~ msgstr "skončilo s chybami."
+#: subtitles.py:2525
+msgid "enabled"
+msgstr "povolené"
 
-#~ msgid "started."
-#~ msgstr "začalo."
+#: subtitles.py:2525
+msgid "disabled"
+msgstr "vypnuté"
 
-#~ msgid "The file "
-#~ msgstr "Súbor:"
+#: subtitles.py:2651
+msgid "settings"
+msgstr "nastavenia"
 
-#~ msgid "Download Status"
-#~ msgstr "Priebeh sťahovania"
+#: seek.py:139
+#, python-format
+msgid "unsupported archive %s"
+msgstr "nepodporovaný archív %s"
 
-#~ msgid "Execution Progress:"
-#~ msgstr "Progres exekúcie:"
+#: seekers/xbmc_subtitles.py:115
+msgid "Username"
+msgstr "Prihlasovacie meno"
+
+#: seekers/xbmc_subtitles.py:116
+msgid "Password"
+msgstr "Heslo"
+
+#~ msgid "Primary Language"
+#~ msgstr "Primárny jazyk"
+
+#~ msgid "Secondary Language"
+#~ msgstr "Sekundárny jazyk"
 
 #, fuzzy
-#~ msgid "show download list"
-#~ msgstr "aktuálne sťahované súbory"
-
-#~ msgid "Remove"
-#~ msgstr "Zmazať"
-
-#~ msgid "Recent downloads"
-#~ msgstr "Sťahované súbory"
-
-#~ msgid "Do you want to cancel"
-#~ msgstr "Chcete prerušiť"
-
-#~ msgid "Do you want to remove"
-#~ msgstr "Chcete zmazať"
-
-#~ msgid "is not downloaded yet. Do you want to play it anyway?"
-#~ msgstr "zatiaľ nie je dosťahovaný. Chcete ho aj napriek tomu prehrať?"
-
-#~ msgid "downloads"
-#~ msgstr "Stiahnuté súbory"
-
-#~ msgid "Rating: "
-#~ msgstr "Hodnotenie:"
-
-#~ msgid "standard player"
-#~ msgstr "štandardný prehrávač"
-
-#~ msgid "custom player (subtitle support)"
-#~ msgstr "upravený prehrávač (podpora tituliek)"
-
-#~ msgid "mipsel player"
-#~ msgstr "Mipsel prehrávač (podpora bufferingu)"
-
-#~ msgid "Configuration of Archiv CZSK"
-#~ msgstr "Konfigurácia Archív CZSK"
-
-#~ msgid "Configuration of ArchivCZSK"
-#~ msgstr "Konfigurácia ArchívCZSK"
-
-#~ msgid "Video player Buffer"
-#~ msgstr "nastavenie bufferu prehrávača (KB)"
-
-#~ msgid "AutoPlay"
-#~ msgstr "automaticky prehrávať"
-
-#~ msgid "Video player with RTMP support"
-#~ msgstr "Video prehrávač s RTMP podporou"
-
-#~ msgid "TV archive rtmp buffer"
-#~ msgstr "Buffer pre tv archívy"
-
-#~ msgid "Live rtmp streams buffer"
-#~ msgstr "Buffer pre živé vysielanie"
-
-#~ msgid "Data path"
-#~ msgstr "Data"
-
-#~ msgid "Downloads path"
-#~ msgstr "Sťahovanie"
-
-#~ msgid "Subtitles path"
-#~ msgstr "Titulky"
-
-#~ msgid "Allow auto-update"
-#~ msgstr "Povoliť automatickú kontrolu aktualizácií"
-
-#~ msgid "Debug mode"
-#~ msgstr "Debug mód"
-
-#~ msgid "Free memory after exit"
-#~ msgstr "Uvolniť pamäť po ukončení"
-
-#~ msgid "Add to main menu"
-#~ msgstr "Pridať do hlavného menu"
-
-#~ msgid "Settings of "
-#~ msgstr "Nastavenia "
-
-#~ msgid "Settings of"
-#~ msgstr "Nastavenia"
-
-#~ msgid "Enter the password:"
-#~ msgstr "Zadajte heslo"
-
-#~ msgid "Enter the username:"
-#~ msgstr "Zadajte prihlasovacie meno"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Invalid Location"
-#~ msgstr "Nesprávne umiestnenie"
-
-#~ msgid "Remove shortcut"
-#~ msgstr "Zmazať záložku"
-
-#~ msgid "Shortcut"
-#~ msgstr "Záložky"
-
-#~ msgid "show/hide subtitles"
-#~ msgstr "skryť/zobraziť titulky"
-
-#~ msgid "items"
-#~ msgstr "položky"
-
-#~ msgid "Infinity"
-#~ msgstr "nekonečno"
-
-#~ msgid "name"
-#~ msgstr "názvu"
-
-#~ msgid "year"
-#~ msgstr "roku"
-
-#~ msgid "date"
-#~ msgstr "dátumu"
-
-#~ msgid "rating"
-#~ msgstr "hodnotenia"
-
-#~ msgid "Password"
-#~ msgstr "Heslo"
-
-#~ msgid "Use alternate stream server?"
-#~ msgstr "Použiť alternatívny streamovací server"
-
-#~ msgid "Search history"
-#~ msgstr "História vyhľadávania"
-
-#~ msgid "Order by"
-#~ msgstr "Zoradiť podľa"
-
-#~ msgid "Filter languages - comma-separated e.g.: cz,sk"
-#~ msgstr "Filtrovať jazyk - jazyky oddelené čiarkou napr. cz,sk"
-
-#~ msgid "Include movies without language when filtering"
-#~ msgstr "Zobraziť filmy bez uvedeného jazyku pri filtrovaní"
-
-#~ msgid "User name"
-#~ msgstr "Prihlasovacie meno"
-
-#~ msgid "Show 18+ content"
-#~ msgstr "Zobrazovať obsah 18+"
-
-#~ msgid "Listings"
-#~ msgstr "Stránkovanie"
-
-#~ msgid "Plugin to play TV video archive http://www.b-tv.cz"
-#~ msgstr "Plugin pre prehrávanie videí z archívu http://www.b-tv.cz"
-
-#~ msgid "Search"
-#~ msgstr "Hladať"
-
-#~ msgid "Plugin to play TV video archive Huste.tv"
-#~ msgstr "Plugin pre prehrávanie videí z archívu Huste.tv"
-
-#~ msgid "Plugin to play TV video archive Metropol.cz"
-#~ msgstr "Plugin pre prehrávanie videí z archívu Metropol.cz"
-
-#~ msgid "Plugin to play TV video archive http://www.muvi.cz"
-#~ msgstr "Plugin pre prehrávanie videí z archívu http://www.muvi.cz"
-
-#~ msgid "Plugin to play TV video archive iprima.cz/videoarchiv"
-#~ msgstr "Plugin pre prehrávanie videí z archívu iprima.cz/videoarchív"
-
-#~ msgid ""
-#~ "To show your videos you need to set your username in Stream archive menu"
-#~ msgstr ""
-#~ "Pre zobrazenie vašich videí musíte najrpv zadať svoje meno v nastaveniach "
-#~ "tohto archívu."
-
-#~ msgid "Plugin to play TV video archive www.stv.sk"
-#~ msgstr "Plugin pre prehrávanie videí z archívu Slovenskej televízie"
-
-#~ msgid "Password is not correct"
-#~ msgstr "Nesprávne tajné heslo"
-
-#~ msgid "The show can only be played on Voyo.cz page"
-#~ msgstr "Relácia môže byť prehraná len na Voyo.cz stránke"
-
-#~ msgid "New videos"
-#~ msgstr "Najnovšie videá"
-
-#~ msgid "Add tag"
-#~ msgstr "Pridať tag"
-
-#~ msgid "Popular videos"
-#~ msgstr "Najsledovanejšie videá"
-
-#~ msgid "Remove tag"
-#~ msgstr "Zmazať tag"
-
-#~ msgid "Back"
-#~ msgstr "Predošlá strana"
-
-#~ msgid "Next"
-#~ msgstr "Ďaľšia strana"
-
-#~ msgid "Search on ulozto.cz"
-#~ msgstr "Vyhladávať na uložto"
-
-#~ msgid "Popular"
-#~ msgstr "Najsledovanejšie videá"
-
-#~ msgid "Daily maximum (150) requests for movie was reached, try it tomorrow"
-#~ msgstr ""
-#~ "Denné maximum (150) požiadaviek na film bolo prekročené, skúste znova "
-#~ "zajtra"
-
-#~ msgid ""
-#~ "Video is not available, check out if its working on the web page of "
-#~ "archive"
-#~ msgstr "Video nie je dostupné, skontrolujte či funguje na webe"
-
-#~ msgid "Limit for downloading slots was exceeded, please try again later"
-#~ msgstr ""
-#~ "Bol prekročený limit voľných slotov na sťahovanie, skúste znova neskôr"
-
-#~ msgid "New search"
-#~ msgstr "Nové vyhľadávanie"
-
-#~ msgid "Previous"
-#~ msgstr "Predošlé"
-
-#~ msgid "By date"
-#~ msgstr "Podľa dátumu"
-
-#~ msgid "By performer"
-#~ msgstr "Podľa účinkujúceho"
-
-#~ msgid "By rating"
-#~ msgstr "Podľa hodnotenia"
-
-#~ msgid "archives"
-#~ msgstr "archívy"
-
-#~ msgid "Shortcut "
-#~ msgstr "Záložky"
-
-#~ msgid "Currently choosed subtitles: "
-#~ msgstr "Momentálne vybraté titulky"
-
-#~ msgid "Currently choosed subtitles: None"
-#~ msgstr "Momentálne vybraté titulky: Žiadne"
-
-#~ msgid "Currently active downloads"
-#~ msgstr "Momentálne prebiehajúce sťahovanie"
-
-#~ msgid "Showing subtitles"
-#~ msgstr "Zobrazené titulky"
-
-#~ msgid "Watch content from videacesky.cz"
-#~ msgstr ""
-#~ "Sledujte videá, reklamy, seriály, články a návody zo serveru videacesky.cz"
-
-#~ msgid "Add shortcut "
-#~ msgstr "Pridať záložku"
-
-#~ msgid "Download:"
-#~ msgstr "Sťahovanie:"
-
-#~ msgid "Updated "
-#~ msgstr "Aktualizované"
-
-#~ msgid "Select path"
-#~ msgstr "Vyberte adresár"
-
-#~ msgid "Watch online content from bezvadata.cz"
-#~ msgstr ""
-#~ "Sledujte alebo sťahujte obsah zo serveru bezvadata.cz. Sťahovanie a "
-#~ "prehrávanie bez obmedzení."
-
-#~ msgid "Watch online content from movie-library.cz"
-#~ msgstr ""
-#~ "Sledujte online obsah ze serveru movie-library.cz. Plugin podporuje "
-#~ "prehrávanie a sťahovanie videí ze serveru uloz.to bez nutnosti video "
-#~ "sťahovať alebo vždy opisovať kontrolný kód!!. Ďalej je možné vyhľadávať "
-#~ "videá ako na movie-library.cz tak aj priamo na ulozto.cz a taktiež "
-#~ "sťahovať videá na disk."
-
-#~ msgid "Watch online tales mostly in czech language on pohadkar.cz"
-#~ msgstr ""
-#~ "Sledujte online rozprávky zo serveru pohádkář.cz. Ideálne pre zabavenie "
-#~ "detí."
-
-#~ msgid "Watch news about games on re-play.cz"
-#~ msgstr "Sledujte novinky o hrách na re-play.cz"
-
-#~ msgid "Watch online series from serialycz.cz"
-#~ msgstr "Sledujte seriály na serialycz.cz"
-
-#~ msgid "Additional informations are available, press INFO button"
-#~ msgstr "Sú dostupné ďaľšie informácie, stlačte tlačidlo INFO"
-
-#~ msgid "Plugin to play TV video archive from CT iVysilani"
-#~ msgstr "Plugin pre prehrávanie videí z archívu ČT iVysílání"
-
-#~ msgid "Plugin to play TV video archive joj.sk"
-#~ msgstr "Plugin pre prehrávanie videí z archívu joj.sk"
-
-#~ msgid "Plugin to play TV video archive Voyo.cz"
-#~ msgstr "Plugin pre prehrávanie videí z archívu Voyo.cz"
-
-#~ msgid "Watch online HD content from koukni.cz"
-#~ msgstr "Sledujte online HD obsah zo serveru koukni.cz"
-
-#~ msgid "XML"
-#~ msgstr "XML"
-
-#~ msgid "Turn on xml writing/loading?"
-#~ msgstr "Zapnúť xml zapisovanie/načítavanie"
-
-#~ msgid "Subtitles are not available"
-#~ msgstr "Titulky nie sú dostupné"
-
-#~ msgid "Plugin to play videos form FilmyCZ.com"
-#~ msgstr "Plugin pre prehrávanie videí z FilmyCZ.com"
-
-#~ msgid ""
-#~ "Plugin to play TV video archive from markiza.sk including archive doma tv "
-#~ "and fun tv "
-#~ msgstr ""
-#~ "Plugin pre prehrávanie videí z archívu markiza.sk vrátane doma tv a fun "
-#~ "tv... "
-
-#~ msgid "Add tag:"
-#~ msgstr "Pridať tag:"
-
-#~ msgid "Configuration of ArchívCZSK"
-#~ msgstr "Konfigurácia ArchívCZSK"
-
-#~ msgid "English"
-#~ msgstr "Anglicky"
-
-#~ msgid "Slovak"
-#~ msgstr "Slovensky"
-
-#~ msgid "Czech"
-#~ msgstr "Česky"
-
-#~ msgid "Language"
-#~ msgstr "Jazyk"
-
-#~ msgid "Český"
-#~ msgstr "Česky"
-
-#~ msgid "Shortcut was succesfully added"
-#~ msgstr "Záložka bola úspešne pridaná"
-
-#~ msgid "Error loading:  Not accessible/supported show"
-#~ msgstr "Chyba načítania: nedostupná/nepodporovaná relácia"
+#~ msgid "Third Language"
+#~ msgstr "Preferovaný jazyk"
+
+#~ msgid "Size (MB)"
+#~ msgstr "Veľkosť (MB)"

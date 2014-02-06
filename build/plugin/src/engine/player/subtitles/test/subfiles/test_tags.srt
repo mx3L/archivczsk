@@ -1,0 +1,46 @@
+﻿1
+00:00:5,000 --> 00:00:8,000
+lines:1, Regular
+
+2
+00:00:8,001 --> 00:00:11,000
+<i>lines:1, Italic</i>
+
+3
+00:00:11,001 --> 00:00:14,000
+<b>lines:1, Bold</b>
+
+4
+00:00:14,001 --> 00:00:17,000
+lines:2, Regular
+<b>Bold</b>
+
+5
+00:00:17,001 --> 00:00:20,000
+<b>lines:2 Bold</b>
+<i>Italic</i>
+
+6
+00:00:20,001 --> 00:00:23,000
+<b>lines:3 Bold</b>
+<i>Italic</i>
+Regular
+
+7
+00:00:23,001 --> 00:00:26,000
+<font color=red>lines:3 red regular</font>
+<font color=blue>blue regular</font>
+default color
+
+5
+00:00:26,001 --> 00:00:29,000
+<font color="#0000FF"><i>lines:3 italic blue</i></font>
+<font color="#00ff00"><b>bold green</b>lines</font>
+<font color="#ff0000">regular red</font>
+
+6
+00:00:29,001 --> 00:00:32,000
+lines:4 <font color="#0000FF"><i>italic blue</i></font>
+<font color="#00ff00"><b>bold green</b>lines</font>
+<font color="#ff0000">regular red</font>
+<b>BOLD</b>

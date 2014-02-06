@@ -18,11 +18,14 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from Components.ActionMap import HelpableActionMap
-from Components.config import config
+from Components.config import config, ConfigSubsection
 from ServiceReference import ServiceReference
 
 
-from subtitles.subtitles import SubsSupport
+from subtitles import SubsSupport, initSubsSettings
+config.plugins.archivCZSK.subtitles = ConfigSubsection()
+initSubsSettings(config.plugins.archivCZSK.subtitles)
+
 from controller import VideoPlayerController, GStreamerDownloadController, RTMPController
 from info import videoPlayerInfo
 from infobar import ArchivCZSKMoviePlayerInfobar, ArchivCZSKMoviePlayerSummary, InfoBarAspectChange, InfoBarPlaylist, StatusScreen
@@ -118,6 +121,9 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
          	"leavePlayer": (self.leavePlayer, _("leave player?")),
          	"toggleShow": (self.toggleShow, _("show/hide infobar")),
          	"audioSelection":(self.audioSelection, _("show audio selection menu")),
+         	"refreshSubs":(self.refreshSubs, _("refreshing subtitles position")),
+         	"subsDelayInc":(self.subsDelayInc, _("increasing subtitles delay")),
+         	"subsDelayDec":(self.subsDelayDec, _("decreasing subtitles delay"))
           	}, -3)
 
 		InfoBarBase.__init__(self, steal_current_service=True)
@@ -129,7 +135,7 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 				x.__init__(self)
 
 		# init subtitles
-		SubsSupport.__init__(self, subPath=subtitles, defaultPath=config.plugins.archivCZSK.subtitlesPath.getValue(), forceDefaultPath=True)
+		SubsSupport.__init__(self, subsPath=subtitles, defaultPath=config.plugins.archivCZSK.subtitlesPath.getValue(), forceDefaultPath=True, searchSupport=True)
 
 		# playlist support
 		InfoBarPlaylist.__init__(self, playlist, playlistCB, playlistName,
@@ -189,6 +195,37 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 		super(ArchivCZSKMoviePlayer,self).aspectChange()
 		aspectStr = self.getAspectStr()
 		self.statusDialog.setStatus(aspectStr, "#00ff00")
+
+	def refreshSubs(self):
+		if not self.isSubsLoaded():
+			self.statusDialog.setStatus(_("No external subtitles loaded"))
+		else:
+			self.playAfterSeek()
+			self.statusDialog.setStatus(_("Refreshing subtitles..."))
+
+	def subsDelayInc(self):
+		if not self.isSubsLoaded():
+			self.statusDialog.setStatus(_("No external subtitles loaded"))
+		else:
+			delay = self.getSubsDelay()
+			delay += 200
+			self.setSubsDelay(delay)
+			if delay > 0:
+				self.statusDialog.setStatus("+%d ms" % delay)
+			else:
+				self.statusDialog.setStatus("%d ms" % delay)
+
+	def subsDelayDec(self):
+		if not self.isSubsLoaded():
+			self.statusDialog.setStatus(_("No external subtitles loaded"))
+		else:
+			delay = self.getSubsDelay()
+			delay -= 200
+			self.setSubsDelay(delay)
+			if delay > 0:
+				self.statusDialog.setStatus("+%d ms" % delay)
+			else:
+				self.statusDialog.setStatus("%d ms" % delay)
 
 	# override InfobarShowhide method
 	def epg(self):

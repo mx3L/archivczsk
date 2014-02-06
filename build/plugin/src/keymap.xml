@@ -1,5 +1,5 @@
 <keymap>
-	
+
 	<map context="DownloadActions">
 		<key id="KEY_REFRESH" mapto="showDownloadListView" flags="m" />
 		<key id="KEY_RECORD" mapto="showDownloadListView" flags="m" />
@@ -23,8 +23,11 @@
 		<key id="KEY_RIGHT" mapto="right" flags="m" />
 		<key id="KEY_5" mapto="csfd" flags="m" />
 	</map>
-	
+
 	<map context="ArchivCZSKMoviePlayerActions">
+		<key id="KEY_RIGHT" mapto="subsDelayInc" flags="m" />
+		<key id="KEY_LEFT" mapto="subsDelayDec" flags="m" />
+		<key id="KEY_TV" mapto="refreshSubs" flags="m" />
 		<key id="KEY_RED" mapto="red" flags="m" />
 		<key id="KEY_GREEN" mapto="green" flags="m" />
 		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
@@ -42,28 +45,26 @@
 		<key id="KEY_INFO" mapto="toggleShow" flags="m" />
 		<key id="KEY_OK" mapto="toggleShow" flags="m" />
 	</map>
-	
+
 	<map context="InfobarAspectChangeActions">
 		<key id="KEY_ZOOM" mapto="aspectChange" flags="m" />
-		<key id="KEY_5" mapto="aspectChange" flags="m" /> 
+		<key id="KEY_5" mapto="aspectChange" flags="m" />
 	</map>
-	
+
 	<map context="InfobarAudioSelectionActions">
 		<key id="KEY_AUDIO" mapto="audioSelection" flags="m" />
 	</map>
-	
+
 	<map context="StreamActions">
 		<key id="KEY_1" mapto="incBuffer" flags="m" />
 		<key id="KEY_4" mapto="decBuffer" flags="m" />
 		<key id="KEY_2" mapto="incPlayDelay" flags="m" />
 		<key id="KEY_5" mapto="decPlayDelay" flags="m" />
 	</map>
-	
+
 	<map context="SubtitlesActions">
 		<key id="KEY_SUBTITLE" mapto="subtitles" flags="m" />
 		<key id="KEY_TEXT" mapto="subtitles" flags="m" />
-		<key id="KEY_RIGHT" mapto="subsDelayInc" flags="m" />
-		<key id="KEY_LEFT" mapto="subsDelayDec" flags="m" />
 	</map>
 
 </keymap>

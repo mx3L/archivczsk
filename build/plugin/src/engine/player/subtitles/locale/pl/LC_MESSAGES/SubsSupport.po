@@ -1,0 +1,471 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SubsSupport\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-25 13:35+0100\n"
+"PO-Revision-Date: 2014-02-25 13:35+0100\n"
+"Last-Translator: mx3L <mxfitsat@gmail.com>\n"
+"Language-Team: none <hosunio@tlen.pl>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-Basepath: ../../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: e2_utils.py:51
+#, fuzzy
+msgid "Language selection"
+msgstr "Wybór napisów"
+
+#: e2_utils.py:111
+msgid "Type text of picture"
+msgstr ""
+
+#: e2_utils.py:411
+msgid "unpack error: cannot get subname"
+msgstr ""
+
+#: e2_utils.py:427
+msgid "unpack error: cannot open archive"
+msgstr ""
+
+#: subtitles.py:106 subtitles.py:227
+msgid "Central and Eastern Europe"
+msgstr "Centralna i Wschodnia Europa"
+
+#: subtitles.py:107
+#, fuzzy
+msgid "Western Europe"
+msgstr "Centralna i Wschodnia Europa"
+
+#: subtitles.py:108
+msgid "Russia"
+msgstr ""
+
+#: subtitles.py:109
+msgid "Arabic"
+msgstr ""
+
+#: subtitles.py:110
+msgid "Turkish"
+msgstr ""
+
+#: subtitles.py:111
+msgid "Greek"
+msgstr ""
+
+#: subtitles.py:250
+msgid "red"
+msgstr ""
+
+#: subtitles.py:251
+msgid "grey"
+msgstr ""
+
+#: subtitles.py:252
+msgid "green"
+msgstr ""
+
+#: subtitles.py:253
+msgid "purple"
+msgstr ""
+
+#: subtitles.py:254
+msgid "yellow"
+msgstr ""
+
+#: subtitles.py:255
+msgid "white"
+msgstr ""
+
+#: subtitles.py:256
+msgid "blue"
+msgstr ""
+
+#: subtitles.py:257
+msgid "black"
+msgstr ""
+
+#: subtitles.py:276
+msgid "offset"
+msgstr ""
+
+#: subtitles.py:276
+msgid "border"
+msgstr ""
+
+#: subtitles.py:290
+msgid "Block"
+msgstr ""
+
+#: subtitles.py:290
+msgid "Row (experimental)"
+msgstr ""
+
+#: subtitles.py:324 subtitles.py:2172
+#, fuzzy
+msgid "Language"
+msgstr "Wybór napisów"
+
+#: subtitles.py:324 subtitles.py:2172
+msgid "Provider"
+msgstr ""
+
+#: subtitles.py:449
+#, fuzzy
+msgid "show subtitles menu"
+msgstr "Napisy"
+
+#: subtitles.py:708
+#, fuzzy
+msgid "Cannot load subtitles. Invalid path"
+msgstr "Nie można wykonać napisów"
+
+#: subtitles.py:712
+msgid "Cannot decode subtitles. Try another encoding group"
+msgstr ""
+
+#: subtitles.py:716
+msgid "Cannot parse subtitles. Not supported subtitles format"
+msgstr ""
+
+#: subtitles.py:720
+msgid "Cannot parse subtitles. Invalid subtitles format"
+msgstr ""
+
+#: subtitles.py:1431
+msgid "Currently choosed subtitles"
+msgstr "Obecnie wybrane napisy"
+
+#: subtitles.py:1449
+#, fuzzy
+msgid "Subtitles Menu"
+msgstr "Napisy"
+
+#: subtitles.py:1458
+#, fuzzy
+msgid "Embedded Subtitles"
+msgstr "Napisy"
+
+#: subtitles.py:1469 subtitles.py:1472
+#, fuzzy
+msgid "Encoding:"
+msgstr "Kodowanie"
+
+#: subtitles.py:1472
+msgid "cannot decode"
+msgstr ""
+
+#: subtitles.py:1474
+msgid "None"
+msgstr "Żadne"
+
+#: subtitles.py:1479 subtitles.py:1852
+msgid "Choose subtitles"
+msgstr "Wybież napisy"
+
+#: subtitles.py:1482
+msgid "Change encoding"
+msgstr "Zmiana kodowania"
+
+#: subtitles.py:1483
+msgid "Subtitles settings"
+msgstr "Ustawienia napisów"
+
+#: subtitles.py:1485
+#, fuzzy
+msgid "Subtitles settings (embedded)"
+msgstr "Ustawienia napisów"
+
+#: subtitles.py:1487
+#, fuzzy
+msgid "Turn off subtitles"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1546
+#, fuzzy
+msgid "Subtitles setting"
+msgstr "Ustawienia napisów"
+
+#: subtitles.py:1556 subtitles.py:2486 subtitles.py:2642
+msgid "Save"
+msgstr "Zapisz"
+
+#: subtitles.py:1557 subtitles.py:2487 subtitles.py:2643
+msgid "Cancel"
+msgstr "Cencel"
+
+#: subtitles.py:1558 subtitles.py:2488 subtitles.py:2644
+msgid "Reset Defaults"
+msgstr ""
+
+#: subtitles.py:1565
+#, fuzzy
+msgid "External subtitles setting"
+msgstr "Ustaw napisy"
+
+#: subtitles.py:1572
+msgid "Parsing/Rendering"
+msgstr ""
+
+#: subtitles.py:1573
+msgid "Font type"
+msgstr "Typ czcionki"
+
+#: subtitles.py:1574
+msgid "Font size"
+msgstr "Wielkość czcionki"
+
+#: subtitles.py:1575
+msgid "Position"
+msgstr "Pozycja"
+
+#: subtitles.py:1576
+msgid "Color"
+msgstr "Kolor"
+
+#: subtitles.py:1577
+#, fuzzy
+msgid "Shadow type"
+msgstr "Typ czcionki"
+
+#: subtitles.py:1579
+#, fuzzy
+msgid "Shadow X-offset"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1580
+#, fuzzy
+msgid "Shadow Y-offset"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1582
+#, fuzzy
+msgid "Shadow size"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1583
+#, fuzzy
+msgid "Shadow color"
+msgstr "Typ czcionki"
+
+#: subtitles.py:1584
+msgid "Encoding"
+msgstr "Kodowanie"
+
+#: subtitles.py:1585
+#, fuzzy
+msgid "Show expert settings"
+msgstr "Pokaż więcie szczegółów"
+
+#: subtitles.py:1587
+#, fuzzy
+msgid "Hide delay"
+msgstr "Ukryj odtwarzacz"
+
+#: subtitles.py:1588
+#, fuzzy
+msgid "Sync delay"
+msgstr "Odtwarzaj zapis"
+
+#: subtitles.py:1589
+#, fuzzy
+msgid "Player delay"
+msgstr "Odtwarzaj zapis"
+
+#: subtitles.py:1590
+#, fuzzy
+msgid "Refresh delay"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1591
+msgid "PTS check delay"
+msgstr ""
+
+#: subtitles.py:1693
+msgid "List of Storage Devices"
+msgstr ""
+
+#: subtitles.py:1695
+msgid "Parent Directory"
+msgstr ""
+
+#: subtitles.py:1739
+#, fuzzy
+msgid "Choose from embedded subtitles"
+msgstr "Wybież napisy"
+
+#: subtitles.py:1744
+#, fuzzy
+msgid "Search subtitles"
+msgstr "Pokaż napisy"
+
+#: subtitles.py:1790
+msgid "Choose Subtitles"
+msgstr "Wybierz napisy"
+
+#: subtitles.py:1886
+msgid "unknown"
+msgstr ""
+
+#: subtitles.py:2136
+#, fuzzy
+msgid "Subtitles search"
+msgstr "Napisy"
+
+#: subtitles.py:2141
+#, fuzzy
+msgid "Title"
+msgstr "Tytuł"
+
+#: subtitles.py:2142 subtitles.py:2172
+msgid "Size"
+msgstr ""
+
+#: subtitles.py:2153 subtitles.py:2157
+msgid "N/A"
+msgstr ""
+
+#: subtitles.py:2167
+msgid "Search Expression:"
+msgstr ""
+
+#: subtitles.py:2168
+msgid "Preferred languages:"
+msgstr ""
+
+#: subtitles.py:2172
+msgid "Release"
+msgstr ""
+
+#: subtitles.py:2186
+msgid "Update Expression"
+msgstr ""
+
+#: subtitles.py:2188
+msgid "Reload"
+msgstr ""
+
+#: subtitles.py:2190
+#, fuzzy
+msgid "Settings"
+msgstr "Ustawienia napisów"
+
+#: subtitles.py:2279
+#, fuzzy
+msgid "loading subtitles list..."
+msgstr "Nie można wykonać napisów"
+
+#: subtitles.py:2299
+msgid "No subtitles found :("
+msgstr ""
+
+#: subtitles.py:2300
+msgid "Try update(simplify) search expression and try again.."
+msgstr ""
+
+#: subtitles.py:2319
+#, fuzzy
+msgid "downloading subtitles..."
+msgstr "Nie można wykonać napisów"
+
+#: subtitles.py:2340
+msgid "cannot unpack rar sub-archive, unrar not find, please install it"
+msgstr ""
+
+#: subtitles.py:2341
+msgid "opkg install unrar"
+msgstr ""
+
+#: subtitles.py:2344
+msgid "unpacking..."
+msgstr ""
+
+#: subtitles.py:2354
+msgid "captcha doesn't match, try again..."
+msgstr ""
+
+#: subtitles.py:2368
+msgid ""
+"There are more subtitles in unpacked archive\n"
+" please select which one you want to use"
+msgstr ""
+
+#: subtitles.py:2402
+msgid ""
+"Subtitles with this name already exist\n"
+"Do you want to override them"
+msgstr ""
+
+#: subtitles.py:2418
+#, fuzzy
+msgid "Subtitles will be downloaded in"
+msgstr "Ustawienia napisów"
+
+#: subtitles.py:2418
+msgid "seconds"
+msgstr ""
+
+#: subtitles.py:2421
+msgid "Set search expression"
+msgstr ""
+
+#: subtitles.py:2506 subtitles.py:2507 subtitles.py:2508
+#, fuzzy
+msgid "Preferred Language"
+msgstr "Wybór napisów"
+
+#: subtitles.py:2509
+msgid "Sort by"
+msgstr ""
+
+#: subtitles.py:2510
+msgid "Download to movie directory"
+msgstr ""
+
+#: subtitles.py:2512
+msgid "Save as movie name"
+msgstr ""
+
+#: subtitles.py:2513
+msgid "Ask when overriding existing subtitles"
+msgstr ""
+
+#: subtitles.py:2515
+msgid "Download Path"
+msgstr ""
+
+#: subtitles.py:2516
+msgid "Temp Path"
+msgstr ""
+
+#: subtitles.py:2525
+msgid "enabled"
+msgstr ""
+
+#: subtitles.py:2525
+msgid "disabled"
+msgstr ""
+
+#: subtitles.py:2651
+#, fuzzy
+msgid "settings"
+msgstr "Ustawienia napisów"
+
+#: seek.py:139
+#, python-format
+msgid "unsupported archive %s"
+msgstr ""
+
+#: seekers/xbmc_subtitles.py:115
+msgid "Username"
+msgstr ""
+
+#: seekers/xbmc_subtitles.py:116
+msgid "Password"
+msgstr ""
