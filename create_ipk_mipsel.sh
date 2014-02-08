@@ -104,6 +104,7 @@ find ${P} -name "*.pyc" -exec rm {} \;
 find ${P} -name Makefile.am -exec rm {} \;
 rm -rf ${P}${PLUGINPATH}/converter
 rm -rf ${P}${PLUGINPATH}/engine/player/servicemp4
+rm -rf ${P}${PLUGINPATH}/resources/data/*
 
 echo "downloading addons"
 ${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P}
