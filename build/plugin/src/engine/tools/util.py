@@ -42,13 +42,13 @@ def load_xml_string(xml_string):
         raise
     else:
         return root
-        
+
 
 def load_xml(xml_file):
     xml = None
     try:
         xml = open(xml_file, "r+")
-    
+
     # trying to set encoding utf-8 in xml file with not defined encoding
         if 'encoding' not in xml.readline():
             xml.seek(0)
@@ -62,8 +62,8 @@ def load_xml(xml_file):
         print "I/O error(%d): %s" % (e.errno, e.strerror)
     finally:
         if xml:xml.close()
-        
-    
+
+
     el = ElementTree()
     try:
         el.parse(xml_file)
@@ -72,7 +72,7 @@ def load_xml(xml_file):
         raise
     else:
         return el
-    
+
 #source from xbmc_doplnky
 def decode_html(data):
     try:
@@ -84,10 +84,10 @@ def decode_html(data):
         traceback.print_exc()
         print [data]
         return data
-    
+
 def decode_string(string):
     if isinstance(string, unicode):
-        return string    
+        return string
     encodings = ['utf-8', 'windows-1250', 'iso-8859-2']
     for encoding in encodings:
         try:
@@ -97,7 +97,7 @@ def decode_string(string):
                 return u'cannot_decode'
             else:
                 continue
-            
+
 def check_version(local, remote):
     local = local.split('.')
     remote = remote.split('.')
@@ -113,7 +113,7 @@ def check_version(local, remote):
                 continue
             return int(local[i]) < int(remote[i])
         return False
-    
+
 
 def make_path(p):
     '''Makes sure directory components of p exist.'''
@@ -128,7 +128,7 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
         if debugfnc:
             debugfnc("downloading %s to %s", remote, local)
         else:
-            print  "downloading %s to %s", (remote, local) 
+            print  "downloading %s to %s", (remote, local)
         f = urllib2.urlopen(remote)
         make_path(os.path.dirname(local))
         localFile = open(local, mode)
@@ -158,10 +158,10 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
             print local, 'succesfully downloaded'
     finally:
         if f:f.close()
-        if localFile:localFile.close()            
+        if localFile:localFile.close()
 
 
-#source from xbmc_doplnky 
+#source from xbmc_doplnky
 def _substitute_entity(match):
         ent = match.group(3)
         if match.group(1) == '#':
@@ -177,7 +177,7 @@ def _substitute_entity(match):
             cp = n2cp.get(ent)
             if cp: return unichr(cp)
             else: return match.group()
-        
+
 
 
 def isSupportedVideo(url):
@@ -203,13 +203,13 @@ def isSupportedVideo(url):
 
 def BtoKB(byte):
         return int(float(byte) / float(1024))
-    
+
 def BtoMB(byte):
         return int(float(byte) / float(1024 * 1024))
-    
-def BtoGB(byte): 
+
+def BtoGB(byte):
     return int(float(byte) / float(1024 * 1024 * 1024))
-    
+
 def sToHMS(self, sec):
     m, s = divmod(sec, 60)
     h, m = divmod(m, 60)
@@ -309,8 +309,8 @@ class Language(object):
             return revert_langs[language_name]
         else:
             return None
-    
-    @staticmethod    
+
+    @staticmethod
     def get_language_name(language_id):
         if language_id in Language.language_map:
             return Language.language_map[language_id]
@@ -320,45 +320,45 @@ class Language(object):
 
 def url_exist(url, timeout=20):
     """checks if given url exist
-    
+
     @return: None if cannot find out, if url exist or not
     @return: True if url exist
     @return: False if url not exist
     """
     print '[testing]', url
-    
+
     if url is None:
         return False
-    
+
     if os.path.isfile(url):
         return True
     # for now we cannot determine existence of url in rtmp or mms protocol
     if url.startswith(('rtmp', 'rtsp', 'rtp', 'mms')):
         return None
-    
+
     if not url.startswith('http'):
         return False
-    
+
     if url == '' or url.find(' ') != -1:
-        return False 
-    
+        return False
+
     scheme, netloc, path, query, fragment = urlsplit(url)
     #print 'scheme:', scheme
     #print 'netloc:', netloc
     #print 'path:', path
     #print 'query:', query
     #print 'fragment:', fragment
-    
+
     if netloc == '':
         return False
-    
+
     site = netloc
-        
+
     if query != '':
-        query = '?' + query    
+        query = '?' + query
     path = path + query
     print site, path
-    
+
     conn = None
     try:
         conn = httplib.HTTPConnection(site, timeout=timeout)
@@ -379,19 +379,19 @@ def check_seekable_url(video_url):
         return True
     else:
         return False
-    
+
 def check_program(program):
-    
+
     def is_file(fpath):
         return os.path.isfile(fpath)
-        
+
     def is_exe(fpath):
         return os.access(fpath, os.X_OK)
 
     def set_executable(program):
         mode = os.stat(program).st_mode
         os.chmod(program, mode | stat.S_IXUSR)
-    
+
     fpath, fname = os.path.split(program)
     if fpath:
         if is_file(program):
@@ -413,17 +413,105 @@ def convert_png_to_8bit(png_path, pngquant_path='pngquant'):
     if pngquant is None:
         print 'cannot decode png %s, pngquant not found' % png_path
         return png_path
-    
+
     png_path_8bit = os.path.splitext(png_path)[0] + '-fs8.png'
     cmd = '%s --force 32 %s' % (pngquant, png_path)
     cmd = cmd.split()
 
     if os.path.isfile(png_path_8bit):
         os.remove(png_path_8bit)
-        
+
     eConsoleAppContainer().execute(*cmd)
     if os.path.isfile(png_path_8bit):
         print 'png %s was successfully converted' % os.path.basename(png_path)
         return png_path_8bit
     return png_path
+
+import marshal
+
+
+class CustomImporter:
+    """Used to avoid name collisions in sys.modules"""
+    def __init__(self, name, lib_path='', log=None):
+        self.name = name
+        self.__path = [lib_path]
+        if log:
+            self.log = log
+        else:
+            self.log = lambda *args:None
+        self.__modules = {}
+        self.__filehandle = None
+
+    def add_path(self, path):
+        if not path in self.__path:
+            self.__path.append(path)
+
+    def add_module(self, mod_name, mod):
+        self.__modules[mod_name] = mod
+
+    def release_modules(self):
+        """ lose reference to evaluated modules,
+              so python GC can collect them and free memory"""
+        self.__modules.clear()
+
+    def __repr__(self):
+        return "[%s-importer] " % self.name
+
+    def find_module(self, fullname, path):
+        self.log("%s import '%s'" , self, fullname)
+
+        if fullname in sys.modules:
+            self.log("%s found '%s' in sys.modules\nUsing python standard importer" , self, fullname)
+            return None
+
+        if fullname in self.__modules:
+            self.log("%s found '%s' in modules" , self, fullname)
+            return self
+        try:
+            path = self.__path
+            self.log("%s finding modul '%s' in %s" , self, fullname, path)
+            self.__filehandle, self.filename, self.description = imp.find_module(fullname, path)
+            self.log("%s found modul '%s' <filename:%s description:%s>" , self, fullname, self.filename, self.description)
+        except ImportError:
+            self.log("%s cannot found modul %s" , self, fullname)
+            if self.__filehandle:
+                self.__filehandle.close()
+                self.__filehandle = None
+            return None
+        if self.__filehandle is None:
+            self.log("%s cannot import package '%s', try to append it to sys.path" , self, fullname)
+            raise ImportError
+        self.log("%s trying to load module '%s'" , self, fullname)
+        return self
+
+    def load_module(self, fullname):
+        if fullname in self.__modules:
+            return self.__modules[fullname]
+        try:
+            code = self.__filehandle.read()
+        except Exception:
+            return
+        finally:
+            if self.__filehandle:
+                self.__filehandle.close()
+                self.__filehandle = None
+        self.log("%s importing modul '%s'" , self, fullname)
+        bytecode = os.path.splitext(self.filename)[1] in ['.pyo', '.pyc']
+        mod = self.__modules[fullname] = imp.new_module(fullname)
+        mod.__file__ = self.filename
+        mod.__loader__ = self
+        del self.filename
+        del self.description
+        try:
+            if bytecode:
+                #magic = code[:4]
+                #assert magic == imp.get_magic()
+                code_bytes = code[8:]
+                code = marshal.loads(code_bytes)
+            exec code in mod.__dict__
+            self.log("%s imported modul '%s'", self, fullname)
+        except Exception:
+            del self.__modules[fullname]
+            raise
+        return mod
 

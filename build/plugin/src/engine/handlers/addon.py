@@ -12,7 +12,7 @@ from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
 
 class VideoAddonItemHandler(ItemHandler):
     handles = (PVideoAddon, )
-        
+
     def _open_item(self, item, *args, **kwargs):
 
         def open_item_success_cb(result):
@@ -21,14 +21,14 @@ class VideoAddonItemHandler(ItemHandler):
                 self.content_screen.resolveCommand(command, args)
                 self.content_screen.stopLoading()
                 self.open_video_addon(item.addon, list_items)
-            
-        @AddonExceptionHandler(self.session)  
+
+        @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):
                 self.open_video_addon_cb(item.addon.provider)
                 self.content_screen.stopLoading()
                 self.content_screen.workingFinished()
                 failure.raiseException()
-                
+
         @AddonExceptionHandler(self.session)
         def get_content(addon, params):
                 try:
@@ -44,23 +44,23 @@ class VideoAddonItemHandler(ItemHandler):
         self.content_screen.workingStarted()
         self.content_screen.startLoading()
         get_content(item.addon, params)
-            
+
     def open_video_addon(self, addon, list_items):
         from Plugins.Extensions.archivCZSK.gui.content import ContentScreen
         self.session.openWithCallback(self.open_video_addon_cb, ContentScreen, addon, list_items)
-        
+
     def open_video_addon_cb(self, content_provider):
         if isinstance(content_provider, VideoAddonContentProvider):
             content_provider.stop()
         self.content_screen.workingFinished()
-        
+
     def open_shortcuts_cb(self, sc_item):
         if sc_item:
             self.open_item(self.item, params=sc_item.params)
-        
+
     def resolve_command(self):
         pass
-    
+
     def _init_menu(self, item):
         addon = item.addon
         #item.add_context_menu_item(_("Update"), action=item.addon.update)
@@ -88,7 +88,7 @@ class VideoAddonMainContentHandler(ContentHandler):
 
 
 class VideoAddonContentHandler(ContentHandler):
-    
+
     def __init__(self, session, content_screen, content_provider):
         handlers = []
         handlers.append(FolderItemHandler(session, content_screen, content_provider))
@@ -97,11 +97,10 @@ class VideoAddonContentHandler(ContentHandler):
         handlers.append(PlaylistItemHandler(session, content_screen, content_provider))
         handlers.append(ContextMenuItemHandler(session, content_screen, content_provider))
         ContentHandler.__init__(self, session, content_screen, content_provider, handlers)
-            
+
     def exit_item(self):
         parent_content = self.content_screen.popParent()
         if parent_content is not None:
             self.content_screen.load(parent_content)
         else:
-            self.content_provider.save_shortcuts()
             self.content_screen.close(self.content_provider)
