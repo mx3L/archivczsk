@@ -56,6 +56,7 @@ Version: ${VER}
 Architecture: all
 Section: extra
 Priority: optional
+Recommends: python-html, python-threading, python-json, python-zlib, python-xmlrpc, unrar, python-compression, python-codecs
 Maintainer: mxfitsat@gmail.com
 Homepage: https://code.google.com/p/archivy-czsk/
 Source: https://code.google.com/p/archivy-czsk/
