@@ -12,7 +12,8 @@ from parsers import SrtParser
 
 PARSERS = [SrtParser]
 
-ENCODINGS = ['utf-8','utf-16'
+ENCODINGS = ['utf-8',
+             'utf-16'
              'windows-1252',
              'windows-1256',
              'windows-1250',
@@ -33,25 +34,25 @@ SUBS_PATH = os.path.join(os.path.dirname(__file__), 'subfiles')
 TESTFILES = [os.path.join(SUBS_PATH, 'test_arabic.srt'),
              os.path.join(SUBS_PATH,'test_random.srt'),
              os.path.join(SUBS_PATH,'test_tags.srt'),
-             os.path.join(SUBS_PATH,'test_null_chars.srt')]
+             os.path.join(SUBS_PATH,'test_null_chars.srt'),
+             os.path.join(SUBS_PATH,'test_utf16.srt')]
 
 class LoaderTestCase(unittest.TestCase):
     def setUp(self):
         self.subsloader = SubsLoader(PARSERS, ENCODINGS)
-
-    def test_utf16encoding(self):
-            self.subsloader.change_encodings(['utf-16'])
-            sublist, encoding = self.subsloader.load(os.path.join(SUBS_PATH,'nvsx21.srt'))
-            for idx,sub in enumerate(sublist):
-                print idx, sub['text'].encode('utf-8')
-
-
 
     def test_loader(self):
         for subpath in TESTFILES:
             sublist, encoding = self.subsloader.load(subpath)
             self.assertTrue(len(sublist) > 1, 'parsed subtitle list has to have at least 2 entries')
             self.assertTrue(encoding != '', 'cannot detect encoding')
+
+    def test_utf16(self):
+        self.subsloader.change_encodings(['utf-8','utf-16'])
+        sublist, encoding = self.subsloader.load(os.path.join(SUBS_PATH,'test_utf16.srt'))
+        self.assertTrue(len(sublist) > 1, 'parsed subtitle list has to have at least 2 entries')
+        self.assertTrue(encoding != '', 'cannot detect encoding')
+        self.assertTrue(encoding == 'utf-16', 'utf-16 file has to be decoded with utf-16 encoding')
 
     def test_invalid_path_local(self):
         self.assertRaises(LoadError, self.subsloader.load, 'dsadsa')

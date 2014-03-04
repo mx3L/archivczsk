@@ -58,9 +58,6 @@ class BaseSeeker(object):
         assert title is not None or filepath is not None,'title or filepath needs to be provided'
         subtitles = self._search(title, filepath, langs, season, episode, tvshow, year)
         subtitles['provider'] = self
-        for sub in subtitles['list']:
-            if not 'country' in sub:
-                sub['country'] = langToCountry(languageTranslate(sub['language_name'],0,2))
         return subtitles
 
 

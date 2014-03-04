@@ -4,6 +4,9 @@ import re
 class ParseError(Exception):
     pass
 
+class NoSubtitlesParseError(ParseError):
+    pass
+
 class SubStyler(object):
 
     HEX_COLORS = {
@@ -173,9 +176,12 @@ class BaseParser(object):
         and returns this list
 
         """
-        text =text.strip()
+        text = text.strip()
         text = text.replace('\x00','')
-        return self._parse(text)
+        sublist = self._parse(text)
+        if len(sublist) <=1:
+            raise NoSubtitlesParseError()
+        return sublist
 
     def _parse(self, text):
         return []

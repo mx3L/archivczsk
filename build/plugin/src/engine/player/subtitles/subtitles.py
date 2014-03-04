@@ -38,7 +38,6 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import ConfigSubsection, ConfigSelection, ConfigYesNo, \
     configfile, getConfigListEntry, config, NoSave, ConfigText, ConfigDirectory
-from Screens.InputBox import InputBox
 from Screens.LocationBox import LocationBox
 from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
@@ -94,7 +93,7 @@ DEBUG = False
 # http://docs.python.org/release/2.4.4/lib/standard-encodings.html
 
 # Common encodings for all languages
-ALL_LANGUAGES_ENCODINGS = ['utf-8']
+ALL_LANGUAGES_ENCODINGS = ['utf-8', 'utf-16']
 
 # other encodings
 CENTRAL_EASTERN_EUROPE_ENCODINGS = ['windows-1250', 'iso-8859-2', 'maclatin2', 'IBM852']
@@ -430,6 +429,7 @@ class SubsSupport(SubsSupportEmbedded):
         self.__subclassOfInfobarBase = isinstance(self, InfoBarBase)
         self.__forceDefaultPath = forceDefaultPath
         self.__showGUIInfoMessages = showGUIInfoMessages
+        self.__checkTimer = eTimer()
         self.__starTimer = eTimer()
         self.__starTimer.callback.append(self.__updateSubs)
         try:
@@ -510,10 +510,11 @@ class SubsSupport(SubsSupportEmbedded):
 
     def startSubs(self, time):
         """If subtitles are loaded then start to play them after time set in ms"""
-        if self.__working or self.__loaded:
-            while self.__working:
-                pass
+        def wrapped():
             self.__startTimer.start(time, True)
+
+        if self.__working or self.__loaded:
+            self.__afterWork(wrapped)
 
     def isSubsLoaded(self):
         return self.__loaded
@@ -636,9 +637,13 @@ class SubsSupport(SubsSupportEmbedded):
         self.__starTimer.stop()
         self.__starTimer = None
 
+        self.__checkTimer.stop()
+        self.__checkTimer = None
+
         subtitles_settings.showSubtitles.setValue(True)
         subtitles_settings.showSubtitles.save()
         print '[SubsSupport] closing subtitleDisplay'
+
 
     def __subsMenuCB(self, subsPath, subsEmbedded, settingsChanged, changeEncoding, turnOff, forceReload=False):
         if turnOff:
@@ -743,23 +748,39 @@ class SubsSupport(SubsSupportEmbedded):
     def _getSubsEngineCls(self):
         return SubsEngine
 
+    def __afterWork(self, fnc):
+        def checkWorking():
+            if self.__working:
+                self.__checkTimer.start(200, True)
+            else:
+                self.__checkTimer.stop()
+                fnc()
+
+        self.__checkTimer.stop()
+        self.__starTimer.stop()
+
+        if self.__working:
+            del self.__checkTimer.callback[:]
+            self.__checkTimer.callback.append(checkWorking)
+            self.__checkTimer.start(200, True)
+        else:
+            fnc()
+
 
 ############ Methods triggered by videoEvents when SubsSupport is subclass of Screen ################
-
     def __serviceStarted(self):
         print '[SubsSupport] Service Started'
+        def startSubs():
+            self.__starTimer.start(self.__startDelay, True)
+
         self.__isServiceSet = True
         # subtitles are loading or already loaded
         if self.__working or self.__loaded:
-            while self.__working:
-                pass
-            self.__starTimer.start(self.__startDelay, True)
-            return
-
-        self.resetSubs(True)
-        if self.__subsPath is None and self.__autoLoad:
-            self.__working = True
-            self.__starTimer.start(self.__startDelay, True)
+            self.__afterWork(startSubs)
+        else:
+            self.resetSubs(True)
+            if self.__subsPath is None and self.__autoLoad:
+                startSubs()
 
     def __serviceStopped(self):
         self.__isServiceSet = False
@@ -2100,9 +2121,10 @@ class SubsSearch(Screen):
     SEARCH_THREADS = []
     MAX_THREADS = 3
 
-    def __init__(self, session, filepath=None, searchTitles=None):
+    def __init__(self, session, filepath=None, searchTitles=None, streamed=None):
         Screen.__init__(self, session)
         filepath = filepath or ""
+        self.streamed = streamed is not None and streamed or filepath.startswith(('http','rtmp','mms','hds','hls'))
         searchTitles = searchTitles or []
         if filepath:
             dirname = os.path.dirname(filepath)
@@ -2451,7 +2473,7 @@ class SubsSearch(Screen):
         delay(self.session, seconds, __("Subtitles will be downloaded in") + " " + str(seconds) + " " + __("seconds"))
 
     def updateSearchExpression(self):
-        self.session.openWithCallback(self.updateSearchExpressionCB, InputBox, __("Set search expression"), text=self.searchExpression)
+        self.session.openWithCallback(self.updateSearchExpressionCB, VirtualKeyBoard, __("Set search expression"), text=self.searchExpression)
 
     def updateSearchExpressionCB(self, callback):
         if callback:
@@ -2460,7 +2482,7 @@ class SubsSearch(Screen):
             self.searchSubs()
 
     def openSettings(self, seekers):
-        self.session.openWithCallback(self.openSettingsCB, SubsSearchSettings, seekers)
+        self.session.openWithCallback(self.openSettingsCB, SubsSearchSettings, seekers, self.streamed)
 
     def openSettingsCB(self, callback=None):
             if subtitles_settings.search.downloadToMovieDir.value:
@@ -2510,10 +2532,11 @@ class SubsSearchSettings(Screen, ConfigListScreen):
 
     FOCUS_CONFIG, FOCUS_PROVIDERS = range(2)
 
-    def __init__(self, session, seekers):
+    def __init__(self, session, seekers, streamed=False):
         Screen.__init__(self, session)
         ConfigListScreen.__init__(self, [], session=session)
         self.seekers = seekers
+        self.streamed = streamed
         self.focus = self.FOCUS_CONFIG
         self['providers'] = List([])
         self["key_green"] = Label(__("Save"))
@@ -2540,7 +2563,10 @@ class SubsSearchSettings(Screen, ConfigListScreen):
         menuList.append(getConfigListEntry(__("Preferred Language") + ' 2', subtitles_settings.search.lang2))
         menuList.append(getConfigListEntry(__("Preferred Language") + ' 3', subtitles_settings.search.lang3))
         menuList.append(getConfigListEntry(__("Sort by"), subtitles_settings.search.defaultSort))
-        menuList.append(getConfigListEntry(__("Download to movie directory"), subtitles_settings.search.downloadToMovieDir))
+        if self.streamed:
+            subtitles_settings.search.downloadToMovieDir.value = False
+        else:
+            menuList.append(getConfigListEntry(__("Download to movie directory"), subtitles_settings.search.downloadToMovieDir))
         if subtitles_settings.search.downloadToMovieDir.value:
             menuList.append(getConfigListEntry(__("Save as movie name"), subtitles_settings.search.saveAsMovieName))
             menuList.append(getConfigListEntry(__("Ask when overriding existing subtitles"), subtitles_settings.search.askOverrideExistingSubs))

@@ -3,7 +3,7 @@ import traceback
 from urllib2 import URLError, HTTPError
 
 from utils import load, decode
-from parsers.baseparser import ParseError
+from parsers.baseparser import ParseError, NoSubtitlesParseError
 
 class ParserNotFoundError(Exception):
     pass
@@ -53,10 +53,20 @@ class SubsLoader(object):
 
     def load(self, subfile, current_encoding=None):
         print '[SubsLoader] loading "{0}"'.format(subfile)
-        decoded_text, encoding = self._process_path(subfile, current_encoding)
-        parsed_text = self._parse(decoded_text, os.path.splitext(subfile)[1])
-        print '[SubsLoader] "{0}" - succesfully loaded'.format(subfile),
-        return parsed_text, encoding
+        while 1:
+            decoded_text, encoding = self._process_path(subfile, current_encoding)
+            try:
+                sublist = self._parse(decoded_text, os.path.splitext(subfile)[1])
+            except NoSubtitlesParseError:
+                # this could mean that subtitles file was decoded but
+                # with not right encoding, we try to use other encodings
+                if current_encoding == self._encodings[-1]:
+                    raise
+                print '[SubsLoader] no subtitles parsed, will try different encoding'
+                current_encoding = encoding
+                continue
+            print '[SubsLoader] "{0}" - succesfully loaded'.format(subfile),
+            return sublist, encoding
 
     def _process_path(self, subfile, current_encoding=None) :
         try:
@@ -89,6 +99,10 @@ class SubsLoader(object):
             print '[SubsLoader] trying parsing with [{0}]'.format(parser)
             try:
                 return parser.parse(text)
+            except NoSubtitlesParseError as e:
+                if parser == self._parsers[-1]:
+                    raise
+                continue
             except ParseError as e:
                 print '[SubsLoader][{0}]: {1}'.format(parser,e)
                 continue

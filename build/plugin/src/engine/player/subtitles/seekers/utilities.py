@@ -97,7 +97,7 @@ REGEX_EXPRESSIONS = [ '[Ss]([0-9]+)[][._-]*[Ee]([0-9]+)([^\\\\/]*)$',
                       '[\\\\/\\._ \\[\\(-]([0-9]+)x([0-9]+)([^\\\\/]*)$'
                      ]
 
-LANGCOUNTRY = {"ar":"AE",
+LANG_COUNTRY = {"ar":"AE",
                 "bg":"BG",
                 "ca":"AD",
                 "cs":"CZ",
@@ -135,10 +135,40 @@ LANGCOUNTRY = {"ar":"AE",
                 "tr":"TR",
                 "uk":"UA"}
 
+LANGNAME_ISO6391 = dict(map(lambda lang:(lang[0], lang[2]),LANGUAGES ))
+LANGNAME_ISO6392 = dict(map(lambda lang:(lang[0], lang[3]),LANGUAGES ))
+ISO6391_LANGNAME = dict(map(lambda lang:(lang[2], lang[0]),LANGUAGES ))
+ISO6392_LANGNAME = dict(map(lambda lang:(lang[3], lang[0]),LANGUAGES ))
+
 def languageTranslate(lang, lang_from, lang_to):
-  for x in LANGUAGES:
-    if lang == x[lang_from] :
-      return x[lang_to]
+    if lang_from == 0 and lang_to == 2:
+        if lang in LANGNAME_ISO6391:
+            return LANGNAME_ISO6391[lang]
+    elif lang_from == 0 and lang_to == 3:
+        if lang in LANGNAME_ISO6392:
+            return LANGNAME_ISO6392[lang]
+    if lang_from == 2 and lang_to == 0:
+        if lang in ISO6391_LANGNAME:
+            return ISO6391_LANGNAME[lang]
+    elif lang_from == 3 and lang_to == 0:
+        if lang in ISO6392_LANGNAME:
+            return ISO6392_LANGNAME[lang]
+    else:
+        for x in LANGUAGES:
+            if lang == x[lang_from] :
+                return x[lang_to]
+
+
+def regex_movie(title):
+    # from periscope
+    movie_regexes =['(?P<movie>.*)[\.|\[|\(| ]{1}(?P<year>(?:(?:19|20)[0-9]{2}))(?P<teams>.*)']
+    for regex in movie_regexes:
+        match = re.search(regex,title, re.IGNORECASE)
+        if match:
+            print 'matched!!'
+            return match.group('movie'), match.group('year')
+    return '',''
+
 
 
 def regex_tvshow(compare, file, sub=""):
@@ -269,8 +299,8 @@ def hashFileMD5(file_path, buff_size=1048576):
     return m.hexdigest()
 
 def langToCountry(lang):
-    if lang in LANGCOUNTRY:
-        return LANGCOUNTRY[lang]
+    if lang in LANG_COUNTRY:
+        return LANG_COUNTRY[lang]
     return 'UNK'
 
 class HeadRequest(urllib2.Request):
@@ -290,5 +320,4 @@ def getFileSize(filepath):
             if 'resp' in locals():
                 locals()['resp'].close()
     return None
-
 

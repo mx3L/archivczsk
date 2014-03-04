@@ -34,7 +34,6 @@ class TestXBMCSubtitleProvider(unittest.TestCase):
         self.search_list = []
         self.tvshow_list = []
         self.download_list = []
-        self.download_tvshow_list = []
 
     def testSearchSimple(self):
         for title in self.search_list:
@@ -63,12 +62,6 @@ class TestXBMCSubtitleProvider(unittest.TestCase):
             self.assertTrue(len(subtitles['list']) > 0, 'There should be at least 1 subtitle found')
             self.provider.download(subtitles, subtitles['list'][-1])
 
-    def testDownloadTVShow(self):
-        for title, season, episode in self.download_tvshow_list:
-            result = self.provider.search(title=title, tvshow=title, season=season, episode=episode)
-            self.provider.download(result, result['list'][-1])
-
-
 from seekers.xbmc_subtitles import TitulkyComSeeker
 class TestTitulkycom(TestXBMCSubtitleProvider):
     def setUp(self):
@@ -77,7 +70,6 @@ class TestTitulkycom(TestXBMCSubtitleProvider):
         self.search_list = ['Alias']
         self.download_list= []
         self.tvshow_list = []
-        self.download_tvshow_list = []
         self.provider= TitulkyComSeeker(self.tmp_path,
                                                                         self.download_path,
                                                                         self.settings,
@@ -93,7 +85,6 @@ class TestEdna(TestXBMCSubtitleProvider):
         self.search_list = []
         self.download_list = []
         self.tvshow_list = [('True Detective','1','1')]
-        self.download_tvshow_list = [('True Detective','1','1'), ('True Detective','1','6')]
         self.provider= EdnaSeeker(self.tmp_path,
                                                                         self.download_path,
                                                                         self.settings,
@@ -109,7 +100,6 @@ class TestOpenSubtitles(TestXBMCSubtitleProvider):
         self.search_list = ['Dark Knight']
         self.download_list= ['Dark Knight']
         self.tvshow_list = []
-        self.download_tvshow_list = []
         self.provider= OpenSubtitlesSeeker(self.tmp_path,
                                                                         self.download_path,
                                                                         self.settings,

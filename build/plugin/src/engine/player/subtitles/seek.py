@@ -9,7 +9,7 @@ import threading
 
 SUBTITLES_SEEKERS = []
 
-from seekers.utilities import regex_tvshow, languageTranslate
+from seekers.utilities import regex_tvshow, regex_movie, languageTranslate, langToCountry
 from seekers import TitulkyComSeeker, EdnaSeeker, OpenSubtitlesSeeker
 from seekers import SubtitlesCaptchaError, SubtitlesDownloadError, SubtitlesSearchError
 
@@ -59,14 +59,20 @@ class SubsSeeker(object):
                 if updateCB:
                     updateCB(subtitlesDict)
 
-        year =""
+        season=episode=tvshow=year=""
+
+        titlemovie, year = regex_movie(title)
+        if titlemovie:
+            title = titlemovie
+
+        # from xbmc-subtitles
         if year == "":                                            # If we have a year, assume no tv show
             if str(year) == "":                                          # Still no year: *could* be a tvshow
-                title2, season, episode = regex_tvshow(False, title)
-                if title2 != "" and season != "" and episode != "":
+                titleshow, season, episode = regex_tvshow(False, title)
+                if titleshow != "" and season != "" and episode != "":
                     season = str(int(season))
                     episode = str(int(episode))
-                    tvshow = title2
+                    tvshow = titleshow
                 else:
                     season = ""                                              # Reset variables: could contain garbage from tvshow regex above
                     episode = ""
@@ -90,17 +96,21 @@ class SubsSeeker(object):
     def getSubtitlesList(self, subtitles_dict, provider=None, langs=None, synced=False, nonsynced=False):
         subtitles_list = []
         if provider and provider in subtitles_dict:
-            subtitles_list = subtitles_dict[provider]['list'][:]
+            subtitles_list = subtitles_dict[provider]['list']
             for sub in subtitles_list:
                 if 'provider' not in sub:
                     sub['provider'] = subtitles_dict[provider]['provider'].provider_name
+                if 'country' not in sub:
+                    sub['country'] = langToCountry(languageTranslate(sub['language_name'],0,2))
         else:
             for provider in subtitles_dict:
-                provider_list = subtitles_dict[provider]['list'][:]
+                provider_list = subtitles_dict[provider]['list']
                 subtitles_list+= provider_list
                 for sub in provider_list:
                     if 'provider' not in sub:
                         sub['provider'] = subtitles_dict[provider]['provider'].provider_name
+                    if 'country' not in sub:
+                        sub['country'] = langToCountry(languageTranslate(sub['language_name'],0,2))
         if synced:
             subtitles_list = filter(lambda x:x['sync'], subtitles_list)
         elif nonsynced:
@@ -124,8 +134,6 @@ class SubsSeeker(object):
         if sort_sync:
             return sorted(subtitles_list, key=lambda x:x['sync'],reverse=True)
         return subtitles_list
-
-
 
     def downloadSubtitle(self, selected_subtitle, subtitles_dict):
         print '[SubsSeeker] downloading subtitle', selected_subtitle
