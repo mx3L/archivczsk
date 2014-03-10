@@ -11,19 +11,19 @@ from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoReso
 
 class MediaItemHandler(ItemHandler):
     """ Template class - handles Media Item interaction """
-    
+
     def __init__(self, session, content_screen, content_provider, info_modes):
         ItemHandler.__init__(self, session, content_screen, info_modes)
         self.content_provider = content_provider
-        
+
     def _open_item(self, item, mode='play', *args, **kwargs):
         self.play_item(item, mode, args, kwargs)
-        
+
     def play_item(self, item, mode='play', *args, **kwargs):
         def end_play():
             self.content_provider.resume()
             self.content_screen.workingFinished()
-            
+
         @PlayExceptionHandler(self.session)
         def start_play(item, mode):
             self.content_provider.pause()
@@ -34,15 +34,21 @@ class MediaItemHandler(ItemHandler):
                 raise
         self.content_screen.workingStarted()
         start_play(item, mode)
-        
+
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
         def start_download(mode):
-            self.content_provider.download(item, startCB=startCB, finishCB=finishCB, mode=mode)
+            try:
+                self.content_provider.download(item, startCB=startCB, finishCB=finishCB, mode=mode, overrideCB=overrideCB)
+            except Exception:
+                self.content_screen.workingFinished()
+                raise
+
         startCB = DownloadManagerMessages.startDownloadCB
         finishCB = DownloadManagerMessages.finishDownloadCB
+        overrideCB = DownloadManagerMessages.overrideDownloadCB
         start_download(mode)
-        
+
     def _init_menu(self, item):
         provider = self.content_provider
         if 'play' in provider.capabilities:
@@ -50,60 +56,60 @@ class MediaItemHandler(ItemHandler):
                                                         action=self.play_item,
                                                         params={'item':item,
                                                         'mode':'play'})
-            
+
         if 'play_and_download' in provider.capabilities:
             item.add_context_menu_item(_("Play and Download"),
                                        action=self.play_item,
                                        params={'item':item,
                                                       'mode':'play_and_download'})
-            
+
         if 'play_and_download_gst' in provider.capabilities:
             item.add_context_menu_item(_("Play and download (Gstreamer)"),
                                        action=self.play_item,
                                        params={'item':item,
                                                       'mode':'play_and_download_gst'})
-            
+
         if 'download' in provider.capabilities:
             item.add_context_menu_item(_("Download"),
                                        action=self.download_item,
                                        params={'item':item,
                                                       'mode':'wget'})
-            
+
 
 class VideoResolvedItemHandler(MediaItemHandler):
     handles = (PVideoResolved, )
     def __init__(self, session, content_screen, content_provider):
         info_handlers = ['csfd','item']
-        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)        
+        MediaItemHandler.__init__(self, session, content_screen, content_provider, info_handlers)
 
-            
+
 
 class VideoNotResolvedItemHandler(MediaItemHandler):
     handles = (PVideoNotResolved, )
     def __init__(self, session, content_screen, content_provider):
         info_modes = ['item','csfd']
         MediaItemHandler.__init__(self, session, content_screen, content_provider, ['item','csfd'])
-        
+
     def _init_menu(self, item):
         MediaItemHandler._init_menu(self, item)
         item.add_context_menu_item(_("Resolve videos"),
                                        action=self._resolve_videos,
                                        params={'item':item})
-            
+
     def play_item(self, item, mode='play', *args, **kwargs):
         def wrapped(res_item):
             MediaItemHandler.play_item(self, res_item, mode)
         self._resolve_video(item, wrapped)
-        
+
     def download_item(self, item, mode="", *args, **kwargs):
         def wrapped(res_item):
             MediaItemHandler.download_item(self, res_item, mode)
             self.content_screen.workingFinished()
         self._resolve_video(item, wrapped)
-        
+
     def _filter_by_quality(self, items):
         pass
-    
+
     def _resolve_video(self, item, callback):
         def selected_source(idx):
             if idx is not None:
@@ -127,7 +133,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
                 self.content_screen.workingFinished()
             if item:
                 callback(item)
-            
+
         @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):
             self.content_screen.stopLoading()
@@ -138,8 +144,8 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
         self.content_screen.startLoading()
         self.content_screen.workingStarted()
         self.content_provider.get_content(self.session, item.params, open_item_success_cb, open_item_error_cb)
-        
-            
+
+
     def _resolve_videos(self, item):
         def open_item_success_cb(result):
             list_items, screen_command, args = result
@@ -153,20 +159,20 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
                 self.content_screen.load(content)
                 self.content_screen.showList()
                 self.content_screen.workingFinished()
-            
+
         @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):
             self.content_screen.stopLoading()
             self.content_screen.showList()
             self.content_screen.workingFinished()
             failure.raiseException()
-                 
+
         self.content_screen.workingStarted()
         self.content_screen.hideList()
         self.content_screen.startLoading()
         self.content_provider.get_content(self.session, item.params, open_item_success_cb, open_item_error_cb)
-        
-        
+
+
 
 class PlaylistItemHandler(MediaItemHandler):
     handles = (PPlaylist, )
@@ -183,7 +189,7 @@ class PlaylistItemHandler(MediaItemHandler):
                           'lst_items':list_items,
                           'refresh':False}
         self.content_screen.load(content)
-        
+
     def _init_menu(self, item, *args, **kwargs):
         provider = self.content_provider
         if 'play' in provider.capabilities:

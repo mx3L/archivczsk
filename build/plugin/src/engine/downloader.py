@@ -37,7 +37,7 @@ def toUTF8(text):
 def resetUrllib2Opener():
     opener = urllib2.build_opener()
     urllib2.install_opener(opener)
- 
+
 def url2name(url):
     return os.path.basename(urlsplit(url)[2])
 
@@ -59,9 +59,9 @@ def sanitizeFilename(s):
         result = result.replace('--', '-')
     return result.strip('-')
 
-def getFileInfo(url, localFileName=None, headers={}):    
+def getFileInfo(url, localFileName=None, headers={}):
     resetUrllib2Opener()
-    
+
     localName = url2name(url)
     req = urllib2.Request(url, headers=headers)
     resp = urllib2.urlopen(req)
@@ -72,21 +72,21 @@ def getFileInfo(url, localFileName=None, headers={}):
         localName = resp.info()['Content-Disposition'].split('filename=')[1]
         if localName[0] == '"' or localName[0] == "'":
             localName = localName[1:-1]
-    elif resp.url != url: 
+    elif resp.url != url:
         # if we were redirected, the real file name we take from the final URL
         localName = url2name(resp.url)
-    
+
     # we can force to save the file as specified name
-    if localFileName: 
+    if localFileName:
         # if our filename doesnt have extensions, then add identified extension from localName
         if os.path.splitext(localFileName)[1] == "":
             ext = os.path.splitext(localName)[1]
             if ext in VIDEO_EXTENSIONS:
                 localFileName = os.path.splitext(localFileName)[0] + ext
-                
+
         localName = localFileName
     resp.close()
-    
+
     if os.path.splitext(localName)[1] == "":
         ext = mimetypes.guess_extension(exttype)
         if ext is not None:
@@ -94,11 +94,11 @@ def getFileInfo(url, localFileName=None, headers={}):
         else:
             url_ext = '.' + url.split('.')[-1]
             localName = localName + url_ext
-            
+
     # we didnt get valid extensions so we add one
     if os.path.splitext(localName)[1] not in MEDIA_EXTENSIONS:
         localName = os.path.splitext(localName)[0] + '.mp4'
-        
+
     localName = sanitizeFilename(localName)
     #localName = util.removeDiacritics(localName)
     return localName, length
@@ -119,7 +119,11 @@ class DownloadManager(object):
         self.on_change = []
 
     def addDownload(self, download, overrideCB=None):
-        if not download.url in [down.url for down in self.download_lst]:
+        #check if we didn't download from this url already
+        c1 = download.url in [d.url for d in self.download_lst]
+        # check if filename already exists
+        c2 = os.path.isfile(download.local)
+        if not c1 and not c2:
             self.download_lst.append(download)
             download.start()
         else:
@@ -131,7 +135,7 @@ class DownloadManager(object):
             download.cancel()
 
     def removeDownload(self, download):
-        if download.running: 
+        if download.running:
             if not isinstance(download, HTTPDownloadTwisted):
                 download.pp.appClosed.append(download.remove)
             else:
@@ -147,7 +151,7 @@ class DownloadManager(object):
             if it.url == download.local:
                 return download
         return None
-    
+
     def createDownload(self, name, url, destination, filename=None, live=False, startCB=None, finishCB=None, quiet=False, stream=None, playDownload=False, headers={}, mode=""):
         d = None
         url = toUTF8(url)
@@ -165,7 +169,7 @@ class DownloadManager(object):
                     rtmp_url.append(' --' + rtmp[0])
                     rtmp_url.append("'%s'" % rtmp[1])
                 url = "'%s'" % urlList[0] + ' '.join(rtmp_url)
-                
+
             # always download rtmp stream as live,
             # this way we should slowly but correctly download every video
             live = True
@@ -181,14 +185,14 @@ class DownloadManager(object):
             except (urllib2.HTTPError, urllib2.URLError) as e:
                 print "[Downloader] cannot create download %s - %s error" % (toUTF8(filename), str(e))
                 raise
-            
+
             # for now we cannot download hls streams
             if filename.endswith('m3u8'):
                 raise NotSupportedProtocolError('HLS')
             # only for EPLAYER3(ffmpeg demux)
             # When playing and downloading avi/mkv container then use HTTPTwistedDownload instead of wget
             # Reason is that when we use wget download, downloading file is progressively increasing its size, and ffmpeg isnt updating size of file accordingly
-            # so when video gets to place what ffmpeg read in start, playing prematurely stops because of EOF. 
+            # so when video gets to place what ffmpeg read in start, playing prematurely stops because of EOF.
             # When we use HTTPDownloadTwisted, we firstly create the file of length of the downloading file, and then download to it, so ffmpeg reads
             # full length filesize.
             # Its not nice fix but its working ...
@@ -197,25 +201,25 @@ class DownloadManager(object):
                     d = HTTPDownloadTwisted(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers, fullLengthFile=True)
                 else:
                     d = HTTPDownloadE2(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
-                    
+
             elif mode == "wget":
                 d = HTTPDownloadE2(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
             else:
                 d = HTTPDownloadTwisted(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
-                
+
             d.onStartCB.append(startCB)
             d.onFinishCB.append(finishCB)
             d.length = long(length)
             d.status = DownloadStatus(d)
-            
+
         else:
             print '[Downloader] cannot create download %s - not supported protocol' % toUTF8(filename)
             protocol = filename.split('://')[0].upper()
             raise NotSupportedProtocolError(protocol)
-        
+
         d.playMode = playDownload
         return d
-        
+
 class DownloadStatus():
     def __init__(self, download):
         self.download = download
@@ -225,37 +229,37 @@ class DownloadStatus():
         self.percent = -1
         self.eta = -1
         self.ignoreFirstUpdate = True
-        
-                      
+
+
     def update(self, refreshTime):
-        
+
         totalLength = self.totalLength
         tempLength = self.currentLength
         speedB = 0
-        
+
         if os.path.isfile(self.download.local):
             currentLength = self.download.getCurrentLength()
-            
+
             # download just started
             if tempLength == 0:
                 if not self.ignoreFirstUpdate:
                     speedB = long(float(currentLength) / float(refreshTime))
-                    
+
             elif tempLength > 0:
                 speedB = long(float(currentLength - tempLength) / float(refreshTime))
-                
+
             self.speed = speedB
             if totalLength > 0:
                 if speedB > 0:
                     self.eta = int(float(totalLength - currentLength) / float(speedB))
                 self.percent = float(totalLength - currentLength) / float(totalLength) * 100
             self.currentLength = currentLength
-            
+
             #print '[DownloadStatus] update: speed %s' % self.speed
-            
+
         else:
             print "[Downloader] status: cannot update, file doesnt exist"
-            
+
     def dumpInfo(self):
         return "Name=%s  downloaded: [%d MB/ %d MB] remaining time %dh:%dm:%ds"\
             % (self.download.name, self.currentLength, self.totalLength, self.etaHMS[0], self.etaHMS[1], self.etaHMS[2])
@@ -288,21 +292,21 @@ class Download(object):
         self.pp = None
         self.state = 'unknown'
         self.textState = _('unknown')
-        
+
     def __runFinishCB(self, download):
         self.__updateState()
         for f in self.onFinishCB:
             f(self)
-            
+
     def __runStartCB(self, download):
         self.__updateState()
         for f in self.onStartCB:
             f(self)
-            
+
     def __runOutputCB(self, data):
         for f in self.onOutputCB:
             f(data)
-    
+
     def __updateState(self):
         if not self.running and self.downloaded:
             self.state = 'success_finished'
@@ -316,24 +320,24 @@ class Download(object):
         else:
             self.state = 'unknown'
             self.textState = _("unknown")
-        
+
 
     def remove(self, callback=None):
         """removes download"""
         if not self.running and os.path.isfile(self.local):
             print 'removing', self.filename
             os.remove(self.local)
-            
+
     def getLength(self):
         pass
-        
+
     def getCurrentLength(self):
         currentLength = 0
         if os.path.isfile(self.local):
             currentLength = long(os.path.getsize(self.local))
             #print "Name=%s  downloaded: [%lu B/ %lu B]" % (self.name, currentLength, self.length)
         return currentLength
-        
+
 
     def start(self):
         """Starts downloading file"""
@@ -462,9 +466,9 @@ class HTTPDownloadE2(Download):
         if self.pp.running():
             self.killed = True
             self.pp.sendCtrlC()
-        
+
 class HTTPProgressDownloader(client.HTTPDownloader):
-    
+
     def __init__(self, url, fileOrName, updateCurrentLength, writeToEmptyFile=False, outputCB=None, headers={}, *args, **kwargs):
         self.writeToEmptyFile = writeToEmptyFile
         self.outputCB = outputCB
@@ -472,7 +476,7 @@ class HTTPProgressDownloader(client.HTTPDownloader):
         self.totalLength = 0
         self.currentLength = 0
         client.HTTPDownloader.__init__(self, url, fileOrName, headers=headers, agent=USER_AGENT, *args, **kwargs)
-        
+
 
     def gotHeaders(self, headers):
         print 'gotHeaders'
@@ -485,7 +489,7 @@ class HTTPProgressDownloader(client.HTTPDownloader):
             self.currentLength = 0.0
             print ''
         return client.HTTPDownloader.gotHeaders(self, headers)
-    
+
     def pageStart(self, partialContent):
         """Called on page download start.
 
@@ -514,14 +518,14 @@ class HTTPProgressDownloader(client.HTTPDownloader):
                 outputstr = "%d/%i MB %d percent" % (self.currentLength, percent)
                 self.outputCB(outputstr)
         return client.HTTPDownloader.pagePart(self, data)
-    
+
     def createEmptyFile(self, size):
         f = open(self.fileName, "wb")
         f.seek((size) - 1)
         f.write("\0")
         f.close()
 
-    
+
     def openFile(self, partialContent):
         #download avi files to existing file with full length of file which will be downloaded
         if self.writeToEmptyFile:
@@ -562,13 +566,13 @@ class HTTPDownloadTwisted(Download):
     def __outputCB(self, data):
         if self.showOutput and self.outputCB is not None:
             self.outputCB(data)
-    
+
     def updateCurrentLength(self, currentLength):
         self.currentLength = currentLength
-        
+
     def getCurrentLength(self):
         return self.currentLength
-    
+
     def start(self):
         self.__startCB()
         self.defer = self.downloadWithProgress(self.url, self.local, writeToEmptyFile=self.fullLengthFile, outputCB=self.__outputCB, headers=self.headers).addCallback(self.__finishCB).addErrback(self.downloadError)
@@ -579,7 +583,7 @@ class HTTPDownloadTwisted(Download):
             self.running = False
             self.killed = True
             self.connector.disconnect()
-    
+
     def downloadWithProgress(self, url, file, contextFactory=None, *args, **kwargs):
         scheme, host, port, path = client._parse(url)
         factory = HTTPProgressDownloader(url, file, self.updateCurrentLength, *args, **kwargs)
@@ -591,15 +595,15 @@ class HTTPDownloadTwisted(Download):
         else:
             self.connector = reactor.connectTCP(host, port, factory)
         return factory.deferred
-    
+
     def downloadError(self, failure):
         self.downloaded = False
         self.running = False
         print "Error:", failure.getErrorMessage()
         self.__finishCB(None)
-        
-        
-        
+
+
+
 class GStreamerDownload():
     def __init__(self, path, preBufferPercent=0, preBufferSeconds=0):
         self.path = path

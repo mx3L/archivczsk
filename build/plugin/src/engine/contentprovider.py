@@ -237,7 +237,7 @@ class Downloads(object):
         return video_lst
 
 
-    def download(self, item, startCB, finishCB, playDownload=False, mode=""):
+    def download(self, item, startCB, finishCB, playDownload=False, mode="", overrideCB=None):
         """Downloads item PVideo itemem calls startCB when download starts
            and finishCB when download finishes
         """
@@ -253,7 +253,7 @@ class Downloads(object):
             log.debug('subtitles link: %s' , item.subs)
             subs_file_path = os.path.splitext(d.local)[0] + '.srt'
             util.download_to_file(item.subs, subs_file_path)
-        downloadManager.addDownload(d)
+        downloadManager.addDownload(d, overrideCB)
 
     def remove_download(self, item):
         if item is not None and isinstance(item, PDownload):
