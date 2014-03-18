@@ -5,6 +5,7 @@ Created on 20.3.2012
 @author: marko
 '''
 import os
+import traceback
 
 from enigma import  eServiceCenter, iServiceInformation, eServiceReference, iSeekableService, iPlayableService, iPlayableServicePtr, eTimer, eConsoleAppContainer, getDesktop
 from Screens.MessageBox import MessageBox
@@ -21,10 +22,12 @@ from Components.ActionMap import HelpableActionMap
 from Components.config import config, ConfigSubsection
 from ServiceReference import ServiceReference
 
-
-from subtitles import SubsSupport, initSubsSettings
+try:
+	from Plugins.Extensions.SubsSupport import SubsSupport, initSubsSettings
+except ImportError as e:
+	traceback.print_exc()
+	raise Exception("Please install SubsSupport plugin")
 config.plugins.archivCZSK.subtitles = ConfigSubsection()
-initSubsSettings(config.plugins.archivCZSK.subtitles)
 
 from controller import VideoPlayerController, GStreamerDownloadController, RTMPController
 from info import videoPlayerInfo
@@ -135,6 +138,7 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 				x.__init__(self)
 
 		# init subtitles
+		initSubsSettings(config.plugins.archivCZSK.subtitles)
 		SubsSupport.__init__(self, subsPath=subtitles, defaultPath=config.plugins.archivCZSK.subtitlesPath.getValue(), forceDefaultPath=True, searchSupport=True)
 
 		# playlist support
