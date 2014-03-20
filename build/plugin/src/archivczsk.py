@@ -4,25 +4,25 @@ Created on 21.10.2012
 @author: marko
 '''
 
-import traceback
 import os
 import shutil
 import threading
+import traceback
 
-from Screens.MessageBox import MessageBox
 from Components.config import config, configfile
+from Screens.MessageBox import MessageBox
 
-from . import _, log
-
-import settings
-# loading repositories and their addons
-from gui.common import showYesNoDialog, showInfoMessage, showErrorMessage
-from gui.content import VideoAddonsContentScreen
-from engine.items import PVideoAddon
 from engine.addon import VideoAddon, XBMCAddon
 from engine.exceptions.updater import UpdateXMLVersionError
 from engine.tools.task import Task
+from gui.common import showInfoMessage
+from gui.content import ArchivCZSKContentScreen
+import settings
 
+from . import _, log
+
+
+# loading repositories and their addons
 class ArchivCZSK():
 
     __loaded = False
@@ -69,6 +69,14 @@ class ArchivCZSK():
         return ArchivCZSK.__addons[addon_id]
 
     @staticmethod
+    def get_addons():
+        return ArchivCZSK.__addons.values()
+
+    @staticmethod
+    def get_video_addons():
+        return [addon for addon in ArchivCZSK.get_addons() if isinstance(addon, VideoAddon)]
+
+    @staticmethod
     def get_xbmc_addon(addon_id):
         return XBMCAddon(ArchivCZSK.__addons[addon_id])
 
@@ -87,8 +95,6 @@ class ArchivCZSK():
         self.updated_addons = []
         self.first_time = os.path.exists(os.path.join(settings.PLUGIN_PATH, 'firsttime'))
 
-
-        update_string = ''
         if ArchivCZSK.__need_restart:
             self.ask_restart_e2()
 
@@ -196,27 +202,11 @@ class ArchivCZSK():
     def open_archive_screen(self, callback=None):
         if not ArchivCZSK.__loaded:
             self.load_repositories()
-        tv_video_addon = []
-        video_addon = []
-        for key in ArchivCZSK.__addons.keys():
-            addon = ArchivCZSK.get_addon(key)
-            if not isinstance(addon, VideoAddon):
-                continue
-            if (not config.plugins.archivCZSK.showBrokenAddons.getValue()
-                and addon.get_info('broken')):
-                continue
-            if addon.get_setting('tv_addon'):
-                tv_video_addon.append(PVideoAddon(addon))
-                log.debug('adding %s addon to tv group' , key)
-            else:
-                video_addon.append(PVideoAddon(addon))
-                log.debug('adding %s addon to video group', key)
 
-        tv_video_addon.sort(key=lambda addon:addon.name)
-        video_addon.sort(key=lambda addon:addon.name)
-        # first screen to open when starting plugin, so we start worker thread where we can run our tasks(ie. loading archives)
+        # first screen to open when starting plugin,
+        # so we start worker thread where we can run our tasks(ie. loading archives)
         Task.startWorkerThread()
-        self.session.openWithCallback(self.close_archive_screen, VideoAddonsContentScreen, tv_video_addon, video_addon)
+        self.session.openWithCallback(self.close_archive_screen, ArchivCZSKContentScreen, self)
 
     def close_archive_screen(self):
         if not config.plugins.archivCZSK.preload.getValue():

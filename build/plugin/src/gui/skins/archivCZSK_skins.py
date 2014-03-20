@@ -1,4 +1,4 @@
-VideoAddonsContentScreen_HD = """
+ArchivCZSKContentScreen_HD = """
         <screen position="center,center" size="900,576" title="ArchivyCZSK" flags="wfBorder" transparent="0">
             <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
@@ -17,7 +17,7 @@ VideoAddonsContentScreen_HD = """
         """
 
 
-VideoAddonsContentScreen_SD = """
+ArchivCZSKContentScreen_SD = """
         <screen position="center,center" size="720,576" title="ArchivCZSK" >
             <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
@@ -32,7 +32,7 @@ VideoAddonsContentScreen_SD = """
             <ePixmap position="0,545" size="35,25" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/key_info.png"  zPosition="3" transparent="1" alphatest="on" />
         </screen>"""
             
-VideoAddonsContentScreen = """
+ArchivCZSKContentScreen = """
         <screen position="center,center" size="720,576" flags="wfNoBorder" title="ArchivCZSK" >
             <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />

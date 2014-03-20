@@ -19,7 +19,7 @@ try:
 except ImportError:
     print '[ArchivCZSK] error in importing servicemp4'
     SERVICEMP4 = False
- 
+
 LANGUAGE_SETTINGS_ID = language.getLanguage()[:2]
 
 ############ STB Info ###############
@@ -60,7 +60,7 @@ config.plugins.archivCZSK.videoPlayer.info = NoSave(ConfigNothing())
 playertype = [(videoPlayerInfo.type, videoPlayerInfo.getName())]
 config.plugins.archivCZSK.videoPlayer.exitFix = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.detectedType = ConfigSelection(choices=playertype)
-if videoPlayerInfo.isRTMPSupported():        
+if videoPlayerInfo.isRTMPSupported():
     config.plugins.archivCZSK.videoPlayer.seeking = ConfigYesNo(default=True)
 else:
     config.plugins.archivCZSK.videoPlayer.seeking = ConfigYesNo(default=False)
@@ -68,7 +68,7 @@ else:
 choicelist = [('standard', _('standard player')),
               ('custom', _('custom player (subtitle support)'))]
 config.plugins.archivCZSK.videoPlayer.type = ConfigSelection(default="custom", choices=choicelist)
-config.plugins.archivCZSK.videoPlayer.useVideoController = ConfigYesNo(default=True)             
+config.plugins.archivCZSK.videoPlayer.useVideoController = ConfigYesNo(default=True)
 config.plugins.archivCZSK.videoPlayer.useDefaultSkin = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.autoPlay = ConfigYesNo(default=True)
 
@@ -77,7 +77,7 @@ config.plugins.archivCZSK.videoPlayer.servicemrua = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.servicemp4 = ConfigYesNo(default=False)
 if not SERVICEMP4:
     config.plugins.archivCZSK.videoPlayer.servicemp4.setValue(False)
-    
+
 
 # downloading flag, headers, userAgent for servicemp4
 config.plugins.archivCZSK.videoPlayer.download = NoSave(ConfigText(default="False"))
@@ -144,10 +144,10 @@ config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choic
 
 def changeLogMode(configElement):
     log.changeMode(int(configElement.value))
-    
+
 config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
 
-############ Paths ####################### 
+############ Paths #######################
 
 config.plugins.archivCZSK.dataPath = ConfigDirectory(default="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/resources/data")
 config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
@@ -155,7 +155,7 @@ config.plugins.archivCZSK.subtitlesPath = ConfigDirectory(default="/tmp")
 
 ########### Misc #########################
 
-config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=False)
+config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
 config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
 if ARCH == 'sh4' and SERVICEMP4:
@@ -164,7 +164,7 @@ else:
     config.plugins.archivCZSK.hdmuFix = ConfigYesNo(default=False)
 
 config.plugins.archivCZSK.linkVerification = ConfigYesNo(default=False)
-    
+
 choicelist = []
 for i in range(1, 250, 1):
     choicelist.append(("%d" % i, "%d s" % i))
@@ -200,12 +200,12 @@ def get_player_settings():
                 list.append(getConfigListEntry(_("Buffer size on HDD"), config.plugins.archivCZSK.videoPlayer.downloadBufferSize))
     list.append(getConfigListEntry(_("RTMP Timeout"), config.plugins.archivCZSK.videoPlayer.rtmpTimeout))
     list.append(getConfigListEntry(_("Video player with RTMP support"), config.plugins.archivCZSK.videoPlayer.seeking))
-    list.append(getConfigListEntry(_("TV archive rtmp buffer"), config.plugins.archivCZSK.videoPlayer.archiveBuffer))                                                 
+    list.append(getConfigListEntry(_("TV archive rtmp buffer"), config.plugins.archivCZSK.videoPlayer.archiveBuffer))
     list.append(getConfigListEntry(_("Default live rtmp streams buffer"), config.plugins.archivCZSK.videoPlayer.liveBuffer))
-    #if not (videoPlayerInfo.type == 'gstreamer'):                                
+    #if not (videoPlayerInfo.type == 'gstreamer'):
     list.append(getConfigListEntry(_("Play after"), config.plugins.archivCZSK.videoPlayer.playDelay))
     return list
-    
+
 def get_main_settings():
     list = []
     list.append(getConfigListEntry(_("Allow auto-update"), config.plugins.archivCZSK.autoUpdate))
@@ -214,8 +214,9 @@ def get_main_settings():
     list.append(getConfigListEntry(_("Add to extensions menu"), config.plugins.archivCZSK.extensions_menu))
     list.append(getConfigListEntry(_("Add to main menu"), config.plugins.archivCZSK.main_menu))
     list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
+    list.append(getConfigListEntry(_("Default category"), config.plugins.archivCZSK.defaultCategory))
     return list
-    
+
 def get_path_settings():
     list = []
     list.append(getConfigListEntry(_("Data path"), config.plugins.archivCZSK.dataPath))

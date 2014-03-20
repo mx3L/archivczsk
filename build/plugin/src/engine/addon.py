@@ -4,7 +4,6 @@ Created on 21.10.2012
 @author: marko
 '''
 import os, traceback, sys
-from Tools.LoadPixmap import LoadPixmap
 from Components.config import config, ConfigSubsection, ConfigSelection, ConfigYesNo, ConfigText, ConfigNumber, ConfigIP, ConfigPassword, ConfigDirectory, configfile, getConfigListEntry
 
 from tools import util, parser
@@ -315,7 +314,7 @@ class AddonSettings(object):
         self.main = getattr(config.plugins.archivCZSK.archives, addon_id)
         addon_config.add_global_addon_settings(addon, self.main)
 
-        self.main.enabled_addon = ConfigYesNo(default=True)
+        self.main.enabled = ConfigYesNo(default=True)
 
         self.addon = addon
         self.categories = []
@@ -466,8 +465,7 @@ class AddonInfo(object):
                 self.description = addon_dict['description']['en']
 
         self.requires = addon_dict['requires']
-
-        self.image = LoadPixmap(cached=True, path=os.path.join(self.path, 'icon.png'))
+        self.image = os.path.join(self.path, 'icon.png')
 
         #changelog
         changelog_path = None

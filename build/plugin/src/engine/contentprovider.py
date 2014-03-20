@@ -9,19 +9,18 @@ import sys
 from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
-from Components.config import config
-
-from Plugins.Extensions.archivCZSK import _
-from Plugins.Extensions.archivCZSK import version as aczsk
-from Plugins.Extensions.archivCZSK import log
+from Components.config import config, ConfigSelection
+from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
 from Plugins.Extensions.archivCZSK.engine.player.player import Player, StreamPlayer
 from Plugins.Extensions.archivCZSK.resources.repositories import repo_modules
-import xmlshortcuts
-from tools import task, util
 from downloader import DownloadManager
-from items import PVideo, PFolder, PPlaylist, PDownload, Stream, RtmpStream
+from items import PVideo, PFolder, PPlaylist, PDownload, PCategory, PVideoAddon, \
+    PCategoryVideoAddon, PUserCategory, Stream, RtmpStream
+from serialize import CategoriesIO, FavoritesIO
+from tools import task, util
+PNG_PATH = settings.IMAGE_PATH
 
 
 class SysPath(list):
@@ -177,21 +176,21 @@ class Media(object):
 
 class Favorites(object):
     def __init__(self, shortcuts_path):
-        self.shortcuts = xmlshortcuts.ShortcutXML(shortcuts_path)
+        self.shortcuts = FavoritesIO(os.path.join(shortcuts_path, 'shortcuts'))
         self.capabilities.append('favorites')
         self.on_stop.append(self.save_shortcuts)
 
-    def create_shortcut(self, item):
-        return self.shortcuts.createShortcut(item)
+    def create_shortcut(self, favorite):
+        return self.shortcuts.add_favorite(favorite)
 
-    def remove_shortcut(self, id_shortcut):
-        return self.shortcuts.removeShortcut(id_shortcut)
+    def remove_shortcut(self, favorite):
+        return self.shortcuts.remove_favorite(favorite)
 
     def get_shortcuts(self):
-        return self.shortcuts.getShortcuts()
+        return self.shortcuts.get_favorites()
 
     def save_shortcuts(self):
-        self.shortcuts.writeFile()
+        self.shortcuts.save()
 
 
 class Downloads(object):
@@ -262,6 +261,139 @@ class Downloads(object):
         else:
             log.info('cannot remove item %s from disk, not PDownload instance', str(item))
 
+
+class ArchivCZSKContentProvider(ContentProvider):
+    def __init__(self, archivczsk, path):
+        ContentProvider.__init__(self)
+        self._archivczsk = archivczsk
+        self._categories_io = CategoriesIO(path)
+        self.on_start.append(self.__create_config)
+        self.on_pause.append(self.__create_config)
+        self.on_stop.append(self.__save_categories)
+
+        all_addons_category = PCategory()
+        all_addons_category.name = _("All addons")
+        all_addons_category.params = {'category_addons':'all_addons'}
+        all_addons_category.image = PNG_PATH + '/category_all.png'
+        tv_addons_category = PCategory()
+        tv_addons_category.name = _("TV addons")
+        tv_addons_category.image = PNG_PATH+'/category_tv.png'
+        tv_addons_category.params = {'category_addons':'tv_addons'}
+        video_addons_category = PCategory()
+        video_addons_category.name = _("Video addons")
+        video_addons_category.image = PNG_PATH+'/category_video.png'
+        video_addons_category.params = {'category_addons':'video_addons'}
+        self.default_categories={
+                                 'all_addons':{'item':all_addons_category
+                                               ,'title':_("All addons"),
+                                               'call':self._get_all_addons
+                                               },
+                                 'tv_addons':{
+                                              'item':tv_addons_category,
+                                              'title':_("TV addons"),
+                                              'call':self._get_tv_addons
+                                              },
+                                  'video_addons':{
+                                                  'item':video_addons_category,
+                                                  'title':_("Video addons"),
+                                                  'call':self._get_video_addons
+                                                  }
+                                  }
+        self.default_categories_order = ['all_addons','tv_addons','video_addons']
+
+    def __create_config(self):
+        choicelist = [('categories', _("Category list"))]
+        choicelist.extend([(category_key,self.default_categories[category_key]['title']) for category_key in self.default_categories_order])
+        choicelist.extend([(category.id, category.name) for category in self._get_categories(user_only=True)])
+        config.plugins.archivCZSK.defaultCategory = ConfigSelection(default='categories', choices=choicelist)
+
+    def __save_categories(self):
+        self._categories_io.save()
+
+    def get_content(self, params=None):
+        if not params or 'categories' in params:
+            return self._get_categories()
+        if 'category' in params:
+            return self._get_category(params['category'])
+        if 'category_addons' in params:
+            if 'filter_enabled' in params:
+                return self._get_category_addons(params['category_addons'], params['filter_enabled'])
+            return self._get_category_addons(params['category_addons'])
+        if 'categories_user' in params:
+            return self._get_categories(user_only=True)
+
+    def add_category(self, category_title):
+        pcategory = PCategory()
+        pcategory.name = category_title
+        self._categories_io.add_category(pcategory)
+        # update params
+        pcategory.params = {'category_addons':pcategory.id}
+        self._categories_io.update_category(pcategory)
+
+    def rename_category(self, pcategory, new_title):
+        # sync category
+        pcategory = self._get_category(pcategory.id)
+        pcategory.name = new_title
+        self._categories_io.update_category(pcategory)
+        # update params
+        pcategory.params = {'category_addons':pcategory.id}
+        self._categories_io.update_category(pcategory)
+
+    def remove_category(self, pcategory):
+        self._categories_io.remove_category(pcategory)
+
+    def add_to_category(self, pcategory, paddon):
+        # sync category
+        pcategory = self._get_category(pcategory.id)
+        pcategory.add_addon(paddon)
+        self._categories_io.update_category(pcategory)
+
+    def remove_from_category(self, pcategory, paddon):
+        # sync category
+        pcategory = self._get_category(pcategory.id)
+        pcategory.remove_addon(paddon)
+        self._categories_io.update_category(pcategory)
+
+    def _get_category(self, category_id):
+        if category_id in self.default_categories:
+            return self.default_categories[category_id]['item']
+        pcategory = self._categories_io.get_category(category_id)
+        return pcategory
+
+    def _get_categories(self, user_only=False):
+        category_list = self._categories_io.get_categories()
+        if not user_only:
+            category_list.extend( [self.default_categories[category_key]['item'] for category_key in self.default_categories_order])
+        return category_list
+
+    def _get_category_addons(self, category_id, filter_enabled=True):
+        def filter_enabled_addons(paddon):
+            return paddon.addon.get_setting('enabled')
+        if category_id in self.default_categories:
+            return self.default_categories[category_id]['call'](filter_enabled)
+        addons = [PCategoryVideoAddon(self._archivczsk.get_addon(addon_id)) for addon_id in self._categories_io.get_category(category_id)]
+        if filter_enabled:
+            addons = filter(filter_enabled_addons, addons)
+        return addons
+
+    def _get_all_addons(self, filter_enabled=True):
+        def filter_enabled_addons(paddon):
+            return paddon.addon.get_setting('enabled')
+        addons = [PVideoAddon(addon) for addon in self._archivczsk.get_video_addons()]
+        if filter_enabled:
+            addons = filter(filter_enabled_addons, addons)
+        return addons
+
+    def _get_video_addons(self, filter_enabled=True):
+        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.get_setting('tv_addon')]
+        addons.sort(key=lambda addon: addon.name.lower())
+        return addons
+
+    def _get_tv_addons(self, filter_enabled=True):
+        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.get_setting('tv_addon')]
+        addons.sort(key=lambda addon: addon.name.lower())
+        return addons
+        
 
 class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
 
