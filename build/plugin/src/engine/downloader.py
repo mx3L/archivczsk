@@ -8,7 +8,7 @@ from urlparse import urlsplit
 from twisted.python import failure
 from twisted.web import client
 from twisted.internet import reactor
-import urlparse, urllib2
+import urlparse, urllib2, urllib
 from tools import util
 from exceptions.download import NotSupportedProtocolError
 
@@ -69,7 +69,11 @@ def getFileInfo(url, localFileName=None, headers={}):
     length = resp.info().get('Content-Length')
     if resp.info().has_key('Content-Disposition'):
         # If the response has Content-Disposition, we take file name from it
-        localName = resp.info()['Content-Disposition'].split('filename=')[1]
+        # http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http
+        try:
+            localName = resp.info()['Content-Disposition'].split('filename=')[1]
+        except:
+            localName = urllib.unquote(resp.info()['Content-Disposition'].split("filename*=UTF-8''")[1])
         if localName[0] == '"' or localName[0] == "'":
             localName = localName[1:-1]
     elif resp.url != url:
