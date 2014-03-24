@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: archivCZSK 0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-24 20:23+0100\n"
-"PO-Revision-Date: 2014-03-24 20:35+0100\n"
+"PO-Revision-Date: 2014-03-24 20:54+0100\n"
 "Last-Translator: mx3L <mxfitsat@gmail.com>\n"
 "Language-Team: mx3L, Quido56, vlastvs499 <mxfitsat@gmail.com>\n"
 "Language: cs_CZ\n"
@@ -714,11 +714,11 @@ msgstr "nefunkční"
 
 #: gui/content.py:234
 msgid "disabled"
-msgstr "vypnutej"
+msgstr "vypnutý"
 
 #: gui/content.py:236
 msgid "enabled"
-msgstr "zapnutej"
+msgstr "zapnutý"
 
 #: gui/content.py:249 gui/content.py:401
 msgid "Author: "
