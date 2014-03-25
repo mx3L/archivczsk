@@ -9,9 +9,9 @@ import shutil
 from datetime import datetime
 
 try:
-    from  xml.etree.cElementTree import ElementTree, Element, SubElement, ParseError
+    from  xml.etree.cElementTree import ElementTree, Element, SubElement
 except ImportError:
-    from xml.etree.ElementTree import ElementTree, Element, SubElement, ParseError
+    from xml.etree.ElementTree import ElementTree, Element, SubElement
 
 from items import PVideoNotResolved, PFolder, PUserCategory
 try:
@@ -45,7 +45,7 @@ class BaseXML(object):
             self.xml_tree = ElementTree()
             self.xml_tree.parse(self.path)
             self.xml_root_element = self.xml_tree.getroot()
-        except ParseError as e:
+        except Exception as e:
             log.error("%s invalid xml file - %s, creating backup..."%(str(self), str(e)))
             shutil.copy2(os.path.dirname(self.path), self.path +".bak")
             return False
