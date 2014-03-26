@@ -14,10 +14,10 @@ MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
 pushd ${D} &> /dev/null
 
-PVER="0.70"
+PVER="0.72"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
-DSTAGEVER="7"
+DSTAGEVER="1"
 VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all.ipk
