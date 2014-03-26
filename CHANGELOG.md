@@ -1,3 +1,18 @@
+## Verzia 0.72 beta 1
+**Vseobecne**
+
+* pridany manazer doplnkov
+  * vypnutie, zapnutie doplnkov
+* pridana podpora kategorii
+  * vytvaranie, mazanie, editacia kategorii
+  * pridavanie, mazanie doplnkov do/v kategorii
+  * nastavenie predvolenej kategorie
+* oprava konfliktu s inymi pluginmy(TSMedia,)
+* opraveny cesky preklad - opravil vlastvs499
+
+**Stahovanie**
+* moznost premenovat/prepisat subor ak uz taky subor existuje
+* oprava zistenia nazvu suboru(ulozto)
 
 ## Verzia 0.70 beta 7
 **Vseobecne**
