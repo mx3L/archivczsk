@@ -72,6 +72,9 @@ EOF
 
 cat > ${P}/CONTROL/prerm << EOF
 #!/bin/sh
+mkdir -p /tmp/archivczsk
+echo "saving categories.xml to /tmp/archivczsk"
+cp /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/categories.xml /tmp/archivczsk
 rm -r /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK 2> /dev/null
 exit 0
 EOF

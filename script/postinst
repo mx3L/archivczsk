@@ -7,7 +7,7 @@ TMP='/tmp/archivczsk'
 check_py ()
 {
 if [ -e $1o -o -e $1 ]
-then 
+then
 	echo '0'
 else
 	echo '1'
@@ -34,7 +34,7 @@ if [ "$platform" == "sh4" ]
 then
 	platform="sh4"
 else
-	if [ `ls -al /usr/lib/python2.7 | grep urllib.pyo | wc -l` -gt 0 ]; 
+	if [ `ls -al /usr/lib/python2.7 | grep urllib.pyo | wc -l` -gt 0 ];
 	then
 		platform="mips32el"
 	else
@@ -68,7 +68,7 @@ fi
 
 rm -R $ARCHIVCZSK/script
 
-if [ -d $GSTREAMER ]; 
+if [ -d $GSTREAMER ];
 then
 	echo "Found gstreamer"
 	if [ -e $GSTREAMER/libgstrtmp.so ]
@@ -79,7 +79,7 @@ then
 		cp $TMP/sh4/gst_rtmp_plugin/libgstrtmp.so $GSTREAMER/libgstrtmp.so
 		chmod 755 $GSTREAMER/libgstrtmp.so
 	fi
-		
+
 else
 	rm $ARCHIVCZSK/engine/player/servicemp4.so
 	echo "Gstreamer not found, removing servicemp4.so"
@@ -105,11 +105,11 @@ echo 'Installing rtmpdump'
 if [ "$PLATFORM" == "sh4" ]; then
 	cp $TMP/$PLATFORM/rtmpdump/rtmpdump /usr/bin/
 	cp $TMP/$PLATFORM/rtmpdump/rtmpgw /usr/bin/
-else 
+else
 	if [ "$OE" == "OE4" ]; then
 		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpdump /usr/bin
 		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpgw /usr/bin
-		
+
 	else
 		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpdump /usr/bin
 		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpgw /usr/bin
@@ -153,10 +153,10 @@ echo 'Installing neccessary Python libraries'
 if [ -d /usr/lib/python2.6 ]
 then
 	echo "found Python 2.6"
-	cd  $TMP/python2.6  
+	cd  $TMP/python2.6
 	install_py ./hex_codec.py /usr/lib/python2.6/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.6/encodings/latin_1.py
-	install_py ./utf_16.py /usr/lib/python2.6/encodings/utf_16.py 
+	install_py ./utf_16.py /usr/lib/python2.6/encodings/utf_16.py
 	install_py ./string_escape.py /usr/lib/python2.6/encodings/string_escape.py
 	install_py ./idna.py /usr/lib/python2.6/encodings/idna.py
 	install_py ./iso8859_2.py /usr/lib/python2.6/encodings/iso8859_2.py
@@ -170,7 +170,7 @@ then
 	install_py ./markupbase.py /usr/lib/python2.6/markupbase.py
 	install_py ./sgmllib.py /usr/lib/python2.6/sgmllib.py
 	install_py ./stringprep.py /usr/lib/python2.6/stringprep.py
-	install_py ./subprocess.py /usr/lib/python2.6/subprocess.py 
+	install_py ./subprocess.py /usr/lib/python2.6/subprocess.py
 	install_py ./numbers.py /usr/lib/python2.6/numbers.py
 	install_py ./_LWPCookieJar.py /usr/lib/python2.6/_LWPCookieJar.py
 	install_py ./_MozillaCookieJar.py /usr/lib/python2.6/_MozillaCookieJar.py
@@ -181,23 +181,23 @@ then
 	install_py ./zipfile.py /usr/lib/python2.6/zipfile.py
 	install_py ./stat.py /usr/lib/python2.6/stat.py
 	install_py ./httplib.py /usr/lib/python2.6/httplib.py
-#	if [ ! -f /usr/lib/python2.6/lib-dynload/zlib.so ]; 
+#	if [ ! -f /usr/lib/python2.6/lib-dynload/zlib.so ];
 #	then
 #	    cp ./zlib.so /usr/lib/python2.6/lib-dynload/zlib.so
 #	    chmod 755 /usr/lib/python2.6/lib-dynload/zlib.so
 #	fi
-	
+
 fi
 
 if [ -d /usr/lib/python2.7 ]
 then
-	echo "found Python 2.7"  
+	echo "found Python 2.7"
 	cd $TMP/python2.7
 	install_py ./hex_codec.py /usr/lib/python2.7/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.7/encodings/latin_1.py
 	install_py ./utf_16.py /usr/lib/python2.7/encodings/utf_16.py
 	install_py ./iso8859_2.py /usr/lib/python2.7/encodings/iso8859_2.py
-	install_py ./cp1250.py /usr/lib/python2.7/encodings/cp1250.py 
+	install_py ./cp1250.py /usr/lib/python2.7/encodings/cp1250.py
 	install_py ./string_escape.py /usr/lib/python2.7/encodings/string_escape.py
 	install_py ./idna.py /usr/lib/python2.7/encodings/idna.py
 	install_py ./decimal.py /usr/lib/python2.7/decimal.py
@@ -208,7 +208,7 @@ then
 	install_py ./markupbase.py /usr/lib/python2.7/markupbase.py
 	install_py ./stringprep.py /usr/lib/python2.7/stringprep.py
 	install_py ./sgmllib.py /usr/lib/python2.7/sgmllib.py
-	install_py ./subprocess.py /usr/lib/python2.7/subprocess.py 
+	install_py ./subprocess.py /usr/lib/python2.7/subprocess.py
 	install_py ./numbers.py /usr/lib/python2.7/numbers.py
 	install_py ./fnmatch.py /usr/lib/python2.7/fnmatch.py
 	install_py ./_LWPCookieJar.py /usr/lib/python2.7/_LWPCookieJar.py
@@ -219,11 +219,19 @@ then
 	install_py ./zipfile.py /usr/lib/python2.7/zipfile.py
 	install_py ./stat.py /usr/lib/python2.7/stat.py
 	install_py ./httplib.py /usr/lib/python2.7/httplib.py
-#	if [ ! -f /usr/lib/python2.7/lib-dynload/zlib.so ]; 
+#	if [ ! -f /usr/lib/python2.7/lib-dynload/zlib.so ];
 #	then
 #	    cp ./zlib.so /usr/lib/python2.7/lib-dynload/zlib.so
 #	    chmod 755 /usr/lib/python2.7/lib-dynload/zlib.so
 #	fi
+fi
+
+if [ -f $TMP/categories.xml ];
+then
+	echo "restoring categories..."
+	cp $TMP/categories.xml $ARCHIVCZSK
+else
+	echo "no categories to restore..."
 fi
 
 echo "Clearing temp folder..."
