@@ -236,30 +236,34 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
             return PanelColorListEntry2(name, _('enabled'), 0xffffff, 0x00ff00, width)
 
     def updateAddonGUI(self):
+        image = None
+        title = author = version = description =  ""
         item = self.getSelectedItem()
         if item is not None:
-            self["title"].setText(item.name.encode('utf-8', 'ignore'))
-            image = None
-            try:
-                image = LoadPixmap(cached = True, path = item.image)
-            except Exception:
+            title = item.name and item.name.encode('utf-8','ignore') or ""
+            imagePath = item.image and item.image.encode('utf-8','ignore') or ""
+            if imagePath:
+                try:
+                    image =LoadPixmap(path = imagePath, cached=False)
+                except Exception as e:
+                    print '[ArchivCZSKContent] error when loading image', e
+            try: # addon
+                author = item.author and item.author.encode('utf-8','ignore') or ""
+                version = item.version and item.version.encode('utf-8','ignore') or ""
+                description = item.description and item.description.encode('utf-8','ignore') or ""
+            except AttributeError: #category
                 pass
-            try:
-                self["image"].instance.setPixmap(image)
-                self["author"].setText(_("Author: ") + item.author.encode('utf-8', 'ignore'))
-                self["version"].setText(_("Version: ") + item.version.encode('utf-8', 'ignore'))
-                self["about"].setText(item.description.encode('utf-8', 'ignore'))
-            except Exception:
-                self["image"].instance.setPixmap(None)
-                self["author"].setText("")
-                self["version"].setText("")
-                self["about"].setText("")
+        self["title"].setText(title.strip())
+        if author:
+            self["author"].setText(_("Author: ") + author.strip())
         else:
-            self["image"].instance.setPixmap(None)
-            self["title"].setText("")
             self["author"].setText("")
+        if version:
+            self["version"].setText(_("Version: ") + version.strip())
+        else:
             self["version"].setText("")
-            self["about"].setText("")
+        self["about"].setText(description.strip())
+        self["image"].instance.setPixmap(image)
 
     def __onClose(self):
         self.updateGUITimer.stop()
@@ -388,30 +392,34 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
             self.updateGUITimer.start(100, True)
 
     def updateAddonGUI(self):
+        image = None
+        title = author = version = description =  ""
         item = self.getSelectedItem()
         if item is not None:
-            image = None
-            self["title"].setText(item.name.encode('utf-8', 'ignore'))
-            try:
-                image = LoadPixmap(cached=True, path = item.image)
-            except Exception:
+            title = item.name and item.name.encode('utf-8','ignore') or ""
+            imagePath = item.image and item.image.encode('utf-8','ignore') or ""
+            if imagePath:
+                try:
+                    image =LoadPixmap(path = imagePath, cached=False)
+                except Exception as e:
+                    print '[ArchivCZSKContent] error when loading image', e
+            try: # addon
+                author = item.author and item.author.encode('utf-8','ignore') or ""
+                version = item.version and item.version.encode('utf-8','ignore') or ""
+                description = item.description and item.description.encode('utf-8','ignore') or ""
+            except AttributeError: #category
                 pass
-            self["image"].instance.setPixmap(image)
-            try:
-                self["author"].setText(_("Author: ") + item.author.encode('utf-8', 'ignore'))
-                self["version"].setText(_("Version: ") + item.version.encode('utf-8', 'ignore'))
-                self["about"].setText(item.description.encode('utf-8', 'ignore'))
-            except:
-                self["author"].setText("")
-                self["version"].setText("")
-                self["about"].setText("")
+        self["title"].setText(title.strip())
+        if author:
+            self["author"].setText(_("Author: ") + author.strip())
         else:
-            self["image"].instance.setPixmap(None)
-            self["title"].setText("")
             self["author"].setText("")
+        if version:
+            self["version"].setText(_("Version: ") + version.strip())
+        else:
             self["version"].setText("")
-            self["about"].setText("")
-
+        self["about"].setText(description.strip())
+        self["image"].instance.setPixmap(image)
 
     def toggleCancelLoading(self):
         if Task.getInstance() is not None and not Task.getInstance().isCancelling():
