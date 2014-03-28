@@ -1,3 +1,8 @@
+## Verzia 0.72 beta 2
+**Vseobecne**
+
+* oprava GS na DMM image(Newnigma)
+
 ## Verzia 0.72 beta 1
 **Vseobecne**
 
