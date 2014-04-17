@@ -393,7 +393,7 @@ class ArchivCZSKContentProvider(ContentProvider):
         addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.get_setting('tv_addon')]
         addons.sort(key=lambda addon: addon.name.lower())
         return addons
-        
+
 
 class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
 
@@ -549,7 +549,7 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         log.debug('get_content_cb - success:%s result: %s' % (success, result))
 
         # resetting timeout for resolving content
-        socket.setdefaulttimeout(None)
+        socket.setdefaulttimeout(socket.getdefaulttimeout())
 
         if success:
             log.debug("successfully loaded %d items" % len(self.__gui_item_list[0]))
