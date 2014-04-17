@@ -9,7 +9,7 @@ from Components.config import config, ConfigSubsection, ConfigSelection, ConfigY
 import os
 
 choicelist_timeout = []
-for i in range(10, 360, 5):
+for i in range(10, 120, 5):
     choicelist_timeout.append(("%d" % i, "%d s" % i))
 choicelist_timeout.append(("0", _("infinite")))
 
@@ -23,20 +23,20 @@ global_addon_settings = [
                             },
                             {'label':_('loading'),
                                 'subentries':[
-                                        {'label':_("timeout"), 'id':'loading_timeout', 'entry':ConfigSelection(default="240", choices=choicelist_timeout)},
+                                        {'label':_("timeout"), 'id':'loading_timeout', 'entry':ConfigSelection(default="15", choices=choicelist_timeout)},
                                         ]
                             }
-                         
+
                            ]
 
 
 def add_global_addon_specific_setting(addon, addon_config, setting):
-    
+
     if setting['id'] == 'download_path':
         download_path = os.path.join(config.plugins.archivCZSK.downloadsPath.getValue(), addon.id)
         #print '[ArchivCZSK] adding download_path %s to %s' % (download_path, addon.id)
         setattr(addon_config, setting['id'], ConfigDirectory(default=download_path))
-        
+
 
 #globally adding archivCZSK specific options to addons
 def add_global_addon_settings(addon, addon_config):
@@ -44,7 +44,7 @@ def add_global_addon_settings(addon, addon_config):
         for setting in category['subentries']:
             if 'entry' not in setting:
                 add_global_addon_specific_setting(addon, addon_config, setting)
-            else: 
+            else:
                 setattr(addon_config, setting['id'], setting['entry'])
                 setting['setting_id'] = getattr(addon_config, setting['id'])
 
@@ -66,4 +66,4 @@ def getArchiveConfigList(addon):
                 category_init['subentries'].append(getConfigListEntry(setting['label'], setting['setting_id']))
         categories.append(category_init)
     return categories
-            
+
