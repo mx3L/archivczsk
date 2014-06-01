@@ -31,7 +31,7 @@ ArchivCZSKContentScreen_SD = """
             <widget name="about" position="350,425" size="370,100" halign="left" font="Regular;20" transparent="1" foregroundColor="white" />
             <ePixmap position="0,545" size="35,25" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/key_info.png"  zPosition="3" transparent="1" alphatest="on" />
         </screen>"""
-            
+
 ArchivCZSKContentScreen = """
         <screen position="center,center" size="720,576" flags="wfNoBorder" title="ArchivCZSK" >
             <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
@@ -48,17 +48,17 @@ ArchivCZSKContentScreen = """
             <ePixmap position="0,545" size="35,25" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/key_info.png"  zPosition="3" transparent="1" alphatest="on" />
         </screen>"""
 
-        
+
 ContentScreen_SD = """
         <screen position="center,center" size="720,576" flags="wfNoBorder" title="ArchivCZSK" >
             <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_yellow" position="364,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_blue" position="542,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
-            
+
             <widget name="path_label" position="15,60" size="700,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
             <eLabel position="15,90" size="700,  1" zPosition="1" backgroundColor="#C4C4C4" />
-            
+
             <widget name="menu" position="0,95" size="720,405" transparent="1" scrollbarMode="showOnDemand" />
             <widget name="tip_pixmap" position="5,540" size="35,25" zPosition="2" alphatest="on" />
             <widget name="tip_label" position="45,540" size="535,25" valign="center" halign="left" zPosition="2" font="Regular;18" transparent="1" foregroundColor="white" />
@@ -76,24 +76,24 @@ ContentScreen_HD_IMG = """
             <eLabel position="20,95" size="1060,1" zPosition="1" backgroundColor="#C4C4C4" />
             <widget name="menu" position="12,110" scrollbarMode="showOnDemand" size="680,419" transparent="1" />
             <widget alphatest="on" name="image" position="715,110" size="370,300" zPosition="2" />
-            <widget font = "Regular; 16" foregroundColor = "white" halign = "left" name = "status_label" position = "12,508" size = "535,25" transparent = "1" valign = "center" zPosition = "2" /> 
+            <widget font = "Regular; 16" foregroundColor = "white" halign = "left" name = "status_label" position = "12,508" size = "535,25" transparent = "1" valign = "center" zPosition = "2" />
             <widget alphatest="on" name="tip_pixmap" position="9,544" size="35,25" zPosition="2" />
             <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,548" size="493,25" transparent="1" valign="center" zPosition="2" />
         </screen>
              """
-  
-  
+
+
 ContentScreen_HD = """
         <screen position="center,center" size="900,575" title="ContentScreen">
             <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="454,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            
+
             <widget name="path_label" position="15,65" size="870,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
             <eLabel position="15,95" size="870,1" zPosition="1" backgroundColor="#C4C4C4" />
             <widget name="menu" position="10,110" scrollbarMode="showOnDemand" size="880,420" transparent="1" />
-            <widget font = "Regular; 16" foregroundColor = "white" halign = "left" name = "status_label" position = "12,508" size = "535,25" transparent = "1" valign = "center" zPosition = "2" /> 
+            <widget font = "Regular; 16" foregroundColor = "white" halign = "left" name = "status_label" position = "12,508" size = "535,25" transparent = "1" valign = "center" zPosition = "2" />
             <widget alphatest="on" name="tip_pixmap" position="9,544" size="35,25" zPosition="2" />
             <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,548" size="493,25" transparent="1" valign="center" zPosition="2" />
         </screen>
@@ -112,8 +112,8 @@ StreamContentScreen_SD = """
             <widget name="tip_label" position="45,540" size="535,25" valign="center" halign="left" zPosition="2" font="Regular;18" transparent="1" foregroundColor="white" />
         </screen>
         """
-        
-        
+
+
 StreamContentScreen_HD = """
         <screen backgroundColor="background" name="StreamContentScreen_HD" position="center,90" size="900,575" title="Streams">
             <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,520" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
@@ -136,12 +136,12 @@ StreamContentScreen_HD = """
             <widget alphatest="on" backgroundColor="background" name="livestream_pixmap" position="8,442" size="35,25" zPosition="2" />
         </screen>"""
 
-        
+
 ContentMenuScreen_HD = """
         <screen name="CtxMenu" position="center,center" size="500,300">
             <widget name="menu" position="0,0" size="500,290" scrollbarMode="showOnDemand" />
         </screen>"""
-        
+
 ItemInfoScreen_HD = """
         <screen name="InfoScreen" position="center,center" size="1100,600" title="Info">
             <widget font="Regular;22" foregroundColor="yellow" name="genre" position="435,52" size="613,30" transparent="1" />
@@ -160,7 +160,7 @@ ItemInfoScreen_SD = """
             <widget name="plot" position="0,310" size="720,306" font="Regular;23" transparent="1" foregroundColor="white" />
             <widget name="img" position="10,0" zPosition="2" size="300,300"  alphatest="on"/>
         </screen>"""
-        
+
 VideoPlayerInfoScreen_HD = """
         <screen position="center,center" size="900,575" title="ContentScreen">
             <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
@@ -183,7 +183,7 @@ VideoPlayerInfoScreen_SD = """
             <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_yellow" position="364,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
             <widget name="key_blue" position="542,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
-            
+
             <widget name="detected player" position="24,81" size="222,31" font="Regular; 26" />
             <widget name="detected player_val" position="264,81" size="222,31" font="Regular; 26" />
             <widget name="protocol" position="33,135" size="340,30"  foregroundColor="#e5b243" font="Regular; 24" />
@@ -201,7 +201,7 @@ ContextMenuScreen = """
             <widget name="item_label" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 22" />
             <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
         </screen> """
-        
+
 SelectSource = """
         <screen name="ContextMenuScreen" position="center,center" size="500,350">
             <!-- <widget name="item_pixmap" position="10,13" size="35,25" alphatest="on" /> -->
@@ -209,7 +209,7 @@ SelectSource = """
             <eLabel position="10,50" size="480,1" backgroundColor="#999999" />
             <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
         </screen> """
-        
+
 SearchClient = """
         <screen name="ContextMenuScreen" position="325,163" size="500,400">
             <widget name="menu" position="0,207" scrollbarMode="showOnDemand" size="500,196"  />
@@ -217,17 +217,17 @@ SearchClient = """
             <ePixmap name="search_pixmap" position="10,13" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/search.png" />
             <widget name="infolist" position="10,90" size="471,112" />
         </screen> """
-        
+
 ChangelogScreen_SD = """
         <screen position="center,center" size="610,435" title="Info" >
             <widget name="changelog" position="0,0" size="610,435" font="Regular;18" transparent="1" foregroundColor="white" />
         </screen>"""
-        
+
 ChangelogScreen_HD = """
          <screen position="center,center" size="900,576" title="Info" >
             <widget name="changelog" position="0,0" size="900,576" font="Regular;18" transparent="1" foregroundColor="white" />
         </screen>"""
-            
+
 
 ShortcutsScreen_HD = """
         <screen position="center,center" size="900,576" title="ShortcutsScreen">
@@ -237,7 +237,7 @@ ShortcutsScreen_HD = """
             <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget name="menu" position="7,55" scrollbarMode="showOnDemand" size="885,445" transparent="1" />
         </screen>"""
-     
+
 ShortcutsScreen = """
         <screen position="center,center" size="610,435" title="Shortcuts" >
             <widget name="key_red" position="10,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
@@ -247,7 +247,7 @@ ShortcutsScreen = """
             <eLabel position="-1,55" size="612,1" backgroundColor="#999999" />
             <widget name="menu" position="0,55" size="610,350" scrollbarMode="showOnDemand" />
         </screen>"""
-            
+
 DownloadListScreen_HD = """
         <screen position="center,center" size="900,576" title="ShortcutsScreen">
           <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
@@ -256,7 +256,7 @@ DownloadListScreen_HD = """
           <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
           <widget name="menu" position="7,55" scrollbarMode="showOnDemand" size="885,445" transparent="1" />
         </screen> """
-            
+
 DownloadListScreen = """
         <screen position="center,center" size="610,435" title="Main Menu" >
             <widget name="key_red" position="10,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
@@ -284,7 +284,7 @@ DownloadsScreen = """
             <widget name="menu" position="0,55" size="610,350" scrollbarMode="showOnDemand" />
         </screen>"""
 
-        
+
 DownloadStatusScreen = """
         <screen position="center,140" size="616,435">
             <widget name="filename" position="10,7" size="606,44" valign="top" font="Regular; 22" foregroundColor="red" halign="center" />
@@ -304,33 +304,35 @@ DownloadStatusScreen = """
         </screen>"""
 
 CaptchaDialog_HD = """
-        <screen name="CaptchaDialog" position="center,center" size="900,600" zPosition="99">
-            <widget source="Title" render="Label" position=" 50,12" size="800, 33" halign="center" font="Regular;30" backgroundColor="background" shadowColor="black" shadowOffset="-3,-3" transparent="1"/>
-            <eLabel position=" 20,55" size="860,1" backgroundColor="white"/>
-            <widget name="captcha" position="450,65" zPosition="-1" size="175,70"  alphatest="on"/>
-            <widget name="header" position="100,90" size="700,40" font="Regular;30" transparent="1" noWrap="1" />
-            <widget name="text" position="100,164" size="700,50" font="Regular;46" transparent="1" noWrap="1" halign="right" valign="center"/>
-            <widget name="list" position="20,272" size="860,225" selectionDisabled="1" transparent="1"/>
-            <eLabel position="20,555" size="860,1" backgroundColor="white" />
-        </screen>"""
-        
+        <screen name="CaptchaDialog" position="center,center" size="560,460" zPosition="99" title="Virtual keyboard">
+        <ePixmap pixmap="skin_default/vkey_text.png" position="9,165" zPosition="-4" size="542,52" alphatest="on" />
+        <widget source="country" render="Pixmap" position="490,0" size="60,40" alphatest="on" borderWidth="2" borderColor="yellow" >
+            <convert type="ValueToPixmap">LanguageCode</convert>
+        </widget>
+        <widget name="header" position="10,10" size="500,20" font="Regular;20" transparent="1" noWrap="1" />
+        <widget name="captcha" position="10, 50" size ="540,110" alphatest="blend" zPosition="-1" />
+        <widget name="text" position="12,165" size="536,46" font="Regular;46" transparent="1" noWrap="1" halign="right" />
+        <widget name="list" position="10,220" size="540,225" selectionDisabled="1" transparent="1" />
+    </screen>"""
+
 CaptchaDialog_SD = """
-        <screen name="CaptchaDialog" position="center,center" size="720,576" flags="wfNoBorder" zPosition="99">
-            <widget source="Title" render="Label" position="10,12" size="720, 33" halign="center" font="Regular;30" backgroundColor="background" shadowColor="black" shadowOffset="-3,-3" transparent="1"/>
-            <eLabel position=" 10,55" size="720,1" backgroundColor="white"/>
-            <widget name="captcha" position="450,65" zPosition="1" size="175,70"  alphatest="on"/>
-            <widget name="header" position="20,90" size="680,40" font="Regular;30" transparent="1" noWrap="1" />
-            <widget name="text" position="20,160" size="680,50" font="Regular;46" transparent="1" noWrap="1" halign="right" valign="center"/>
-            <widget name="list" position="20,272" size="680,225" selectionDisabled="1" transparent="1"/>
-            <eLabel position="20,555" size="680,1" backgroundColor="white" />
-        </screen>"""
-        
+        <screen name="CaptchaDialog" position="center,center" size="560,460" zPosition="99" title="Virtual keyboard">
+        <ePixmap pixmap="skin_default/vkey_text.png" position="9,165" zPosition="-4" size="542,52" alphatest="on" />
+        <widget source="country" render="Pixmap" position="490,0" size="60,40" alphatest="on" borderWidth="2" borderColor="yellow" >
+            <convert type="ValueToPixmap">LanguageCode</convert>
+        </widget>
+        <widget name="header" position="10,10" size="500,20" font="Regular;20" transparent="1" noWrap="1" />
+        <widget name="captcha" position="10, 50" size ="540,110" alphatest="blend" zPosition="-1" />
+        <widget name="text" position="12,165" size="536,46" font="Regular;46" transparent="1" noWrap="1" halign="right" />
+        <widget name="list" position="10,220" size="540,225" selectionDisabled="1" transparent="1" />
+    </screen>"""
+
 Playlist = """
         <screen name="Playlist" position="center,center" size="650,450" flags="wfNoBorder" backgroundColor="#48080808">
             <widget name="menu" position="0,60" scrollbarMode="showOnDemand" size="650,390" backgroundColor="#48080808"/>
             <widget name="title" position="0,0" size="650,55" valign="center" halign="center" backgroundColor="#28080808" font="Regular; 24" foregroundColor="#e9b253" />
         </screen> """
-        
+
 ArchivCZSKMoviePlayer_HD = """
     <screen position="50,550" size="1180,130" title="InfoBar" backgroundColor="transparent" flags="wfNoBorder">
       <ePixmap position="0,0" size="1180,130" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/info_bg.png" />
