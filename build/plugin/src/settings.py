@@ -5,12 +5,17 @@ Created on 15.10.2012
 '''
 import os
 
-from Components.config import config, ConfigSubsection, ConfigSelection, ConfigDirectory, ConfigInteger, ConfigYesNo, ConfigText, ConfigNothing, configfile, getConfigListEntry, NoSave
 from Components.Language import language
+from Components.config import config, ConfigSubsection, ConfigSelection, \
+    ConfigDirectory, ConfigYesNo, ConfigText, ConfigNothing, getConfigListEntry, \
+    NoSave
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
+
 from Plugins.Extensions.archivCZSK import log, _
 from engine.player.info import videoPlayerInfo
 from engine.tools import stb
+
+
 SERVICEMP4 = False
 
 try:
@@ -29,11 +34,15 @@ AZBOX = (MODEL == 'Azbox')
 
 ######### Plugin Paths ##############
 
-PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS),'Extensions','archivCZSK')
+PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions', 'archivCZSK')
 IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
 SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skin')
 REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories')
 STREAM_PATH = os.path.join(PLUGIN_PATH, 'streams/streams.xml')
+
+CUSTOM_FONTS_PATH = os.path.join(SKIN_PATH,'font.json')
+CUSTOM_COLORS_PATH = os.path.join(SKIN_PATH,'color.json')
+CUSTOM_SIZES_PATH = os.path.join(SKIN_PATH,'sizes.json')
 
 ############ Updater Paths #############
 
@@ -149,7 +158,7 @@ config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
 
 ############ Paths #######################
 
-config.plugins.archivCZSK.dataPath = ConfigDirectory(default="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/resources/data")
+config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
 config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
 config.plugins.archivCZSK.subtitlesPath = ConfigDirectory(default="/tmp")
 
@@ -187,7 +196,7 @@ def get_player_settings():
             list.append(getConfigListEntry(_("Exit fix"), config.plugins.archivCZSK.videoPlayer.exitFix))
         if videoPlayerInfo.type == 'gstreamer':
             list.append(getConfigListEntry(_("Buffer size"), config.plugins.archivCZSK.videoPlayer.bufferSize))
-            #list.append(getConfigListEntry(_("Video player Buffer Mode"), config.plugins.archivCZSK.videoPlayer.bufferMode))
+            # list.append(getConfigListEntry(_("Video player Buffer Mode"), config.plugins.archivCZSK.videoPlayer.bufferMode))
     if (player == 'standard' and AZBOX) and not useServiceMP4:
         list.append(getConfigListEntry(_("Use servicemrua (AZBOX)"), config.plugins.archivCZSK.videoPlayer.servicemrua))
     if SERVICEMP4 and not useServiceMRUA:
@@ -202,14 +211,14 @@ def get_player_settings():
     list.append(getConfigListEntry(_("Video player with RTMP support"), config.plugins.archivCZSK.videoPlayer.seeking))
     list.append(getConfigListEntry(_("TV archive rtmp buffer"), config.plugins.archivCZSK.videoPlayer.archiveBuffer))
     list.append(getConfigListEntry(_("Default live rtmp streams buffer"), config.plugins.archivCZSK.videoPlayer.liveBuffer))
-    #if not (videoPlayerInfo.type == 'gstreamer'):
+    # if not (videoPlayerInfo.type == 'gstreamer'):
     list.append(getConfigListEntry(_("Play after"), config.plugins.archivCZSK.videoPlayer.playDelay))
     return list
 
 def get_main_settings():
     list = []
     list.append(getConfigListEntry(_("Allow auto-update"), config.plugins.archivCZSK.autoUpdate))
-    #list.append(getConfigListEntry(_("Preload"), config.plugins.archivCZSK.preload))
+    # list.append(getConfigListEntry(_("Preload"), config.plugins.archivCZSK.preload))
     list.append(getConfigListEntry(_("Debug mode"), config.plugins.archivCZSK.debugMode))
     list.append(getConfigListEntry(_("Add to extensions menu"), config.plugins.archivCZSK.extensions_menu))
     list.append(getConfigListEntry(_("Add to main menu"), config.plugins.archivCZSK.main_menu))
