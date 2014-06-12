@@ -19,9 +19,10 @@ from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
     PPlaylist, PExit, PVideo, PContextMenuItem, PSearch, PSearchItem, PDownload, \
     PVideoAddon, Stream, RtmpStream
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString
 from base import BaseArchivCZSKMenuListScreen
-from common import MyConditionalLabel, PanelListEntryHD, \
-    PanelColorListEntry2, LoadingScreen, TipBar, CutLabel
+from common import MyConditionalLabel, PanelListEntryHD, PanelColorListEntry2, \
+    LoadingScreen, TipBar, CutLabel
 from download import DownloadList
 from enigma import eTimer, eLabel
 from menu import ArchiveCZSKConfigScreen
@@ -91,7 +92,7 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
             path_text = ' / '
         else:
             path_text = ' / ' + ' / '.join(self.path)
-        self["path_label"].setText(path_text.encode('utf-8', 'ignore'))
+        self["path_label"].setText(toString(path_text))
 
 
     def updateMenuList(self, index=0):
@@ -243,17 +244,17 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
         title = author = version = description = ""
         item = self.getSelectedItem()
         if item is not None:
-            title = item.name and item.name.encode('utf-8', 'ignore') or ""
-            imagePath = item.image and item.image.encode('utf-8', 'ignore') or ""
+            title = item.name and toString(item.name) or ""
+            imagePath = item.image and toString(item.image) or ""
             if imagePath:
                 try:
                     image = LoadPixmap(path=imagePath, cached=False)
                 except Exception as e:
                     print '[ArchivCZSKContent] error when loading image', e
             try:  # addon
-                author = item.author and item.author.encode('utf-8', 'ignore') or ""
-                version = item.version and item.version.encode('utf-8', 'ignore') or ""
-                description = item.description and item.description.encode('utf-8', 'ignore') or ""
+                author = item.author and toString(item.author) or ""
+                version = item.version and toString(item.version) or ""
+                description = item.description and toString(item.description) or ""
             except AttributeError:  # category
                 pass
         self["title"].setText(title.strip())
@@ -399,17 +400,17 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         title = author = version = description = ""
         item = self.getSelectedItem()
         if item is not None:
-            title = item.name and item.name.encode('utf-8', 'ignore') or ""
-            imagePath = item.image and item.image.encode('utf-8', 'ignore') or ""
+            title = item.name and toString(item.name) or ""
+            imagePath = item.image and toString(item.image) or ""
             if imagePath:
                 try:
                     image = LoadPixmap(path=imagePath, cached=False)
                 except Exception as e:
                     print '[ArchivCZSKContent] error when loading image', e
             try:  # addon
-                author = item.author and item.author.encode('utf-8', 'ignore') or ""
-                version = item.version and item.version.encode('utf-8', 'ignore') or ""
-                description = item.description and item.description.encode('utf-8', 'ignore') or ""
+                author = item.author and toString(item.author) or ""
+                version = item.version and toString(item.version) or ""
+                description = item.description and toString(item.description) or ""
             except AttributeError:  # category
                 pass
         self["title"].setText(title.strip())
