@@ -1,30 +1,33 @@
-import copy, os
+import copy
+import os
 
-from enigma import eTimer, eLabel
-from skin import parseFont
-from Screens.MessageBox import MessageBox
-from Screens.InputBox import InputBox
-from Components.Label import Label
 from Components.ActionMap import ActionMap
-from Components.config import config
+from Components.Label import Label
 from Components.Pixmap import Pixmap, PixmapConditional
+from Components.config import config
+from Screens.InputBox import InputBox
+from Screens.MessageBox import MessageBox
 from Tools.LoadPixmap import LoadPixmap
 
-from menu import ArchiveCZSKConfigScreen
-from base import  BaseArchivCZSKMenuListScreen
-from webpixmap import WebPixmap
-from download import DownloadList
-from common import MyConditionalLabel, ButtonLabel, PanelList, PanelListEntryHD, PanelColorListEntry2, LoadingScreen , TipBar, CutLabel
-
-from Plugins.Extensions.archivCZSK import _
-from Plugins.Extensions.archivCZSK import log
-from Plugins.Extensions.archivCZSK import settings
-from Plugins.Extensions.archivCZSK.engine.items import (PItem, PFolder, PRoot, PPlaylist, PExit,
-                                                        PVideo, PContextMenuItem, PSearch, PSearchItem,
-                                                        PDownload, PVideoAddon, Stream, RtmpStream)
-from Plugins.Extensions.archivCZSK.engine.contentprovider import StreamContentProvider, VideoAddonContentProvider, ArchivCZSKContentProvider
-from Plugins.Extensions.archivCZSK.engine.handlers import ArchivCZSKContentHandler, VideoAddonContentHandler, VideoAddonManagementScreenContentHandler, StreamContentHandler
+from Plugins.Extensions.archivCZSK import _, log, settings
+from Plugins.Extensions.archivCZSK.engine.contentprovider import \
+    StreamContentProvider, VideoAddonContentProvider, ArchivCZSKContentProvider
+from Plugins.Extensions.archivCZSK.engine.handlers import \
+    ArchivCZSKContentHandler, VideoAddonContentHandler, \
+    VideoAddonManagementScreenContentHandler, StreamContentHandler
+from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
+    PPlaylist, PExit, PVideo, PContextMenuItem, PSearch, PSearchItem, PDownload, \
+    PVideoAddon, Stream, RtmpStream
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
+from base import BaseArchivCZSKMenuListScreen
+from common import MyConditionalLabel, PanelListEntryHD, \
+    PanelColorListEntry2, LoadingScreen, TipBar, CutLabel
+from download import DownloadList
+from enigma import eTimer, eLabel
+from menu import ArchiveCZSKConfigScreen
+from skin import parseFont
+from webpixmap import WebPixmap
+
 
 PanelListEntry = PanelListEntryHD
 
@@ -192,7 +195,7 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
         contentHandler = VideoAddonManagementScreenContentHandler(session, self, provider)
         addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
         BaseContentScreen.__init__(self, session, contentHandler, addonItems)
-        TipBar.__init__(self, [], startOnShown = False)
+        TipBar.__init__(self, [], startOnShown=False)
         if self.HD:
             self.setSkin('ArchivCZSKContentScreen_HD')
         else:
@@ -227,7 +230,7 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
     def _createMenuListEntry(self, item, idx):
         addon = item.addon
         name = item.name
-        width = self["menu"].instance.size().width() -5
+        width = self["menu"].instance.size().width() - 5
         if addon.get_info('broken'):
             return PanelColorListEntry2(name, _('broken'), 0xffffff, 0xff0000, width)
         elif not addon.get_setting('enabled'):
@@ -237,21 +240,21 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
 
     def updateAddonGUI(self):
         image = None
-        title = author = version = description =  ""
+        title = author = version = description = ""
         item = self.getSelectedItem()
         if item is not None:
-            title = item.name and item.name.encode('utf-8','ignore') or ""
-            imagePath = item.image and item.image.encode('utf-8','ignore') or ""
+            title = item.name and item.name.encode('utf-8', 'ignore') or ""
+            imagePath = item.image and item.image.encode('utf-8', 'ignore') or ""
             if imagePath:
                 try:
-                    image =LoadPixmap(path = imagePath, cached=False)
+                    image = LoadPixmap(path=imagePath, cached=False)
                 except Exception as e:
                     print '[ArchivCZSKContent] error when loading image', e
-            try: # addon
-                author = item.author and item.author.encode('utf-8','ignore') or ""
-                version = item.version and item.version.encode('utf-8','ignore') or ""
-                description = item.description and item.description.encode('utf-8','ignore') or ""
-            except AttributeError: #category
+            try:  # addon
+                author = item.author and item.author.encode('utf-8', 'ignore') or ""
+                version = item.version and item.version.encode('utf-8', 'ignore') or ""
+                description = item.description and item.description.encode('utf-8', 'ignore') or ""
+            except AttributeError:  # category
                 pass
         self["title"].setText(title.strip())
         if author:
@@ -341,11 +344,11 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         try:
             addon = item.addon
         except AttributeError:
-            return PanelListEntry(name,idx, thumb)
+            return PanelListEntry(name, idx, thumb)
         if addon.get_info('broken'):
-            return PanelListEntry(name,idx, thumb, 0xff0000)
+            return PanelListEntry(name, idx, thumb, 0xff0000)
         else:
-            return PanelListEntry(name,idx, thumb)
+            return PanelListEntry(name, idx, thumb)
 
 
     def openSettings(self):
@@ -393,21 +396,21 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
 
     def updateAddonGUI(self):
         image = None
-        title = author = version = description =  ""
+        title = author = version = description = ""
         item = self.getSelectedItem()
         if item is not None:
-            title = item.name and item.name.encode('utf-8','ignore') or ""
-            imagePath = item.image and item.image.encode('utf-8','ignore') or ""
+            title = item.name and item.name.encode('utf-8', 'ignore') or ""
+            imagePath = item.image and item.image.encode('utf-8', 'ignore') or ""
             if imagePath:
                 try:
-                    image =LoadPixmap(path = imagePath, cached=False)
+                    image = LoadPixmap(path=imagePath, cached=False)
                 except Exception as e:
                     print '[ArchivCZSKContent] error when loading image', e
-            try: # addon
-                author = item.author and item.author.encode('utf-8','ignore') or ""
-                version = item.version and item.version.encode('utf-8','ignore') or ""
-                description = item.description and item.description.encode('utf-8','ignore') or ""
-            except AttributeError: #category
+            try:  # addon
+                author = item.author and item.author.encode('utf-8', 'ignore') or ""
+                version = item.version and item.version.encode('utf-8', 'ignore') or ""
+                description = item.description and item.description.encode('utf-8', 'ignore') or ""
+            except AttributeError:  # category
                 pass
         self["title"].setText(title.strip())
         if author:
@@ -517,7 +520,6 @@ class ContentScreen(BaseContentScreen, DownloadList, TipBar):
     def openCSFD(self):
         self.info('csfd')
 
-
     def toggleCancelLoading(self):
         if Task.getInstance() is not None and not Task.getInstance().isCancelling():
             self["status_label"].setText("Canceling...")
@@ -538,12 +540,6 @@ class ContentScreen(BaseContentScreen, DownloadList, TipBar):
         it = self.getSelectedItem()
         img = it and it.image
         self['image'].load(img)
-
-    def exitItem(self):
-        if len(self.stack) == 0:
-            self.exitContentScreen()
-        else:
-            self.load(self.stack.pop())
 
     def cancel(self):
         if self.working:
