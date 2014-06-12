@@ -1,15 +1,21 @@
-import  mimetypes, sys, urllib2, re
-import md5
-import htmlentitydefs
-import os.path
-import imp
-import traceback
-from xml.etree.cElementTree import ElementTree, fromstring
 from htmlentitydefs import name2codepoint as n2cp
-from urlparse import urlsplit
+import htmlentitydefs
 import httplib
+import imp
+import marshal
+import md5
+import mimetypes
+import os.path
+import re
 import stat
+import sys
+import traceback
+import urllib2
+from urlparse import urlsplit
+from xml.etree.cElementTree import ElementTree, fromstring
+
 from enigma import eConsoleAppContainer
+
 
 supported_video_extensions = ('.avi', '.mp4', '.mkv', '.mpeg', '.mpg')
 
@@ -73,7 +79,7 @@ def load_xml(xml_file):
     else:
         return el
 
-#source from xbmc_doplnky
+# source from xbmc_doplnky
 def decode_html(data):
     try:
         if not type(data) == unicode:
@@ -97,6 +103,23 @@ def decode_string(string):
                 return u'cannot_decode'
             else:
                 continue
+
+def toUnicode(text):
+    if isinstance(text, basestring):
+        if isinstance(text, unicode):
+            return text
+        if isinstance(text, str):
+            return unicode(text, 'utf-8', 'ignore')
+    return unicode(str(text), 'utf-8', 'ignore')
+
+def toString(text):
+    if text is None:
+        return None
+    if isinstance(text, basestring):
+        if isinstance(text, unicode):
+            return text.encode('utf-8')
+        return text
+    return str(text)
 
 def check_version(local, remote):
     local = local.split('.')
@@ -161,7 +184,7 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
         if localFile:localFile.close()
 
 
-#source from xbmc_doplnky
+# source from xbmc_doplnky
 def _substitute_entity(match):
         ent = match.group(3)
         if match.group(1) == '#':
@@ -343,11 +366,11 @@ def url_exist(url, timeout=20):
         return False
 
     scheme, netloc, path, query, fragment = urlsplit(url)
-    #print 'scheme:', scheme
-    #print 'netloc:', netloc
-    #print 'path:', path
-    #print 'query:', query
-    #print 'fragment:', fragment
+    # print 'scheme:', scheme
+    # print 'netloc:', netloc
+    # print 'path:', path
+    # print 'query:', query
+    # print 'fragment:', fragment
 
     if netloc == '':
         return False
@@ -364,7 +387,7 @@ def url_exist(url, timeout=20):
         conn = httplib.HTTPConnection(site, timeout=timeout)
         conn.request('HEAD', path)
         response = conn.getresponse()
-        #print response.getheaders()
+        # print response.getheaders()
         print response.getheader('accept-ranges')
     except Exception:
         print traceback.print_exc()
@@ -372,13 +395,6 @@ def url_exist(url, timeout=20):
     finally:
         if conn: conn.close()
     return response.status in (200, 301, 302)
-
-
-def check_seekable_url(video_url):
-    if response.getheader('accept-ranges') is not None:
-        return True
-    else:
-        return False
 
 def check_program(program):
 
@@ -427,7 +443,6 @@ def convert_png_to_8bit(png_path, pngquant_path='pngquant'):
         return png_path_8bit
     return png_path
 
-import marshal
 
 
 class CustomImporter:
@@ -504,8 +519,8 @@ class CustomImporter:
         del self.description
         try:
             if bytecode:
-                #magic = code[:4]
-                #assert magic == imp.get_magic()
+                # magic = code[:4]
+                # assert magic == imp.get_magic()
                 code_bytes = code[8:]
                 code = marshal.loads(code_bytes)
             exec code in mod.__dict__
