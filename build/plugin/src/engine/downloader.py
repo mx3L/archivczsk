@@ -174,11 +174,12 @@ class DownloadManager(object):
                     rtmp_url.append("'%s'" % rtmp[1])
                 url = "'%s'" % urlList[0] + ' '.join(rtmp_url)
 
-            # always download rtmp stream as live,
-            # this way we should slowly but correctly download every video
-            live = True
+            if not live:
+                realtime = True
+            else:
+                realtime = False
 
-            d = RTMPDownloadE2(url=url, name=name, destDir=destination, live=live, quiet=quiet)
+            d = RTMPDownloadE2(url=url, name=name, destDir=destination, live=live, quiet=quiet, realtime=realtime)
             d.onStartCB.append(startCB)
             d.onFinishCB.append(finishCB)
             d.status = DownloadStatus(d)
@@ -361,7 +362,7 @@ class Download(object):
 
 
 class RTMPDownloadE2(Download):
-    def __init__(self, name, url, destDir, filename=None, live=False, quiet=False):
+    def __init__(self, name, url, destDir, filename=None, live=False, quiet=False, realtime=True):
         if not filename:
             filename = name + '.flv'
             filename = sanitizeFilename(filename)
@@ -371,6 +372,7 @@ class RTMPDownloadE2(Download):
         self.pp.appClosed.append(self.__finishCB)
         self.pp.stderrAvail.append(self.__outputCB)
         self.live = live
+        self.realtime = realtime
 
     def __startCB(self):
         self.running = True
@@ -401,12 +403,13 @@ class RTMPDownloadE2(Download):
     def start(self):
         cmd = RTMP_DUMP_PATH + ' -r ' + self.url + ' -o ' + '"' + self.local + '"'
         cmd = cmd.encode('utf-8')
-        print cmd
         if self.quiet:
             cmd += ' -q '
         if self.live:
             cmd += ' -v'
-        print '[RTMPDownloadE2] starting downloading', self.url, 'to', self.local
+        if self.realtime:
+            cmd += ' -R'
+        print '[cmd]',cmd
         self.__startCB()
         self.pp.execute(cmd)
 
@@ -459,10 +462,9 @@ class HTTPDownloadE2(Download):
     def start(self):
         cmd = WGET_PATH + ' "' + self.url + '"' + ' -O ' + '"' + self.local + '"' ' -U ' + '"' + USER_AGENT + '" ' + self.headers
         cmd = cmd.encode('utf-8')
-        print cmd
         if self.quiet:
             cmd += ' -q'
-        print '[HTTPDownloadE2] starting downloading', self.url
+        print '[cmd]',cmd
         self.__startCB()
         self.pp.execute(cmd)
 
