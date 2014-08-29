@@ -244,7 +244,10 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 
 	def leavePlayer(self):
 		self.is_closing = True
-		self.session.openWithCallback(self.leavePlayerConfirmed, MessageBox, text=_("Stop playing this movie?"), type=MessageBox.TYPE_YESNO)
+		if self.settings.confirmExit.value:
+			self.session.openWithCallback(self.leavePlayerConfirmed, MessageBox, text=_("Stop playing this movie?"), type=MessageBox.TYPE_YESNO)
+		else:
+			self.leavePlayerConfirmed(True)
 
 	def leavePlayerConfirmed(self, answer):
 		if answer:

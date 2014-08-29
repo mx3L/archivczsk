@@ -441,7 +441,10 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         if self.working:
             self.toggleCancelLoading()
         elif not self.working:
-            self.session.openWithCallback(self.closePlugin, MessageBox, _('Do you want to exit ArchivCZSK?'), type=MessageBox.TYPE_YESNO)
+            if config.plugins.archivCZSK.confirmExit.value:
+                self.session.openWithCallback(self.closePlugin, MessageBox, _('Do you want to exit ArchivCZSK?'), type=MessageBox.TYPE_YESNO)
+            else:
+                self.closePlugin(True)
 
     def closePlugin(self, callback=None):
         if callback:

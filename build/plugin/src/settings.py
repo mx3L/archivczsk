@@ -80,6 +80,7 @@ config.plugins.archivCZSK.videoPlayer.type = ConfigSelection(default="custom", c
 config.plugins.archivCZSK.videoPlayer.useVideoController = ConfigYesNo(default=True)
 config.plugins.archivCZSK.videoPlayer.useDefaultSkin = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.autoPlay = ConfigYesNo(default=True)
+config.plugins.archivCZSK.videoPlayer.confirmExit = ConfigYesNo(default=False)
 
 # to use servicemrua instead of servicemp3/servicemp4
 config.plugins.archivCZSK.videoPlayer.servicemrua = ConfigYesNo(default=False)
@@ -147,6 +148,7 @@ config.plugins.archivCZSK.extensions_menu = ConfigYesNo(default=False)
 config.plugins.archivCZSK.epg_menu = ConfigYesNo(default=True)
 config.plugins.archivCZSK.autoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.preload = ConfigYesNo(default=True)
+config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
 
 choicelist = [('1', _("info")), ('2', _("debug"))]
 config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choicelist)
@@ -213,6 +215,7 @@ def get_player_settings():
     list.append(getConfigListEntry(_("Default live rtmp streams buffer"), config.plugins.archivCZSK.videoPlayer.liveBuffer))
     # if not (videoPlayerInfo.type == 'gstreamer'):
     list.append(getConfigListEntry(_("Play after"), config.plugins.archivCZSK.videoPlayer.playDelay))
+    list.append(getConfigListEntry(_("Confirm exit when closing player"), config.plugins.archivCZSK.videoPlayer.confirmExit))
     return list
 
 def get_main_settings():
@@ -224,6 +227,7 @@ def get_main_settings():
     list.append(getConfigListEntry(_("Add to main menu"), config.plugins.archivCZSK.main_menu))
     list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
     list.append(getConfigListEntry(_("Default category"), config.plugins.archivCZSK.defaultCategory))
+    list.append(getConfigListEntry(_("Confirm exit when closing plugin"), config.plugins.archivCZSK.confirmExit))
     return list
 
 def get_path_settings():
