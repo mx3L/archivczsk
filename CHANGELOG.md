@@ -1,3 +1,17 @@
+## Verzia 0.72 beta 4
+**Vseobecne**
+
+* vypnutie hlasky pri ukonceni pluginu/prehravaca (http://code.google.com/p/archivy-czsk/issues/detail?id=50)
+
+## Verzia 0.72 beta 3
+**Vseobecne**
+
+* korektne formatovane pismo v zoznamoch
+* pouzity LocationBox pre vyber cesty
+* oprava stahovania niektorych rtmp streamov
+* opravena captcha obrazovka
+* + ine mensie opravy popisane v commit log
+
 ## Verzia 0.72 beta 2
 **Vseobecne**
 
