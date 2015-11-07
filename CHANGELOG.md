@@ -1,3 +1,15 @@
+## Verzia 0.72 beta 5
+**Vseobecne**
+
+* aktualizovane doplnky (ta3.com, joj.sk, rtvs.sk, prima-play, ulozto, stream-resolver)
+* odstranene nefunkcne doplnky
+* nova adresa pre aktualizacie (pre starsie verzie nebudu aktualizacie fungovat)
+* opravena detekcia gstreamer-1.0 verzie
+* pridana zavislost na novu subssupport verziu pre lepsiu podporu tituliek
+* pridana zavislost na youtube-dl pre prehravanie zabezpecenych videii z youtube
+* pridana zavislost na python-email pre funcknost dvtv
+* pridana zavislost na curl pre funkcnost automatickych aktualizacii
+
 ## Verzia 0.72 beta 4
 **Vseobecne**
 
