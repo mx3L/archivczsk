@@ -19,6 +19,7 @@ GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
 DSTAGEVER="4"
 VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
+ADDONS_COMMIT="8b2037c36214604779ef5f308b388e38088d5e3a"
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all.ipk
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
@@ -57,7 +58,7 @@ Architecture: all
 Section: extra
 Priority: optional
 Depends: enigma2-plugin-extensions-subssupport (>=1.0.0)
-Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl
+Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl
 Maintainer: mxfitsat@gmail.com
 Homepage: https://code.google.com/p/archivy-czsk/
 Source: https://code.google.com/p/archivy-czsk/
@@ -111,9 +112,9 @@ rm -rf ${P}${PLUGINPATH}/engine/player/servicemp4
 rm -rf ${P}${PLUGINPATH}/resources/data/*
 
 echo "downloading addons"
-${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P}
-${D}/build/plugin/src/script/getaddons.py dmd_czech ${P}
-${D}/build/plugin/src/script/getaddons.py custom ${P}
+${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P} $ADDONS_COMMIT
+${D}/build/plugin/src/script/getaddons.py dmd_czech ${P} $ADDONS_COMMIT
+${D}/build/plugin/src/script/getaddons.py custom ${P} $ADDONS_COMMIT
 
 mkdir -p ${P}/tmp/archivczsk
 mkdir -p ${P}/tmp/archivczsk/python2.7

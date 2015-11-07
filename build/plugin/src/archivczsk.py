@@ -11,6 +11,7 @@ import traceback
 
 from Components.config import config, configfile
 from Screens.MessageBox import MessageBox
+from Components.Console import Console
 
 from engine.addon import VideoAddon, XBMCAddon
 from engine.exceptions.updater import UpdateXMLVersionError
@@ -102,8 +103,16 @@ class ArchivCZSK():
             self.opened_first_time()
 
         elif config.plugins.archivCZSK.autoUpdate.value:
+            path = os.path.join(os.path.dirname(__file__), 'commit')
+            Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
+        else:
+            self.open_archive_screen()
+
+    def check_commit_download(self, data, retval, extra_args):
+        if retval == 0:
             self.check_addon_updates()
         else:
+            log.info("commit not downloaded")
             self.open_archive_screen()
 
     def opened_first_time(self):

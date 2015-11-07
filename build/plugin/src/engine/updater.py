@@ -138,7 +138,13 @@ class Updater(object):
         
         local_file = os.path.join(tmp_base, zip_filename)
         remote_file = remote_base + '/' + zip_filename
-        
+        if remote_file.find('{commit}') != -1:
+            from Plugins.Extensions.archivCZSK.settings import PLUGIN_PATH
+            try:
+                commit = open(os.path.join(PLUGIN_PATH, 'commit')).readline()[:-1]
+            except Exception:
+                commit = '4ff9ac15d461a885f13125125ea501f3b12eb05d'
+            remote_file = remote_file.replace('{commit}', commit)
         # hack for https github urls
         # since some receivers have have problems with https 
         if remote_file.find('https://raw.github.com') == 0:
@@ -156,6 +162,13 @@ class Updater(object):
         
         # hack for https github urls
         # since some receivers have have problems with https
+        if self.update_xml_url.find('{commit}') != -1:
+            from Plugins.Extensions.archivCZSK.settings import PLUGIN_PATH
+            try:
+                commit = open(os.path.join(PLUGIN_PATH, 'commit')).readline()[:-1]
+            except Exception:
+                commit = '4ff9ac15d461a885f13125125ea501f3b12eb05d'
+            self.update_xml_url = self.update_xml_url.replace('{commit}', commit)
         if self.update_xml_url.find('https://raw.github.com') == 0:
             update_xml_url = self.update_xml_url.replace('https://raw.github.com', 'http://rawgithub.com')
         else: update_xml_url = self.update_xml_url
