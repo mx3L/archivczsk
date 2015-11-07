@@ -57,7 +57,7 @@ Version: ${VER}
 Architecture: all
 Section: extra
 Priority: optional
-Depends: enigma2-plugin-extensions-subssupport (>=1.0.0)
+Depends: enigma2-plugin-extensions-subssupport (>=1.5.4)
 Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl
 Maintainer: mxfitsat@gmail.com
 Homepage: https://code.google.com/p/archivy-czsk/

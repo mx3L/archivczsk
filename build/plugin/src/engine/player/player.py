@@ -23,7 +23,7 @@ from Components.config import config, ConfigSubsection
 from ServiceReference import ServiceReference
 
 try:
-	from Plugins.Extensions.SubsSupport import SubsSupport, initSubsSettings
+	from Plugins.Extensions.SubsSupport import SubsSupport, SubsSupportStatus, initSubsSettings
 except ImportError as e:
 	traceback.print_exc()
 	raise Exception("Please install SubsSupport plugin")
@@ -87,7 +87,7 @@ class StandardStreamVideoPlayer(MoviePlayer, InfoBarPlaylist):
 
 ###################################################################################
 
-class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, ArchivCZSKMoviePlayerInfobar, InfoBarBase, InfoBarShowHide, \
+class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupportStatus, SubsSupport, ArchivCZSKMoviePlayerInfobar, InfoBarBase, InfoBarShowHide, \
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen, InfoBarNotifications, \
 		InfoBarServiceNotifications, InfoBarPVRState, \
 		InfoBarAspectChange, InfoBarServiceErrorPopupSupport):
@@ -139,6 +139,7 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupport, 
 		# init subtitles
 		initSubsSettings()
 		SubsSupport.__init__(self, subsPath=subtitles, defaultPath=config.plugins.archivCZSK.subtitlesPath.getValue(), forceDefaultPath=True, searchSupport=True)
+		SubsSupportStatus.__init__(self)
 
 		# playlist support
 		InfoBarPlaylist.__init__(self, playlist, playlistCB, playlistName,
