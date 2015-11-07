@@ -17,7 +17,7 @@ pushd ${D} &> /dev/null
 PVER="0.72"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
-DSTAGEVER="4"
+DSTAGEVER="5"
 VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
 ADDONS_COMMIT="8b2037c36214604779ef5f308b388e38088d5e3a"
 
