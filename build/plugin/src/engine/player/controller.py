@@ -12,6 +12,7 @@ from Components.Converter.ServicePositionAdj import ServicePositionAdj
 from ServiceReference import ServiceReference
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage, showYesNoDialog
 from util import getBufferInfo
 
@@ -706,10 +707,10 @@ class RTMPController(BaseVideoPlayerController):
         self._offset_pts = 0
         self._offset_mode = False
 
-        # eplayer gets correct video length of rtmp streams, but after this seeking workaround
+        # eplayer and gst10 gets correct video length of rtmp streams, but after this seeking workaround
         # it cannot get correct video position and starts with 0 position every time after un-pause/seek
         # so we adjust only play position since length is correct
-        self._eplayer_mode = False
+        self._eplayer_gst10_mode = False
 
         # With some rtmp streams we cannot get correct video length on gstreamer 0.10
         # Video duration on these streams represents accumulated value of buffered seconds instead of actual video length
@@ -732,7 +733,8 @@ class RTMPController(BaseVideoPlayerController):
         self.sref_url = sref.getPath()
         self.sref_id = sref.getType()
         self.sref_name = sref.getServiceName()
-        self._eplayer_mode = video_player.__class__.__name__ in ('EPlayer3VideoPlayer', 'EPlayer2VideoPlayer')
+        self._eplayer_gst10_mode = (video_player.__class__.__name__ in ('EPlayer3VideoPlayer', 'EPlayer2VideoPlayer') or
+                                                                        (videoPlayerInfo.type == 'gstreamer' and videoPlayerInfo.version == '1.0'))
 
 
     def _update_video_state(self, play_pts):
@@ -741,7 +743,7 @@ class RTMPController(BaseVideoPlayerController):
         if self.video_length_total is not None:
             if self.video_length_total - play_pts <= self._offset_mode_limit:
                 self.video_length_total = None
-        if self.video_length_total is None or self._eplayer_mode:
+        if self.video_length_total is None or self._eplayer_gst10_mode:
             self._offset_mode = True
         else:
             self._offset_mode = False
@@ -809,6 +811,6 @@ class RTMPController(BaseVideoPlayerController):
         if self._offset_mode:
             self._base_pts = self._seek_pts
             ServicePositionAdj.setBasePts(self._base_pts)
-            if not self._eplayer_mode:
+            if not self._eplayer_gst10_mode:
                 ServicePositionAdj.setBaseLength(self._base_pts)
         self.session.nav.playService(seek_sref)

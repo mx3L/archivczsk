@@ -16,9 +16,14 @@ class VideoPlayerInfo(object):
     def __init__(self):
         self.type = 'gstreamer'
         self.version = 0
-        if os.path.isdir(GSTREAMER_PATH) or os.path.isdir(GSTREAMER10_PATH):
+        if os.path.isdir(GSTREAMER10_PATH):
             print 'found gstreamer'
             self.type = 'gstreamer'
+            self.version = '1.0'
+        elif os.path.isdir(GSTREAMER_PATH):
+            print 'found gstreamer'
+            self.type = 'gstreamer'
+            self.version = '0.10'
         elif os.path.isfile(EPLAYER3_PATH):
             print 'found eplayer3'
             self.type = 'eplayer3'
@@ -29,7 +34,9 @@ class VideoPlayerInfo(object):
 
     def getName(self):
         if self.type == 'gstreamer':
-            return 'GStreamer'
+            if self.version == '1.0':
+                return 'Gstreamer 1.0'
+            return 'GStreamer 0.10'
         if self.type == 'eplayer3':
             return 'EPlayer3'
         if self.type == 'eplayer2':
