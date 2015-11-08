@@ -4,12 +4,8 @@ Created on 8.5.2012
 @author: marko
 '''
 import os, time, mimetypes
-from urlparse import urlsplit
-from twisted.python import failure
-from twisted.web import client
-from twisted.internet import reactor
 import urlparse, urllib2, urllib
-from tools import util
+from player.info import videoPlayerInfo
 from exceptions.download import NotSupportedProtocolError
 
 try:
@@ -17,6 +13,12 @@ try:
     from Plugins.Extensions.archivCZSK import _
 except ImportError:
     pass
+
+GST_LAUNCH = None
+if videoPlayerInfo.type == 'gstreamer' and videoPlayerInfo.version == '1.0':
+    GST_LAUNCH = 'gst-launch-1.0'
+elif videoPlayerInfo.type =='gstreamer' and videoPlayerInfo.version == '0.10':
+    GST_LAUNCH = 'gst-launch-0.10'
 
 
 RTMP_DUMP_PATH = '/usr/bin/rtmpdump'
@@ -39,7 +41,17 @@ def resetUrllib2Opener():
     urllib2.install_opener(opener)
 
 def url2name(url):
-    return os.path.basename(urlsplit(url)[2])
+    fname = os.path.basename(urlparse.urlparse(url).path.split('/')[-1])
+    if url.startswith('rtmp'):
+        url_split = url.split()
+        if len(url_split) > 1:
+            for i in url_split:
+                if i.find('playpath=') == 0:
+                    fname = urlparse.urlparse(i[len('playpath='):]).path.split('/')[-1]
+                    break
+    elif url.startswith('http') and urlparse.urlparse(url).path.endswith('.m3u8'):
+        fname = urlparse.urlparse(url).path.split('/')[-2]
+    return sanitizeFilename(fname)
 
 def sanitizeFilename(s):
     """Sanitizes a string so it could be used as part of a filename."""
@@ -140,10 +152,7 @@ class DownloadManager(object):
 
     def removeDownload(self, download):
         if download.running:
-            if not isinstance(download, HTTPDownloadTwisted):
-                download.pp.appClosed.append(download.remove)
-            else:
-                download.defer.addCallback(download.remove)
+            download.defer.addCallback(download.remove)
             download.cancel()
             self.download_lst.remove(download)
         else:
@@ -162,7 +171,16 @@ class DownloadManager(object):
         if not os.path.exists(destination):
             os.makedirs(destination)
 
-        if url[0:4] == 'rtmp':
+        if (((url[0:4] == 'rtmp' and mode in ('auto', 'gstreamer')) or
+              (url[0:4] == 'http' and mode  in ('auto', 'gstreamer') and urlparse.urlparse(url).path.endswith('.m3u8')) or
+              (url[0:4] == 'http' and mode in ('auto', 'gstreamer') and playDownload) or
+              (url[0:4] == 'http' and mode in ('gstreamer',))) and GST_LAUNCH):
+            d = GstDownload(url = url, name = name, destDir = destination)
+            d.onStartCB.append(startCB)
+            d.onFinishCB.append(finishCB)
+            d.status = DownloadStatus(d)
+
+        elif url[0:4]  == 'rtmp' and mode in ('auto', 'rtmpdump'):
             if stream is not None:
                 url = stream.getRtmpgwUrl()
             else:
@@ -190,28 +208,10 @@ class DownloadManager(object):
             except (urllib2.HTTPError, urllib2.URLError) as e:
                 print "[Downloader] cannot create download %s - %s error" % (toUTF8(filename), str(e))
                 raise
-
             # for now we cannot download hls streams
             if filename.endswith('m3u8'):
                 raise NotSupportedProtocolError('HLS')
-            # only for EPLAYER3(ffmpeg demux)
-            # When playing and downloading avi/mkv container then use HTTPTwistedDownload instead of wget
-            # Reason is that when we use wget download, downloading file is progressively increasing its size, and ffmpeg isnt updating size of file accordingly
-            # so when video gets to place what ffmpeg read in start, playing prematurely stops because of EOF.
-            # When we use HTTPDownloadTwisted, we firstly create the file of length of the downloading file, and then download to it, so ffmpeg reads
-            # full length filesize.
-            # Its not nice fix but its working ...
-            if mode == "":
-                if os.path.splitext(filename)[1] in ('.avi', '.mkv') and playDownload:
-                    d = HTTPDownloadTwisted(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers, fullLengthFile=True)
-                else:
-                    d = HTTPDownloadE2(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
-
-            elif mode == "wget":
-                d = HTTPDownloadE2(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
-            else:
-                d = HTTPDownloadTwisted(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
-
+            d = HTTPDownloadE2(name=filename, url=url, filename=filename, destDir=destination, quiet=quiet, headers=headers)
             d.onStartCB.append(startCB)
             d.onFinishCB.append(finishCB)
             d.length = long(length)
@@ -473,86 +473,19 @@ class HTTPDownloadE2(Download):
             self.killed = True
             self.pp.sendCtrlC()
 
-class HTTPProgressDownloader(client.HTTPDownloader):
 
-    def __init__(self, url, fileOrName, updateCurrentLength, writeToEmptyFile=False, outputCB=None, headers={}, *args, **kwargs):
-        self.writeToEmptyFile = writeToEmptyFile
-        self.outputCB = outputCB
-        self.updateCurrentLength = updateCurrentLength
-        self.totalLength = 0
-        self.currentLength = 0
-        client.HTTPDownloader.__init__(self, url, fileOrName, headers=headers, agent=USER_AGENT, *args, **kwargs)
-
-
-    def gotHeaders(self, headers):
-        print 'gotHeaders'
-        if self.status == '200': # page data is on the way
-            if headers.has_key('content-length'):
-                self.totalLength = int(headers['content-length'][0])
-                print self.totalLength
-            else:
-                self.totalLength = 0
-            self.currentLength = 0.0
-            print ''
-        return client.HTTPDownloader.gotHeaders(self, headers)
-
-    def pageStart(self, partialContent):
-        """Called on page download start.
-
-        @param partialContent: tells us if the download is partial download we requested.
-        """
-        if partialContent and not self.requestedPartial:
-            raise ValueError, "we shouldn't get partial content response if we didn't want it!"
-        if self.waiting:
-            try:
-                if not self.file:
-                    self.file = self.openFile(partialContent)
-            except IOError:
-                #raise
-                self.deferred.errback(failure.Failure())
-
-    def pagePart(self, data):
-        if self.status == '200':
-            self.currentLength += len(data)
-            self.updateCurrentLength(self.currentLength)
-            if self.totalLength:
-                percent = "%i%%" % ((self.currentLength / self.totalLength) * 100)
-                outputstr = "%.3f/%.3f MB %s percent" % (float(self.currentLength / (1024 * 1024)), float(self.totalLength / (1024 * 1024)), percent)
-                self.outputCB(outputstr)
-            else:
-                percent = '%dK' % (self.currentLength / 1000)
-                outputstr = "%d/%i MB %d percent" % (self.currentLength, percent)
-                self.outputCB(outputstr)
-        return client.HTTPDownloader.pagePart(self, data)
-
-    def createEmptyFile(self, size):
-        f = open(self.fileName, "wb")
-        f.seek((size) - 1)
-        f.write("\0")
-        f.close()
-
-
-    def openFile(self, partialContent):
-        #download avi files to existing file with full length of file which will be downloaded
-        if self.writeToEmptyFile:
-            self.createEmptyFile(self.totalLength)
-            file = open(self.fileName, 'rb+')
-            return file
-        else:
-            return client.HTTPDownloader.openFile(self, partialContent)
-
-
-
-class HTTPDownloadTwisted(Download):
-    def __init__(self, name, url, destDir, filename=None, quiet=False, headers={}, fullLengthFile=False):
+class GstDownload(Download):
+    """Downloads file with gstreamer"""
+    def __init__(self, name, url, destDir, filename=None, quiet=False, headers={}):
         if filename is None:
-            path = urlparse.urlparse(url).path
-            filename = os.path.basename(path)
+            filename = url2name(url)
+        if not filename.endswith(VIDEO_EXTENSIONS):
+            filename = os.path.splitext(filename)[0] +'.mp4'
         Download.__init__(self, name, url, destDir, filename, quiet)
-        self.connector = None
-        self.currentLength = 0
-        self.headers = headers
-        self.fullLengthFile = fullLengthFile
+        self.pp = eConsoleAppContainer()
+        #self.pp.dataAvail.append(self.__startCB)
+        self.pp.stderrAvail.append(self.__outputCB)
+        self.pp.appClosed.append(self.__finishCB)
 
     def __startCB(self):
         self.running = True
@@ -560,9 +493,10 @@ class HTTPDownloadTwisted(Download):
             self.startCB(self)
 
     def __finishCB(self, retval):
+        print 'gstdownload finished with', str(retval)
         self.running = False
         self.finish_time = time.time()
-        if not self.killed:
+        if retval == 0 and not self.killed:
             self.downloaded = True
         else:
             self.downloaded = False
@@ -573,42 +507,26 @@ class HTTPDownloadTwisted(Download):
         if self.showOutput and self.outputCB is not None:
             self.outputCB(data)
 
-    def updateCurrentLength(self, currentLength):
-        self.currentLength = currentLength
-
-    def getCurrentLength(self):
-        return self.currentLength
+    def kill(self):
+        if self.pp.running():
+            self.pp.kill()
 
     def start(self):
+        if self.url.startswith('rtmp'):
+            cmd = "%s rtmpsrc location='%s' ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
+        elif self.url.startswith('http') and urlparse.urlparse(self.url).path.endswith('.m3u8'):
+            cmd = "%s souphttpsrc location='%s' ! hlsdemux ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
+        elif self.url.startswith('http'):
+            cmd = "%s souphttpsrc location='%s' ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
+        cmd = cmd.encode('utf-8')
+        print '[cmd]',cmd
         self.__startCB()
-        self.defer = self.downloadWithProgress(self.url, self.local, writeToEmptyFile=self.fullLengthFile, outputCB=self.__outputCB, headers=self.headers).addCallback(self.__finishCB).addErrback(self.downloadError)
+        self.pp.execute(cmd)
 
     def cancel(self):
-        if self.running and self.connector is not None:
-            self.downloaded = False
-            self.running = False
+        if self.pp.running():
             self.killed = True
-            self.connector.disconnect()
-
-    def downloadWithProgress(self, url, file, contextFactory=None, *args, **kwargs):
-        scheme, host, port, path = client._parse(url)
-        factory = HTTPProgressDownloader(url, file, self.updateCurrentLength, *args, **kwargs)
-        if scheme == 'https':
-            from twisted.internet import ssl
-            if contextFactory is None:
-                contextFactory = ssl.ClientContextFactory()
-            self.connector = reactor.connectSSL(host, port, factory, contextFactory)
-        else:
-            self.connector = reactor.connectTCP(host, port, factory)
-        return factory.deferred
-
-    def downloadError(self, failure):
-        self.downloaded = False
-        self.running = False
-        print "Error:", failure.getErrorMessage()
-        self.__finishCB(None)
-
-
+            self.pp.sendCtrlC()
 
 class GStreamerDownload():
     def __init__(self, path, preBufferPercent=0, preBufferSeconds=0):

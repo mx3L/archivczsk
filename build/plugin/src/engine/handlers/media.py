@@ -73,7 +73,7 @@ class MediaItemHandler(ItemHandler):
             item.add_context_menu_item(_("Download"),
                                        action=self.download_item,
                                        params={'item':item,
-                                                      'mode':'wget'})
+                                                      'mode':'auto'})
 
 
 class VideoResolvedItemHandler(MediaItemHandler):
