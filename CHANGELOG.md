@@ -1,3 +1,14 @@
+## Verzia 0.72 beta 6
+**Vseobecne**
+
+* aktualizovana prima-play(prehravanie funkcne)
+* pridane zobrazenie gstreamer verzie
+* zlepsene prehravanie rtmp streamov pri image s gstreamer-1.0 verziou
+  * korektne zobrazenie pozicie po pretacani (prima-play, novaplus), v pripade ze je zapnuta oprava rtmp pretacania
+* zlepsenie moznosti stahovania pri image s gstreamer
+  * pridana moznost stahovat HLS streamy(ivysilani, ta3.com, rtvs.sk, markiza.sk)
+  * stabilnejsie stahovanie rtmp streamov(prima-play, joj.sk, novaplus..)
+
 ## Verzia 0.72 beta 5
 **Vseobecne**
 
