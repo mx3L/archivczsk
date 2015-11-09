@@ -152,7 +152,7 @@ class DownloadManager(object):
 
     def removeDownload(self, download):
         if download.running:
-            download.defer.addCallback(download.remove)
+            download.pp.appClosed.append(download.remove)
             download.cancel()
             self.download_lst.remove(download)
         else:
