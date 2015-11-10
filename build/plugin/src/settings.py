@@ -169,6 +169,7 @@ config.plugins.archivCZSK.subtitlesPath = ConfigDirectory(default="/tmp")
 ########### Misc #########################
 
 config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
+config.plugins.archivCZSK.showVideoSourceSelection = ConfigYesNo(default=True)
 config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
 if ARCH == 'sh4' and SERVICEMP4:
@@ -242,6 +243,7 @@ def get_path_settings():
 def get_misc_settings():
     list = []
     list.append(getConfigListEntry(_("Show broken addons"), config.plugins.archivCZSK.showBrokenAddons))
+    list.append(getConfigListEntry(_("Show video source selection"), config.plugins.archivCZSK.showVideoSourceSelection))
     list.append(getConfigListEntry(_("Convert captcha images to 8bit"), config.plugins.archivCZSK.convertPNG))
     list.append(getConfigListEntry(_("Drop caches on exit"), config.plugins.archivCZSK.clearMemory))
     verification = config.plugins.archivCZSK.linkVerification.getValue()

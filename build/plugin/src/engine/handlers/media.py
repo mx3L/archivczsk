@@ -1,5 +1,7 @@
 from twisted.internet import defer
 
+from Components.config import config
+
 from item import ItemHandler
 from folder import FolderItemHandler
 from Plugins.Extensions.archivCZSK import _, log
@@ -99,7 +101,10 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
     def play_item(self, item, mode='play', *args, **kwargs):
         def wrapped(res_item):
             MediaItemHandler.play_item(self, res_item, mode)
-        self._resolve_video(item, wrapped)
+        if config.plugins.archivCZSK.showVideoSourceSelection.value:
+            self._resolve_video(item, wrapped)
+        else:
+            self._resolve_videos(item)
 
     def download_item(self, item, mode="", *args, **kwargs):
         def wrapped(res_item):
