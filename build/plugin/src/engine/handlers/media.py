@@ -3,7 +3,7 @@ from twisted.internet import defer
 from item import ItemHandler
 from folder import FolderItemHandler
 from Plugins.Extensions.archivCZSK import _, log
-from Plugins.Extensions.archivCZSK.gui.context import SelectSource
+from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectSourceScreen
 from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler, DownloadExceptionHandler, PlayExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist
@@ -126,7 +126,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
             item = None
             if len(list_items) > 1:
                 self.list_items = list_items
-                self.session.openWithCallback(selected_source, SelectSource, list_items)
+                self.session.openWithCallback(selected_source, ArchivCZSKSelectSourceScreen, list_items)
             elif len(list_items) == 1:
                 item = list_items[0]
             else: # no video

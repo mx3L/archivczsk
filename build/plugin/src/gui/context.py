@@ -21,7 +21,7 @@ from Plugins.Extensions.archivCZSK import _
 
 from base import  BaseArchivCZSKScreen
 def showContextMenu(session, name, img, items, globalItems, cb):
-    session.openWithCallback(cb, ContextMenuScreen, name, img, items, globalItems)
+    session.openWithCallback(cb, ArchivCZSKContextMenuScreen, name, img, items, globalItems)
 
 
 class ContextMenuList(MenuList):
@@ -53,7 +53,7 @@ def ContextEntryDisabled(name, idx, png='', separator=False):
 
 
 
-class ContextMenuScreen(BaseArchivCZSKScreen):
+class ArchivCZSKContextMenuScreen(BaseArchivCZSKScreen):
     def __init__(self, session, name, img, items=None, globalItems=None):
         BaseArchivCZSKScreen.__init__(self, session)
         self.ctxItems = items or []
@@ -164,13 +164,13 @@ class ContextMenuScreen(BaseArchivCZSKScreen):
     def cancel(self):
         self.close(None)
 
-class SelectSource(ContextMenuScreen):
+class ArchivCZSKSelectSourceScreen(ArchivCZSKContextMenuScreen):
     def __init__(self, session, sources):
-        ContextMenuScreen.__init__(self, session, _("Select source"), None, sources, None)
+        ArchivCZSKContextMenuScreen.__init__(self, session, _("Select source"), None, sources, None)
 
-class SelectCategory(ContextMenuScreen):
+class ArchivCZSKSelectCategoryScreen(ArchivCZSKContextMenuScreen):
     def __init__(self, session, categories):
-        ContextMenuScreen.__init__(self, session, _("Select category"), None, categories, None)
-        self.setSkin('SelectSource')
+        ArchivCZSKContextMenuScreen.__init__(self, session, _("Select category"), None, categories, None)
+        self.skinName = "ArchivCZSKSelectSourceScreen"
 
 

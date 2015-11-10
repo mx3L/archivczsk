@@ -261,10 +261,10 @@ def PlaylistEntry(name, png):
     res.append(MultiContentEntryText(pos=(55, 5), size=(580, 30), font=0, flags=RT_VALIGN_CENTER | RT_HALIGN_LEFT, text=toUTF8(name)))
     return res
 
-class Playlist(BaseArchivCZSKMenuListScreen):
+class ArchivCZSKPlaylistScreen(BaseArchivCZSKMenuListScreen):
     instance = None
     def __init__(self, session, title, playlist, selected, selection):
-        Playlist.instance = self
+        ArchivCZSKPlaylistScreen.instance = self
         BaseArchivCZSKMenuListScreen.__init__(self, session, PlaylistPanelList)
         self.lst_items = playlist
         self.selected = selected
@@ -300,7 +300,7 @@ class Playlist(BaseArchivCZSKMenuListScreen):
         self.cancel()
 
     def _onClose(self):
-        Playlist.instance = None
+        ArchivCZSKPlaylistScreen.instance = None
 
     def cancel(self):
         self.close(self.selected)
@@ -357,13 +357,13 @@ class InfoBarPlaylist(object):
         self.__last = len(playlist) - 1
 
     def showPlaylist(self):
-        if Playlist.instance or len(self.__playlist)==1:
+        if ArchivCZSKPlaylistScreen.instance or len(self.__playlist)==1:
             return
         if self.__showProtocol:
             list = ["[%s] %s" % (video.get_protocol(), video.name) for video in self.__playlist]
         else:
             list = ["%s" % (video.name) for video in self.__playlist]
-        self.session.openWithCallback(self.__showPlaylistCb, Playlist, self.__name, list,
+        self.session.openWithCallback(self.__showPlaylistCb, ArchivCZSKPlaylistScreen, self.__name, list,
                                       self.__selected, self.__selection)
 
     def __showPlaylistCb(self, selection=None):

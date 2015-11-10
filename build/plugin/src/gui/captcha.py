@@ -36,7 +36,7 @@ class Captcha(object):
     def openCaptchaDialog(self, captcha_file):
         if config.plugins.archivCZSK.convertPNG.getValue():
             captcha_file = util.convert_png_to_8bit(captcha_file)
-        self.session.openWithCallback(self.captchaCB, CaptchaDialog, captcha_file)
+        self.session.openWithCallback(self.captchaCB, ArchivCZSKCaptchaScreen, captcha_file)
 
     def downloadCaptchaCB(self, txt=""):
         print "[Captcha] downloaded successfully:"
@@ -48,7 +48,7 @@ class Captcha(object):
         
 
 
-class CaptchaDialog(BaseArchivCZSKScreen,VirtualKeyBoard):
+class ArchivCZSKCaptchaScreen(BaseArchivCZSKScreen,VirtualKeyBoard):
     def __init__(self, session, captcha_file):  
         BaseArchivCZSKScreen.__init__(self,session,False)
         VirtualKeyBoard.__init__(self, session, _('Type text of picture'))

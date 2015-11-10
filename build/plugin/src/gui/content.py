@@ -191,7 +191,7 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
             self.contentHandler.info_item(self.getSelectedItem(), mode)
 
 
-class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
+class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
     def __init__(self, session, provider):
         contentHandler = VideoAddonManagementScreenContentHandler(session, self, provider)
         addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
@@ -357,7 +357,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self.provider.resume()
 
     def openAddonManagement(self):
-        self.session.openWithCallback(self.openAddonManagementCB, VideoAddonsManagementScreen, self.provider)
+        self.session.openWithCallback(self.openAddonManagementCB, ArchivCZSKVideoAddonsManagementScreen, self.provider)
 
     def openAddonManagementCB(self, cb=None):
         self.workingStarted()
@@ -438,7 +438,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
             self.close()
 
 
-class ContentScreen(BaseContentScreen, DownloadList, TipBar):
+class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
 
     CSFD_TIP = (KEY_5_IMG, _("show info in CSFD"))
     INFO_TIP = (KEY_INFO_IMG, _("show additional info"))

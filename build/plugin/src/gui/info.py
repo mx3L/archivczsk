@@ -24,7 +24,7 @@ from Plugins.Extensions.archivCZSK.gui.common import showYesNoDialog, showInfoMe
 from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
 
 def showChangelog(session, changelog_title, changelog_text):
-	session.open(ChangelogScreen, changelog_title, changelog_text)
+	session.open(ArchivCZSKChangelogScreen, changelog_title, changelog_text)
 
 def showItemInfo(session, item):
 	Info(session, item)
@@ -42,12 +42,12 @@ def showCSFDInfo(session, item):
 	
 def showVideoPlayerInfo(session, cb=None):
 	if cb:
-		session.openWithCallback(cb, VideoPlayerInfoScreen)
+		session.openWithCallback(cb, ArchivCZSKVideoPlayerInfoScreen)
 	else:
-		session.open(VideoPlayerInfoScreen)
+		session.open(ArchivCZSKVideoPlayerInfoScreen)
 
 
-class ChangelogScreen(BaseArchivCZSKScreen):
+class ArchivCZSKChangelogScreen(BaseArchivCZSKScreen):
 	def __init__(self, session, title, text=None):
 		BaseArchivCZSKScreen.__init__(self, session)
 		self.changelog = text
@@ -108,9 +108,9 @@ class Info(object):
 		
 	def showInfo(self):
 		print '[Info] showInfo'
-		self.session.openWithCallback(self.closeInfo, ItemInfoScreen, self.it)
+		self.session.openWithCallback(self.closeInfo, ArchivCZSKItemInfoScreen, self.it)
 
-class ItemInfoScreen(BaseArchivCZSKScreen):
+class ArchivCZSKItemInfoScreen(BaseArchivCZSKScreen):
 	def __init__(self, session, it):
 		BaseArchivCZSKScreen.__init__(self, session)
 		self.image_link = None
@@ -169,7 +169,7 @@ class ItemInfoScreen(BaseArchivCZSKScreen):
 		
 		
 		
-class VideoPlayerInfoScreen(BaseArchivCZSKScreen):
+class ArchivCZSKVideoPlayerInfoScreen(BaseArchivCZSKScreen):
 	GST_INSTALL = 0
 	GST_REINSTALL = 1
 	GST_INSTALL_RTMP = 2

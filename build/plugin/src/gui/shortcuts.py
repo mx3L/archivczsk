@@ -15,9 +15,9 @@ from common import PanelListEntryHD
 PanelListEntry = PanelListEntryHD
 
 def openShortcuts(session, addon, cb):
-	session.openWithCallback(cb, ShortcutsScreen, addon)
+	session.openWithCallback(cb, ArchivCZSKShortcutsScreen, addon)
 
-class ShortcutsScreen(BaseArchivCZSKMenuListScreen):
+class ArchivCZSKShortcutsScreen(BaseArchivCZSKMenuListScreen):
 	def __init__(self, session, addon):
 		BaseArchivCZSKMenuListScreen.__init__(self, session)
 

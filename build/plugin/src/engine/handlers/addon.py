@@ -8,7 +8,7 @@ from category import CategoryItemHandler, UserCategoryItemHandler
 from media import VideoResolvedItemHandler, VideoNotResolvedItemHandler, PlaylistItemHandler
 
 from Plugins.Extensions.archivCZSK import _
-from Plugins.Extensions.archivCZSK.gui.context import SelectCategory
+from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectCategoryScreen
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PRoot, PFolder, PVideoAddon, PCategoryVideoAddon
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
@@ -57,8 +57,8 @@ class VideoAddonItemHandlerTemplate(ItemHandler):
             get_content(addon, params)
 
     def open_video_addon(self, addon, list_items):
-        from Plugins.Extensions.archivCZSK.gui.content import ContentScreen
-        self.session.openWithCallback(self.open_video_addon_cb, ContentScreen, addon, list_items)
+        from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreen
+        self.session.openWithCallback(self.open_video_addon_cb, ArchivCZSKAddonContentScreen, addon, list_items)
 
     def open_video_addon_cb(self, content_provider):
         if isinstance(content_provider, VideoAddonContentProvider):
@@ -124,7 +124,7 @@ class VideoAddonItemHandler(VideoAddonItemHandlerTemplate):
         for category in self.categories:
             if item.addon_id in category:
                 category.enabled = False
-        self.session.openWithCallback(self._choose_category_cb, SelectCategory, self.categories)
+        self.session.openWithCallback(self._choose_category_cb, ArchivCZSKSelectCategoryScreen, self.categories)
 
     def _choose_category_cb(self, idx):
         if idx is not None:

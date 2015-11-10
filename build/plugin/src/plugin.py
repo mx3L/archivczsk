@@ -13,7 +13,7 @@ from Plugins.Extensions.archivCZSK import _
 import gui.download as dwnld
 from archivczsk import ArchivCZSK
 from engine.downloader import DownloadManager
-from gui.search import SearchClient
+from gui.search import ArchivCZSKSearchClientScreen
 import version
 from gsession import GlobalSession
 
@@ -34,7 +34,7 @@ def menu(menuid, **kwargs):
 def eventinfo(session, servicelist, **kwargs):
 	ref = session.nav.getCurrentlyPlayingServiceReference()
 	print str(ref)
-	session.open(SearchClient, ref)
+	session.open(ArchivCZSKSearchClientScreen, ref)
 	
 
 def main(session, **kwargs):

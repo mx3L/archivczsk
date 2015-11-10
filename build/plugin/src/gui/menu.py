@@ -21,9 +21,9 @@ def openArchivCZSKMenu(session):
 
 def openAddonMenu(session, addon, cb):
     if cb is None:
-        session.open(AddonConfigScreen, addon)
+        session.open(ArchivCZSKAddonConfigScreen, addon)
     else:
-        session.openWithCallback(cb, AddonConfigScreen, addon)
+        session.openWithCallback(cb, ArchivCZSKAddonConfigScreen, addon)
 
 class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
     WIDTH_HD = 610
@@ -248,7 +248,7 @@ class ArchiveCZSKConfigScreen(BaseArchivCZSKConfigScreen):
             super(ArchiveCZSKConfigScreen, self).keyOk()
 
 
-class AddonConfigScreen(BaseArchivCZSKConfigScreen):
+class ArchivCZSKAddonConfigScreen(BaseArchivCZSKConfigScreen):
     def __init__(self, session, addon):
         self.session = session
         self.addon = addon

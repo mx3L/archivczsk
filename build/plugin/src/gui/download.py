@@ -27,7 +27,7 @@ PanelListEntry = PanelListEntryHD
 
 
 def openDownloads(session, name, content_provider, cb):
-    session.openWithCallback(cb, DownloadsScreen, name, content_provider)
+    session.openWithCallback(cb, ArchivCZSKDownloadsScreen, name, content_provider)
 
 def openAddonDownloads(session, addon, cb):
     openDownloads(session, addon.name, addon.provider, cb)
@@ -40,8 +40,8 @@ class DownloadManagerMessages(object):
     def finishDownloadCB(download):
         session = GlobalSession.getSession()
         def updateDownloadList(callback=None):
-            if DownloadListScreen.instance is not None:
-                DownloadListScreen.instance.refreshList()
+            if ArchivCZSKDownloadListScreen.instance is not None:
+                ArchivCZSKDownloadListScreen.instance.refreshList()
         if download.downloaded:
             session.openWithCallback(updateDownloadList, MessageBox, _("ArchivyCZSK - Download:") + ' ' + \
                                       download.name.encode('utf-8', 'ignore') + ' ' + _("successfully finished."), \
@@ -106,7 +106,7 @@ class DownloadManagerMessages(object):
                 session.openWithCallback(askOverrideCB, ChoiceBox, message, choices)
 
 
-class DownloadStatusScreen(BaseArchivCZSKScreen):
+class ArchivCZSKDownloadStatusScreen(BaseArchivCZSKScreen):
 
     def __init__(self, session, download):
         BaseArchivCZSKScreen.__init__(self, session)
@@ -272,13 +272,13 @@ class DownloadList:
 
     def showDownloadListScreen(self):
         self.workingStarted()
-        self.session.openWithCallback(self.workingFinished, DownloadListScreen)
+        self.session.openWithCallback(self.workingFinished, ArchivCZSKDownloadListScreen)
 
-class DownloadListScreen(BaseArchivCZSKMenuListScreen):
+class ArchivCZSKDownloadListScreen(BaseArchivCZSKMenuListScreen):
     instance = None
     def __init__(self, session):
         BaseArchivCZSKMenuListScreen.__init__(self, session)
-        DownloadListScreen.instance = self
+        ArchivCZSKDownloadListScreen.instance = self
         self["key_red"] = Button(_("Cancel"))
         self["key_green"] = Button(_("Play"))
         self["key_yellow"] = Button(_("Remove"))
@@ -306,7 +306,7 @@ class DownloadListScreen(BaseArchivCZSKMenuListScreen):
         self.onShown.append(self.setWindowTitle)
 
     def __onClose(self):
-        DownloadListScreen.instance = None
+        ArchivCZSKDownloadListScreen.instance = None
 
     def setWindowTitle(self):
         self.setTitle(self.title)
@@ -367,10 +367,10 @@ class DownloadListScreen(BaseArchivCZSKMenuListScreen):
     def ok(self):
         if  len(self.lst_items) > 0:
             download = self.getSelectedItem()
-            self.session.openWithCallback(self.workingFinished, DownloadStatusScreen, download)
+            self.session.openWithCallback(self.workingFinished, ArchivCZSKDownloadStatusScreen, download)
 
 
-class DownloadsScreen(BaseArchivCZSKMenuListScreen, DownloadList):
+class ArchivCZSKDownloadsScreen(BaseArchivCZSKMenuListScreen, DownloadList):
     instance = None
     def __init__(self, session, name, content_provider):
         BaseArchivCZSKMenuListScreen.__init__(self, session, panelList=PanelListDownload)

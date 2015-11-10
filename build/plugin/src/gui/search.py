@@ -23,7 +23,7 @@ from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, PanelList,
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKMenuListScreen
 
     
-class SearchClient(BaseArchivCZSKMenuListScreen):
+class ArchivCZSKSearchClientScreen(BaseArchivCZSKMenuListScreen):
     WIDTH_HD = 400
     WIDTH_SD = 200
     def __init__(self, session, currService):
