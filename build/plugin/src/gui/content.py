@@ -11,10 +11,10 @@ from Tools.LoadPixmap import LoadPixmap
 
 from Plugins.Extensions.archivCZSK import _, log, settings
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
-    StreamContentProvider, VideoAddonContentProvider, ArchivCZSKContentProvider
+    VideoAddonContentProvider, ArchivCZSKContentProvider
 from Plugins.Extensions.archivCZSK.engine.handlers import \
     ArchivCZSKContentHandler, VideoAddonContentHandler, \
-    VideoAddonManagementScreenContentHandler, StreamContentHandler
+    VideoAddonManagementScreenContentHandler
 from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
     PPlaylist, PExit, PVideo, PContextMenuItem, PSearch, PSearchItem, PDownload, \
     PVideoAddon, Stream, RtmpStream
@@ -317,7 +317,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
 
         self["key_red"] = Label("")
         self["key_green"] = Label(_("Manager"))
-        self["key_yellow"] = Label(_("Live streams"))
+        self["key_yellow"] = Label("")
         self["key_blue"] = Label(_("Settings"))
 
         self["actions"] = ActionMap(["archivCZSKActions"],
@@ -328,7 +328,6 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
                 "down": self.down,
                 "blue": self.openSettings,
                 "green": self.openAddonManagement,
-                "yellow": self.showStreams,
                 "menu" : self.menu
             }, -2)
         # after layout show update item "GUI" - edit: shamann
@@ -367,15 +366,6 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self.workingStarted()
         self.refreshList()
         self.workingFinished()
-
-    def showStreams(self):
-        if not self.working:
-            self.workingStarted()
-            stream_content_provider = StreamContentProvider(config.plugins.archivCZSK.downloadsPath.getValue(), settings.STREAM_PATH)
-            lst_items = stream_content_provider.get_content(None)
-            if not isinstance(lst_items[0], PExit):
-                lst_items.insert(0, PExit())
-            self.session.openWithCallback(self.workingFinished, StreamContentScreen, stream_content_provider, lst_items)
 
     def addCategory(self):
         self.session.openWithCallback(self.addCategoryCB, InputBox, _("Set category name"))
@@ -550,150 +540,3 @@ class ContentScreen(BaseContentScreen, DownloadList, TipBar):
             self.toggleCancelLoading()
         else:
             self.contentHandler.exit_item()
-
-
-class StreamContentScreen(BaseContentScreen, DownloadList, TipBar):
-    CONTEXT_TIP = (KEY_MENU_IMG, _("show menu of current item"))
-    LIVE_PIXMAP = None
-
-    def __init__(self, session, content_provider, lst_items):
-        contentHandler = StreamContentHandler(session, self, content_provider)
-        BaseContentScreen.__init__(self, session, contentHandler, lst_items)
-        self.content_provider = content_provider
-        # include DownloadList
-        DownloadList.__init__(self)
-
-        # include TipList
-        TipBar.__init__(self, [self.CONTEXT_TIP], startOnShown=True)
-
-        self["key_red"] = Label(_("Remove"))
-        self["key_green"] = Label(_("Downloads"))
-        self["key_yellow"] = Label("")
-        self["key_blue"] = Label("")
-
-        self['archive_label'] = Label(_("Stream player"))
-        self['streaminfo_label'] = MyConditionalLabel(_("STREAM INFO"), self.isStream)
-        self['streaminfo'] = MyConditionalLabel("", self.isStream)
-        self['protocol_label'] = MyConditionalLabel(_("PROTOCOL:"), self.isStream)
-        self['protocol'] = MyConditionalLabel("", self.isStream)
-        self['playdelay_label'] = MyConditionalLabel(_("PLAY DELAY:"), self.isStream)
-        self['playdelay'] = MyConditionalLabel("", self.isStream)
-        self['livestream_pixmap'] = PixmapConditional()
-        self['rtmpbuffer_label'] = MyConditionalLabel(_("RTMP BUFFER:"), self.isRtmpStream)
-        self['rtmpbuffer'] = MyConditionalLabel("", self.isRtmpStream)
-        self['playerbuffer_label'] = MyConditionalLabel(_("PLAYER BUFFER:"), self.isGstreamerPlayerSelected)
-        self['playerbuffer'] = MyConditionalLabel("", self.isGstreamerPlayerSelected)
-
-
-        self["actions"] = ActionMap(["archivCZSKActions"],
-            {
-                "ok": self.ok,
-                "up": self.up,
-                "down": self.down,
-                "cancel": self.cancel,
-                "green" : self.openDownloads,
-                "menu": self.menu
-            }, -2)
-
-
-        self["StreamAction"] = ActionMap(["StreamActions"],
-            {
-                "incBuffer": self.increaseRtmpBuffer,
-                "decBuffer": self.decreaseRtmpBuffer,
-                "incPlayDelay" : self.increasePlayDelay,
-                "decPlayDelay" : self.decreasePlayDelay,
-                "red" : self.removeStream,
-                "refresh":self.refreshList
-            }, -3)
-
-        self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-
-        self.onUpdateGUI.append(self.updateStreamInfo)
-        self.onLayoutFinish.append(self.updateGUI)
-        self.onClose.append(self.__onClose)
-
-    def openDownloads(self):
-        import download
-        if not self.working:
-            self.workingStarted()
-            download.openDownloads(self.session, "Streamy", self.content_provider, self.workingFinished)
-
-    def isStream(self):
-        it = self.getSelectedItem()
-        return isinstance(it, PVideo)
-
-    def isRtmpStream(self):
-        it = self.getSelectedItem()
-        return isinstance(it, PVideo) and it.url.startswith('rtmp')
-
-    def isGstreamerPlayerSelected(self):
-        it = self.getSelectedItem()
-        return isinstance(it, PVideo) and config.plugins.archivCZSK.videoPlayer.detectedType.getValue() == 'gstreamer'
-
-    def updateStreamInfo(self):
-        it = self.getSelectedItem()
-        if isinstance(it, (PFolder, PPlaylist, PExit)):
-            pass
-        else:
-            stream = it.stream
-            if self.isStream():
-                self['protocol'].setText(it.get_protocol())
-                self['playdelay'].setText(str(stream.playDelay))
-                self['livestream_pixmap'].instance.setPixmap(self.LIVE_PIXMAP)
-            if self.isRtmpStream():
-                self['rtmpbuffer'].setText(str(stream.buffer))
-            if self.isGstreamerPlayerSelected():
-                self['playerbuffer'].setText(str(stream.playerBuffer))
-
-        self['streaminfo_label'].update()
-        self['streaminfo'].update()
-        self['protocol_label'].update()
-        self['protocol'].update()
-        self['playdelay_label'].update()
-        self['playdelay'].update()
-        self['livestream_pixmap'].update()
-        self['rtmpbuffer_label'].update()
-        self['rtmpbuffer'].update()
-        self['playerbuffer_label'].update()
-        self['playerbuffer'].update()
-
-
-    def increaseRtmpBuffer(self):
-        if not self.working:
-            stream = self.selected_it.stream
-            if stream is not None and isinstance(stream, RtmpStream):
-                stream.rtmpBuffer += 1000
-                self['rtmpbuffer'].setText(str(stream.rtmpBuffer))
-
-    def decreaseRtmpBuffer(self):
-        if not self.working:
-            stream = self.selected_it.stream
-            if stream is not None and isinstance(stream, RtmpStream):
-                if stream.rtmpBuffer > 1000:
-                    stream.rtmpBuffer -= 1000
-                    self['rtmpbuffer'].setText(str(stream.rtmpBuffer))
-
-    def increasePlayDelay(self):
-        if not self.working:
-            stream = self.selected_it.stream
-            if stream is not None and isinstance(stream, Stream):
-                stream.playDelay += 1
-                self['playdelay'].setText(str(stream.playDelay))
-
-    def decreasePlayDelay(self):
-        if not self.working:
-            stream = self.selected_it.stream
-            if stream is not None and isinstance(stream, Stream):
-                if stream.playDelay > 3:
-                    stream.playDelay -= 1
-                    self['playdelay'].setText(str(stream.playDelay))
-
-    def removeStream(self):
-        if not self.working:
-            self.contentHandler.ask_remove_stream(self.getSelectedItem())
-
-    def cancel(self):
-        self.contentHandler.exit_item()
-
-    def __onClose(self):
-        self.session.nav.playService(self.oldService)

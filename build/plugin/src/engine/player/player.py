@@ -424,7 +424,7 @@ class GStreamerVideoPlayer(CustomVideoPlayer):
 
 	def bufferFull(self):
 		if self.useBufferControl:
-			if self.seekstate != self.SEEK_STATE_PLAY :
+			if self.seekstate != self.SEEK_STATE_PLAY:
 				log.debug("Buffer filled start playing")
 				self.setSeekState(self.SEEK_STATE_PLAY)
 
@@ -444,36 +444,6 @@ class EPlayer3VideoPlayer(CustomVideoPlayer):
 class EPlayer2VideoPlayer(CustomVideoPlayer):
 	def __init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload=False, subtitles=None):
 		CustomVideoPlayer.__init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload, subtitles)
-		self.playService()
-
-
-class GSTStreamVideoPlayer(GStreamerVideoPlayer):
-	def __init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload=False, subtitles=None):
-		onStartShow = repeat = len(playlist) > 1
-		CustomVideoPlayer.__init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload, subtitles,
-								   autoPlay=False, onStartShow=onStartShow, showProtocol=True, repeat=repeat)
-		self.gstreamerSetting = self.settings
-		self.useBufferControl = False
-		self.setBufferMode(int(self.gstreamerSetting.bufferMode.getValue()))
-
-		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-            {
-                iPlayableService.evBuffering: self._evUpdatedBufferInfo,
-            })
-		self.playService()
-
-class EP3StreamVideoPlayer(CustomVideoPlayer):
-	def __init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload=False, subtitles=None):
-		onStartShow = repeat = len(playlist) > 1
-		CustomVideoPlayer.__init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload, subtitles,
-								   autoPlay=False, showProtocol=True, onStartShow=onStartShow, repeat=repeat)
-		self.playService()
-
-class EP2StreamVideoPlayer(CustomVideoPlayer):
-	def __init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload=False, subtitles=None):
-		onStartShow = repeat = len(playlist) > 1
-		CustomVideoPlayer.__init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload, subtitles,
-								   autoPlay=False, showProtocol=True, onStartShow=onStartShow, repeat=repeat)
 		self.playService()
 
 class DownloadSupport(object):
@@ -818,10 +788,10 @@ class Player(DownloadSupport, RTMPGWSupport):
 
 	def __getVideoPlayer(self):
 		session = self.session
-		if isinstance(session.current_dialog, (CustomVideoPlayer, StandardVideoPlayer, StandardStreamVideoPlayer)):
+		if isinstance(session.current_dialog, (CustomVideoPlayer, StandardVideoPlayer)):
 			return session.current_dialog
 		for dialog in session.dialog_stack:
-			if isinstance(dialog, (CustomVideoPlayer, StandardVideoPlayer, StandardStreamVideoPlayer)):
+			if isinstance(dialog, (CustomVideoPlayer, StandardVideoPlayer)):
 				return dialog
 		return None
 
@@ -918,32 +888,3 @@ class Player(DownloadSupport, RTMPGWSupport):
 		self.session.nav.playService(self.oldService)
 		if self.callback:
 			self.callback()
-
-
-
-class StreamPlayer(Player):
-
-	def _openVideoPlayer(self, sref, subs, vpc, gstd, pad):
-		videoPlayerSetting = self.settings.type.getValue()
-		playerType = self.settings.detectedType.getValue()
-
-		if videoPlayerSetting == 'standard':
-			self.session.openWithCallback(self.exit, StandardStreamVideoPlayer, sref,
-										  self.playlist, self.playlistName, self._playlistCallback)
-
-		elif videoPlayerSetting == 'custom':
-			if playerType == 'gstreamer':
-				if gstd:
-					path = self.gstDownload.path
-					prebufferP = self.gstDownload.preBufferPercent
-					prebufferS = self.gstDownload.preBufferSeconds
-					videoPlayerController = GStreamerDownloadController(path, prebufferP, prebufferS)
-					pad = True
-				self.session.openWithCallback(self.exit, GSTStreamVideoPlayer, sref, vpc, self.playlist,
-											  self.playlistName, self._playlistCallback, pad, subs)
-			elif playerType == 'eplayer3':
-				self.session.openWithCallback(self.exit, EP3StreamVideoPlayer, sref, vpc, self.playlist,
-											  self.playlistName, self._playlistCallback, pad, subs)
-			elif playerType == 'eplayer2':
-				self.session.openWithCallback(self.exit, EP2StreamVideoPlayer, sref, vpc, self.playlist,
-											  self.playlistName, self._playlistCallback, pad, subs)

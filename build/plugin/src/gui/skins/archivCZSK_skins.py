@@ -99,44 +99,6 @@ ContentScreen_HD = """
         </screen>
              """
 
-StreamContentScreen_SD = """
-        <screen position="center,center" size="720,576" flags="wfNoBorder" title="ArchivCZSK" >
-            <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
-            <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
-            <widget name="key_yellow" position="364,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
-            <widget name="key_blue" position="542,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
-            <widget name="path_label" position="15,60" size="700,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
-            <eLabel position="15,90" size="700,  1" zPosition="1" backgroundColor="#C4C4C4" />
-            <widget name="menu" position="0,95" size="720,405" transparent="1" scrollbarMode="showOnDemand" />
-            <widget name="tip_pixmap" position="5,540" size="35,25" zPosition="2" alphatest="on" />
-            <widget name="tip_label" position="45,540" size="535,25" valign="center" halign="left" zPosition="2" font="Regular;18" transparent="1" foregroundColor="white" />
-        </screen>
-        """
-
-
-StreamContentScreen_HD = """
-        <screen backgroundColor="background" name="StreamContentScreen_HD" position="center,90" size="900,575" title="Streams">
-            <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,520" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,520" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="454,520" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,520" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget name="menu" position="13,102" scrollbarMode="showOnDemand" size="530,330" transparent="1" />
-            <widget alphatest="on" name="tip_pixmap" position="8,442" size="35,25" zPosition="2" />
-            <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,442" size="535,25" transparent="1" valign="center" zPosition="2" />
-            <widget backgroundColor="background" font="Regular; 24" name="streaminfo_label" position="604,120" size="226,34" />
-            <widget backgroundColor="background" font="Regular; 20" foregroundColor="#e5b243" name="protocol_label" position="579,170" size="167,25" />
-            <widget backgroundColor="background" font="Regular; 20" name="protocol" position="771,169" size="85,25" />
-            <widget backgroundColor="background" font="Regular; 20" foregroundColor="#e5b243" name="playdelay_label" position="580,207" size="167,25" />
-            <widget backgroundColor="background" font="Regular; 34" foregroundColor="#e5b243" halign="center" name="archive_label" position="32,6" size="835,34" />
-            <widget backgroundColor="background" font="Regular; 20" name="playdelay" position="770,207" size="85,25" />
-            <widget backgroundColor="background" font="Regular; 20" name="rtmpbuffer" position="769,244" size="85,25" />
-            <widget backgroundColor="background" font="Regular; 20" foregroundColor="#e5b243" name="rtmpbuffer_label" position="580,244" size="167,25" />
-            <widget backgroundColor="background" font="Regular; 20" foregroundColor="#e5b243" name="playerbuffer_label" position="581,284" size="167,25" />
-            <widget backgroundColor="background" font="Regular; 20" name="playerbuffer" position="769,284" size="85,25" />
-            <widget alphatest="on" backgroundColor="background" name="livestream_pixmap" position="8,442" size="35,25" zPosition="2" />
-        </screen>"""
-
-
 ContentMenuScreen_HD = """
         <screen name="CtxMenu" position="center,center" size="500,300">
             <widget name="menu" position="0,0" size="500,290" scrollbarMode="showOnDemand" />

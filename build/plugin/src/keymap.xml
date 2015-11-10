@@ -55,13 +55,6 @@
 		<key id="KEY_AUDIO" mapto="audioSelection" flags="m" />
 	</map>
 
-	<map context="StreamActions">
-		<key id="KEY_1" mapto="incBuffer" flags="m" />
-		<key id="KEY_4" mapto="decBuffer" flags="m" />
-		<key id="KEY_2" mapto="incPlayDelay" flags="m" />
-		<key id="KEY_5" mapto="decPlayDelay" flags="m" />
-	</map>
-
 	<map context="SubtitlesActions">
 		<key id="KEY_SUBTITLE" mapto="subtitles" flags="m" />
 		<key id="KEY_TEXT" mapto="subtitles" flags="m" />
