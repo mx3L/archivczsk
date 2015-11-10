@@ -315,8 +315,8 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self["version"] = Label("")
         self["about"] = Label("")
 
-        self["key_red"] = Label("")
-        self["key_green"] = Label(_("Manager"))
+        self["key_red"] = Label(_("Manager"))
+        self["key_green"] = Label()
         self["key_yellow"] = Label("")
         self["key_blue"] = Label(_("Settings"))
 
@@ -327,7 +327,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
                 "up": self.up,
                 "down": self.down,
                 "blue": self.openSettings,
-                "green": self.openAddonManagement,
+                "red": self.openAddonManagement,
                 "menu" : self.menu
             }, -2)
         # after layout show update item "GUI" - edit: shamann
