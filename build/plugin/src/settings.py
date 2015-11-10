@@ -36,7 +36,7 @@ AZBOX = (MODEL == 'Azbox')
 
 PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions', 'archivCZSK')
 IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
-SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skin')
+SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skins')
 REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories')
 STREAM_PATH = os.path.join(PLUGIN_PATH, 'streams/streams.xml')
 
@@ -149,6 +149,8 @@ config.plugins.archivCZSK.epg_menu = ConfigYesNo(default=True)
 config.plugins.archivCZSK.autoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.preload = ConfigYesNo(default=True)
 config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
+#TODO fill this ConfigSelection with possible skins
+config.plugins.archivCZSK.skin = ConfigSelection(default="", choices=[])
 
 choicelist = [('1', _("info")), ('2', _("debug"))]
 config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choicelist)

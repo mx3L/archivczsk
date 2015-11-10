@@ -12,7 +12,6 @@ from Components import Label
 from enigma import getDesktop
 
 # plugin imports
-from skins import archivCZSK_skins
 from common import PanelList, PanelListEntryHD, PanelListEntrySD
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK import log
@@ -28,38 +27,9 @@ class BaseArchivCZSKScreen(Screen):
         #setting SD/HD skin
         if getDesktop(0).size().width() >= 1280:
             self.HD = True
-        if self.HD and hasattr(archivCZSK_skins, self.__class__.__name__ + '_HD'):
-            log.debug('setting %s skin' , self.__class__.__name__ + '_HD')
-            self.skin = getattr(archivCZSK_skins, self.__class__.__name__ + '_HD')
-            
-        elif not self.HD and hasattr(archivCZSK_skins, self.__class__.__name__ + '_SD'):
-            log.debug('setting %s skin' , self.__class__.__name__ + '_SD')
-            self.skin = getattr(archivCZSK_skins, self.__class__.__name__ + '_SD')
-            
-        else:
-            if hasattr(archivCZSK_skins, self.__class__.__name__):
-                self.skin = getattr(archivCZSK_skins, self.__class__.__name__)
-                log.debug('setting %s skin' , self.__class__.__name__)
-                
-            else:
-                log.debug("Cannot find skin for screen %s" , self.__class__.__name__)
 
-        #Screen initialization
         if initScreen:    
             Screen.__init__(self, session)
-        
-        
-    def setSkin(self, skinName):
-        if hasattr(archivCZSK_skins, skinName):
-            self.skin = getattr(archivCZSK_skins, skinName)
-        else:
-            log.debug("cannot find skinName '%s'", skinName)
-            
-    def setSkinName(self, skinName):
-        self.skinName = skinName
-        
-        
-
         
 class BaseArchivCZSKMenuListScreen(BaseArchivCZSKScreen):
     """Base Screen for screens with menu list"""

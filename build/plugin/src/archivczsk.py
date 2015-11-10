@@ -12,6 +12,7 @@ import traceback
 from Components.config import config, configfile
 from Screens.MessageBox import MessageBox
 from Components.Console import Console
+from skin import loadSkin
 
 from engine.addon import VideoAddon, XBMCAddon
 from engine.exceptions.updater import UpdateXMLVersionError
@@ -56,6 +57,21 @@ class ArchivCZSK():
             else:
                 ArchivCZSK.add_repository(repository)
         ArchivCZSK.__loaded = True
+
+    @staticmethod
+    def load_skin():
+        from enigma import getDesktop
+        if getDesktop(0).size().width() >= 1280:
+            skin_default_path = os.path.join(settings.SKIN_PATH, "default_hd.xml")
+        else:
+            skin_default_path = os.path.join(settings.SKIN_PATH, "default_sd.xml")
+        skin_name = config.plugins.archivCZSK.skin.value
+        skin_path = os.path.join(settings.SKIN_PATH, skin_name+".xml")
+        if not os.path.isfile(skin_path):
+            log.error("skin '%s' doesn't exist"% skin_path)
+            skin_path = skin_default_path
+        log.info("loading skin %s" % skin_path)
+        loadSkin(skin_path)
 
     @staticmethod
     def get_repository(repository_id):

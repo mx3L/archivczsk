@@ -104,13 +104,13 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupportSt
 
 		# # set default/non-default skin according to SD/HD mode
 		if self.settings.useDefaultSkin.getValue():
-			self.setSkinName("MoviePlayer")
+			self.skinName = "MoviePlayer"
 		else:
 			HD = getDesktop(0).size().width() == 1280
 			if HD:
-				self.setSkin("ArchivCZSKMoviePlayer_HD")
+				self.skinName = "ArchivCZSKMoviePlayer"
 			else:
-				self.setSkinName("MoviePlayer")
+				self.skinName = "MoviePlayer"
 
 
 		# # init custom infobar (added info about download speed, buffer level..)

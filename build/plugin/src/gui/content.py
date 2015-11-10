@@ -197,10 +197,7 @@ class VideoAddonsManagementScreen(BaseContentScreen, TipBar):
         addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
         BaseContentScreen.__init__(self, session, contentHandler, addonItems)
         TipBar.__init__(self, [], startOnShown=False)
-        if self.HD:
-            self.setSkin('ArchivCZSKContentScreen_HD')
-        else:
-            self.setSkin('ArchivCZSKContentScreen_SD')
+        self.skinName = "ArchivCZSKContentScreen"
         self.updateGUITimer = eTimer()
         self.updateGUITimer.callback.append(self.updateAddonGUI)
         self.onUpdateGUI.append(self.changeAddon)
