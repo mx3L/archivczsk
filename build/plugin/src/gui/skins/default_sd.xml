@@ -51,7 +51,7 @@
                                 MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=0),
                                 MultiContentEntryText(pos=(60, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
                             ]
-                            , True, "showAlways"),
+                            , True, "showOnDemand"),
                         },
                         "fonts": [gFont("Regular", 21)],
                         "itemHeight": 29

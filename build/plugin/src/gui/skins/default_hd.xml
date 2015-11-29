@@ -44,6 +44,7 @@
             <widget name="path_label" position="15,65" size="870,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
             <eLabel position="15,95" size="870,1" zPosition="1" backgroundColor="#C4C4C4" />
             <widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >
+                <convert type="ACZSKKodiToE2List">Index:1,ColorCodes,Bold:FCE083,Italic:FCE083</convert>
                 <convert type="TemplatedMultiContent">
                     {"templates":
                         {"default": (29, 
@@ -51,7 +52,7 @@
                                 MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=0),
                                 MultiContentEntryText(pos=(60, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
                             ]
-                            , True, "showAlways"),
+                            , True, "showOnDemand"),
                         },
                         "fonts": [gFont("Regular", 21)],
                         "itemHeight": 29
