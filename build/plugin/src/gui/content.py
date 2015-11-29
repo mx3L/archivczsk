@@ -4,6 +4,7 @@ import os
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap, PixmapConditional
+from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Screens.InputBox import InputBox
 from Screens.MessageBox import MessageBox
@@ -20,8 +21,8 @@ from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
     PVideoAddon, Stream, RtmpStream
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
-from base import BaseArchivCZSKMenuListScreen
-from common import MyConditionalLabel, PanelListEntryHD, PanelColorListEntry2, \
+from base import BaseArchivCZSKListSourceScreen
+from common import MyConditionalLabel,  PanelColorListEntry2, \
     LoadingScreen, TipBar, CutLabel
 from download import DownloadList
 from enigma import eTimer, eLabel
@@ -30,18 +31,16 @@ from skin import parseFont
 from webpixmap import WebPixmap
 
 
-PanelListEntry = PanelListEntryHD
-
 KEY_MENU_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_menu.png'))
 KEY_INFO_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_info.png'))
 KEY_5_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_5.png'))
 PATH_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'next.png'))
 
 
-class BaseContentScreen(BaseArchivCZSKMenuListScreen):
+class BaseContentScreen(BaseArchivCZSKListSourceScreen):
 
     def __init__(self, session, contentHandler, lst_items):
-        BaseArchivCZSKMenuListScreen.__init__(self, session)
+        BaseArchivCZSKListSourceScreen.__init__(self, session)
         self.contentHandler = contentHandler
         self.loadingScreen = session.instantiateDialog(LoadingScreen)
 
@@ -95,17 +94,6 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
         self["path_label"].setText(toString(path_text))
 
 
-    def updateMenuList(self, index=0):
-        menu_list = []
-        for idx, it in enumerate(self.lst_items):
-            entry = self._createMenuListEntry(it, idx)
-            menu_list.append(entry)
-        self["menu"].setList(menu_list)
-        self["menu"].moveToIndex(index)
-
-    def _createMenuListEntry(self, item, idx):
-        return PanelListEntry(item.name, idx, item.thumb)
-
     def refreshList(self):
         log.debug("refreshing screen of %s item" , self.parent_it.name)
         self.refreshing = True
@@ -150,10 +138,7 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
         self.stack.append({'lst_items':self.lst_items,
                             'parent_it':copy.copy(self.parent_it),
                            'refresh':self.refresh,
-                           'index':self["menu"].getSelectedIndex()})
-
-    def getSelectedIndex(self):
-        return self["menu"].getSelectedIndex()
+                           'index':self["menu"].index})
 
     def getParent(self):
         if len(self.stack) > 0:
@@ -191,13 +176,13 @@ class BaseContentScreen(BaseArchivCZSKMenuListScreen):
             self.contentHandler.info_item(self.getSelectedItem(), mode)
 
 
-class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
+class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen):
     def __init__(self, session, provider):
         contentHandler = VideoAddonManagementScreenContentHandler(session, self, provider)
         addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
         BaseContentScreen.__init__(self, session, contentHandler, addonItems)
-        TipBar.__init__(self, [], startOnShown=False)
         self.skinName = "ArchivCZSKContentScreen"
+        self["menu"].style = "management"
         self.updateGUITimer = eTimer()
         self.updateGUITimer.callback.append(self.updateAddonGUI)
         self.onUpdateGUI.append(self.changeAddon)
@@ -225,16 +210,24 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
         if self.execing:
             self.updateGUITimer.start(100, True)
 
-    def _createMenuListEntry(self, item, idx):
-        addon = item.addon
-        name = item.name
-        width = self["menu"].instance.size().width() - 5
-        if addon.get_info('broken'):
-            return PanelColorListEntry2(name, _('broken'), 0xffffff, 0xff0000, width)
-        elif not addon.get_setting('enabled'):
-            return PanelColorListEntry2(name, _('disabled'), 0xffffff, 0xffff00, width)
-        else:
-            return PanelColorListEntry2(name, _('enabled'), 0xffffff, 0x00ff00, width)
+    def updateMenuList(self, index=0):
+        itemList = []
+        itemColor = 0xffffff
+        addonState = _("enabled")
+        for item in self.lst_items:
+            addon = item.addon
+            if addon.get_info('broken'):
+                itemColor = 0xff0000
+                addonState = _("broken")
+            elif not addon.get_setting('enabled'):
+                itemColor = 0xffff00
+                addonState = _("disabled")
+            else:
+                itemColor = 0x00ff00
+                addonState = _("enabled")
+            itemList.append((toString(item.name), addonState, itemColor))
+        self["menu"].list = itemList
+        self["menu"].index = index
 
     def updateAddonGUI(self):
         image = None
@@ -335,18 +328,17 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self.updateGUITimer.stop()
         self.updateGUITimer = None
 
-    def _createMenuListEntry(self, item, idx):
-        name = item.name
-        thumb = item.thumb
-        try:
-            addon = item.addon
-        except AttributeError:
-            return PanelListEntry(name, idx, thumb)
-        if addon.get_info('broken'):
-            return PanelListEntry(name, idx, thumb, 0xff0000)
-        else:
-            return PanelListEntry(name, idx, thumb)
-
+    def updateMenuList(self, index=0):
+        itemList = []
+        itemColor = 0xffffff
+        for item in self.lst_items:
+            if getattr(item, "addon", False) and item.addon.get_info('broken'):
+                itemColor = 0xff0000
+            else:
+                itemColor = 0xffffff
+            itemList.append((toString(item.name), itemColor))
+        self["menu"].list = itemList
+        self["menu"].index = index
 
     def openSettings(self):
         if not self.working:
@@ -454,14 +446,6 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
 
         # include TipList
         TipBar.__init__(self, [self.CSFD_TIP, self.CONTEXT_TIP, self.INFO_TIP], startOnShown=True)
-        self.updateGUITimer = eTimer()
-        self.updateGUITimer.callback.append(self.updateImage)
-        enabledImage = False
-
-        if enabledImage and self.HD:
-            self.onUpdateGUI.append(self.changeImage)
-            self.setSkin("ContentScreen_HD_IMG")
-            self["image"] = WebPixmap()
 
         self["key_red"] = Label("")
         self["key_green"] = Label(_("Downloads"))
@@ -481,12 +465,11 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
                 "csfd": self.openCSFD
             }, -2)
 
-        self.onLayoutFinish.append(self.updateGUI)
-        self.onShown.append(self.setWindowTitle)
+        #self.onUpdateGUI.append(self.updateFullTitle)
+        self.onLayoutFinish.append(self.setWindowTitle)
 
     def setWindowTitle(self):
-        addon_name = self.addon.name.encode('utf-8')
-        self.setTitle(addon_name)
+        self.setTitle(toString(self.addon.name))
 
     def openAddonShortcuts(self):
         if not self.working:
@@ -531,6 +514,10 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
         it = self.getSelectedItem()
         img = it and it.image
         self['image'].load(img)
+
+    def updateMenuList(self, index=0):
+        self["menu"].list = [(LoadPixmap(toString(item.thumb)), toString(item.name)) for item in self.lst_items]
+        self["menu"].index = index
 
     def cancel(self):
         if self.working:

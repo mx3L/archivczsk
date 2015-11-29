@@ -142,24 +142,6 @@ class PanelListDownload(MenuList):
         self.l.setFont(Font.REGULAR_BIG, gFont("Regular", 23))
         self.l.setFont(Font.REGULAR_SMALL, gFont("Regular", 17))
 
-def PanelListEntryHD(name, idx, png='', textcolor=None):
-    res = [(name)]
-    if fileExists(png):
-        res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=loadPNG(png)))
-        res.append(MultiContentEntryFormattedText(pos=(60, 5), size=(950, 30), fontSize=Size.MEDIUM, flags=RT_VALIGN_TOP, text=toString(name), color=textcolor))
-    else:
-        res.append(MultiContentEntryFormattedText(pos=(5, 5), size=(950, 30), fontSize=Size.MEDIUM, flags=RT_VALIGN_TOP, text=toString(name), color=textcolor))
-    return res
-
-def PanelListEntrySD(name, idx, png='', textcolor=None):
-    res = [(name)]
-    if fileExists(png):
-        res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=loadPNG(png)))
-        res.append(MultiContentEntryFormattedText(pos=(60, 5), size=(950, 30), fontSize=Size.MEDIUM, flags=RT_VALIGN_TOP, text=toString(name), color=textcolor))
-    else:
-        res.append(MultiContentEntryFormattedText(pos=(5, 5), size=(330, 30), fontSize=Size.MEDIUM, flags=RT_VALIGN_TOP, text=toString(name), color=textcolor))
-    return res
-
 def PanelListDownloadEntry_SD(name, download):
     res = [(name)]
     res.append(MultiContentEntryText(pos=(0, 5), size=(610, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name)))
@@ -194,13 +176,6 @@ def PanelColorListEntry2(name, value, colorName, colorValue, sizePanelX):
     res = [(name)]
     res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name), color=colorName))
     res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=toString(value), color=colorValue))
-    return res
-
-def PanelListEntry2(name, sizePanelX, png=''):
-    res = [(name)]
-    if fileExists(png):
-        res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 27), png=loadPNG(png)))
-        res.append(MultiContentEntryText(pos=(60, 5), size=(sizePanelX - 60, 30), font=Font.REGULAR_SMALL, flags=RT_HALIGN_LEFT | RT_VALIGN_CENTER, text=name))
     return res
 
 def PanelListDownloadListEntry(pdownload):

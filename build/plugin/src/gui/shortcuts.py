@@ -4,22 +4,22 @@ Created on 28.4.2012
 
 @author: marko
 '''
-from Screens.MessageBox import MessageBox
-from Components.Button import Button
 from Components.ActionMap import NumberActionMap
+from Components.Button import Button
+from Screens.MessageBox import MessageBox
+from Tools.LoadPixmap import LoadPixmap
 
 from Plugins.Extensions.archivCZSK import _
-from base import BaseArchivCZSKMenuListScreen
-from common import PanelListEntryHD
+from common import toString
+from base import BaseArchivCZSKListSourceScreen
 
-PanelListEntry = PanelListEntryHD
 
 def openShortcuts(session, addon, cb):
 	session.openWithCallback(cb, ArchivCZSKShortcutsScreen, addon)
 
-class ArchivCZSKShortcutsScreen(BaseArchivCZSKMenuListScreen):
+class ArchivCZSKShortcutsScreen(BaseArchivCZSKListSourceScreen):
 	def __init__(self, session, addon):
-		BaseArchivCZSKMenuListScreen.__init__(self, session)
+		BaseArchivCZSKListSourceScreen.__init__(self, session)
 
 		self.addon = addon
 		self.lst_items = self.addon.provider.get_shortcuts()
@@ -56,13 +56,10 @@ class ArchivCZSKShortcutsScreen(BaseArchivCZSKMenuListScreen):
 			self.addon.provider.remove_shortcut(it_shortcut)
 			self.lst_items = self.addon.provider.get_shortcuts()
 			self.updateMenuList()
-
-	def updateMenuList(self):
-		menu_list = []
-		for idx, x in enumerate(self.lst_items):
-			menu_list.append(PanelListEntry(x.name, idx, x.thumb))
-		self["menu"].setList(menu_list)
-
+	
+	def updateMenuList(self, index=0):
+		self["menu"].list = [(LoadPixmap(toString(item.thumb)), toString(item.name)) for item in self.lst_items]
+		self["menu"].index = index
 
 	def ok(self):
 		self.close(self.getSelectedItem())

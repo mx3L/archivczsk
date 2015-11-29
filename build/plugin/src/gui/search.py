@@ -3,40 +3,34 @@ Created on 2.3.2013
 
 @author: marko
 '''
-import os
 
-from Screens import Screen
-from Screens.EpgSelection import EPGSelection
+from Components.ActionMap import ActionMap
+from Components.Label import Label
+from Components.Sources.EventInfo import EventInfo
+from Components.Sources.StaticText import StaticText
 from Screens.ChannelSelection import ChannelSelectionBase
+from Screens.EpgSelection import EPGSelection
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Components.ActionMap import ActionMap, NumberActionMap
-from Components.Button import Button
-from Components.Label import Label
-from Components.ActionMap import ActionMap
-from Components.Sources.EventInfo import EventInfo
-
-
-from Plugins.Extensions.archivCZSK import _, settings
 from Plugins.Extensions.archivCZSK.client import seeker
-from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, PanelList, PanelListEntryHD, PanelListEntry2
-from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKMenuListScreen
+from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKListSourceScreen
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, toString
 
-    
-class ArchivCZSKSearchClientScreen(BaseArchivCZSKMenuListScreen):
-    WIDTH_HD = 400
-    WIDTH_SD = 200
+
+class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
     def __init__(self, session, currService):
-        BaseArchivCZSKMenuListScreen.__init__(self, session)
+        BaseArchivCZSKListSourceScreen.__init__(self, session)
         self.session = session
         self.currService = currService
         self.searchList = seeker.getCapabilities()
         event = EventInfo(session.nav, EventInfo.NOW).getEvent()
         self.searchExp = event and event.getEventName() or ''
-        self["infolist"] = PanelList([], 30)
+        self['red_label'] = StaticText(_("change search expression"))
+        self['green_label'] = StaticText(_("remove diacritic"))
+        self['blue_label'] = StaticText(_("choose from EPG"))
         self['search'] = Label(self.searchExp)
         
-        self["actions"] = NumberActionMap(["archivCZSKActions"],
+        self["actions"] = ActionMap(["archivCZSKActions"],
                 {
                 "ok": self.ok,
                 "cancel": self.cancel,
@@ -48,51 +42,32 @@ class ArchivCZSKSearchClientScreen(BaseArchivCZSKMenuListScreen):
                 }, -2)
         
         self.onShown.append(self.updateTitle)
-        self.onLayoutFinish.append(self.disableSelection)
-        self.onLayoutFinish.append(self.initInfoList)
         
     def updateTitle(self):
         self.title = _("ArchivCZSK Search")
         
-    def disableSelection(self):
-        self["infolist"].selectionEnabled(False)
-        
-    def initInfoList(self):
-        blueB = os.path.join(settings.IMAGE_PATH, 'buttons/blue.png')
-        redB = os.path.join(settings.IMAGE_PATH, 'buttons/red.png')
-        yellowB = os.path.join(settings.IMAGE_PATH, 'buttons/yellow.png')
-        infolist = []
-        infolist.append(PanelListEntry2(_("change search expression"), self.WIDTH_HD, yellowB))
-        infolist.append(PanelListEntry2(_("remove diacritic"), self.WIDTH_HD, redB))
-        infolist.append(PanelListEntry2(_("choose from EPG"), self.WIDTH_HD, blueB))
-        self['infolist'].l.setList(infolist)
-        
-    def updateMenuList(self):
-        list = []
-        for idx, menu_item in enumerate(self.searchList):
-            list.append(PanelListEntryHD(menu_item[0], idx))
-        self["menu"].setList(list) 
-        
+    def updateMenuList(self, index=0):
+        self["menu"].list = [(toString(item[0]), ) for item in self.searchList]
+        self["menu"].index = index
+    
     def ok(self):
         if not self.working:
             self.working = True
-            idx = self['menu'].getSelectedIndex()
-            self.search(self.searchList[idx][1], self.searchList[idx][2])
+            self.search(self.searchList[self["menu"].index][1], self.searchList[self["menu"].index][2])
                 
     def cancel(self):
         seeker.searchClose()
         self.close(None)
+
+    def keyRed(self):
+        self.changeSearchExp()
+
+    def keyGreen(self):
+        self.removeDiacritics()
     
     def keyBlue(self):
         self.chooseFromEpg()
-        
-    def keyYellow(self):
-        self.changeSearchExp()
-        
-    def keyRed(self):
-        self.removeDiacritics()
-        
-        
+
     def removeDiacritics(self):
         try:
             import unicodedata

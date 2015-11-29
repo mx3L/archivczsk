@@ -4,7 +4,27 @@
             <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="454,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget name="menu" position="12,62" scrollbarMode="showNever" size="435,427" transparent="1" />
+            <widget source="menu" render="Listbox" position="12,62" size="435,427" transparent="1" >
+                <convert type="TemplatedMultiContent">
+                    {"templates":
+                        {"default": (29,
+                            [
+                                MultiContentEntryText(pos=(0, 5), size=(430, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xff000001), # addon/category name
+                            ]
+                            , True, "showNever"), 
+                        "management": (29, 
+                            [
+                                MultiContentEntryText(pos=(0, 5), size=(430, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xffffff),
+                                MultiContentEntryText(pos=(0, 5), size=(430, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_RIGHT, text=1, color=0xff000002)
+                            ]
+                            , True, "showNever"),
+
+                        },
+                        "fonts": [gFont("Regular", 21)],
+                        "itemHeight": 29
+                    }
+                </convert>
+            </widget>
             <widget alphatest="on" name="image" position="543,124" size="256,256" zPosition="2" />
             <widget font="Regular; 25" foregroundColor="yellow" halign="center" name="title" position="472,64" size="379,40" transparent="1" />
             <widget font="Regular;20" foregroundColor="yellow" halign="left" name="author" position="487,402" size="379,25" transparent="1" />
@@ -23,12 +43,26 @@
 
             <widget name="path_label" position="15,65" size="870,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
             <eLabel position="15,95" size="870,1" zPosition="1" backgroundColor="#C4C4C4" />
-            <widget name="menu" position="10,110" scrollbarMode="showOnDemand" size="880,420" transparent="1" />
+            <widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >
+                <convert type="TemplatedMultiContent">
+                    {"templates":
+                        {"default": (29, 
+                            [
+                                MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=0),
+                                MultiContentEntryText(pos=(60, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+                            ]
+                            , True, "showAlways"),
+                        },
+                        "fonts": [gFont("Regular", 21)],
+                        "itemHeight": 29
+                    }
+                </convert>
+            </widget>
             <widget font = "Regular; 16" foregroundColor = "white" halign = "left" name = "status_label" position = "12,508" size = "535,25" transparent = "1" valign = "center" zPosition = "2" />
             <widget alphatest="on" name="tip_pixmap" position="9,544" size="35,25" zPosition="2" />
             <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,548" size="493,25" transparent="1" valign="center" zPosition="2" />
         </screen>
-        
+
         <screen name="ArchivCZSKVideoPlayerInfoScreen" position="center,center" size="900,575" title="ContentScreen">
             <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
@@ -57,10 +91,29 @@
         </screen> 
 
         <screen name="ArchivCZSKSearchClientScreen" position="325,163" size="500,400">
-            <widget name="menu" position="0,207" scrollbarMode="showOnDemand" size="500,196"  />
-            <widget name="search" position="57,13" size="424,69" foregroundColor="#e5b243" halign="center" font="Regular; 23" />
             <ePixmap name="search_pixmap" position="10,13" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/search.png" />
+            <widget name="search" position="57,13" size="424,69" foregroundColor="#e5b243" halign="center" font="Regular; 23" />
             <widget name="infolist" position="10,90" size="471,112" />
+            <ePixmap name="red_pixmap" position="10,90" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/red.png" />
+            <widget source="red_label" render="Label" position="50 ,90" size="330,28" font="Regular;23" halign="left" backgroundColor="background"  transparent="1"/>
+            <ePixmap name="green_pixmap" position="10,120" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/green.png" />
+            <widget source="green_label" render="Label" position="50 ,120" size="330,28" font="Regular;23" halign="left" backgroundColor="background"  transparent="1"/>
+            <ePixmap name="blue_pixmap" position="10,150" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/blue.png" />
+            <widget source="blue_label" render="Label" position="50 ,150" size="330,28" font="Regular;23" halign="left" backgroundColor="background"  transparent="1"/>
+            <widget source="menu" render="Listbox" position="0,207" size="500,170" transparent="1" >
+                <convert type="TemplatedMultiContent">
+                    {"templates":
+                        {"default": (29, 
+                            [
+                                MultiContentEntryText(pos=(10, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0)
+                            ]
+                            , True, "showOnDemand"),
+                        },
+                        "fonts": [gFont("Regular", 20)],
+                        "itemHeight": 29
+                    }
+                </convert>
+            </widget>
         </screen> 
 
          <screen name="ArchivCZSKChangelogScreen" position="center,center" size="900,576" title="Info" >
@@ -72,7 +125,21 @@
             <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="454,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
             <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="677,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
-            <widget name="menu" position="7,55" scrollbarMode="showOnDemand" size="885,445" transparent="1" />
+            <widget source="menu" render="Listbox" position="7,55" size="885,445" transparent="1" >
+                <convert type="TemplatedMultiContent">
+                    {"templates":
+                        {"default": (29, 
+                            [
+                                MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=0),
+                                MultiContentEntryText(pos=(60, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+                            ]
+                            , True, "showOnDemand"),
+                        },
+                        "fonts": [gFont("Regular", 21)],
+                        "itemHeight": 29
+                    }
+                </convert>
+            </widget>
         </screen>
 
         <screen name="ArchivCZSKDownloadListScreen" position="center,center" size="900,576" title="ShortcutsScreen">

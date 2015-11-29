@@ -36,7 +36,6 @@ def eventinfo(session, servicelist, **kwargs):
 	print str(ref)
 	session.open(ArchivCZSKSearchClientScreen, ref)
 	
-
 def main(session, **kwargs):
 	ArchivCZSK(session)
 

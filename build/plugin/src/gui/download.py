@@ -19,11 +19,9 @@ from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
 from base import BaseArchivCZSKScreen, BaseArchivCZSKMenuListScreen
-from common import PanelListEntryHD, PanelListDownload, PanelListDownloadEntry, \
+from common import PanelListDownload, PanelListDownloadEntry, \
     PanelListDownloadListEntry, MultiLabelWidget
 from enigma import eTimer
-
-PanelListEntry = PanelListEntryHD
 
 
 def openDownloads(session, name, content_provider, cb):
