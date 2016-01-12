@@ -7,11 +7,6 @@ from Components.config import config, ConfigInteger, ConfigSubsection, ConfigYes
 from Plugins.Extensions.archivCZSK import log
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0'
 
-if not hasattr(config,'mediaplayer'):
-    config.mediaplayer = ConfigSubsection()
-config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=True)
-config.mediaplayer.alternateUserAgent = ConfigText(default="")
-config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
 
 def loadSettings(userAgent="", extraHeaders={}, downloadMode=False):
     if userAgent != "" or len(extraHeaders) > 0 or downloadMode:
@@ -25,6 +20,11 @@ def resetSettings():
 class VideoPlaySettingsProvider(object):
     def __init__(self):
         self.__config = config.plugins.archivCZSK.videoPlayer
+        if not hasattr(config,'mediaplayer'):
+            config.mediaplayer = ConfigSubsection()
+        config.mediaplayer.useAlternateUserAgent = ConfigYesNo(default=True)
+        config.mediaplayer.alternateUserAgent = ConfigText(default="")
+        config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
         
     def setHTTPTimeout(self, timeout):
         self.__config.httpTimeout.setValue(str(timeout))
