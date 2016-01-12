@@ -17,9 +17,9 @@ pushd ${D} &> /dev/null
 PVER="0.72"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
-DSTAGEVER="6"
+DSTAGEVER="7"
 VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
-ADDONS_COMMIT="296bb0372035f0afa93d825cbd84fbe74d735b4c"
+ADDONS_COMMIT="0c95d70c8fc86ca5e77790580db08e7ac13014e5"
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all.ipk
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
