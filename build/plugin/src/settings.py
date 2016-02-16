@@ -149,8 +149,10 @@ config.plugins.archivCZSK.epg_menu = ConfigYesNo(default=True)
 config.plugins.archivCZSK.autoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.preload = ConfigYesNo(default=True)
 config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
-#TODO fill this ConfigSelection with possible skins
-config.plugins.archivCZSK.skin = ConfigSelection(default="", choices=[])
+
+skinChoices = [os.path.splitext(fname)[0] for fname in os.listdir(SKIN_PATH) if fname.endswith('.xml') ]
+skinChoices.append('auto')
+config.plugins.archivCZSK.skin = ConfigSelection(default="auto", choices=skinChoices)
 
 choicelist = [('1', _("info")), ('2', _("debug"))]
 config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choicelist)
@@ -223,6 +225,7 @@ def get_player_settings():
 
 def get_main_settings():
     list = []
+    list.append(getConfigListEntry(_("Skin"), config.plugins.archivCZSK.skin))
     list.append(getConfigListEntry(_("Allow auto-update"), config.plugins.archivCZSK.autoUpdate))
     # list.append(getConfigListEntry(_("Preload"), config.plugins.archivCZSK.preload))
     list.append(getConfigListEntry(_("Debug mode"), config.plugins.archivCZSK.debugMode))

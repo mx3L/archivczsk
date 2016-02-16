@@ -66,9 +66,8 @@ class ArchivCZSK():
         else:
             skin_default_path = os.path.join(settings.SKIN_PATH, "default_sd.xml")
         skin_name = config.plugins.archivCZSK.skin.value
-        skin_path = os.path.join(settings.SKIN_PATH, skin_name+".xml")
-        if not os.path.isfile(skin_path):
-            log.error("skin '%s' doesn't exist"% skin_path)
+        skin_path = os.path.join(settings.SKIN_PATH, skin_name + ".xml")
+        if skin_name == 'auto' or not os.path.isfile(skin_path):
             skin_path = skin_default_path
         log.info("loading skin %s" % skin_path)
         loadSkin(skin_path)
