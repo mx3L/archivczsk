@@ -18,10 +18,10 @@ PVER="0.72"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 DSTAGE="beta"
 DSTAGEVER="7"
-VER=$PVER\_$DSTAGE\_$DSTAGEVER\_$GITVER
+VER=$PVER-$DSTAGE-$DSTAGEVER-$GITVER
 ADDONS_COMMIT="0c95d70c8fc86ca5e77790580db08e7ac13014e5"
 
-PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all.ipk
+PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
 popd &> /dev/null
 
@@ -58,10 +58,9 @@ Architecture: all
 Section: extra
 Priority: optional
 Depends: enigma2-plugin-extensions-subssupport (>=1.5.4)
-Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl
+Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl, gst-plugins-bad-fragmented, gst-plugins-bad-rtmp
 Maintainer: mxfitsat@gmail.com
 Homepage: https://code.google.com/p/archivy-czsk/
-Source: https://code.google.com/p/archivy-czsk/
 Description: prehravanie CZ/SK archivov $VER"
 EOF
 
@@ -187,7 +186,8 @@ echo "2.0" > ${B}/debian-binary
 
 cd ${B}
 ls -la
-ar -r ${PKG} ./debian-binary ./data.tar.gz ./control.tar.gz
+ar -r ${PKG}.ipk ./debian-binary ./control.tar.gz ./data.tar.gz
+ar -r ${PKG}.deb ./debian-binary ./control.tar.gz ./data.tar.gz
 cd -
 
 rm -rf ${P}
