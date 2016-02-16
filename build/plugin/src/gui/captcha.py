@@ -17,6 +17,7 @@ from Components.config import config
 
 
 from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKScreen
 
@@ -56,8 +57,9 @@ class ArchivCZSKCaptchaScreen(BaseArchivCZSKScreen,VirtualKeyBoard):
         self.Scale = AVSwitch().getFramebufferScale()
         self.picPath = captcha_file
         self.picLoad = ePicLoad()
-        self.picLoad.PictureData.get().append(self.decodePicture)
+        self.picLoad_conn = eConnectCallback(self.picLoad.PictureData, self.decodePicture)
         self.onLayoutFinish.append(self.showPicture)
+        self.onClose.append(self.__onClose)
 
     def showPicture(self):
         self.picLoad.setPara([self["captcha"].instance.size().width(), self["captcha"].instance.size().height(), self.Scale[0], self.Scale[1], 0, 1, "#002C2C39"])
@@ -72,3 +74,7 @@ class ArchivCZSKCaptchaScreen(BaseArchivCZSKScreen,VirtualKeyBoard):
         if ptr != None:
             self["captcha"].instance.setPixmap(ptr.__deref__())
             self["captcha"].show()
+
+    def __onClose(self):
+        del self.picLoad_conn
+        del self.picLoad

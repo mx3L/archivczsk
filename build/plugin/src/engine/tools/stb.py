@@ -79,6 +79,10 @@ def _setBoxtype():
                 manu = "Dreambox"
                 model = "7020hd"
                 arch = "mipsel"
+        elif box == "dm7080hd":
+                manu = "Dreambox"
+                model = "7080hd"
+                arch = "mipsel"
         elif box == "elite":
                 manu = "Azbox"
                 model = "Elite"

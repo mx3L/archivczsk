@@ -7,6 +7,8 @@ Created on 16.5.2013
 from twisted.internet import defer
 from enigma import eTimer
 
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+
 bufferServicemp4 = True
 
 def setBufferSize(iStreamed, size):
@@ -67,6 +69,7 @@ class Video(object):
         self.session = session
         self.service = None
         self.__serviceTimer = eTimer()
+        self.__serviceTimer_conn = None
         self.__serviceTimerTryDelay = 500 #ms
         self.__serviceTryTime = 0
         self.__serviceTryLimit = serviceTryLimit * 1000
@@ -84,12 +87,12 @@ class Video(object):
         """
         
         def fireDeferred():
-            self.__serviceTimer.callback.remove(setService)
+            del self.__serviceTimer_conn
             self.__deferred.callback(None)
             self.__deferred = None
             
         def fireDeferredErr():
-            self.__serviceTimer.callback.remove(setService)
+            del self.__serviceTimer_conn
             self.__deferred.errback(defer.failure.Failure(Exception("")))
             self.__deferred = None
             
@@ -111,7 +114,7 @@ class Video(object):
             getService()
         
         self.__deferred = defer.Deferred()
-        self.__serviceTimer.callback.append(setService)
+        self.__serviceTimer_conn = eConnectCallback(self.__serviceTimer.timeout, setService)
         getService()
         return self.__deferred    
         

@@ -15,6 +15,7 @@ from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
@@ -139,9 +140,8 @@ class ArchivCZSKDownloadStatusScreen(BaseArchivCZSKScreen):
         self._download.onFinishCB.append(self.stopTimer)
 
         self.timer = eTimer()
-        self.timer_running = False
+        self.timer_conn = eConnectCallback(self.timer.timeout, self.updateStatus)
         self.timer_interval = 3000
-        self.timer.callback.append(self.updateStatus)
 
         self.onShown.append(self.updateStaticInfo)
         self.onShown.append(self.updateState)
@@ -166,12 +166,9 @@ class ArchivCZSKDownloadStatusScreen(BaseArchivCZSKScreen):
 
     def startTimer(self):
         self.timer.start(self.timer_interval)
-        self.timer_running = True
 
     def stopTimer(self, cb=None):
-        if self.timer_running:
-            self.timer.stop()
-            self.timer_running = False
+        self.timer.stop()
 
 
     def updateStaticInfo(self):
@@ -254,6 +251,7 @@ class ArchivCZSKDownloadStatusScreen(BaseArchivCZSKScreen):
         self._download.onFinishCB.remove(self.stopTimer)
 
         self.stopTimer()
+        del self.timer_conn
         del self.timer
 
 

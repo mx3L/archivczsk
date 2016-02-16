@@ -11,6 +11,7 @@ from exceptions.download import NotSupportedProtocolError
 try:
     from enigma import eConsoleAppContainer
     from Plugins.Extensions.archivCZSK import _
+    from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 except ImportError:
     pass
 
@@ -152,7 +153,7 @@ class DownloadManager(object):
 
     def removeDownload(self, download):
         if download.running:
-            download.pp.appClosed.append(download.remove)
+            download.onFinishCB.append(download.remove)
             download.cancel()
             self.download_lst.remove(download)
         else:
@@ -369,8 +370,8 @@ class RTMPDownloadE2(Download):
         Download.__init__(self, name, url, destDir, filename, quiet)
         self.pp = eConsoleAppContainer()
         #self.pp.dataAvail.append(self.__startCB)
-        self.pp.appClosed.append(self.__finishCB)
-        self.pp.stderrAvail.append(self.__outputCB)
+        self.appClosed_conn = eConnectCallback(self.pp.appClosed, self.__finishCB)
+        self.stderrAvail_conn = eConnectCallback(self.pp.stderrAvail, self.__outputCB)
         self.live = live
         self.realtime = realtime
 
@@ -429,8 +430,8 @@ class HTTPDownloadE2(Download):
         Download.__init__(self, name, url, destDir, filename, quiet)
         self.pp = eConsoleAppContainer()
         #self.pp.dataAvail.append(self.__startCB)
-        self.pp.stderrAvail.append(self.__outputCB)
-        self.pp.appClosed.append(self.__finishCB)
+        self.appClosed_conn = eConnectCallback(self.pp.appClosed, self.__finishCB)
+        self.stderrAvail_conn = eConnectCallback(self.pp.stderrAvail, self.__outputCB)
         if len(headers) > 0:
             self.headers = '--header ' + ' --header '.join([("'" + key + ': ' + value + "'") for key, value in headers.iteritems()])
         else: self.headers = ""
@@ -484,8 +485,8 @@ class GstDownload(Download):
         Download.__init__(self, name, url, destDir, filename, quiet)
         self.pp = eConsoleAppContainer()
         #self.pp.dataAvail.append(self.__startCB)
-        self.pp.stderrAvail.append(self.__outputCB)
-        self.pp.appClosed.append(self.__finishCB)
+        self.appClosed_conn = eConnectCallback(self.pp.appClosed, self.__finishCB)
+        self.stderrAvail_conn = eConnectCallback(self.pp.stderrAvail, self.__outputCB)
 
     def __startCB(self):
         self.running = True

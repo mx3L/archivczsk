@@ -15,6 +15,7 @@ from enigma import iPlayableService, eTimer, getDesktop
 from skin import parseColor
 
 from Plugins.Extensions.archivCZSK import _, settings, log
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKMenuListScreen
 from Plugins.Extensions.archivCZSK.gui.common import PanelList
 
@@ -131,7 +132,7 @@ class StatusScreen(Screen):
         statusPositionX = 50
         statusPositionY = 100
         self.delayTimer = eTimer()
-        self.delayTimer.callback.append(self.hideStatus)
+        self.delayTimer_conn = eConnectCallback(self.delayTimer.timeout, self.hideStatus)
         self.delayTimerDelay = 1500
 
         self.skin = """
@@ -157,6 +158,7 @@ class StatusScreen(Screen):
     def __onClose(self):
         print 'closing StatusScreen'
         self.delayTimer.stop()
+        del self.delayTimer_conn
         del self.delayTimer
 
 class InfoBarAspectChange(object):

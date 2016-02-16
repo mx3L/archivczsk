@@ -8,6 +8,8 @@ from os.path import isdir as os_path_isdir, isfile as os_isfile
 from Components.AVSwitch import AVSwitch
 from Components.config import config
 
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+
 def getAspect():
 	val = AVSwitch().getAspectRatioSetting()
 	if val == 0 or val == 1:
@@ -22,9 +24,14 @@ class WebPixmap(Pixmap):
 	def __init__(self, default = None):
 		Pixmap.__init__(self)
 		self.picload = ePicLoad()
-		self.picload.PictureData.get().append(self.setPixmapCB)
+		self.picload_conn = eConnectCallback(self.picload.PictureData, self.setPixmapCB)
 		self.cachedir = "/tmp/"
 		self.default = default
+	
+	def destroy(self):
+		del self.picload_conn
+		del self.picload
+		Pixmap.destroy(self)
 
 	def onShow(self):
 		Pixmap.onShow(self)
@@ -34,7 +41,7 @@ class WebPixmap(Pixmap):
 		self.picload.setPara((self.instance.size().width(), self.instance.size().height(), sc[0], sc[1], False, resize, background))
 
 	def load(self, url = None):
-         	if url is None:
+		if url is None:
 			self.instance.setPixmap(None)
 			return
 		url = isinstance(url,unicode) and url.encode('utf-8') or url

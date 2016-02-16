@@ -19,6 +19,7 @@ from enigma import ePicLoad, getDesktop
 
 from base import BaseArchivCZSKScreen
 from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.settings import ARCH,PLUGIN_PATH
 from Plugins.Extensions.archivCZSK.gui.common import showYesNoDialog, showInfoMessage, PanelColorListEntry, PanelList
 from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
@@ -149,15 +150,16 @@ class ArchivCZSKItemInfoScreen(BaseArchivCZSKScreen):
 		self.title = self.it.name.encode('utf-8', 'ignore')
 		self.Scale = AVSwitch().getFramebufferScale()
 		self.picLoad = ePicLoad()
-		self.picLoad.PictureData.get().append(self.decodePicture)
+		self.picLoad_conn = eConnectCallback(self.picLoad.PictureData, self.decodePicture)
 		self.onLayoutFinish.append(self.showPicture)
-	
+		self.onClose.append(self.__onClose)
+
 	def pageUp(self):
 		self["plot"].pageUp()
 
 	def pageDown(self):
 		self["plot"].pageDown()
-		
+
 	def showPicture(self):
 		if self.image_dest is not None:
 			self.picLoad.setPara([self["img"].instance.size().width(), self["img"].instance.size().height(), self.Scale[0], self.Scale[1], 0, 1, "#002C2C39"])
@@ -166,9 +168,13 @@ class ArchivCZSKItemInfoScreen(BaseArchivCZSKScreen):
 	def decodePicture(self, PicInfo=""):
 		ptr = self.picLoad.getData()
 		self["img"].instance.setPixmap(ptr)
-		
-		
-		
+
+	def __onClose(self):
+		del self.picLoad_conn
+		del self.picLoad
+
+
+
 class ArchivCZSKVideoPlayerInfoScreen(BaseArchivCZSKScreen):
 	GST_INSTALL = 0
 	GST_REINSTALL = 1

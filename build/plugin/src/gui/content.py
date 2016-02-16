@@ -11,6 +11,7 @@ from Screens.MessageBox import MessageBox
 from Tools.LoadPixmap import LoadPixmap
 
 from Plugins.Extensions.archivCZSK import _, log, settings
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
     VideoAddonContentProvider, ArchivCZSKContentProvider
 from Plugins.Extensions.archivCZSK.engine.handlers import \
@@ -184,7 +185,7 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen):
         self.skinName = "ArchivCZSKContentScreen"
         self["menu"].style = "management"
         self.updateGUITimer = eTimer()
-        self.updateGUITimer.callback.append(self.updateAddonGUI)
+        self.updateGUITimer_conn = eConnectCallback(self.updateGUITimer.timeout, self.updateAddonGUI)
         self.onUpdateGUI.append(self.changeAddon)
         self.onClose.append(self.__onClose)
         self["image"] = Pixmap()
@@ -261,7 +262,8 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen):
 
     def __onClose(self):
         self.updateGUITimer.stop()
-        self.updateGUITimer = None
+        del self.updateGUITimer_conn
+        del self.updateGUITimer
 
 
 
@@ -289,7 +291,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self.ctx_items.append((_("Add Category"), None, self.addCategory))
         self.provider = provider
         self.updateGUITimer = eTimer()
-        self.updateGUITimer.callback.append(self.updateAddonGUI)
+        self.updateGUITimer_conn = eConnectCallback(self.updateGUITimer.timeout, self.updateAddonGUI)
 
         # include DownloadList
         DownloadList.__init__(self)
@@ -326,7 +328,8 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
     def __onClose(self):
         self.provider.stop()
         self.updateGUITimer.stop()
-        self.updateGUITimer = None
+        del self.updateGUITimer_conn
+        del self.updateGUITimer
 
     def updateMenuList(self, index=0):
         itemList = []

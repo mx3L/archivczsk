@@ -12,6 +12,7 @@ from Components.Converter.ServicePositionAdj import ServicePositionAdj
 from ServiceReference import ServiceReference
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage, showYesNoDialog
 from util import getBufferInfo
@@ -152,6 +153,7 @@ class VideoPlayerController(BaseVideoPlayerController):
         # set buffer time, its counting after time_limit
         # so realistically we have buffer of size: buffer_time + time_limit
         self.buffer_time = buffer_time * 90000
+        self.buffering_timer_conns = []
 
         # I did couple of tests and seeking is not really precise,
         # so to make sure that we can seek when download we have seek_limit
@@ -159,9 +161,8 @@ class VideoPlayerController(BaseVideoPlayerController):
 
         # timers for checking and buffering
         self.check_timer = None
-        self.check_timer_running = False
+        self.check_timer_conns = []
         self.buffering_timer = None
-        self.buffering_timer_running = False
 
         self.buffered_percent = 0
         self.buffered_time = 0
@@ -193,14 +194,15 @@ class VideoPlayerController(BaseVideoPlayerController):
         if play_and_download and self.video_length_total:
 
             self.buffering_timer = eTimer()
-            self.buffering_timer.callback.append(self.check_position)
-            self.buffering_timer.callback.append(self._update_download_status)
-            self.buffering_timer.callback.append(self._update_info_bar)
+            self.buffering_timer_conns = []
+            self.buffering_timer_conns.append(eConnectCallback(self.buffering_timer.timeout, self.check_position))
+            self.buffering_timer_conns.append(eConnectCallback(self.buffering_timer.timeout, self._update_download_status))
+            self.buffering_timer_conns.append(eConnectCallback(self.buffering_timer.timeout, self._update_info_bar))
 
             self.check_timer = eTimer()
-            self.check_timer.callback.append(self.check_position)
-            self.check_timer.callback.append(self._update_download_status)
-            self.check_timer.callback.append(self._update_info_bar)
+            self.check_timer_conns.append(eConnectCallback(self.check_timer.timeout, self.check_position))
+            self.check_timer_conns.append(eConnectCallback(self.check_timer.timeout, self._update_download_status))
+            self.check_timer_conns.append(eConnectCallback(self.check_timer.timeout, self._update_info_bar))
 
             self.start_video_check()
         else:
@@ -213,29 +215,23 @@ class VideoPlayerController(BaseVideoPlayerController):
     def start_video_check(self):
         log.debug('starting video_checking')
         self.check_timer.start(self.video_check_interval)
-        self.check_timer_running = True
 
         self.download_interval_check = self.video_check_interval
         self.check_position()
 
     def stop_video_check(self):
         log.debug('stopping video_checking')
-        if self.check_timer_running:
-            self.check_timer.stop()
-            self.check_timer_running = False
+        self.check_timer.stop()
 
     def start_buffer_check(self):
         log.debug('starting buffer_checking')
         self.buffering_timer.start(self.buffer_check_interval)
-        self.buffering_timer_running = True
 
         self.download_interval_check = self.buffer_check_interval
 
     def stop_buffer_check(self):
         log.debug('stopping buffer_checking')
-        if self.buffering_timer_running:
-            self.buffering_timer.stop()
-            self.buffering_timer_running = False
+        self.buffering_timer.stop()
 
     def get_download_position(self):
         if self.video_length_total is None or self.download.length == 0:
@@ -312,22 +308,23 @@ class VideoPlayerController(BaseVideoPlayerController):
 
     def _do_eof_internal(self, playing):
         log.debug('stopping timers_eof')
-        if self.check_timer_running and hasattr(self, "check_timer"):
+        if getattr(self, "check_timer"):
             self.check_timer.stop()
-        if self.buffering_timer_running and hasattr(self, "buffering_timer"):
+        if getattr(self, "buffering_timer"):
             self.buffering_timer.stop()
         log.debug('do_eof_internal')
         self.video_player._doEofInternal(playing)
 
     def _exit_video_player(self):
         log.debug('stopping timers_exit')
-        if self.check_timer_running:
+        if self.check_timer:
             self.check_timer.stop()
-        if self.buffering_timer_running:
+            del self.check_timer_conns[:]
+            del self.check_timer
+        if self.buffering_timer:
             self.buffering_timer.stop()
-
-        del self.check_timer
-        del self.buffering_timer
+            del self.buffering_timer_conns[:]
+            del self.buffering_timer
         log.debug('exiting service')
         self.video_player._exitVideoPlayer()
 
@@ -448,10 +445,10 @@ class VideoPlayerController(BaseVideoPlayerController):
                 if not self.is_video_paused():
                     self._pause_service()
 
-                if self.check_timer_running:
+                if self.check_timer.isActive():
                     self.stop_video_check()
 
-                if not self.buffering_timer_running:
+                if not self.buffering_timer.isActive():
                     self.start_buffer_check()
 
             # We can unpause video
@@ -463,10 +460,10 @@ class VideoPlayerController(BaseVideoPlayerController):
                     if self.autoplay:
                         self._unpause_service()
 
-                if self.buffering_timer_running:
+                if self.buffering_timer.isActive():
                     self.stop_buffer_check()
 
-                if not self.check_timer_running:
+                if not self.check_timer.isActive():
                     self.start_video_check()
 
 

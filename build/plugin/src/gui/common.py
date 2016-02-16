@@ -16,6 +16,7 @@ from Screens.Screen import Screen
 from Tools.Directories import fileExists
 
 from Plugins.Extensions.archivCZSK import settings, _, log
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.tools.util import BtoMB, BtoKB, BtoGB, \
     toString
 from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, eSize, eListbox, \
@@ -227,8 +228,7 @@ class TipBar():
         self.tip_selection = 0
         self.tip_timer_refresh = tip_timer_refresh * 1000
         self.tip_timer = eTimer()
-        self.tip_timer_running = False
-        self.tip_timer.callback.append(self.changeTip)
+        self.tip_timer_conn = eConnectCallback(self.tip_timer.timeout, self.changeTip)
         if startOnShown:
             self.onFirstExecBegin.append(self.startTipTimer)
 
@@ -264,17 +264,14 @@ class TipBar():
         self.startTipTimer()
 
     def startTipTimer(self):
-        if not self.tip_timer_running:
-            self.tip_timer.start(self.tip_timer_refresh)
-            self.tip_timer_running = True
+        self.tip_timer.start(self.tip_timer_refresh)
 
     def stopTipTimer(self):
-        if self.tip_timer_running:
-            self.tip_timer.stop()
-            self.tip_timer_running = False
+        self.tip_timer.stop()
 
     def __exit(self):
         self.stopTipTimer()
+        del self.tip_timer_conn
         del self.tip_timer
 
 
@@ -294,7 +291,13 @@ class LoadingScreen(Screen):
         self.__shown = False
 
         self.timer = eTimer()
-        self.timer.timeout.get().append(self.showNextSpinner)
+        self.timer_conn = eConnectCallback(self.timer.timeout, self.showNextSpinner)
+        self.onClose.append(self.__onClose)
+
+    def __onClose(self):
+        self.timer.stop()
+        del self.timer_conn
+        del self.timer
 
     def start(self):
         self.__shown = True

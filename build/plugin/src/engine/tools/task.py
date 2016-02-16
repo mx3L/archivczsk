@@ -11,6 +11,7 @@ from Queue import Queue
 
 from enigma import ePythonMessagePump
 from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonThreadException
         
 # object for stopping workerThread        
@@ -29,9 +30,8 @@ def run_in_main_thread(val):
     #print 'run_in_main_thread -', currentThread().getName()
     fnc_out_queue.get()()
     
-m_pump = ePythonMessagePump()
-m_pump.recv_msg.get().append(run_in_main_thread)
-    
+m_pump = None
+m_pump_conn = None
 
 def callFromThread(func):
     """calls function from child thread in main(reactor) thread, 
@@ -99,6 +99,13 @@ class Task(object):
     @staticmethod
     def startWorkerThread():
         log.debug("[Task] starting workerThread")
+        global m_pump_conn
+        if m_pump_conn is not None:
+            del m_pump_conn
+        global m_pump
+        if m_pump is None:
+            m_pump = ePythonMessagePump()
+        m_pump_conn = eConnectCallback(m_pump.recv_msg, run_in_main_thread)
         Task.worker_thread = WorkerThread()
         Task.worker_thread.start()
         
@@ -108,6 +115,14 @@ class Task(object):
         Task.worker_thread.stop()
         Task.worker_thread.join()
         Task.worker_thread = None
+        global m_pump_conn
+        if m_pump_conn is not None:
+            del m_pump_conn
+        m_pump_conn = None
+        global m_pump
+        if m_pump is not None:
+            m_pump.stop()
+        m_pump = None
         
     @staticmethod     
     def setPollingInterval(self, interval):

@@ -37,6 +37,7 @@ import setting
 from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK import settings
 from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.items import RtmpStream, PVideo, PPlaylist
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.engine.exceptions.play import UrlNotExistError, RTMPGWMissingError
@@ -621,7 +622,7 @@ class RTMPGWSupport(object):
 			cmd = '%s --quiet --rtmp %s --sport %d' % (RTMPGW_PATH, rtmpUrl, self.__port)
 		log.debug('rtmpgw server streaming: %s' , cmd)
 		self.__rtmpgwProcess = eConsoleAppContainer()
-		self.__rtmpgwProcess.appClosed.append(self.__endRTMPGWProcess)
+		self.__appClosed_conn = eConnectCallback(self.__rtmpgwProcess.appClosed, self.__endRTMPGWProcess)
 		self.__rtmpgwProcess.execute(cmd)
 
 	def __endRTMPGWProcess(self, status):
