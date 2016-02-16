@@ -17,6 +17,7 @@ from skin import loadSkin
 from engine.addon import VideoAddon, XBMCAddon
 from engine.exceptions.updater import UpdateXMLVersionError
 from engine.tools.task import Task
+from engine.tools.util import check_program
 from gui.common import showInfoMessage
 from gui.content import ArchivCZSKContentScreen
 import settings
@@ -62,7 +63,11 @@ class ArchivCZSK():
     def load_skin():
         from enigma import getDesktop
         if getDesktop(0).size().width() >= 1280:
-            skin_default_path = os.path.join(settings.SKIN_PATH, "default_hd.xml")
+            # dm7080 hd DMM image is using dpkg as package manager, other images don't
+            if check_program('dpkg'):
+                skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_hd.xml")
+            else:
+                skin_default_path = os.path.join(settings.SKIN_PATH, "default_hd.xml")
         else:
             skin_default_path = os.path.join(settings.SKIN_PATH, "default_sd.xml")
         skin_name = config.plugins.archivCZSK.skin.value
