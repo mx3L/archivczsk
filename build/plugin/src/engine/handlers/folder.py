@@ -22,9 +22,14 @@ class FolderItemHandler(ItemHandler):
             list_items, screen_command, args = result
             list_items.insert(0, PExit())
 
-            if screen_command is not None:
-                self.content_screen.resolveCommand(screen_command, args)
+            if not list_items and screen_command is not None:
+                if screen_command == 'refreshnow':
+                    self.content_screen.refreshList()
             else:
+                if screen_command is not None:
+                    if screen_command == 'updatelist':
+                        self.content_screen.refreshing = True
+
                 if not self.content_screen.refreshing:
                     self.content_screen.save()
                 else:
