@@ -4,6 +4,7 @@ import twisted.internet.defer as defer
 
 from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
+from Screens.ChoiceBox import ChoiceBox
 
 from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
@@ -94,6 +95,18 @@ def getYesNoInput(session, text):
             d.callback(False)
     d = defer.Deferred()
     session.openWithCallback(getYesNoInputCB, MessageBox, text=toString(text), type=MessageBox.TYPE_YESNO)
+    return d
+
+@callFromThread
+def getListInput(session, list, title=""):
+    def getListInputCB(selected=None):
+        if selected is not None:
+            d.callback(newlist.index(selected))
+        else:
+            d.callback(-1)
+    d = defer.Deferred()
+    newlist = [(toString(name), ) for name in list]
+    session.openWithCallback(getListInputCB, ChoiceBox, toString(title), newlist, skin_name="ArchivCZSKChoiceBox")
     return d
 
 

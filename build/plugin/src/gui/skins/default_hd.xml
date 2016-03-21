@@ -248,6 +248,11 @@
       <widget name="download_label" position="960,65" size="120,20" font="Regular; 16" backgroundColor="background" transparent="1"/>
       <widget name="download_speed" position="1070,65" size="80,20" text="N/A" font="Regular; 16" backgroundColor="background" transparent="1"/>
     </screen>
+
+	<screen name="ArchivCZSKChoiceBox" position="center,center" size="550,400" zPosition="1">
+	    <widget name="text" position="10,10" size="550,25" font="Regular;20" />
+	    <widget name="list" position="0,30" size="550,335" scrollbarMode="showOnDemand" />
+	</screen>
         
 </skin>
         
