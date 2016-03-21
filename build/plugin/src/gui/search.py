@@ -36,7 +36,7 @@ class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
                 "cancel": self.cancel,
                 "up": self.up,
                 "down": self.down,
-                "yellow": self.keyYellow,
+                "green": self.keyGreen,
                 "red": self.keyRed,
                 "blue": self.keyBlue,
                 }, -2)
