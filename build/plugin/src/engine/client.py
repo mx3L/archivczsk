@@ -18,6 +18,7 @@ from Plugins.Extensions.archivCZSK.engine.tools.task import callFromThread, Task
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString, toUnicode
 from Plugins.Extensions.archivCZSK.gui.captcha import Captcha
 from Plugins.Extensions.archivCZSK.resources.libraries import simplejson as json
+from Plugins.Extensions.archivCZSK.resources.libraries import m3u8
 
 
 GItem_lst = VideoAddonContentProvider.get_shared_itemlist()
