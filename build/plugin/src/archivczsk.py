@@ -64,9 +64,12 @@ class ArchivCZSK():
         from enigma import getDesktop
         if getDesktop(0).size().width() >= 1280:
             # dm7080 hd DMM image is using dpkg as package manager, other images don't
-            if check_program('dpkg'):
+            try:
+                from enigma import eTimer
+                eTimer().connect
                 skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_hd.xml")
-            else:
+            except Exception as e:
+                print e
                 skin_default_path = os.path.join(settings.SKIN_PATH, "default_hd.xml")
         else:
             skin_default_path = os.path.join(settings.SKIN_PATH, "default_sd.xml")
