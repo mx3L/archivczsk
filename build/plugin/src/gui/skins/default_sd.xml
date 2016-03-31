@@ -101,7 +101,6 @@
         <screen name="ArchivCZSKSearchClientScreen" position="325,163" size="500,400">
             <ePixmap name="search_pixmap" position="10,13" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/search.png" />
             <widget name="search" position="57,13" size="424,69" foregroundColor="#e5b243" halign="center" font="Regular; 23" />
-            <widget name="infolist" position="10,90" size="471,112" />
             <ePixmap name="red_pixmap" position="10,90" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/red.png" />
             <widget source="red_label" render="Label" position="50 ,90" size="330,28" font="Regular;23" halign="left" backgroundColor="background"  transparent="1"/>
             <ePixmap name="green_pixmap" position="10,120" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/green.png" />
