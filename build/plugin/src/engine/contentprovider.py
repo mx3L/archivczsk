@@ -22,6 +22,13 @@ from serialize import CategoriesIO, FavoritesIO
 from tools import task, util
 PNG_PATH = settings.IMAGE_PATH
 
+CREATE_DEFAULT_HTTPS_CONTEXT = None
+try:
+    import ssl
+    CREATE_DEFAULT_HTTPS_CONTEXT = ssl._create_default_https_context
+except:
+    pass
+
 
 class SysPath(list):
     """to append sys path only to addon which belongs to"""
@@ -534,6 +541,10 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         if loading_timeout > 0:
             socket.setdefaulttimeout(loading_timeout)
 
+        try:
+            ssl._create_default_https_context = ssl._create_unverified_context
+        except:
+            pass
         thread_task = task.Task(self._get_content_cb, self.run_script, session, params)
         thread_task.run()
         return self.content_deferred
@@ -551,6 +562,10 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         # resetting timeout for resolving content
         socket.setdefaulttimeout(socket.getdefaulttimeout())
 
+        try:
+            ssl._create_default_https_context = CREATE_DEFAULT_HTTPS_CONTEXT
+        except:
+            pass
         if success:
             log.debug("successfully loaded %d items" % len(self.__gui_item_list[0]))
             lst_itemscp = [[], None, {}]
