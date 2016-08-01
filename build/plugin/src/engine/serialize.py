@@ -47,7 +47,7 @@ class BaseXML(object):
             self.xml_root_element = self.xml_tree.getroot()
         except Exception as e:
             log.error("%s invalid xml file - %s, creating backup..."%(str(self), str(e)))
-            shutil.copy2(os.path.dirname(self.path), self.path +".bak")
+            shutil.copy2(self.path, self.path + ".bak")
             return False
         return True
 
@@ -77,12 +77,11 @@ class Item2XML(BaseXML):
 
     def __init__(self, path):
         BaseXML.__init__(self, path)
-        self.strpath = '/'.join(self.path.split('/')[-2:])
         if not self.parsed:
             self.__create_root()
 
     def __str__(self):
-        return "[%s - %s]" % (self.__class__.__name__, self.strpath)
+        return "[%s - %s]" % (self.__class__.__name__, '/'.join(self.path.split('/')[-2:]))
 
     def __len__(self):
         items = self.xml_root_element.find('items')
