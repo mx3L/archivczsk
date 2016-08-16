@@ -44,7 +44,7 @@ def decode_string(string):
 
 
 @callFromThread
-def getTextInput(session, text):
+def getTextInput(session, title, text=""):
     def getTextInputCB(word):
         log.debug("textinput: %s", word)
         if word is None:
@@ -52,7 +52,7 @@ def getTextInput(session, text):
         else:
             d.callback(word)
     d = defer.Deferred()
-    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=text)
+    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=title, text=text)
     return d
 
 def getSearch(session):
