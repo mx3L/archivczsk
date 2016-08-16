@@ -23,6 +23,12 @@ def _(txt):
 localeInit()
 language.addCallback(localeInit)
 
+def toString(text):
+    if isinstance(text, unicode):
+        print text.encode('utf-8')
+    elif isinstance(text, str):
+        print text
+
 class log(object):
     ERROR = 0
     INFO = 1
@@ -40,7 +46,7 @@ class log(object):
                 text = text % args[0]
             elif len(args) >=1:
                 text = text % args
-            print "[ArchivCZSK] DEBUG:", text.encode('utf-8')
+            print "[ArchivCZSK] DEBUG:", toString(text)
 
     @staticmethod
     def info(text, *args):
@@ -49,7 +55,7 @@ class log(object):
                 text = text % args[0]
             elif len(args) >=1:
                 text = text % args
-            print "[ArchivCZSK] INFO:", text.encode('utf-8')
+            print "[ArchivCZSK] INFO:", toString(text)
 
     @staticmethod
     def error(text, *args):
@@ -58,7 +64,8 @@ class log(object):
                 text = text % args[0]
             elif len(args) >=1:
                 text = text % args
-            print "[ArchivCZSK] ERROR:", text.encode('utf-8')
+            print "[ArchivCZSK] ERROR:", toString(text)
+
 
 
 # set logger
