@@ -1,4 +1,4 @@
-SUBDIRS = servicemp4 subtitles
+SUBDIRS = subtitles
 
 installdir = $(libdir)/enigma2/python/Plugins/Extensions/archivCZSK/engine/player
 

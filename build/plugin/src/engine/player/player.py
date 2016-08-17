@@ -46,7 +46,6 @@ from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKScreen
 # possible services
 SERVICEDVB_ID = 0x1
 SERVICEMP3_ID = 4097
-SERVICEMP4_ID = 4113
 SERVICEMRUA_ID = 4370
 
 # rtmpgw bin
@@ -367,9 +366,6 @@ class GStreamerVideoPlayer(CustomVideoPlayer):
 	def __init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload=False, subtitles=None):
 		CustomVideoPlayer.__init__(self, session, sref, videoPlayerController, playlist, playlistName, playlistCB, playAndDownload, subtitles)
 		self.gstreamerSetting = self.settings
-		self.useBufferControl = False
-		self.setBufferMode(int(self.gstreamerSetting.bufferMode.getValue()))
-
 		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
             {
                 iPlayableService.evBuffering: self._evUpdatedBufferInfo,
@@ -381,13 +377,6 @@ class GStreamerVideoPlayer(CustomVideoPlayer):
 			return
 		streamed = self.session.nav.getCurrentService().streamed()
 		bufferInfo = getBufferInfo(streamed)
-
-		if(bufferInfo['percentage'] > 95):
-			self.bufferFull()
-
-		if(bufferInfo['percentage'] == 0 and (bufferInfo['avg_in_rate'] != 0 and bufferInfo['avg_out_rate'] != 0)):
-			self.bufferEmpty()
-
 		info = {
 				'bitrate':0,
 				'buffer_percent':bufferInfo['percentage'],
@@ -407,33 +396,10 @@ class GStreamerVideoPlayer(CustomVideoPlayer):
 		if bufferSize > 0:
 			self.setBufferSize(bufferSize * 1024)
 
-	def setBufferMode(self, mode=None):
-		if self.playAndDownload:
-			return
-
-		if mode == 3:
-			log.debug("manual buffer control")
-			self.useBufferControl = True
-
 	def setBufferSize(self, size):
 		""" set buffer size for streams in Bytes """
-
-		# servicemp4 already set bufferSize
-		if not self.gstreamerSetting.servicemp4.getValue():
-			streamed = self.session.nav.getCurrentService().streamed()
-			setBufferSize(streamed, size)
-
-	def bufferFull(self):
-		if self.useBufferControl:
-			if self.seekstate != self.SEEK_STATE_PLAY:
-				log.debug("Buffer filled start playing")
-				self.setSeekState(self.SEEK_STATE_PLAY)
-
-	def bufferEmpty(self):
-		if self.useBufferControl:
-			if self.seekstate != self.SEEK_STATE_PAUSE :
-				log.debug("Buffer drained pause")
-				self.setSeekState(self.SEEK_STATE_PAUSE)
+		streamed = self.session.nav.getCurrentService().streamed()
+		setBufferSize(streamed, size)
 
 
 class EPlayer3VideoPlayer(CustomVideoPlayer):
@@ -778,8 +744,6 @@ class Player(DownloadSupport, RTMPGWSupport):
 
 		if streamUrl.endswith('.ts') and videoPlayerInfo.type == 'gstreamer':
 			sref = eServiceReference(SERVICEDVB_ID, 0, streamUrl)
-		elif self.settings.servicemp4.getValue():
-			sref = eServiceReference(SERVICEMP4_ID, 0, streamUrl)
 		elif self.settings.servicemrua.getValue():
 			sref = eServiceReference(SERVICEMRUA_ID, 0, streamUrl)
 		else:

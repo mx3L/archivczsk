@@ -224,9 +224,7 @@ class ArchiveCZSKConfigScreen(BaseArchivCZSKConfigScreen):
         if current in [
                         config.plugins.archivCZSK.linkVerification,
                         config.plugins.archivCZSK.videoPlayer.type,
-                        config.plugins.archivCZSK.videoPlayer.servicemp4,
-                        config.plugins.archivCZSK.videoPlayer.servicemrua,
-                        config.plugins.archivCZSK.videoPlayer.bufferMode]:
+                        config.plugins.archivCZSK.videoPlayer.servicemrua]:
             self.buildMenu()
 
     def keyRight(self):
@@ -235,9 +233,7 @@ class ArchiveCZSKConfigScreen(BaseArchivCZSKConfigScreen):
         if current in [
                        config.plugins.archivCZSK.linkVerification,
                        config.plugins.archivCZSK.videoPlayer.type,
-                       config.plugins.archivCZSK.videoPlayer.servicemp4,
-                       config.plugins.archivCZSK.videoPlayer.servicemrua,
-                       config.plugins.archivCZSK.videoPlayer.bufferMode]:
+                       config.plugins.archivCZSK.videoPlayer.servicemrua]:
             self.buildMenu()
 
     def keyOk(self):

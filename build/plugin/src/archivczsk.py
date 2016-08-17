@@ -149,13 +149,6 @@ class ArchivCZSK():
         config.plugins.archivCZSK.linkVerification.setValue(False)
         config.plugins.archivCZSK.linkVerification.save()
 
-        # fix GS on sh4 with servicemp4(older images)
-        # on new sh4 images, servicemp4 has to be turned off
-        # until servicemp4 for new images isn't compiled ..
-        if settings.ARCH == 'sh4' and settings.SERVICEMP4:
-            config.plugins.archivCZSK.hdmuFix.setValue(True)
-            config.plugins.archivCZSK.hdmuFix.save()
-
         text = _("This is the first time you started archivyCZSK") + "\n\n"
         text += _("For optimal usage of this plugin, you need to check") + "\n"
         text += _("if you have all neccessary video plugins installed") + "."

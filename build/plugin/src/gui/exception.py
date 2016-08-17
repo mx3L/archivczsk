@@ -125,7 +125,5 @@ class PlayExceptionHandler(GUIExceptionHandler):
             except play.RTMPGWMissingError, e:
                 self.errorMessage(_("Cannot found rtmpgw, make sure that you have installed it, or try to use Video player with internal rtmp support"))
     
-            #except play.ServiceMP4NeededError:
-                #showErrorMessage(self.session, "%s\n%s:%d" % (_("Download Error:"), e.message, _("protocol is not supported")), self.timeout)
         return wrapped
     

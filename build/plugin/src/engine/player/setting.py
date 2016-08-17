@@ -26,35 +26,18 @@ class VideoPlaySettingsProvider(object):
         config.mediaplayer.alternateUserAgent = ConfigText(default="")
         config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
         
-    def setHTTPTimeout(self, timeout):
-        self.__config.httpTimeout.setValue(str(timeout))
-    
     def setExtraHeaders(self, dictHeaders):
-        if not self.__config.servicemp4.getValue():
-            headersString = '|'.join([(key + ':' + value) for key, value in dictHeaders.iteritems()])
-            if not hasattr(config.mediaplayer, 'extraHeaders'):
-                config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
-            config.mediaplayer.extraHeaders.setValue(headersString)
-        else:
-            headersString = '#'.join([(key + ':' + value) for key, value in dictHeaders.iteritems()])
-            self.__config.extraHeaders.setValue(headersString)
+        headersString = '|'.join([(key + ':' + value) for key, value in dictHeaders.iteritems()])
+        if not hasattr(config.mediaplayer, 'extraHeaders'):
+            config.mediaplayer.extraHeaders = NoSave(ConfigText(default=""))
+        config.mediaplayer.extraHeaders.setValue(headersString)
         
     def setUserAgent(self, agent=""):
-        if self.__config.servicemp4.getValue():
-            if agent != "":
-                self.__config.userAgent.setValue(agent)
+        if agent != "":
+            config.mediaplayer.useAlternateUserAgent.setValue(True)
+            config.mediaplayer.alternateUserAgent.setValue(agent)
         else:
-            if agent != "":
-                config.mediaplayer.useAlternateUserAgent.setValue(True)
-                config.mediaplayer.alternateUserAgent.setValue(agent)
-            else:
-                config.mediaplayer.useAlternateUserAgent.setValue(False)
-        
-    def setDownloadMode(self, mode=False):
-        if mode:
-            self.__config.download.setValue("True")
-        else:
-            self.__config.download.setValue("False")
+            config.mediaplayer.useAlternateUserAgent.setValue(False)
 
 
 class VideoPlaySetting(object):
@@ -67,12 +50,9 @@ class CustomVideoPlaySetting(VideoPlaySetting):
         super(CustomVideoPlaySetting, self).__init__()
         self.vpsp.setUserAgent(userAgent)
         self.vpsp.setExtraHeaders(extraHeaders)
-        if downloadMode:
-            self.vpsp.setDownloadMode(downloadMode)
         
 class DefaultVideoPlaySetting(VideoPlaySetting):
     def __init__(self):
         super(DefaultVideoPlaySetting, self).__init__()
         self.vpsp.setUserAgent(USER_AGENT)
         self.vpsp.setExtraHeaders({})
-        self.vpsp.setDownloadMode(False)

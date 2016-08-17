@@ -9,7 +9,6 @@ from enigma import eTimer
 
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 
-bufferServicemp4 = True
 
 def setBufferSize(iStreamed, size):
     """
@@ -51,15 +50,6 @@ def getBufferInfo(iStreamed):
         bufferDict['avg_out_rate'] = bufferInfo[2]
         bufferDict['space'] = bufferInfo[3]
         bufferDict['size'] = bufferInfo[4]
-        if bufferServicemp4:
-            try:
-                # servicemp4 download
-                bufferDict['downloading'] = bufferInfo[5]
-                bufferDict['download_path'] = bufferInfo[6]
-                bufferDict['download_percent'] = bufferInfo[7]
-            except IndexError:
-                global bufferServicemp4
-                bufferServicemp4 = False
     return bufferDict
 
 

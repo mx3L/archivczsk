@@ -78,7 +78,6 @@ plugin/src/engine/player/Makefile
 plugin/src/engine/player/subtitles/Makefile
 plugin/src/engine/player/subtitles/fonts/Makefile
 plugin/src/engine/player/subtitles/parsers/Makefile
-plugin/src/engine/player/servicemp4/Makefile
 plugin/src/resources/Makefile
 plugin/src/resources/repositories/Makefile
 plugin/src/resources/repositories/custom/Makefile
