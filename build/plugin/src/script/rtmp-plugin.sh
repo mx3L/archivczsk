@@ -45,7 +45,6 @@ if [ "$OE" == "OE40" ]; then
 	cp /tmp/mipsel/gst_rtmp_plugin/OE4_seekingfix/libgstrtmp.so $GSTDIR
 	cp /tmp/mipsel/rtmpdump/OE4_KSV/librtmp.so.1 $LIBDIR
 	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpdump $BINDIR
-	cp /tmp/mipsel/rtmpdump/OE4_KSV/rtmpgw $BINDIR
 
 else
 	cp /tmp/mipsel/gst_rtmp_plugin/OE16-3/libgstrtmp.so $GSTDIR
@@ -54,7 +53,6 @@ else
 		ln -s $LIBDIR/librtmp.so.0 $LIBDIR/librtmp.so
 	fi
 	cp /tmp/mipsel/rtmpdump/OE16-3/rtmpdump $BINDIR
-	cp /tmp/mipsel/rtmpdump/OE16-3/rtmpgw $BINDIR
 fi
 
 chmod 755 $LIBDIR/librtmp*

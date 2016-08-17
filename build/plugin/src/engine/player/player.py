@@ -40,17 +40,13 @@ from Plugins.Extensions.archivCZSK import log
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.items import RtmpStream, PVideo, PPlaylist
 from Plugins.Extensions.archivCZSK.engine.tools import util
-from Plugins.Extensions.archivCZSK.engine.exceptions.play import UrlNotExistError, RTMPGWMissingError
+from Plugins.Extensions.archivCZSK.engine.exceptions.play import UrlNotExistError
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKScreen
 
 # possible services
 SERVICEDVB_ID = 0x1
 SERVICEMP3_ID = 4097
 SERVICEMRUA_ID = 4370
-
-# rtmpgw bin
-RTMPGW_PATH = '/usr/bin/rtmpgw'
-NETSTAT_PATH = 'netstat'
 
 # standard players with playlist support
 
@@ -541,72 +537,14 @@ class DownloadSupport(object):
 		self.download.playMode = False
 
 
-class RTMPGWSupport(object):
-	__port = 8902
 
-	def __init__(self):
-		self.__streamPart = 'http://0.0.0.0:'
-		self.__rtmpgwProcess = None
-		self.useRtmpgw = not self.settings.seeking.getValue()
-		self.onClose.append(self.stopRTMPGWProcess)
-
-	def _getRTMPGWPlayUrl(self):
-		return self.__streamPart + str(self.__port)
-
-
-	def startRTMPGWProcess(self, media_it):
-		log.debug('starting rtmpgw process')
-		ret = util.check_program(RTMPGW_PATH)
-		if ret is None:
-			raise RTMPGWMissingError()
-
-		if RTMPGWSupport.__port > 8905:
-			RTMPGWSupport.__port = 8902
-		else:
-			RTMPGWSupport.__port += 1
-		port = RTMPGWSupport.__port
-
-		stream = media_it.stream
-		url = media_it.url
-		live = media_it.live
-		try:
-			cmd = "%s %s --sport %d" % (RTMPGW_PATH, stream.getRtmpgwUrl(), port)
-		except Exception:
-			urlList = url.split()
-			rtmpTimeout = self.settings.rtmpTimeout.getValue()
-			rtmpBuffer = (live and self.liveRTMPBuffer) or (not live and self.archiveRTMPBuffer)
-			rtmp_url = []
-			for url in urlList[1:]:
-				rtmp = url.split('=', 1)
-				rtmp_url.append(' --' + rtmp[0])
-				rtmp_url.append("'%s'" % rtmp[1])
-			rtmpUrl = "'%s'" % urlList[0] + ' '.join(rtmp_url)
-			if not '--buffer' in rtmpUrl:
-				rtmpUrl = '%s --buffer %d' % (rtmpUrl, int(rtmpBuffer))
-			if not '--timeout' in rtmpUrl:
-				rtmpUrl = '%s --timeout %d' % (rtmpUrl, int(rtmpTimeout))
-			cmd = '%s --quiet --rtmp %s --sport %d' % (RTMPGW_PATH, rtmpUrl, self.__port)
-		log.debug('rtmpgw server streaming: %s' , cmd)
-		self.__rtmpgwProcess = eConsoleAppContainer()
-		self.__appClosed_conn = eConnectCallback(self.__rtmpgwProcess.appClosed, self.__endRTMPGWProcess)
-		self.__rtmpgwProcess.execute(cmd)
-
-	def __endRTMPGWProcess(self, status):
-		log.debug('rtmpgw process exited with status %d' , status)
-		self.__rtmpgwProcess = None
-
-	def stopRTMPGWProcess(self):
-		if self.__rtmpgwProcess is not None:
-			self.__rtmpgwProcess.sendCtrlC()
-
-class Player(DownloadSupport, RTMPGWSupport):
+class Player(DownloadSupport):
 	"""Player for playing PVideo/PPlaylist content"""
 	items = (PVideo, PPlaylist)
 
 	def __init__(self, session, callback=None, content_provider=None):
 		self.onClose = []
 		self.settings = config.plugins.archivCZSK.videoPlayer
-		RTMPGWSupport.__init__(self)
 		DownloadSupport.__init__(self, content_provider=content_provider, download=None)
 		self.session = session
 		self.oldService = session.nav.getCurrentlyPlayingServiceReference()
@@ -684,12 +622,6 @@ class Player(DownloadSupport, RTMPGWSupport):
 		if self.play_it:
 			srefName = self.play_it.name
 			playUrl = self._getPlayUrl(self.play_it)
-			self.stopRTMPGWProcess()
-			if playUrl.startswith('rtmp') and self.useRtmpgw:
-				self.startRTMPGWProcess(self.play_it)
-				playUrl = self._getRTMPGWPlayUrl()
-				self.seekable = False
-				self.pausable = False
 			subtitlesUrl = self.play_it.subs
 			verifyLink = self.verifyLink
 			self._playStream(srefName, playUrl, subtitlesUrl, verifyLink=verifyLink)
@@ -804,7 +736,6 @@ class Player(DownloadSupport, RTMPGWSupport):
 			# TODO player shouldnt know about video addon methods
 				   # need rewrite
 			if streamURL.startswith('rtmp') and \
-		 		self.settings.seeking.getValue() and \
 		 		self.content_provider.__class__.__name__ == 'VideoAddonContentProvider' and \
 		  		self.content_provider.video_addon.get_setting('rtmp_seek_fix'):
 					videoPlayerController = RTMPController()

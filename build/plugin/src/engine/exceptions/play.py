@@ -3,6 +3,3 @@ class PlayException(Exception):
         
 class UrlNotExistError(PlayException):
     pass
-
-class RTMPGWMissingError(PlayException):
-    pass

@@ -347,9 +347,7 @@ class ArchivCZSKVideoPlayerInfoScreen(BaseArchivCZSKScreen):
 		self.restartNeeded = True
 		
 	def updatePlayerSettings(self):
-		if videoPlayerInfo.isRTMPSupported():
-			self.__settings.seeking.setValue(True)
-			self.__settings.seeking.save()
+		pass
 			
 	def askRestartE2(self):
 		message = _("Its highly recommended to restart Enigma2")

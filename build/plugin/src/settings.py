@@ -60,10 +60,6 @@ config.plugins.archivCZSK.videoPlayer.info = NoSave(ConfigNothing())
 playertype = [(videoPlayerInfo.type, videoPlayerInfo.getName())]
 config.plugins.archivCZSK.videoPlayer.exitFix = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.detectedType = ConfigSelection(choices=playertype)
-if videoPlayerInfo.isRTMPSupported():
-    config.plugins.archivCZSK.videoPlayer.seeking = ConfigYesNo(default=True)
-else:
-    config.plugins.archivCZSK.videoPlayer.seeking = ConfigYesNo(default=False)
 
 choicelist = [('standard', _('standard player')),
               ('custom', _('custom player (subtitle support)'))]
@@ -171,7 +167,6 @@ def get_player_settings():
     if player == 'standard' and AZBOX:
         list.append(getConfigListEntry(_("Use servicemrua (AZBOX)"), config.plugins.archivCZSK.videoPlayer.servicemrua))
     list.append(getConfigListEntry(_("RTMP Timeout"), config.plugins.archivCZSK.videoPlayer.rtmpTimeout))
-    list.append(getConfigListEntry(_("Video player with RTMP support"), config.plugins.archivCZSK.videoPlayer.seeking))
     list.append(getConfigListEntry(_("TV archive rtmp buffer"), config.plugins.archivCZSK.videoPlayer.archiveBuffer))
     list.append(getConfigListEntry(_("Default live rtmp streams buffer"), config.plugins.archivCZSK.videoPlayer.liveBuffer))
     # if not (videoPlayerInfo.type == 'gstreamer'):
