@@ -95,10 +95,13 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         self["path_label"].setText(toString(path_text))
 
 
-    def refreshList(self):
+    def refreshList(self, restoreLastPosition=True):
         log.debug("refreshing screen of %s item" , self.parent_it.name)
         self.refreshing = True
-        self.contentHandler.open_item(self.parent_it)
+        if restoreLastPosition:
+            self.contentHandler.open_item(self.parent_it, position=self.getSelectedIndex())
+        else:
+            self.contentHandler.open_item(self.parent_it)
 
     def load(self, params):
         """
@@ -153,15 +156,15 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
 
 
     def resolveCommand(self, command, arg):
-        print arg
-        log.debug("resolving %s command " , str(command))
-
-        if command is None:
-            pass
-        elif command == 'refreshnow':
-            self.refreshList()
-        else:
-            log.debug("unknown command %s" , command)
+        if command is not None:
+            if command == 'refreshnow':
+                self.refreshList()
+            elif command == 'refreshnow_resetpos':
+                self.refreshList(restoreLastPosition=False)
+            elif command == 'updatelist':
+                self.refreshing = True
+            else:
+                log.debug("unknown command %s" , command)
 
 
     def ok(self):

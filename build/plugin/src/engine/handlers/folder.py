@@ -20,15 +20,13 @@ class FolderItemHandler(ItemHandler):
     def _open_item(self, item, *args, **kwargs):
         def open_item_success_cb(result):
             list_items, screen_command, args = result
-            list_items.insert(0, PExit())
 
             if not list_items and screen_command is not None:
-                if screen_command == 'refreshnow':
-                    self.content_screen.refreshList()
+                self.content_screen.resolveCommand(screen_command, args)
             else:
+                list_items.insert(0, PExit())
                 if screen_command is not None:
-                    if screen_command == 'updatelist':
-                        self.content_screen.refreshing = True
+                    self.content_screen.resolveCommand(screen_command, args)
 
                 if not self.content_screen.refreshing:
                     self.content_screen.save()
@@ -40,7 +38,10 @@ class FolderItemHandler(ItemHandler):
                     if parent_content:
                         parent_content['refresh'] = True
 
-                content = {'parent_it':item, 'lst_items':list_items, 'refresh':False}
+                content = {'parent_it':item,
+                        'lst_items':list_items, 
+                        'refresh':False,
+                        'index':kwargs.get('position', 0)}
                 self.content_screen.load(content)
                 self.content_screen.stopLoading()
                 self.content_screen.showList()

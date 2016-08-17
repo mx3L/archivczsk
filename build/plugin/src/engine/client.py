@@ -121,8 +121,11 @@ def set_command(name, **kwargs):
     for arg in kwargs:
         GItem_lst[2][arg] = kwargs[arg]
 
-def refresh_screen():
-    set_command('refreshnow')
+def refresh_screen(restoreLastPosition=True):
+    if restoreLastPosition:
+        set_command('refreshnow')
+    else:
+        set_command('refreshnow_resetpos')
 
 
 def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False):
