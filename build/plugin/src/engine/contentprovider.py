@@ -6,6 +6,7 @@ Created on 3.10.2012
 import os
 import socket
 import sys
+from shutil import copyfile
 from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
@@ -255,10 +256,14 @@ class Downloads(object):
                                            live=item.live, destination=self.downloads_path,
                                            startCB=startCB, finishCB=finishCB, quiet=quiet,
                                            playDownload=playDownload, headers=headers, mode=mode)
-        if item.subs is not None and item.subs != '':
+        if item.subs:
             log.debug('subtitles link: %s' , item.subs)
-            subs_file_path = os.path.splitext(d.local)[0] + '.srt'
-            util.download_to_file(item.subs, subs_file_path)
+            remote = item.subs
+            local = os.path.splitext(d.local)[0] + '.srt'
+            if os.path.isfile(remote):
+                copyfile(remote, local)
+            elif remote.startswith('http'):
+                util.download_to_file(remote, local)
         downloadManager.addDownload(d, overrideCB)
 
     def remove_download(self, item):
