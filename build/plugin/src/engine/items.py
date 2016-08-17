@@ -172,7 +172,7 @@ class PDownload(PVideo):
 class PRoot(PItem):
     def __init__(self):
         PItem.__init__(self)
-        self.name = u'/'
+        self.name = u''
 
 class PExit(PItem):
     def __init__(self):

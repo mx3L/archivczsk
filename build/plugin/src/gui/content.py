@@ -52,9 +52,7 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         self.refreshing = False
         self.parent_it = PRoot()
         self.enabled_path = True
-        self.max_path_width = 0
 
-        self.path = []
         self.stack = []
         self.old_stack_len = 0
         self["status_label"] = Label("")
@@ -81,17 +79,8 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         self["path_pixmap"].instance.setPixmap(PATH_IMG)
 
     def updatePath(self):
-        current_stack_len = len(self.stack)
-        parent_name = self.parent_it.name
-        if current_stack_len <= self.old_stack_len:
-            if len(self.path) > 0:
-                self.path.pop()
-        elif current_stack_len > self.old_stack_len:
-            self.path.append(parent_name)
-        if len(self.path) == 0:
-            path_text = ' / '
-        else:
-            path_text = ' / ' + ' / '.join(self.path)
+        path_text = ' / '.join(params['parent_it'].name for params in self.stack)
+        path_text += ' / ' + self.parent_it.name
         self["path_label"].setText(toString(path_text))
 
 
@@ -129,16 +118,12 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
             self.refreshList()
         else:
             log.debug("loading screen of %s item" , repr(self.parent_it))
-            index = 'index' in params and params['index'] or 0
-            if self.enabled_path and not self.refreshing:
-                self.updatePath()
-            self.updateMenuList(index)
+            self.updatePath()
+            self.updateMenuList(index = params.get('index', 0))
 
     def save(self):
         """saves current screen to stack"""
         log.debug("saving current screen to stack")
-
-        self.old_stack_len = len(self.stack)
         self.stack.append({'lst_items':self.lst_items,
                             'parent_it':copy.copy(self.parent_it),
                            'refresh':self.refresh,
