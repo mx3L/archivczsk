@@ -555,7 +555,6 @@ class Player(DownloadSupport):
 		self.liveRTMPBuffer = int(self.settings.liveBuffer.getValue())
 		self.archiveRTMPBuffer = int(self.settings.archiveBuffer.getValue())
 		self.playerBuffer = int(self.settings.bufferSize.getValue())
-		self.verifyLink = config.plugins.archivCZSK.linkVerification.getValue()
 		self.hdmuFix = config.plugins.archivCZSK.hdmuFix.getValue()
 		self.seekable = True
 		self.pausable = True
@@ -623,8 +622,7 @@ class Player(DownloadSupport):
 			srefName = self.play_it.name
 			playUrl = self._getPlayUrl(self.play_it)
 			subtitlesUrl = self.play_it.subs
-			verifyLink = self.verifyLink
-			self._playStream(srefName, playUrl, subtitlesUrl, verifyLink=verifyLink)
+			self._playStream(srefName, playUrl, subtitlesUrl)
 		else:
 			log.info("Nothing to play. You need to set VideoItem first.")
 
@@ -693,13 +691,7 @@ class Player(DownloadSupport):
 		return None
 
 
-	def _playStream(self, srefName, streamURL, subtitlesURL, playAndDownload=False, playAndDownloadGst=False, verifyLink=False):
-		if verifyLink:
-			timeout = int(config.plugins.archivCZSK.linkVerificationTimeout.getValue())
-			ret = util.url_exist(streamURL, timeout)
-			if ret is not None and not ret:
-				raise UrlNotExistError()
-
+	def _playStream(self, srefName, streamURL, subtitlesURL, playAndDownload=False, playAndDownloadGst=False):
 		self.session.nav.stopService()
 		sref = self._createServiceRef(streamURL, srefName)
 

@@ -142,14 +142,6 @@ config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
 config.plugins.archivCZSK.hdmuFix = ConfigYesNo(default=False)
 
-config.plugins.archivCZSK.linkVerification = ConfigYesNo(default=False)
-
-choicelist = []
-for i in range(1, 250, 1):
-    choicelist.append(("%d" % i, "%d s" % i))
-config.plugins.archivCZSK.linkVerificationTimeout = ConfigSelection(default="30", choices=choicelist)
-
-
 
 def get_player_settings():
     list = []
@@ -200,11 +192,6 @@ def get_misc_settings():
     list.append(getConfigListEntry(_("Show video source selection"), config.plugins.archivCZSK.showVideoSourceSelection))
     list.append(getConfigListEntry(_("Convert captcha images to 8bit"), config.plugins.archivCZSK.convertPNG))
     list.append(getConfigListEntry(_("Drop caches on exit"), config.plugins.archivCZSK.clearMemory))
-    verification = config.plugins.archivCZSK.linkVerification.getValue()
-    if not (videoPlayerInfo.type == 'gstreamer'):
-        list.append(getConfigListEntry(_("Use link verification"), config.plugins.archivCZSK.linkVerification))
-        if verification:
-            list.append(getConfigListEntry(_("Verification timeout"), config.plugins.archivCZSK.linkVerificationTimeout))
     if ARCH == 'sh4':
         list.append(getConfigListEntry(_("Amiko HDMU fix"), config.plugins.archivCZSK.hdmuFix))
     return list

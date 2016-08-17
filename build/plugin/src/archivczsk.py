@@ -146,8 +146,6 @@ class ArchivCZSK():
         os.remove(os.path.join(settings.PLUGIN_PATH, 'firsttime'))
         config.plugins.archivCZSK.videoPlayer.useDefaultSkin.setValue(False)
         config.plugins.archivCZSK.videoPlayer.useDefaultSkin.save()
-        config.plugins.archivCZSK.linkVerification.setValue(False)
-        config.plugins.archivCZSK.linkVerification.save()
 
         text = _("This is the first time you started archivyCZSK") + "\n\n"
         text += _("For optimal usage of this plugin, you need to check") + "\n"
