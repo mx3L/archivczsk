@@ -1,5 +1,6 @@
 # script taken from openwebif project
 D=$(pushd $(dirname $0) &> /dev/null; pwd; popd &> /dev/null)
+S=${D}/ipkg.src.$$
 P=${D}/ipkg.tmp.$$
 B=${D}/ipkg.build.$$
 DP=${D}/ipkg.deps
@@ -25,17 +26,23 @@ PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
 popd &> /dev/null
 
+rm -rf ${D}/ipkg.src*
+rm -rf ${D}/ipkg.tmp*
+rm -rf ${D}/ipkg.build*
+
 mkdir -p ${P}
 mkdir -p ${P}/CONTROL
 mkdir -p ${B}
 mkdir -p ${DP}
+mkdir -p ${S}
+git archive --format=tar HEAD | (cd ${S} && tar xf -)
 
 if [ -d ${DP}/Python-2.6 ] && [ -d ${DP}/Python-2.7 ]; then
 	echo "python packages are already downloaded"
 else
 	echo "downloading neccesary python packages..."
-	wget -O ${DP}/Python-2.6.tgz $P26
-	wget -O ${DP}/Python-2.7.5.tgz $P27
+	curl $P26 -s -o ${DP}/Python-2.6.tgz
+	curl $P27 -s -o ${DP}/Python-2.7.5.tgz
 	tar -C ${DP} -xzf ${DP}/Python-2.6.tgz
 	tar -C ${DP} -xzf ${DP}/Python-2.7.5.tgz
 	mv ${DP}/Python-2.7.5 ${DP}/Python-2.7
@@ -45,8 +52,8 @@ rm -rf ${DP}/sh4
 rm -rd ${DP}/mipsel
 
 echo "downloading neccesary sh4/mipsel binaries"
-wget -O ${DP}/sh4_$SH4_V.tar.gz $SH4
-wget -O ${DP}/mipsel_$MIPS_V.tar.gz $MIPS
+curl $SH4 -s -o ${DP}/sh4_$SH4_V.tar.gz
+curl $MIPS -s -o ${DP}/mipsel_$MIPS_V.tar.gz 
 tar -C ${DP} -xzf ${DP}/sh4_$SH4_V.tar.gz
 tar -C ${DP} -xzf ${DP}/mipsel_$MIPS_V.tar.gz
 
@@ -66,7 +73,7 @@ EOF
 
 cat > ${P}/CONTROL/preinst << EOF
 #!/bin/sh
-rm -r /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK 2> /dev/null
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
 exit 0
 EOF
 
@@ -75,45 +82,48 @@ cat > ${P}/CONTROL/prerm << EOF
 mkdir -p /tmp/archivczsk
 echo "saving categories.xml to /tmp/archivczsk"
 cp /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/categories.xml /tmp/archivczsk
-rm -r /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK 2> /dev/null
 exit 0
 EOF
 
-cp ${D}/script/postinst ${P}/CONTROL/
+cat > ${P}/CONTROL/postrm << EOF
+#!/bin/sh
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
+exit 0
+EOF
+
+cp ${S}/script/postinst ${P}/CONTROL/
+
 
 chmod 755 ${P}/CONTROL/preinst
 chmod 755 ${P}/CONTROL/postinst
 chmod 755 ${P}/CONTROL/prerm
+chmod 755 ${P}/CONTROL/postrm
 
 mkdir -p ${P}${PLUGINPATH}
 mkdir -p ${P}${PLUGINPATH}/locale/cs/LC_MESSAGES/
 mkdir -p ${P}${PLUGINPATH}/locale/sk/LC_MESSAGES/
 mkdir -p ${P}/usr/lib/enigma2/python/Components/Converter/
 
-cp -rp ${D}/build/plugin/src/* ${P}${PLUGINPATH}
-cp -p ${D}/build/plugin/src/converter/* ${P}/usr/lib/enigma2/python/Components/Converter/
+cp -rp ${S}/build/plugin/src/* ${P}${PLUGINPATH}
+cp -p ${S}/build/plugin/src/converter/* ${P}/usr/lib/enigma2/python/Components/Converter/
 touch ${P}${PLUGINPATH}/firsttime
 
 echo "creating locales"
-msgfmt ${D}/build/plugin/po/cs.po -o ${P}${PLUGINPATH}/locale/cs/LC_MESSAGES/archivCZSK.mo
-msgfmt ${D}/build/plugin/po/sk.po -o ${P}${PLUGINPATH}/locale/sk/LC_MESSAGES/archivCZSK.mo
+msgfmt ${S}/build/plugin/po/cs.po -o ${P}${PLUGINPATH}/locale/cs/LC_MESSAGES/archivCZSK.mo
+msgfmt ${S}/build/plugin/po/sk.po -o ${P}${PLUGINPATH}/locale/sk/LC_MESSAGES/archivCZSK.mo
 
 #echo "compiling to optimized python bytecode"
 #python -O -m compileall ${P} 1> /dev/null
 
 echo "cleanup of unnecessary files"
-find ${P} -name "*.po" -exec rm {} \;
-find ${P} -name "*.pyo" -print -exec rm {} \;
-find ${P} -name "*.pyc" -print -exec rm {} \;
+find ${P} -type f -name ".gitignore" -exec rm {} \;
 find ${P} -name Makefile.am -exec rm {} \;
 rm -rf ${P}${PLUGINPATH}/converter
-rm -rf ${P}${PLUGINPATH}/engine/player/servicemp4
 rm -rf ${P}${PLUGINPATH}/resources/data/*
 
-echo "downloading addons"
-${D}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P} $ADDONS_COMMIT
-${D}/build/plugin/src/script/getaddons.py dmd_czech ${P} $ADDONS_COMMIT
-${D}/build/plugin/src/script/getaddons.py custom ${P} $ADDONS_COMMIT
+${S}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P} $ADDONS_COMMIT
+${S}/build/plugin/src/script/getaddons.py dmd_czech ${P} $ADDONS_COMMIT
+${S}/build/plugin/src/script/getaddons.py custom ${P} $ADDONS_COMMIT
 
 mkdir -p ${P}/tmp/archivczsk
 mkdir -p ${P}/tmp/archivczsk/python2.7
@@ -122,7 +132,7 @@ mkdir -p ${P}/tmp/archivczsk/python2.6
 cp -rp ${DP}/sh4 ${P}/tmp/archivczsk
 cp -rp ${DP}/mipsel ${P}/tmp/archivczsk
 
-cp -p ${D}/script/getenigma2ver ${P}/tmp/archivczsk
+cp -p ${S}/script/getenigma2ver ${P}/tmp/archivczsk
 
 cp -p ${DP}/Python-2.6/Lib/encodings/hex_codec.py ${P}/tmp/archivczsk/python2.6/hex_codec.py
 cp -p ${DP}/Python-2.6/Lib/encodings/string_escape.py ${P}/tmp/archivczsk/python2.7/string_escape.py
@@ -188,7 +198,8 @@ cd ${B}
 ls -la
 ar -r ${PKG}.ipk ./debian-binary ./control.tar.gz ./data.tar.gz
 ar -r ${PKG}.deb ./debian-binary ./control.tar.gz ./data.tar.gz
-cd -
+cd ${D}
 
 rm -rf ${P}
 rm -rf ${B}
+rm -rf ${S}
