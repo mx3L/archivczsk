@@ -6,6 +6,7 @@ Created on 22.5.2012
 import json
 import time
 
+from Components.GUIComponent import GUIComponent
 from Components.Label import Label, LabelConditional, MultiColorLabel
 from Components.MenuList import MenuList
 from Components.MultiContent import MultiContentEntryText, \
@@ -20,11 +21,11 @@ from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.tools.util import BtoMB, BtoKB, BtoGB, \
     toString
 from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, eSize, eListbox, \
-    ePoint, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, \
+    ePoint, RT_HALIGN_LEFT, RT_HALIGN_RIGHT, RT_HALIGN_CENTER, RT_VALIGN_CENTER, RT_WRAP, \
     eListboxPythonMultiContent, gFont, getDesktop, ePicLoad, eServiceCenter, \
     iServiceInformation, eServiceReference, iSeekableService, iPlayableService, \
     iPlayableServicePtr, eTimer
-from skin import parseColor
+from skin import parseColor, parseSize, parseFont, parsePosition
 import skin
 
 
@@ -392,6 +393,195 @@ class MultiLabelWidget():
         position = widget1.position
         size1 = widget1.instance.calculateSize()
         widget2.instance.move(ePoint(position[0] + size1.width() + 10, position[1]))
+
+
+class Tabs(GUIComponent):
+    def __init__(self, tabs):
+        GUIComponent.__init__(self)
+        self.l = eListboxPythonMultiContent()
+        self.list = []
+        self.tabs = tabs
+        self.params = {}
+        self.params['size'] = (0,0)
+        self.params['position'] = (0,0)
+        self.params['spaceWidth'] = 10
+        self.params['spaceHeight'] = 10
+        self.tab_params = {}
+        self.tab_params['size'] = (130, 30)
+        self.tab_params['fontActive'] = 'Regular;27'
+        self.tab_params['fontInactive'] = 'Regular;27'
+        self.tab_params['halign'] = 'center'
+        self.tab_params['valign'] = 'center'
+        self.tab_params['foregroundColorActive'] = 'red'
+        self.tab_params['backgroundColorActive'] = 'black'
+        self.tab_params['foregroundColorInactive'] = 'grey'
+        self.tab_params['backgroundColorInactive'] = 'black'
+        self.active_tab_idx = None
+
+    GUI_WIDGET = eListbox
+
+    def postWidgetCreate(self, instance):
+        instance.setSelectionEnable(False)
+        instance.setWrapAround(True)
+
+    def preWidgetRemove(self, instance):
+        instance.setContent(None)
+
+    def tabEntryComponent(self, tabs):
+        res = [(tabs)]
+        x = 0
+        for tab in tabs:
+            res.append(self.tabEntry(tab, x, False))
+            x += self.tab_params['size'][0] + self.params['spaceWidth']
+        return res
+
+    def tabEntry(self, tab, x, active):
+        if active:
+            font      = 0
+            color     = parseColor(self.tab_params['foregroundColorActive']).argb()
+            backcolor = parseColor(self.tab_params['backgroundColorActive']).argb()
+        else:
+            font      = 1
+            color     = parseColor(self.tab_params['foregroundColorInactive']).argb()
+            backcolor = parseColor(self.tab_params['backgroundColorInactive']).argb()
+
+        return MultiContentEntryText(
+            pos       = (x, 0),
+            size      = (self.tab_params['size'][0], self.tab_params['size'][1]),
+            font      = font,
+            text      = tab.encode('utf-8'),
+            flags     = RT_HALIGN_CENTER | RT_VALIGN_CENTER | RT_WRAP,
+            color     = color,
+            backcolor = backcolor)
+
+    def initList(self):
+        size = self.params['size']
+        tabsize = self.tab_params['size']
+        space_width = self.params['spaceWidth']
+        space_height = self.params['spaceHeight']
+
+        entries_per_col = size[1] / (tabsize[1] + space_height)
+        if (entries_per_col + 1) * (tabsize[1] + space_height) - space_height <= size[1]:
+            entries_per_col += 1
+        assert entries_per_col > 0
+
+        entries_per_row = size[0] / (tabsize[0] + space_width)
+        if (entries_per_row + 1) * (tabsize[0] + space_width) - space_width <= size[0]:
+            entries_per_row += 1
+        num_rows = len(self.tabs) / entries_per_row + 1
+        num_pages = num_rows / entries_per_col + 1
+
+        print "entries_per_row = %d, rows = %d, num_pages = %d"%(entries_per_row, num_rows, num_pages)
+        self.entries_per_row = entries_per_row
+        self.entries_per_page = entries_per_col * entries_per_row
+        self.pages = [self.tabs[i:i+self.entries_per_page] for i in range(0, len(self.tabs), self.entries_per_page)]
+
+        scale = ((1,1),(1,1))
+        self.l.setFont(0, parseFont(self.tab_params['fontActive'], scale))
+        self.l.setFont(1, parseFont(self.tab_params['fontInactive'], scale))
+        self.l.setItemHeight(tabsize[1]+ self.params['spaceHeight'])
+        self.buildTabPage(self.pages[0])
+        self.setActiveTab(0)
+        self.instance.setContent(self.l)
+
+    def buildTabPage(self, page):
+        self.list = []
+        rows = [page[i:i+self.entries_per_row] for i in range(0, len(page), self.entries_per_row)]
+        for row in rows:
+            self.list.append(self.tabEntryComponent(row))
+        self.l.setList(self.list)
+
+    def selectNext(self):
+        idx = self.active_tab_idx
+        if idx == len(self.tabs) - 1:
+            idx = 0
+        else:
+            idx +=1
+        self.setActiveTab(idx)
+
+    def selectPrevious(self):
+        idx = self.active_tab_idx
+        if idx == 0:
+            idx = len(self.tabs) - 1
+        else:
+            idx -= 1
+        self.setActiveTab(idx)
+
+    def setActiveTab(self, idx):
+        tab = self.tabs[idx]
+        a_page_idx, a_tab = 0, None
+
+        if self.active_tab_idx is not None:
+            a_tab = self.tabs[self.active_tab_idx]
+            a_page_idx, a_row_idx, a_tab_idx = self.getTabPosition(self.active_tab_idx)
+            #print 'setActiveTab(previous)(%s) idx(%d), page_idx(%d), row_idx(%d), tab_idx(%d)'%(
+            #        a_tab, self.active_tab_idx, a_page_idx, a_row_idx, a_tab_idx)
+        page_idx, row_idx, tab_idx = self.getTabPosition(idx)
+        #print 'setActiveTab(next)(%s) idx(%d), page_idx(%d), row_idx(%d), tab_idx(%d)'%(
+        #        tab, idx, page_idx, row_idx, tab_idx)
+
+        if page_idx != a_page_idx:
+            self.buildTabPage(self.pages[page_idx])
+            a_tab = self.active_tab_idx = None
+
+        if a_tab:
+            x = self.list[a_row_idx][a_tab_idx+1][1]
+            self.list[a_row_idx][a_tab_idx+1] = self.tabEntry(a_tab, x, False)
+            a_tab = self.active_tab_idx = None
+
+        x = self.list[row_idx][tab_idx+1][1]
+        self.list[row_idx][tab_idx+1] = self.tabEntry(tab, x, True)
+        self.active_tab_idx = idx
+        self.l.setList(self.list)
+
+    def getTabPosition(self, idx):
+        page_idx = idx / self.entries_per_page
+        row_idx = idx % self.entries_per_page / self.entries_per_row
+        tab_idx = idx % self.entries_per_page % self.entries_per_row
+        return page_idx, row_idx, tab_idx
+
+    def applySkin(self, desktop, parent):
+        if not self.visible:
+                self.instance.hide()
+
+        if self.skinAttributes is None:
+                return False
+
+        scale = ((1,1),(1,1))
+        toremove = []
+        for (attrib, value) in self.skinAttributes:
+            #print 'Tabs - processing %r, %r'%(attrib, value)
+
+            if attrib == 'size':
+                size = parseSize(value, scale, parent, desktop)
+                self.params['size'] = (size.width(), size.height())
+            elif attrib == 'position':
+                position = parsePosition(value, scale, parent, desktop)
+                self.params['position'] = (position.x(), position.y())
+            elif attrib in ('spaceWidth',
+                    'spaceHeight'):
+                self.params[attrib] = int(value)
+                toremove.append((attrib, value))
+            elif attrib == 'tab_size':
+                size = parseSize(value, scale, parent, desktop)
+                self.tab_params['size'] = (size.width(), size.height())
+                toremove.append((attrib, value))
+            elif attrib in ('tab_valign',
+                    'tab_halign',
+                    'tab_fontActive',
+                    'tab_fontInactive',
+                    'tab_foregroundColorActive',
+                    'tab_foregroundColorInactive',
+                    'tab_backgroundColorActive',
+                    'tab_backgroundColorInactive'):
+                self.tab_params[attrib[4:]] = value
+                toremove.append((attrib, value))
+        for item in toremove:
+            self.skinAttributes.remove(item)
+        skin.applyAllAttributes(self.instance, desktop, self.skinAttributes, parent.scale)
+
+        self.initList()
+        return True
 
 
 class CategoryWidget():
