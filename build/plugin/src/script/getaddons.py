@@ -217,7 +217,7 @@ def download_addons(repository, base, commit=None):
     repo_addons_url = repo["repo_addons_url"]
     if repo_addons_url.find('{commit}') != -1 and commit:
         repo_addons_url = repo_addons_url.replace('{commit}', commit)
-    os.system("wget -O %s %s" % (addons_xml_path, repo_addons_url))
+    os.system("curl %s -s -o %s" % (repo_addons_url, addons_xml_path))
     remote_addons = XBMCMultiAddonXMLParser(addons_xml_path).parse_addons()
     for addon_id in remote_addons.keys():
         remote_addon = remote_addons[addon_id]
@@ -227,25 +227,24 @@ def download_addons(repository, base, commit=None):
             remote_base = remote_base.replace('{commit}', commit)
         local_file = os.path.join(TMP_PATH, zip_filename)
         remote_file = remote_base + '/' + zip_filename
-        print "downloading %s..." % addon_id
-        os.system("wget -O %s %s" % (local_file, remote_file))
-        os.system("unzip %s -d %s" % (local_file, os.path.dirname(repository_path)))
+        print " downloading %s-%s" % (addon_id, remote_addon['version'])
+        os.system("curl %s -s -o %s" % (remote_file, local_file))
+        os.system("unzip %s -d %s > /dev/null" % (local_file, os.path.dirname(repository_path)))
     os.system("rm -r %s" % TMP_PATH)
 
 
 
 
 if __name__=='__main__':
-    print sys.argv
     if len(sys.argv) < 2:
         print "You need to provide repository name"
     else:
         repository = sys.argv[1]
         base=''
         commit = None
-        if len(sys.argv) == 3:
+        if len(sys.argv) > 2:
             base = sys.argv[2]
-        if len(sys.argv) == 4:
+        if len(sys.argv) > 3:
             commit = sys.argv[3]
         print "downloading addons from [%s] repository to %s" % (repository, base)
         download_addons(repository, base, commit)
