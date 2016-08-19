@@ -18,6 +18,7 @@ def getCapabilities():
     """
     list = []
     #list.append((_('Search in') + ' ' + 'OnlineFiles', 'plugin.video.online-files', 'all'))
+    list.append((_('Search in') + ' ' + 'Sosac.ph', 'plugin.video.sosac.ph', 'all'))
     list.append((_('Search in') + ' ' + 'Befun.cz', 'plugin.video.befun.cz', 'all'))
     list.append((_('Search in') + ' ' + 'Koukni.cz', 'plugin.video.koukni.cz', 'koukni.cz'))
     list.append((_('Search in') + ' ' + 'Ulozto.cz', 'plugin.video.online-files', 'ulozto.cz'))
@@ -158,6 +159,8 @@ def getSearcher(session, addon_name, archivczsk, succ_cb, err_cb):
         return BefunSearch(session, archivczsk, succ_cb, err_cb)
     elif addon_name == 'plugin.video.koukni.cz':
         return KoukniSearch(session, archivczsk, succ_cb, err_cb)
+    elif addon_name == 'plugin.video.sosac.ph':
+        return SosacSearch(session, archivczsk, succ_cb, err_cb)
     else:
         return None
             
@@ -228,6 +231,13 @@ class OnlineFilesSearch(Search):
         
 class BefunSearch(Search):
     addon_id = 'plugin.video.befun.cz'
+    
+    def search(self, search_exp, mode='all'):
+        params = {'search':search_exp, 'search-no-history':True}
+        self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
+
+class SosacSearch(Search):
+    addon_id = 'plugin.video.sosac.ph'
     
     def search(self, search_exp, mode='all'):
         params = {'search':search_exp, 'search-no-history':True}
