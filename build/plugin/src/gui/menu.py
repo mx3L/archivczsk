@@ -12,7 +12,7 @@ from Plugins.Extensions.archivCZSK import _, settings
 from Plugins.Extensions.archivCZSK.resources.repositories import \
     config as addon_config
 from base import BaseArchivCZSKScreen
-from common import CategoryWidgetSD, CategoryWidgetHD
+from common import Tabs
 import info
 
 
@@ -25,12 +25,8 @@ def openAddonMenu(session, addon, cb):
     else:
         session.openWithCallback(cb, ArchivCZSKAddonConfigScreen, addon)
 
-class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
-    WIDTH_HD = 610
-    HEIGHT_HD = 435
 
-    WIDTH_SD = 610
-    HEIGHT_SD = 435
+class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
 
     def __init__(self, session, categories=[]):
         BaseArchivCZSKScreen.__init__(self, session)
@@ -40,16 +36,14 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
         self.categories = categories
         self.selected_category = 0
         self.config_list_entries = []
-        self.category_widgets = []
-        self.category_widgets_y = 100
 
-        self.initializeCategories()
         self.initializeSkin()
 
         self["key_yellow"] = Label(_("Changelog"))
         self["key_green"] = Label(_("Save"))
         self["key_red"] = Label(_("Cancel"))
         self["key_blue"] = Label(_("Next"))
+        self["categories"] = Tabs([c['label'] for c in categories])
 
         self["actions"] = ActionMap(["SetupActions", "ColorActions"],
             {
@@ -66,60 +60,16 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
             x()
 
     def initializeSkin(self):
-        if self.HD:
-            self.skin = """
-            <screen position="center,center" size="%s,%s" >
-                <widget name="key_red" position="10,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_green" position="160,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_yellow" position="310,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_blue" position="460,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
-                <eLabel position="-1,55" size="612,1" backgroundColor="#999999" />""" % (self.WIDTH_HD, self.HEIGHT_HD)
-            self.skin += '\n' + self.getCategoriesWidgetString()
-
-            self.skin += """<widget name="config" position="0,%s" size="%s,%s" scrollbarMode="showOnDemand" />
-                        </screen>""" % (self.category_widgets_y, self.WIDTH_HD, self.HEIGHT_HD - self.category_widgets_y - 10)
-        else:
-            self.skin = """
-            <screen position="center,center" size="%s,%s" >
-                <widget name="key_red" position="10,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_green" position="160,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_yellow" position="310,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
-                <widget name="key_blue" position="460,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
-                <eLabel position="-1,55" size="612,1" backgroundColor="#999999" />""" % (self.WIDTH_HD, self.HEIGHT_HD)
-            self.skin += '\n' + self.getCategoriesWidgetString()
-
-            self.skin += """<widget name="config" position="0,%s" size="%s,%s" scrollbarMode="showOnDemand" />
-                        </screen>""" % (self.category_widgets_y, self.WIDTH_SD, self.HEIGHT_SD - self.category_widgets_y - 10)
-
-        # print "initialized skin %s" % self.skin
-    def initializeCategories(self):
-        self.createCategoryWidgets()
-
-    def createCategoryWidget(self, name, label, x_position, y_position):
-        if self.HD:
-            return CategoryWidgetHD(self, name, label, x_position, y_position)
-        else:
-            return CategoryWidgetSD(self, name, label, x_position, y_position)
-
-    def createCategoryWidgets(self):
-        space = 5
-        x_position = 5
-        y_position = 60
-        width = self.WIDTH_HD
-        if not self.HD : width = self.WIDTH_SD
-
-        for idx, category in enumerate(self.categories):
-            cat_widget = self.createCategoryWidget('category' + str(idx), category['label'], x_position, y_position)
-            self.category_widgets.append(cat_widget)
-            x_position += cat_widget.x_size + space
-            if (x_position + cat_widget.x_size + space) > width and self.categories[-1] != category:
-                x_position = 5
-                y_position += space + cat_widget.y_size
-                self.category_widgets_y += (2 * space) + cat_widget.y_size
-
-
-    def getCategoriesWidgetString(self):
-        return '\n'.join(cat_widget.get_skin_string() for cat_widget in self.category_widgets)
+        self.skin = """
+        <screen position="center,center" size="610,435" >
+            <widget name="key_red" position="10,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
+            <widget name="key_green" position="160,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
+            <widget name="key_yellow" position="310,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
+            <widget name="key_blue" position="460,5" zPosition="1" size="140,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
+            <eLabel position="5,57" size="600,1" backgroundColor="#ffffff" />
+            <widget name="categories" position="10,60" size="590,40" tab_size="140,30" tab_fontInactive="Regular;18" tab_fontActive="Regular;21" tab_backgroundColorActive="#000000" tab_backgroundColorInactive="#000000" />
+            <widget name="config" position="10,105" size="590,320" scrollbarMode="showOnDemand" />
+        </screen>"""
 
     def nextCategory(self):
         if len(self.categories) > 0:
@@ -133,7 +83,6 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
 
             self.config_list_entries = config_list
 
-        self.category_widgets[self.selected_category].activate()
         self["config"].list = self.config_list_entries
         self["config"].setList(self.config_list_entries)
 
@@ -152,9 +101,7 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
 
         self.config_list_entries = config_list
 
-        self.category_widgets[current_category].deactivate()
-        self.category_widgets[self.selected_category].activate()
-
+        self["categories"].setActiveTab(self.selected_category)
         self["config"].list = self.config_list_entries
         self["config"].setList(self.config_list_entries)
 
@@ -277,3 +224,4 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
 
     def cancel(self):
         self.close(None, None)
+
