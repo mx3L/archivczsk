@@ -131,7 +131,7 @@ class ArchivCZSK():
 
         elif config.plugins.archivCZSK.autoUpdate.value:
             path = os.path.join(os.path.dirname(__file__), 'commit')
-            Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
+            self.__console = Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
         else:
             self.open_archive_screen()
 
@@ -241,6 +241,7 @@ class ArchivCZSK():
             self.__repositories.clear()
             ArchivCZSK.__loaded = False
 
+        del self.__console
         # We dont need worker thread anymore so we stop it
         Task.stopWorkerThread()
 
