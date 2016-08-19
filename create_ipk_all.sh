@@ -132,8 +132,6 @@ mkdir -p ${P}/tmp/archivczsk/python2.6
 cp -rp ${DP}/sh4 ${P}/tmp/archivczsk
 cp -rp ${DP}/mipsel ${P}/tmp/archivczsk
 
-cp -p ${S}/script/getenigma2ver ${P}/tmp/archivczsk
-
 cp -p ${DP}/Python-2.6/Lib/encodings/hex_codec.py ${P}/tmp/archivczsk/python2.6/hex_codec.py
 cp -p ${DP}/Python-2.6/Lib/encodings/string_escape.py ${P}/tmp/archivczsk/python2.7/string_escape.py
 cp -p ${DP}/Python-2.6/Lib/encodings/latin_1.py ${P}/tmp/archivczsk/python2.6/latin_1.py
