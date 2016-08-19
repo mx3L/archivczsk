@@ -17,7 +17,7 @@ import info
 
 
 def openArchivCZSKMenu(session):
-    session.open(ArchiveCZSKConfigScreen)
+    session.open(ArchivCZSKConfigScreen)
 
 def openAddonMenu(session, addon, cb):
     if cb is None:
@@ -144,7 +144,7 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
             config_entry.setValue(res)
 
 
-class ArchiveCZSKConfigScreen(BaseArchivCZSKConfigScreen):
+class ArchivCZSKConfigScreen(BaseArchivCZSKConfigScreen):
     def __init__(self, session):
 
         categories = [
@@ -186,7 +186,7 @@ class ArchiveCZSKConfigScreen(BaseArchivCZSKConfigScreen):
         if current == config.plugins.archivCZSK.videoPlayer.info:
             info.showVideoPlayerInfo(self.session)
         else:
-            super(ArchiveCZSKConfigScreen, self).keyOk()
+            super(ArchivCZSKConfigScreen, self).keyOk()
 
 
 class ArchivCZSKAddonConfigScreen(BaseArchivCZSKConfigScreen):

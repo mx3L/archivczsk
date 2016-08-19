@@ -27,7 +27,7 @@ from common import MyConditionalLabel,  PanelColorListEntry2, \
     LoadingScreen, TipBar, CutLabel
 from download import DownloadList
 from enigma import eTimer, eLabel
-from menu import ArchiveCZSKConfigScreen
+from menu import ArchivCZSKConfigScreen
 from skin import parseFont
 from webpixmap import WebPixmap
 
@@ -334,7 +334,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
     def openSettings(self):
         if not self.working:
             self.provider.pause()
-            self.session.openWithCallback(self.openSettingsCB, ArchiveCZSKConfigScreen)
+            self.session.openWithCallback(self.openSettingsCB, ArchivCZSKConfigScreen)
 
     def openSettingsCB(self, cb=None):
         self.provider.resume()
