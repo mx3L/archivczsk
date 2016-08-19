@@ -130,10 +130,14 @@ class ArchivCZSK():
             self.opened_first_time()
 
         elif config.plugins.archivCZSK.autoUpdate.value:
-            path = os.path.join(os.path.dirname(__file__), 'commit')
-            self.__console = Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
+            self.download_commit()
         else:
             self.open_archive_screen()
+
+    def download_commit(self):
+        path = os.path.join(os.path.dirname(__file__), 'commit')
+        self.__console = Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
+
 
     def check_commit_download(self, data, retval, extra_args):
         if retval == 0:
@@ -155,7 +159,7 @@ class ArchivCZSK():
 
     def open_player_info(self, callback=None):
         import gui.info as info
-        info.showVideoPlayerInfo(self.session, self.check_addon_updates)
+        info.showVideoPlayerInfo(self.session, self.download_commit)
 
     def check_addon_updates(self):
         lock = threading.Lock()
