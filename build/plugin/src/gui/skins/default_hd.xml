@@ -91,7 +91,7 @@
             <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
         </screen> 
 
-        <screen name="ArchivCZSKSearchClientScreen" position="325,163" size="500,400">
+        <screen name="ArchivCZSKSearchClientScreen" position="center,center" size="500,400">
             <ePixmap name="search_pixmap" position="10,13" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/search.png" />
             <widget name="search" position="57,13" size="424,69" foregroundColor="#e5b243" halign="center" font="Regular; 23" />
             <ePixmap name="red_pixmap" position="10,90" size="35,27" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/red.png" />
