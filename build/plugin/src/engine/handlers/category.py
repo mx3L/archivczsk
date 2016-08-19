@@ -9,7 +9,7 @@ class CategoryItemHandlerTemplate(ItemHandler):
         ItemHandler.__init__(self, session, content_screen)
         self.content_provider = content_provider
 
-    def _open_item(self, item):
+    def _open_item(self, item, *args, **kwargs):
         self.content_screen.workingStarted()
         if not self.content_screen.refreshing:
             self.content_screen.save()
