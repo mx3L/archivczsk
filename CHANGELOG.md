@@ -1,3 +1,20 @@
+## Verzia 0.72 beta 8
+**Vseobecne**
+
+* oprava GS pri vyhladavani cez EPG 
+* pridana podpora pre novy prima plugin
+* odstraneny nefunkcny prima plugin,
+* oprava tv.sme.sk a videacesky.cz 
+
+## Verzia 0.72 beta 7
+**Vseobecne**
+
+* aktualizovane archivy
+* mensie upravy skinu, priprava pre podporu inych skinov
+* oprava GS pred zacatim prehravania na OpenATV image
+* odstraneny prehravac streamov ( odporucam pouzit IPTV bouquets )
+* pridana moznost neotvarat "Vyberte Zdroj" obrazovku pred nacitavanim videa, ale nacitat video linky a vybrat si z nich, s moznostou sa k nim vratit.
+
 ## Verzia 0.72 beta 6
 **Vseobecne**
 
