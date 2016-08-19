@@ -141,6 +141,7 @@ class ArchivCZSKSeeker():
             searcher.search(search_exp, mode)
         else:
             showInfoMessage(self.session, _("Cannot find searcher") + ' ' + addon_id.encode('utf-8'))
+            return self.cb()
             
     def close(self):
         if self.searching:
