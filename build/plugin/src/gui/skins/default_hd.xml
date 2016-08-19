@@ -116,6 +116,16 @@
             </widget>
         </screen> 
 
+        <screen name="ArchivCZSKConfigScreen" position="center,center" size="900,575">
+            <widget name="key_red" position="8,5" size="215,45" backgroundColor="#9f1313" font="Regular;20" halign="center" shadowColor="black" shadowOffset="-2,-2" valign="center" zPosition="1" />
+            <widget name="key_green" position="231,5" size="215,45" backgroundColor="#1f771f" font="Regular;20" halign="center" shadowColor="black" shadowOffset="-2,-2" valign="center" zPosition="1" />
+            <widget name="key_yellow" position="454,5" size="215,45" backgroundColor="#a08500" font="Regular;20" halign="center" shadowColor="black" shadowOffset="-2,-2" valign="center" zPosition="1" />
+            <widget name="key_blue" size="215,45" position="677,5" backgroundColor="#18188b" font="Regular;20" halign="center" shadowColor="black" shadowOffset="-2,-2" valign="center" zPosition="1" />
+            <eLabel position="5,57" size="890,1" backgroundColor="#ffffff" />
+            <widget name="categories" position="8,60" size="884,55" tab_size="215,45" spaceWidth="8" tab_fontInactive="Regular;18" tab_fontActive="Regular;21" tab_backgroundColorActive="#000000" tab_backgroundColorInactive="#000000" />
+            <widget name="config" position="10,115" size="880,455" scrollbarMode="showOnDemand" />
+        </screen>
+
          <screen name="ArchivCZSKChangelogScreen" position="center,center" size="900,576" title="Info" >
             <widget name="changelog" position="0,0" size="900,576" font="Regular;18" transparent="1" foregroundColor="white" />
         </screen>

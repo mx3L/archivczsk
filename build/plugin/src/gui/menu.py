@@ -198,6 +198,7 @@ class ArchivCZSKAddonConfigScreen(BaseArchivCZSKConfigScreen):
         categories = addon_config.getArchiveConfigList(addon)
 
         BaseArchivCZSKConfigScreen.__init__(self, session, categories=categories)
+        self.skinName = ["ArchivCZSKAddonConfigScreen", "ArchivCZSKConfigScreen"]
 
 
         self.onShown.append(self.buildMenu)
