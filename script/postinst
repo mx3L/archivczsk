@@ -79,10 +79,6 @@ then
 		cp $TMP/sh4/gst_rtmp_plugin/libgstrtmp.so $GSTREAMER/libgstrtmp.so
 		chmod 755 $GSTREAMER/libgstrtmp.so
 	fi
-
-else
-	rm $ARCHIVCZSK/engine/player/servicemp4.so
-	echo "Gstreamer not found, removing servicemp4.so"
 fi
 }
 
@@ -101,23 +97,6 @@ OE=$(get_oe)
 
 echo "Installation for $PLATFORM platform"
 
-echo 'Installing rtmpdump'
-if [ "$PLATFORM" == "sh4" ]; then
-	cp $TMP/$PLATFORM/rtmpdump/rtmpdump /usr/bin/
-	cp $TMP/$PLATFORM/rtmpdump/rtmpgw /usr/bin/
-else
-	if [ "$OE" == "OE4" ]; then
-		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpdump /usr/bin
-		cp $TMP/mipsel/rtmpdump/OE4_KSV/rtmpgw /usr/bin
-
-	else
-		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpdump /usr/bin
-		cp $TMP/mipsel/rtmpdump/OE16-3/rtmpgw /usr/bin
-	fi
-fi
-chmod 755 /usr/bin/rtmpdump
-chmod 755 /usr/bin/rtmpgw
-
 echo 'Installing pngquant...'
 if [ "$PLATFORM" == "sh4"  ]; then
 	cp $TMP/$PLATFORM/pngquant/pngquant /usr/bin/
@@ -130,19 +109,6 @@ else
 fi
 chmod 755 /usr/bin/pngquant
 
-echo 'Installing servicemp4...'
-E2VER=$(python $TMP/getenigma2ver)
-echo ".....found enigma2 for $PLATFORM platform, version: $E2VER"
-E2VER=${E2VER:0:6}
-if [ $E2VER -gt 201304 ] &&  [ "$PLATFORM" == "mips32el" ]
-   then
-	echo ".....version for new images will be used"
-	cp $TMP/mipsel/servicemp4/e2_052013/servicemp4.so $ARCHIVCZSK/engine/player/
-   else
-	echo ".....version for old images will be used"
-	cp $TMP/mipsel/servicemp4/e2_122012/servicemp4.so $ARCHIVCZSK/engine/player/
-fi
-
 if [ "$PLATFORM" == "sh4" ]
 then sh4_install
 fi
@@ -152,7 +118,7 @@ chmod 755 $ARCHIVCZSK/script/*.sh 2>/dev/null
 echo 'Installing neccessary Python libraries'
 if [ -d /usr/lib/python2.6 ]
 then
-	echo "found Python 2.6"
+	echo "Found Python 2.6"
 	cd  $TMP/python2.6
 	install_py ./hex_codec.py /usr/lib/python2.6/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.6/encodings/latin_1.py
@@ -181,17 +147,11 @@ then
 	install_py ./zipfile.py /usr/lib/python2.6/zipfile.py
 	install_py ./stat.py /usr/lib/python2.6/stat.py
 	install_py ./httplib.py /usr/lib/python2.6/httplib.py
-#	if [ ! -f /usr/lib/python2.6/lib-dynload/zlib.so ];
-#	then
-#	    cp ./zlib.so /usr/lib/python2.6/lib-dynload/zlib.so
-#	    chmod 755 /usr/lib/python2.6/lib-dynload/zlib.so
-#	fi
-
 fi
 
 if [ -d /usr/lib/python2.7 ]
 then
-	echo "found Python 2.7"
+	echo "Found Python 2.7"
 	cd $TMP/python2.7
 	install_py ./hex_codec.py /usr/lib/python2.7/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.7/encodings/latin_1.py
@@ -219,19 +179,12 @@ then
 	install_py ./zipfile.py /usr/lib/python2.7/zipfile.py
 	install_py ./stat.py /usr/lib/python2.7/stat.py
 	install_py ./httplib.py /usr/lib/python2.7/httplib.py
-#	if [ ! -f /usr/lib/python2.7/lib-dynload/zlib.so ];
-#	then
-#	    cp ./zlib.so /usr/lib/python2.7/lib-dynload/zlib.so
-#	    chmod 755 /usr/lib/python2.7/lib-dynload/zlib.so
-#	fi
 fi
 
 if [ -f $TMP/categories.xml ];
 then
-	echo "restoring categories..."
+	echo "Found categories.xml, restoring..."
 	cp $TMP/categories.xml $ARCHIVCZSK
-else
-	echo "no categories to restore..."
 fi
 
 echo "Clearing temp folder..."
