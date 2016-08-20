@@ -134,7 +134,7 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupportSt
 
 		# init subtitles
 		initSubsSettings()
-		SubsSupport.__init__(self, subsPath=subtitles, defaultPath=config.plugins.archivCZSK.subtitlesPath.getValue(), forceDefaultPath=True, searchSupport=True)
+		SubsSupport.__init__(self, subsPath=subtitles, defaultPath=config.plugins.archivCZSK.tmpPath.getValue(), forceDefaultPath=True, searchSupport=True)
 		SubsSupportStatus.__init__(self)
 
 		# playlist support

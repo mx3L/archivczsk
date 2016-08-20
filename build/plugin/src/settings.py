@@ -132,7 +132,7 @@ config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
 
 config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
 config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
-config.plugins.archivCZSK.subtitlesPath = ConfigDirectory(default="/tmp")
+config.plugins.archivCZSK.tmpPath = ConfigDirectory(default="/tmp")
 
 ########### Misc #########################
 
@@ -183,7 +183,7 @@ def get_path_settings():
     list = []
     list.append(getConfigListEntry(_("Data path"), config.plugins.archivCZSK.dataPath))
     list.append(getConfigListEntry(_("Downloads path"), config.plugins.archivCZSK.downloadsPath))
-    list.append(getConfigListEntry(_("Subtitles path"), config.plugins.archivCZSK.subtitlesPath))
+    list.append(getConfigListEntry(_("Temp path"), config.plugins.archivCZSK.tmpPath))
     return list
 
 def get_misc_settings():
