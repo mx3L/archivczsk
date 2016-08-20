@@ -245,7 +245,7 @@ class ArchivCZSK():
             self.__repositories.clear()
             ArchivCZSK.__loaded = False
 
-        del self.__console
+        self.__console = None
         # We dont need worker thread anymore so we stop it
         Task.stopWorkerThread()
 
