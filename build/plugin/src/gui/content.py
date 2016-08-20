@@ -79,8 +79,23 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         self["path_pixmap"].instance.setPixmap(PATH_IMG)
 
     def updatePath(self):
-        path_text = ' / '.join(params['parent_it'].name for params in self.stack)
-        path_text += ' / ' + self.parent_it.name
+        path_list = []
+        path_list_tmp = [params['parent_it'].name for params in self.stack] + [self.parent_it.name]
+        # squash two or more successive equal entries into one and show it:
+        # [name1, next, next , name] -> [name1, next(2), name2]
+        pidx = idx = 0
+        while (idx < len(path_list_tmp)):
+            path = path_list_tmp[idx]
+            path_list.append(path)
+            cnt = 0
+            while ((idx + 1) < len(path_list_tmp) and path == path_list_tmp[idx+1]):
+                idx += 1
+                cnt += 1
+            if cnt > 0:
+                path_list[pidx] = "%s (%d)"%(path, cnt + 1)
+            idx += 1
+            pidx += 1
+        path_text = ' / '.join(path_list)
         self["path_label"].setText(toString(path_text))
 
 
