@@ -1,3 +1,21 @@
+## Verzia 0.73
+**Vseobecne**
+
+* pridana full-hd verzia skinu
+* pridana podpora pre skinovanie nastaveni doplnkov/archivu
+  * uprava skinu nastaveni z vyuzitim noveho Tabs komponentu
+* opravy a vylepsenia pri zobrazovani cesty pri prehliadani doplnkov
+  * vzdy sa zobrazuje spravna cesta
+  * skracovanie cesty ak za sebou nasleduju rovnake nazvy 
+* pridane vyhladavanie v EPG pre sosac plugin
+* pridana podpora pre editovanie ulozenych vyhladavanych nazvov
+* oprava hlasenej chyby SSL: CERTIFICATE_VERIFY_FAILED, v niektorych 
+doplnkoch(ivysilani, prima, koukni) pri pouziti python-2.7.9+
+* oprava stahovania aktualizacii po prvom spusteni
+* odstranene nepotrebne sucasti archivov (servicemp4, rtmpgw)
+* odstranene instalovanie rtmpdump z dovodu moznej nekompatibility
+a uprednostnene instalovanie rtmpdump z feedu
+
 ## Verzia 0.72 beta 8
 **Vseobecne**
 
