@@ -180,11 +180,14 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
             self.contentHandler.info_item(self.getSelectedItem(), mode)
 
 
-class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen):
+class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
+    CONTEXT_TIP = (KEY_MENU_IMG, _("show menu of current addon"))
+
     def __init__(self, session, provider):
         contentHandler = VideoAddonManagementScreenContentHandler(session, self, provider)
         addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
         BaseContentScreen.__init__(self, session, contentHandler, addonItems)
+        TipBar.__init__(self, [self.CONTEXT_TIP], startOnShown=False)
         self.skinName = "ArchivCZSKContentScreen"
         self["menu"].style = "management"
         self.updateGUITimer = eTimer()
