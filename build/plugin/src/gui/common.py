@@ -17,7 +17,7 @@ from Screens.Screen import Screen
 from Tools.Directories import fileExists
 
 from Plugins.Extensions.archivCZSK import settings, _, log
-from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback, parseSize, parsePosition
 from Plugins.Extensions.archivCZSK.engine.tools.util import BtoMB, BtoKB, BtoGB, \
     toString
 from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, eSize, eListbox, \
@@ -25,7 +25,7 @@ from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, eSize, eListbox, \
     eListboxPythonMultiContent, gFont, getDesktop, ePicLoad, eServiceCenter, \
     iServiceInformation, eServiceReference, iSeekableService, iPlayableService, \
     iPlayableServicePtr, eTimer
-from skin import parseColor, parseSize, parseFont, parsePosition
+from skin import parseColor, parseFont
 import skin
 
 

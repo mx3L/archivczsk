@@ -17,6 +17,30 @@ from enigma import eServiceReference, eListboxPythonMultiContent, eServiceCenter
 
 from . import _
 
+from skin import parseSize as __parseSize
+from skin import parsePosition as __parsePosition
+
+def isDMMImage():
+    try:
+        from enigma import eTimer
+        eTimer().timeout.connect
+    except Exception as e:
+        return False
+    return True
+
+DMM_IMAGE = isDMMImage()
+
+def parseSize(s, scale, object = None, desktop = None):
+    if DMM_IMAGE:
+        return __parseSize(s, scale, desktop, object)
+    return __parseSize(s, scale, object, desktop)
+
+def parsePosition(s, scale, object = None, desktop = None, size = None):
+    if DMM_IMAGE:
+        return __parsePosition(s, scale, desktop, object)
+    return __parsePosition(s, scale, object, desktop, size)
+
+
 # taken from IPTVPlayer
 class eConnectCallbackObj:
     def __init__(self, obj=None, connectHandler=None):

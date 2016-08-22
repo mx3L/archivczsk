@@ -23,6 +23,7 @@ from gui.content import ArchivCZSKContentScreen
 import settings
 
 from . import _, log
+from Plugins.Extensions.archivCZSK.compat import DMM_IMAGE
 
 
 # loading repositories and their addons
@@ -64,13 +65,12 @@ class ArchivCZSK():
         from enigma import getDesktop
         desktop_width = getDesktop(0).size().width()
         if  desktop_width >= 1280:
-            # dm7080 hd DMM image is using dpkg as package manager, other images don't
-            try:
-                from enigma import eTimer
-                eTimer().connect
-                skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_hd.xml")
-            except Exception as e:
-                print e
+            if DMM_IMAGE:
+                if desktop_width == 1920:
+                    skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_fhd.xml")
+                else:
+                    skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_hd.xml")
+            else:
                 if desktop_width == 1920:
                     skin_default_path = os.path.join(settings.SKIN_PATH, "default_fhd.xml")
                 else:
