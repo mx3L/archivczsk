@@ -447,7 +447,7 @@ class AddonInfo(object):
         self.path = os.path.dirname(info_file)
         self.library = addon_dict['library']
         self.script = addon_dict['script']
-        self.tmp_path = settings.TMP_PATH
+        self.tmp_path = config.plugins.archivCZSK.tmpPath.value
         self.data_path = os.path.join(config.plugins.archivCZSK.dataPath.getValue(), self.id)
         self.profile = self.data_path
 

@@ -57,7 +57,7 @@ class Repository():
         self._addons = {}
         
         #create updater for repository
-        self._updater = updater.Updater(self, os.path.join(settings.TMP_PATH, self.id))
+        self._updater = updater.Updater(self, os.path.join(config.plugins.archivCZSK.tmpPath.value, self.id))
         
         # load installed addons in repository
         for addon_dir in os.listdir(self.addons_path):

@@ -31,7 +31,6 @@ CUSTOM_SIZES_PATH = os.path.join(SKIN_PATH,'sizes.json')
 
 ############ Updater Paths #############
 
-TMP_PATH = '/tmp/archivCZSK/'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0'
 
 config.plugins.archivCZSK = ConfigSubsection()
