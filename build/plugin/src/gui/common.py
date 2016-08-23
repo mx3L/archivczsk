@@ -360,11 +360,12 @@ class CutLabel(Label):
         testInstance.setText(text)
         actWidth = testInstance.calculateSize().width()
         pixsPerChar = float(actWidth) / float(len(text))
-        print actWidth, '/', len(text), '=', pixsPerChar
-        print maxWidth
+        #print actWidth, '/', len(text), '=', pixsPerChar
+        #print maxWidth
         if pixsPerChar > 0:
             self.maxChars = int(maxWidth / pixsPerChar)
-        print self.maxChars
+        #print self.maxChars
+        return True
 
     def GUIcreate(self, parent):
         self.testInstance = self.GUI_WIDGET(parent)
@@ -376,7 +377,7 @@ class CutLabel(Label):
 
 
     def setText(self, text):
-        print len(text), self.maxChars
+        #print len(text), self.maxChars
         if len(text) > self.maxChars:
             cutChars = len(text) - self.maxChars
             if self.cutLeft:
