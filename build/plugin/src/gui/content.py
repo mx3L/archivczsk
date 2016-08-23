@@ -35,7 +35,6 @@ from webpixmap import WebPixmap
 KEY_MENU_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_menu.png'))
 KEY_INFO_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_info.png'))
 KEY_5_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_5.png'))
-PATH_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'next.png'))
 
 
 class BaseContentScreen(BaseArchivCZSKListSourceScreen):
@@ -56,12 +55,9 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         self.stack = []
         self.old_stack_len = 0
         self["status_label"] = Label("")
-        self["path_pixmap"] = Pixmap()
         self["path_label"] = CutLabel(" / ")
         if not self.enabled_path:
             self["path_label"].hide()
-        else:
-            self.onLayoutFinish.append(self.setPathPixmap)
         self.onClose.append(self.__onClose)
 
     def __onClose(self):
@@ -74,9 +70,6 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
     def stopLoading(self):
         self.loadingScreen.stop()
         self["status_label"].setText("")
-
-    def setPathPixmap(self):
-        self["path_pixmap"].instance.setPixmap(PATH_IMG)
 
     def updatePath(self):
         path_list = []
