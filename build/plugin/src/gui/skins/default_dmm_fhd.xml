@@ -4,24 +4,24 @@
             <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
             <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="583,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
             <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-            <widget source="menu" render="Listbox" position="15,79" size="559,548" transparent="1" >
+            <widget source="menu" render="Listbox" position="15,79" size="559,543" transparent="1" >
                 <convert type="TemplatedMultiContent">
                     {"templates":
-                        {"default": (35,
+                        {"default": (36, 
                             [
-                                MultiContentEntryText(pos=(0,6), size=(552,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xff000001), # addon/category name
+                                MultiContentEntryText(pos=(7, 0), size=(430, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xff000001), # addon/category name
                             ]
                             , True, "showNever"), 
-                        "management": (35, 
+                        "management": (30, 
                             [
-                                MultiContentEntryText(pos=(0,6), size=(552,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xffffff),
-                                MultiContentEntryText(pos=(0,6), size=(552,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_RIGHT, text=1, color=0xff000002)
+                                MultiContentEntryText(pos=(7, 0), size=(425, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0, color=0xffffff),
+                                MultiContentEntryText(pos=(7, 0), size=(525, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_RIGHT, text=1, color=0xff000002)
                             ]
                             , True, "showNever"),
 
                         },
-                        "fonts": [gFont("Regular", 26)],
-                        "itemHeight": 35
+                        "fonts": [gFont("Regular", 30)],
+                        "itemHeight": 40
                     }
                 </convert>
             </widget>
@@ -30,8 +30,6 @@
             <widget font="Regular;25" foregroundColor="yellow" halign="left" name="author" position="626,516" size="487,32" transparent="1" />
             <widget font="Regular;25" foregroundColor="yellow" halign="left" name="version" position="626,564" size="487,32" transparent="1" />
             <widget font="Regular;25" foregroundColor="white" halign="left" name="about" position="626,610" size="487,128" transparent="1" />
-            <widget font="Regular;25" foregroundColor="white" halign="left" name="tip_label" position="77,694" size="510,32" transparent="1" />
-            <widget name="tip_pixmap" alphatest="on" zPosition="2" position="17,692" size="44,32" />
             <widget name="status_label" position="14,638" size="385,32" font="Regular; 16"  transparent="1" halign="left" valign="center" zPosition="2" foregroundColor="white" />
         </screen>
         
@@ -43,18 +41,18 @@
 
             <widget name="path_label" position="19,83" size="1118,32" halign="left" font="Regular;24" transparent="1" foregroundColor="#C4C4C4" />
             <eLabel position="19,122" size="1118,1" zPosition="1" backgroundColor="#C4C4C4" />
-            <widget source="menu" render="Listbox" position="12,141" size="1131,514" transparent="1" >
+            <widget source="menu" render="Listbox" position="12,141" size="1131,504" transparent="1" >
                 <convert type="TemplatedMultiContent">
                     {"templates":
-                        {"default": (35, 
+                        {"default": (36, 
                             [
-                                MultiContentEntryPixmapAlphaTest(pos=(6,6), size=(35,25), png=0),
-                                MultiContentEntryText(pos=(60,0), size=(1221,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
-                            ]
-                            , True, "showOnDemand"),
+                                MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(70, 39), png=0),
+                                MultiContentEntryText(pos=(70, 0), size=(1080, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+                        ]
+                        , True, "showOnDemand"),
                         },
-                        "fonts": [gFont("Regular", 26)],
-                        "itemHeight": 35
+                        "fonts": [gFont("Regular", 30)],
+                        "itemHeight": 40
                     }
                 </convert>
             </widget>
@@ -102,14 +100,14 @@
             <widget source="menu" render="Listbox" position="0,266" size="642,218" transparent="1" >
                 <convert type="TemplatedMultiContent">
                     {"templates":
-                        {"default": (35, 
+                        {"default": (36, 
                             [
-                                MultiContentEntryText(pos=(12,0), size=(1221,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0)
+                                MultiContentEntryText(pos=(10, 0), size=(950, 39), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=0)
                             ]
                             , True, "showOnDemand"),
                         },
-                        "fonts": [gFont("Regular", 26)],
-                        "itemHeight": 35
+                        "fonts": [gFont("Regular", 30)],
+                        "itemHeight": 40
                     }
                 </convert>
             </widget>
@@ -122,7 +120,7 @@
             <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
             <eLabel position="5,67" size="1147,1" backgroundColor="#ffffff" />
             <widget name="categories" position="10,71" size="1137,55" tab_size="276,45" spaceWidth="10" tab_fontInactive="Regular;23" tab_fontActive="Regular;26" tab_backgroundColorActive="#000000" tab_backgroundColorInactive="#000000" />
-            <widget name="config" position="10,136" size="1137,434" scrollbarMode="showOnDemand" />
+            <widget name="config" position="10,136" size="1137,434" itemHeight="30" scrollbarMode="showOnDemand" />
         </screen>
 
          <screen name="ArchivCZSKChangelogScreen" position="center,center" size="1157,740" title="Info" >
@@ -134,18 +132,18 @@
             <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
             <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="583,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
             <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-            <widget source="menu" render="Listbox" position="8,70" size="1137,572" transparent="1" >
+            <widget source="menu" render="Listbox" position="8,70" size="1137,565" transparent="1" >
                 <convert type="TemplatedMultiContent">
                     {"templates":
-                        {"default": (35, 
+                        {"default": (36, 
                             [
-                                MultiContentEntryPixmapAlphaTest(pos=(6,6), size=(35,25), png=0),
-                                MultiContentEntryText(pos=(60,0), size=(1221,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+                                MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(70, 39), png=0),
+                                MultiContentEntryText(pos=(70, 0), size=(790, 100), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
                             ]
                             , True, "showOnDemand"),
                         },
-                        "fonts": [gFont("Regular", 26)],
-                        "itemHeight": 35
+                        "fonts": [gFont("Regular", 30)],
+                        "itemHeight": 40
                     }
                 </convert>
             </widget>
