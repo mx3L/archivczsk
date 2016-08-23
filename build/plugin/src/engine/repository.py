@@ -24,7 +24,7 @@ class Repository():
     SUPPORTED_ADDONS = ['video', 'tools']
         
     def __init__(self, config_file):
-        log.info("initializing repository from %s" , config_file)
+        log.debug("initializing repository from %s" , config_file)
         pars = parser.XBMCAddonXMLParser(config_file)
         repo_dict = pars.parse()
         
@@ -73,8 +73,7 @@ class Repository():
                     addon = VideoAddon(addon_info, self)
                 except Exception:
                     traceback.print_exc()
-                    log.info("%s cannot load video addon %s" , self, addon_dir)
-                    log.info("skipping")
+                    log.error("%s cannot load video addon %s, skipping.." , self, addon_dir)
                     continue
                 else:
                     archivczsk.ArchivCZSK.add_addon(addon)
@@ -86,13 +85,12 @@ class Repository():
                     tools = ToolsAddon(addon_info, self)
                 except Exception:
                     traceback.print_exc()
-                    log.info("%s cannot load tools addon %s" , self, addon_dir)
-                    log.info("skipping")
+                    log.error("%s cannot load tools addon %s, skipping.." , self, addon_dir)
                     continue
                 else:
                     archivczsk.ArchivCZSK.add_addon(tools)
                     self.add_addon(tools)
-        log.info("%s successfully loaded" , self)
+        log.debug("%s successfully loaded" , self)
         
      
     def __repr__(self):

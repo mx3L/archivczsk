@@ -46,7 +46,6 @@ def decode_string(string):
 @callFromThread
 def getTextInput(session, title, text=""):
     def getTextInputCB(word):
-        log.debug("textinput: %s", word)
         if word is None:
             d.callback('')
         else:

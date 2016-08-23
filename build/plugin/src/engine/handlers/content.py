@@ -21,10 +21,10 @@ class ContentHandler(ItemHandler):
     def _get_handler(self, item):
         for handler in self._handlers:
             if handler.can_handle(item):
-                log.info("found handler %s" % (handler))
+                log.debug("found handler %s" % (handler))
                 return handler
             else:
-                log.info("%s cannot handle %s" % (handler, item))
+                log.debug("%s cannot handle %s" % (handler, item))
 
     def open_item(self, item, *args, **kwargs):
         if self.is_exit(item):
@@ -36,7 +36,7 @@ class ContentHandler(ItemHandler):
             if handler is not None:
                 handler.open_item(item, *args, **kwargs)
             else:
-                log.info("cannot open item %s, cannot found its handler" % item)
+                log.error("cannot open item %s, cannot found its handler" % item)
                 self.content_screen.stopLoading()
                 self.content_screen.showList()
                 self.content_screen.workingFinished()

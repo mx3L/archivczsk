@@ -31,7 +31,7 @@ class Addon(object):
         self.path = info.path
         self.relative_path = os.path.relpath(self.path, repository.path)
 
-        log.info("initializing %s", self)
+        log.info("%s - initializing", self)
 
         self._updater = repository._updater
         self.__need_update = False
@@ -54,7 +54,7 @@ class Addon(object):
         self.loader = AddonLoader(self)
 
     def __repr__(self):
-        return "%s(%s %s)" % (self.__class__.__name__, self.name, self.version)
+        return "%s(%s-%s)" % (self.__class__.__name__, self.name, self.version)
 
 
     def update(self):
@@ -86,9 +86,9 @@ class Addon(object):
     def get_info(self, info):
         try:
             atr = getattr(self.info, '%s' % info)
-        except Exception:
-            print traceback.print_exc()
-            log.debug("get_info cannot retrieve info")
+        except Exception as e:
+            #traceback.print_exc()
+            log.error("%s get_info cannot retrieve info - %s" % (self, str(e)))
             return None
         else:
             return atr
@@ -146,7 +146,6 @@ class ToolsAddon(Addon):
     def __init__(self, info, repository):
         Addon.__init__(self, info, repository)
         self.library = self.info.library
-        log.info('%s successfully loaded', self)
 
         lib_path = os.path.join(self.path, self.library)
         self.loader.add_path(lib_path)
@@ -172,9 +171,6 @@ class VideoAddon(Addon):
         main = self.settings.main
         main.seekable = ConfigYesNo(default=True)
         main.pausable = ConfigYesNo(default=True)
-
-        log.info('%s successfully loaded', self)
-
 
     def refresh_provider_paths(self, *args, **kwargs):
         self.downloads_path = self.get_setting('download_path')
@@ -218,28 +214,26 @@ class AddonLanguage(object):
         self.default_language_id = 'en'
         self.current_language_id = 'en'
         self.languages = {}
-        log.debug("initializing languages of %s", addon)
+        log.debug("initializing %s - languages", addon)
 
         if not os.path.isdir(languages_dir):
-            log.debug("%s cannot load languages, missing %s directory", self, os.path.basename(languages_dir))
+            log.error("%s cannot load languages, missing %s directory", self, os.path.basename(languages_dir))
             return
 
         for language_dir in os.listdir(languages_dir):
             language_id = self.get_language_id(language_dir)
             if language_id is None:
-                log.debug("%s unknown language %s, you need to update Language map to use it", self, language_dir)
-                log.debug("skipping language %s", language_dir)
+                log.error("%s unknown language %s, you need to update Language map to use it, skipping..", self, language_dir)
                 continue
             language_dir_path = os.path.join(languages_dir, language_dir)
             language_file_path = os.path.join(language_dir_path, self._language_filename)
             if os.path.isfile(language_file_path):
                 self.languages[language_id] = None
             else:
-                log.debug("%s cannot find language file %s", self, language_file_path)
-                log.debug("skipping language %s", language_dir)
+                log.error("%s cannot find language file %s, skipping %s language..", self, language_file_path, language_dir)
 
     def __repr__(self):
-        return "%s Language" % self.addon
+        return "%s[language]" % self.addon
 
 
     def load_language(self, language_id):
@@ -248,7 +242,7 @@ class AddonLanguage(object):
         try:
             el = util.load_xml(language_file_path)
         except Exception:
-            log.debug("skipping language %s", language_id)
+            log.error("%s skipping language %s"%(self, language_id))
         else:
             language = {}
             strings = el.getroot()
@@ -277,7 +271,7 @@ class AddonLanguage(object):
         if string_id in self.current_language:
             return self.current_language[string_id]
         else:
-            log.debug("%s cannot find language id %s in %s language, returning id of language", self, string_id, self.current_language_id)
+            log.error("%s cannot find language id %s in %s language, returning id of language", self, string_id, self.current_language_id)
             return str(string_id)
 
     def has_language(self, language_id):
@@ -287,11 +281,11 @@ class AddonLanguage(object):
         if self.has_language(language_id):
             if self.languages[language_id] is None:
                 self.load_language(language_id)
-            log.debug("setting current language %s to %s", self.current_language_id, language_id)
+            log.info("%s setting current language %s to %s", self, self.current_language_id, language_id)
             self.current_language_id = language_id
             self.current_language = self.languages[language_id]
         else:
-            log.debug("%s cannot set language %s, language is not available", self, language_id)
+            log.error("%s cannot set language %s, language is not available", self, language_id)
 
     def get_language(self):
         return self.current_language_id
@@ -304,7 +298,7 @@ class AddonLanguage(object):
 class AddonSettings(object):
 
     def __init__(self, addon, settings_file):
-        log.debug("initializing settings of addon %s", addon.name)
+        log.debug("%s - initializing settings", addon)
 
 
         # remove dots from addon.id to resolve issue with load/save config of addon
@@ -329,7 +323,7 @@ class AddonSettings(object):
 
 
     def __repr__(self):
-        return "%s Settings" % self.addon
+        return "%s[settings]" % self.addon
 
 
     def initialize_settings(self):
@@ -346,7 +340,7 @@ class AddonSettings(object):
                 self.initialize_entry(self.main, subentry)
                 if subentry['visible'] == 'true':
                     category['subentries'].append(getConfigListEntry(self._get_label(subentry['label']).encode('utf-8'), subentry['setting_id']))
-            log.debug("initialized category %s", str(category))
+            log.debug("%s initialized category %s", self, str(category))
             self.categories.append(category)
 
 
@@ -357,7 +351,7 @@ class AddonSettings(object):
         try:
             setting = getattr(self.main, '%s' % setting_id)
         except (ValueError, KeyError):
-            log.debug('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
+            log.error('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
             return ""
         else:
             if isinstance(setting, ConfigIP):
@@ -368,7 +362,7 @@ class AddonSettings(object):
         try:
             setting = getattr(self.main, '%s' % setting_id)
         except ValueError:
-            log.debug('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
+            log.error('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
             return False
         else:
             setting.setValue(value)
@@ -376,7 +370,7 @@ class AddonSettings(object):
             return True
 
     def _get_label(self, label):
-        log.debug('resolving label: %s', label)
+        log.debug('%s resolving label: %s', self, label)
         try:
             string_id = int(label)
         except ValueError:
@@ -432,7 +426,7 @@ class AddonSettings(object):
 class AddonInfo(object):
 
     def __init__(self, info_file):
-        log.info("initializing info of addon from %s" , info_file)
+        log.info("AddonInfo(%s) initializing.." , '/'.join(info_file.split('/')[-3:]))
 
         pars = parser.XBMCAddonXMLParser(info_file)
         addon_dict = pars.parse()
@@ -484,12 +478,16 @@ class AddonInfo(object):
             try:
                 self.changelog = text.decode('windows-1250')
             except Exception:
-                log.debug('cannot decode c[C]angleog.txt')
+                log.error('%s c[C]angleog.txt cannot be decoded', self)
                 self.changelog = u''
                 pass
         else:
-            log.debug('c[C]hangelog.txt missing')
+            log.error('%s c[C]hangelog.txt file is missing', self)
             self.changelog = u''
+
+
+    def __repr__(self):
+        return "AddonInfo(%s)" % ('/'.join(self.path.split('/')[-2:]))
 
 
     def get_changelog(self):

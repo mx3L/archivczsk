@@ -58,13 +58,13 @@ class ACZSKKodiToE2List(Converter):
         for arg in arguments:
             if arg.startswith("Index"):
                 self.indexes = [int(i) for i in arg.split(':')[1].split('.')]
-                print "[KodiToE2List] self.indexes = %s"%str(self.indexes)
+                #print "[KodiToE2List] self.indexes = %s"%str(self.indexes)
         if "ColorCodes" in arguments:
             self.type = self.TYPE_COLOR_CODES
-            print "[KodiToE2List] self.type = self.TYPE_COLOR_CODES"
+            #print "[KodiToE2List] self.type = self.TYPE_COLOR_CODES"
         else:
             self.type = self.TYPE_TEXT
-            print "[KodiToE2List] self.type = self.TYPE_TEXT"
+            #print "[KodiToE2List] self.type = self.TYPE_TEXT"
         if self.type == self.TYPE_COLOR_CODES:
             for arg in arguments:
                 if arg.split(':')[0] == "Bold":

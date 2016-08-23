@@ -36,7 +36,7 @@ class SysPath(list):
     def __init__(self, addons):
         self.addons = addons
     def append(self, val):
-        print '[AddonSysPath] append', val
+        log.debug('[AddonSysPath] append %s'%val)
         for addon in self.addons:
             if val.find(addon.id) != -1:
                 addon.loader.add_path(val)
@@ -54,7 +54,7 @@ class AddonSys():
 
     def __setitem__(self, key, val):
         if key == 'path':
-            print 'you cannot replace AddonSysPath'
+            log.error('you cannot replace AddonSysPath!')
         else:
             dict.__setitem__(self, key, val)
 
@@ -87,7 +87,7 @@ class ContentProvider(object):
         self.__started = False
         self.__paused = False
 
-    def __str__(self):
+    def __repr__(self):
         return "%s"% self.__class__.__name__
 
     def is_seekable(self):
@@ -106,47 +106,47 @@ class ContentProvider(object):
 
     def start(self):
         if self.__started:
-            log.info("[%s] cannot start, provider is already started",self)
+            log.debug("[%s] cannot start, provider is already started",self)
             return
         self.__started = True
         self.__paused = False
         for f in self.on_start:
             f()
-        log.info("[%s] started", self)
+        log.debug("[%s] started", self)
 
     def stop(self):
         if not self.__started:
-            log.info("[%s] cannot stop, provider is already stopped",self)
+            log.debug("[%s] cannot stop, provider is already stopped",self)
             return
         self.__started = False
         self.__paused = False
         for f in self.on_stop:
             f()
-        log.info("[%s] stopped", self)
+        log.debug("[%s] stopped", self)
 
     def resume(self):
         if not self.__started:
-            log.info("[%s] cannot resume, provider not started yet",self)
+            log.debug("[%s] cannot resume, provider not started yet",self)
             return
         if not self.__paused:
-            log.info("[%s] cannot resume, provider is already running",self)
+            log.debug("[%s] cannot resume, provider is already running",self)
             return
         self.__paused = False
         for f in self.on_resume:
             f()
-        log.info("[%s] resumed", self)
+        log.debug("[%s] resumed", self)
 
     def pause(self):
         if not self.__started:
-            log.info("[%s] cannot pause, provider not started yet",self)
+            log.debug("[%s] cannot pause, provider not started yet",self)
             return
         if self.__paused:
-            log.info("[%s] cannot pause, provider is already paused",self)
+            log.debug("[%s] cannot pause, provider is already paused",self)
             return
         self.__paused = True
         for f in self.on_pause:
             f()
-        log.info("[%s] paused", self)
+        log.debug("[%s] paused", self)
 
 
 class Media(object):
@@ -179,7 +179,7 @@ class Media(object):
             elif mode == 'play_and_download_gst':
                 self.player.playAndDownload(True)
         else:
-            log.info('Invalid playing mode - %s', str(mode))
+            log.error('Invalid playing mode - %s', str(mode))
 
 
 class Favorites(object):
@@ -271,7 +271,7 @@ class Downloads(object):
             log.debug('removing item %s from disk' % item.name)
             os.remove(item.path.encode('utf-8'))
         else:
-            log.info('cannot remove item %s from disk, not PDownload instance', str(item))
+            log.error('cannot remove item %s from disk, not PDownload instance', str(item))
 
 
 class ArchivCZSKContentProvider(ContentProvider):
@@ -323,6 +323,7 @@ class ArchivCZSKContentProvider(ContentProvider):
         self._categories_io.save()
 
     def get_content(self, params=None):
+        log.info('%s get_content - params: %s' % (self, str(params)))
         if not params or 'categories' in params:
             return self._get_categories()
         if 'category' in params:
@@ -441,6 +442,9 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         self.on_pause.append(self.__pause_resolving_provider)
         self.on_resume.append(self.__resume_resolving_provider)
 
+    def __repr__(self):
+        return "%s(%s)"%(self.__class__.__name__, self.video_addon)
+
     def __clean_sys_modules(self):
         self.saved_modules = {}
         for mod_name in repo_modules:
@@ -489,38 +493,38 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
 
     def resolve_dependencies(self):
         from Plugins.Extensions.archivCZSK.archivczsk import ArchivCZSK
-        log.info("trying to resolve dependencies for %s" , self.video_addon)
+        log.info("%s trying to resolve dependencies for %s" , self, self.video_addon)
         for dependency in self.video_addon.requires:
             addon_id, version, optional = dependency['addon'], dependency['version'], dependency['optional']
 
             # checking if archivCZSK version is compatible with this plugin
             if addon_id == 'enigma2.archivczsk':
                 if  not util.check_version(aczsk.version, version):
-                    log.debug("archivCZSK version %s>=%s" , aczsk.version, version)
+                    log.debug("%s archivCZSK version %s>=%s" , self, aczsk.version, version)
                 else:
-                    log.debug("archivCZSK version %s<=%s" , aczsk.version, version)
+                    log.debug("%s archivCZSK version %s<=%s" , self, aczsk.version, version)
                     raise AddonError(_("You need to update archivCZSK at least to") + " " + version + " " + _("version"))
 
-            log.info("%s requires %s addon, version %s" , self.video_addon, addon_id, version)
+            log.info("%s requires %s addon, version %s" , self, addon_id, version)
             if ArchivCZSK.has_addon(addon_id):
                 tools_addon = ArchivCZSK.get_addon(addon_id)
-                log.info("required %s founded" , tools_addon)
+                log.debug("%s required %s founded" , self, tools_addon)
                 if  not util.check_version(tools_addon.version, version):
-                    log.debug("version %s>=%s" , tools_addon.version, version)
+                    log.debug("%s version %s>=%s" , self, tools_addon.version, version)
                     self._dependencies.append(tools_addon)
                 else:
-                    log.debug("version %s<=%s" , tools_addon.version, version)
+                    log.debug("%s version %s<=%s" , self, tools_addon.version, version)
                     if not optional:
-                        log.error("cannot execute %s " , self.video_addon)
+                        log.error("%s cannot execute", self)
                         raise AddonError("Cannot execute addon %s, dependency %s version %s needs to be at least version %s"
                                         % (self.video_addon, tools_addon.id, tools_addon.version, version))
                     else:
-                        log.debug("skipping")
+                        log.debug("%s skipping")
                         continue
             else:
-                log.info("required %s addon not founded" , addon_id)
+                log.error("%s required %s addon not founded" ,self, addon_id)
                 if not optional:
-                    log.info("cannot execute %s addon" , self.video_addon)
+                    log.error("%s cannot execute %s addon" ,self, self.video_addon)
                     raise Exception("Cannot execute %s, missing dependency %s" % (self.video_addon, addon_id))
                 else:
                     log.debug("skipping")
@@ -531,13 +535,13 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
             self.__addon_sys.add_addon(addon)
 
     def release_dependencies(self):
-        log.debug("trying to release dependencies for %s" , self.video_addon)
+        log.debug("%s trying to release dependencies for %s" ,self , self.video_addon)
         for addon in self._dependencies:
             addon.deinclude()
         del self._dependencies[:]
 
     def get_content(self, session, params, successCB, errorCB):
-        log.debug('get_content - params:%s' % str(params))
+        log.info('%s get_content - params: %s' % (self, str(params)))
         self.__clear_list()
         self.content_deferred = defer.Deferred()
         self.content_deferred.addCallbacks(successCB, errorCB)
@@ -562,7 +566,8 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
                                'sys':self.__addon_sys, 'os':os})
 
     def _get_content_cb(self, success, result):
-        log.debug('get_content_cb - success:%s result: %s' % (success, result))
+        log.info('%s get_content_cb - success: %s, items: %d, guicmd: %r - %r' % (
+            self, success, len(self.__gui_item_list[0]), self.__gui_item_list[1], self.__gui_item_list[2]))
 
         # resetting timeout for resolving content
         socket.setdefaulttimeout(socket.getdefaulttimeout())
@@ -572,7 +577,6 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         except:
             pass
         if success:
-            log.debug("successfully loaded %d items" % len(self.__gui_item_list[0]))
             lst_itemscp = [[], None, {}]
             lst_itemscp[0] = self.__gui_item_list[0][:]
             lst_itemscp[1] = self.__gui_item_list[1]

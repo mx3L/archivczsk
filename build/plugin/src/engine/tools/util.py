@@ -88,7 +88,6 @@ def decode_html(data):
             return entity_re.subn(_substitute_entity, data)[0]
     except:
         traceback.print_exc()
-        print [data]
         return data
 
 def decode_string(string):
@@ -390,7 +389,7 @@ def url_exist(url, timeout=20):
         # print response.getheaders()
         print response.getheader('accept-ranges')
     except Exception:
-        print traceback.print_exc()
+        traceback.print_exc()
         return False
     finally:
         if conn: conn.close()
