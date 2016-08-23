@@ -1,32 +1,24 @@
-'''
-Created on 21.10.2012
-
-@author: marko
-'''
-
 import os
 import shutil
 import threading
 import traceback
 
 from Components.config import config, configfile
-from Screens.MessageBox import MessageBox
 from Components.Console import Console
+from Screens.MessageBox import MessageBox
 from skin import loadSkin
 
-from engine.addon import VideoAddon, XBMCAddon
-from engine.exceptions.updater import UpdateXMLVersionError
-from engine.tools.task import Task
-from engine.tools.util import check_program
-from gui.common import showInfoMessage
-from gui.content import ArchivCZSKContentScreen
-import settings
-
-from . import _, log
+from Plugins.Extensions.archivCZSK import _, log, toString, settings
+from Plugins.Extensions.archivCZSK.engine.addon import VideoAddon, XBMCAddon
+from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
+from Plugins.Extensions.archivCZSK.engine.tools.task import Task
+from Plugins.Extensions.archivCZSK.gui.info import showVideoPlayerInfo
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage
+from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKContentScreen
 from Plugins.Extensions.archivCZSK.compat import DMM_IMAGE
 
 
-# loading repositories and their addons
+
 class ArchivCZSK():
 
     __loaded = False
@@ -42,19 +34,18 @@ class ArchivCZSK():
     @staticmethod
     def load_repositories():
         from engine.repository import Repository
-        log.info('looking for repositories in %s', settings.REPOSITORY_PATH)
+        log.debug('looking for repositories in %s', settings.REPOSITORY_PATH)
         for repo in os.listdir(settings.REPOSITORY_PATH):
             repo_path = os.path.join(settings.REPOSITORY_PATH, repo)
             if os.path.isfile(repo_path):
                 continue
-            log.info('found repository %s', repo)
+            log.debug('found repository %s', repo)
             repo_xml = os.path.join(repo_path, 'addon.xml')
             try:
                 repository = Repository(repo_xml)
             except Exception:
                 traceback.print_exc()
-                log.info('cannot load repository %s', repo)
-                log.info("skipping")
+                log.error('cannot load repository %s, skipping..', repo)
                 continue
             else:
                 ArchivCZSK.add_repository(repository)
@@ -136,14 +127,14 @@ class ArchivCZSK():
 
     def download_commit(self):
         path = os.path.join(os.path.dirname(__file__), 'commit')
-        self.__console = Console().ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
-
+        self.__console = Console()
+        self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
 
     def check_commit_download(self, data, retval, extra_args):
         if retval == 0:
             self.check_addon_updates()
         else:
-            log.info("commit not downloaded")
+            log.error("commit not downloaded")
             self.open_archive_screen()
 
     def opened_first_time(self):
@@ -158,8 +149,7 @@ class ArchivCZSK():
 
 
     def open_player_info(self, callback=None):
-        import gui.info as info
-        info.showVideoPlayerInfo(self.session, self.download_commit)
+        showVideoPlayerInfo(self.session, self.download_commit)
 
     def check_addon_updates(self):
         lock = threading.Lock()
@@ -170,10 +160,10 @@ class ArchivCZSK():
                 with lock:
                     self.to_update_addons += to_update
             except UpdateXMLVersionError:
-                log.info('cannot retrieve update xml for repository %s', repository)
+                log.error('cannot retrieve update xml for repository %s', repository)
             except Exception:
                 traceback.print_exc()
-                log.info('error when checking updates for repository %s', repository)
+                log.error('error when checking updates for repository %s', repository)
         for repo_key in self.__repositories.keys():
             repository = self.__repositories[repo_key]
             threads.append(threading.Thread(target=check_repository, args=(repository,)))
@@ -189,21 +179,21 @@ class ArchivCZSK():
 
 
     def ask_update_addons(self, update_string):
-        self.session.openWithCallback(self.update_addons,
-                                      MessageBox,
-                                      _("Do you want to update") + " " + _("addons") + '?' + '\n\n' + update_string.encode('utf-8') ,
-                                      type=MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(
+                self.update_addons,
+                MessageBox,
+                "%s %s?\n\n%s" %(_("Do you want to update"), _("addons"), toString(update_string)),
+                type = MessageBox.TYPE_YESNO)
 
     def update_addons(self, callback=None, verbose=True):
         if not callback:
             self.open_archive_screen()
         else:
             updated_string = self._update_addons()
-            print updated_string.encode('utf-8')
             self.session.openWithCallback(self.ask_restart_e2,
-                                              MessageBox,
-                                              _("Following addons were updated") + ':\n\n' + updated_string.encode('utf-8'),
-                                              type=MessageBox.TYPE_INFO)
+                    MessageBox,
+                    "%s:\n\n%s"%(_("Following addons were updated"), toString(update_string)),
+                    type=MessageBox.TYPE_INFO)
 
     def _update_addons(self):
         for addon in self.to_update_addons:
@@ -216,13 +206,15 @@ class ArchivCZSK():
             else:
                 if updated:
                     self.updated_addons.append(addon)
-
         return '\n'.join(addon_u.name for addon_u in self.updated_addons)
 
 
     def ask_restart_e2(self, callback=None):
         ArchivCZSK.__need_restart = True
-        self.session.openWithCallback(self.restart_e2, MessageBox, _("You need to restart E2. Do you want to restart it now?"), type=MessageBox.TYPE_YESNO)
+        self.session.openWithCallback(self.restart_e2, 
+                MessageBox, 
+                _("You need to restart E2. Do you want to restart it now?"), 
+                type=MessageBox.TYPE_YESNO)
 
 
     def restart_e2(self, callback=None):
@@ -272,4 +264,4 @@ class ArchivCZSK():
                 with open("/proc/sys/vm/drop_caches", "w") as f:
                     f.write("1")
             except IOError as e:
-                print 'cannot drop caches : %s' % str(e)
+                log.error('cannot drop caches : %s' % str(e))
