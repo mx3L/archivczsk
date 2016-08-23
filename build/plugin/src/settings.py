@@ -1,20 +1,14 @@
-'''
-Created on 15.10.2012
-
-@author: marko
-'''
 import os
 
 from Components.Language import language
 from Components.config import config, ConfigSubsection, ConfigSelection, \
-    ConfigDirectory, ConfigYesNo, ConfigText, ConfigNothing, getConfigListEntry, \
+    ConfigDirectory, ConfigYesNo, ConfigNothing, getConfigListEntry, \
     NoSave
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
 
 from Plugins.Extensions.archivCZSK import log, _
-from engine.player.info import videoPlayerInfo
-from engine.tools import stb
-
+from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
+from Plugins.Extensions.archivCZSK.engine.tools import stb
 
 
 LANGUAGE_SETTINGS_ID = language.getLanguage()[:2]
@@ -30,7 +24,6 @@ PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions', 'archiv
 IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
 SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skins')
 REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories')
-STREAM_PATH = os.path.join(PLUGIN_PATH, 'streams/streams.xml')
 
 CUSTOM_FONTS_PATH = os.path.join(SKIN_PATH,'font.json')
 CUSTOM_COLORS_PATH = os.path.join(SKIN_PATH,'color.json')
