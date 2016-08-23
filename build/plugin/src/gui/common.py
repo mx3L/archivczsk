@@ -553,17 +553,17 @@ class Tabs(GUIComponent):
             #print 'Tabs - processing %r, %r'%(attrib, value)
 
             if attrib == 'size':
-                size = parseSize(value, scale, parent, desktop)
+                size = parseSize(value, scale, self.instance, desktop)
                 self.params['size'] = (size.width(), size.height())
             elif attrib == 'position':
-                position = parsePosition(value, scale, parent, desktop)
+                position = parsePosition(value, scale, self.instance, desktop)
                 self.params['position'] = (position.x(), position.y())
             elif attrib in ('spaceWidth',
                     'spaceHeight'):
                 self.params[attrib] = int(value)
                 toremove.append((attrib, value))
             elif attrib == 'tab_size':
-                size = parseSize(value, scale, parent, desktop)
+                size = parseSize(value, scale, self.instance, desktop)
                 self.tab_params['size'] = (size.width(), size.height())
                 toremove.append((attrib, value))
             elif attrib in ('tab_valign',
