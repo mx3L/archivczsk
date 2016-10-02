@@ -9,11 +9,12 @@ import shutil
 from datetime import datetime
 
 try:
-    from  xml.etree.cElementTree import ElementTree, Element, SubElement
+    from xml.etree.cElementTree import ElementTree, Element, SubElement
 except ImportError:
     from xml.etree.ElementTree import ElementTree, Element, SubElement
 
 from items import PVideoNotResolved, PFolder, PUserCategory
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString, toUnicode
 try:
     from Plugins.Extensions.archivCZSK import log
 except ImportError:
@@ -81,7 +82,7 @@ class Item2XML(BaseXML):
             self.__create_root()
 
     def __str__(self):
-        return "[%s - %s]" % (self.__class__.__name__, '/'.join(self.path.split('/')[-2:]))
+        return "[%s - %s]" % (self.__class__.__name__, toString('/'.join(self.path.split('/')[-2:])))
 
     def __len__(self):
         items = self.xml_root_element.find('items')
@@ -92,7 +93,7 @@ class Item2XML(BaseXML):
         SubElement(self.xml_root_element, 'items')
 
     def create_item(self, xml_item):
-        log.debug("{0} create item - {1}".format(self, xml_item))
+        log.debug("{0} create item - {1}".format(self, toString(xml_item)))
         item = self._get_item_cls(xml_item)()
         item.id = xml_item.attrib.get('id')
         item.addon_id = xml_item.attrib.get('addon_id')
@@ -118,25 +119,25 @@ class Item2XML(BaseXML):
         self.add_item(item)
 
     def create_xml_item(self, item):
-        log.debug("{0} create xml item - {1}".format(self, item))
+        log.debug("{0} create xml item - {1}".format(self, toString(item)))
         if item.id:
-            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, item))
+            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
             return
         item_id = item.get_id()
         if self.find_item_by_id(item_id):
-            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, item))
+            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
             return
         addon_id = item.addon_id
         xml_item = SubElement(self.xml_root_element.find('items'), 'item')
-        xml_item.set('id', str(item_id))
+        xml_item.set('id', toUnicode(item_id))
         xml_item.set('ctime', str(datetime.now()))
         if addon_id:
-            xml_item.set('addon_id', str(addon_id))
+            xml_item.set('addon_id', toUnicode(addon_id))
         name = SubElement(xml_item, 'name')
-        name.text = item.name
+        name.text = toUnicode(item.name)
         params = SubElement(xml_item, 'params')
         for key, value in item.params.iteritems():
-            params.set(str(key), str(value))
+            params.set(toUnicode(key), toUnicode(value))
         item.id = item_id
         return xml_item
 
@@ -164,10 +165,10 @@ class Item2XML(BaseXML):
         xml_items = self.xml_root_element.find('items')
         xml_item = self.find_item_by_id(item.id)
         if xml_item is None:
-            log.debug('{0} remove_item - {1} not found'.format(self, item))
+            log.debug('{0} remove_item - {1} not found'.format(self, toString(item)))
         else:
             xml_items.remove(xml_item)
-            log.debug('{0} remove_item - {1} successfully removed'.format(self, item))
+            log.debug('{0} remove_item - {1} successfully removed'.format(self, toString(item)))
         item.id = None
 
     def find_item_by_id(self, item_id):
