@@ -1,6 +1,7 @@
 from twisted.internet import defer
 
 from Components.config import config
+from Screens.MessageBox import MessageBox
 
 from item import ItemHandler
 from folder import FolderItemHandler
@@ -9,6 +10,7 @@ from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectSourceScre
 from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler, DownloadExceptionHandler, PlayExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString
 
 
 class MediaItemHandler(ItemHandler):
@@ -97,6 +99,24 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
         item.add_context_menu_item(_("Resolve videos"),
                                        action=self._resolve_videos,
                                        params={'item':item})
+        if 'favorites' in self.content_provider.capabilities:
+            item.add_context_menu_item(_("Add Shortcut"), 
+                    action=self.ask_add_shortcut, 
+                    params={'item':item})
+        else:
+            item.remove_context_menu_item(_("Add Shortcut"), 
+                    action=self.ask_add_shortcut, 
+                    params={'item':item})
+
+    def ask_add_shortcut(self, item):
+        self.item = item
+        self.session.openWithCallback(self.add_shortcut_cb, MessageBox,
+                text="%s %s %s"%(_("Do you want to add"), toString(item.name),  _("shortcut?")),
+                type=MessageBox.TYPE_YESNO)
+
+    def add_shortcut_cb(self, cb):
+        if cb:
+            self.content_provider.create_shortcut(self.item)
 
     def play_item(self, item, mode='play', *args, **kwargs):
         def wrapped(res_item):
