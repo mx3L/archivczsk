@@ -30,7 +30,7 @@ except ImportError as e:
 
 from controller import VideoPlayerController, GStreamerDownloadController, RTMPController
 from info import videoPlayerInfo
-from infobar import ArchivCZSKMoviePlayerInfobar, ArchivCZSKMoviePlayerSummary, InfoBarAspectChange, InfoBarPlaylist, StatusScreen
+from infobar import ArchivCZSKMoviePlayerInfobar, ArchivCZSKMoviePlayerSummary, InfoBarAspectChange, InfoBarPlaylist, StatusScreen, InfoBarSubservicesSupport
 from util import Video, getBufferInfo, setBufferSize
 import setting
 
@@ -83,9 +83,11 @@ class StandardStreamVideoPlayer(MoviePlayer, InfoBarPlaylist):
 
 ###################################################################################
 
-class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupportStatus, SubsSupport, ArchivCZSKMoviePlayerInfobar, InfoBarBase, InfoBarShowHide, \
-		InfoBarSeek, InfoBarAudioSelection, HelpableScreen, InfoBarNotifications, \
-		InfoBarServiceNotifications, InfoBarPVRState, \
+class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist,
+		SubsSupportStatus, SubsSupport, ArchivCZSKMoviePlayerInfobar,
+		InfoBarBase, InfoBarShowHide,InfoBarSeek, InfoBarAudioSelection,
+		HelpableScreen, InfoBarNotifications, InfoBarSubservicesSupport,
+		InfoBarServiceNotifications, InfoBarPVRState,
 		InfoBarAspectChange, InfoBarServiceErrorPopupSupport):
 
 	ENABLE_RESUME_SUPPORT = True
@@ -126,11 +128,11 @@ class ArchivCZSKMoviePlayer(BaseArchivCZSKScreen, InfoBarPlaylist, SubsSupportSt
 
 		InfoBarBase.__init__(self, steal_current_service=True)
 		# init of all inherited screens
-		for x in HelpableScreen, InfoBarShowHide, \
-			    InfoBarSeek, InfoBarAudioSelection, InfoBarNotifications, \
-				InfoBarServiceNotifications, HelpableScreen, InfoBarPVRState, \
-				InfoBarAspectChange, InfoBarServiceErrorPopupSupport:
-				x.__init__(self)
+		for x in HelpableScreen, InfoBarShowHide, InfoBarSubservicesSupport, \
+			InfoBarSeek, InfoBarAudioSelection, InfoBarNotifications, \
+			InfoBarServiceNotifications, HelpableScreen, InfoBarPVRState, \
+			InfoBarAspectChange, InfoBarServiceErrorPopupSupport:
+			x.__init__(self)
 
 		# init subtitles
 		initSubsSettings()
