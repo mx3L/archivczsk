@@ -4,6 +4,7 @@ Created on 25.9.2012
 @author: marko
 '''
 from Screens.Screen import Screen
+from Screens.ChoiceBox import ChoiceBox
 from Components.ProgressBar import ProgressBar
 from Components.Label import Label
 from Components.ActionMap import HelpableActionMap, ActionMap, NumberActionMap
@@ -424,3 +425,33 @@ class InfoBarPlaylist(object):
                 self.showPlaylist()
         else:
             self.leavePlayerConfirmed((True, 'quit'))
+
+
+# pretty much openpli's one but simplified
+class InfoBarSubservicesSupport(object):
+    def __init__(self):
+        self["InfoBarSubservicesSupport"] = HelpableActionMap(self, 
+                "ColorActions", { "green": (self.showSubservices, _("Show subservices"))}, -1)
+
+    def showSubservices(self):
+        service = self.session.nav.getCurrentService()
+        service_ref = self.session.nav.getCurrentlyPlayingServiceReference()
+        subservices = service and service.subServices()
+        numsubservices = subservices and subservices.getNumberOfSubservices() or 0
+
+        selection = 0
+        choice_list = []
+        for idx in range(0, numsubservices):
+            subservice_ref = subservices.getSubservice(idx)
+            if service_ref.toString() == subservice_ref.toString():
+                selection = idx
+            choice_list.append((subservice_ref.getName(), subservice_ref))
+        if numsubservices > 1:
+            self.session.openWithCallback(self.subserviceSelected, ChoiceBox,
+                title = _("Please select subservice..."), list = choice_list, 
+                selection = selection, skin_name="SubserviceSelection")
+
+    def subserviceSelected(self, service_ref):
+        if service_ref:
+            self.session.nav.playService(service_ref[1])
+
