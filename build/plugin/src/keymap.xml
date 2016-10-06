@@ -25,21 +25,20 @@
 	</map>
 
 	<map context="ArchivCZSKMoviePlayerActions">
-		<key id="KEY_RIGHT" mapto="subsDelayInc" flags="m" />
-		<key id="KEY_LEFT" mapto="subsDelayDec" flags="m" />
+		<key id="KEY_NEXT" mapto="nextEntry" flags="m" />
+		<key id="KEY_PREVIOUS" mapto="prevEntry" flags="m" />
 		<key id="KEY_TV" mapto="refreshSubs" flags="m" />
 		<key id="KEY_RED" mapto="red" flags="m" />
 		<key id="KEY_GREEN" mapto="green" flags="m" />
 		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
 		<key id="KEY_BLUE" mapto="blue" flags="m" />
 		<key id="KEY_ESC" mapto="cancel" flags="m" />
-		<key id="KEY_EXIT" mapto="leavePlayer" flags="m" />
-		<key id="KEY_STOP" mapto="leavePlayer" flags="m" />
-		<key id="KEY_ESC" mapto="leavePlayer" flags="m" />
+		<key id="KEY_EXIT" mapto="cancel" flags="m" />
+		<key id="KEY_STOP" mapto="cancel" flags="m" />
 		<key id="KEY_HOME" mapto="cancel" flags="m" />
 		<key id="KEY_OK" mapto="ok" flags="m" />
-		<key id="KEY_UP" mapto="up" flags="m" />
-		<key id="KEY_DOWN" mapto="down" flags="m" />
+		<key id="KEY_UP" mapto="showPlaylist" flags="m" />
+		<key id="KEY_DOWN" mapto="showPlaylist" flags="m" />
 		<key id="KEY_LEFT" mapto="left" flags="m" />
 		<key id="KEY_RIGHT" mapto="right" flags="m" />
 		<key id="KEY_INFO" mapto="toggleShow" flags="m" />

@@ -10,8 +10,12 @@ from shutil import copyfile
 from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
+from Screens.LocationBox import LocationBox
+from Screens.MessageBox import MessageBox
 from Components.config import config, ConfigSelection
 from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
 from Plugins.Extensions.archivCZSK.engine.player.player import Player 
@@ -21,6 +25,9 @@ from items import PVideo, PFolder, PPlaylist, PDownload, PCategory, PVideoAddon,
     PCategoryVideoAddon, PUserCategory, Stream, RtmpStream
 from serialize import CategoriesIO, FavoritesIO
 from tools import task, util
+from tools.util import toString
+
+from enigma import eTimer
 PNG_PATH = settings.IMAGE_PATH
 
 CREATE_DEFAULT_HTTPS_CONTEXT = None
@@ -90,15 +97,6 @@ class ContentProvider(object):
     def __repr__(self):
         return "%s"% self.__class__.__name__
 
-    def is_seekable(self):
-        return True
-
-    def is_pausable(self):
-        return True
-
-    def get_capabilities(self):
-        return self.capabilities
-
     def get_content(self, params={}):
         """get content with help of params
           @return: should return list of items created in items module"""
@@ -149,40 +147,110 @@ class ContentProvider(object):
         log.debug("[%s] paused", self)
 
 
-class Media(object):
-    def __init__(self, player_cls, allowed_download=True):
+class PlayMixin(object):
+    def __init__(self, allowed_download=True):
         self.player = None
-        self.player_cls = player_cls
-        self.player_cfg = config.plugins.archivCZSK.videoPlayer
         self.capabilities.append('play')
         if allowed_download:
             self.capabilities.append('play_and_download')
-            #self.capabilities.append('play_and_download_gst')
-        self.on_stop.append(self.__delete_player)
 
-    def __delete_player(self):
-        self.player = None
-
-    def play(self, session, item, mode, cb=None):
-        if not self.player:
-            use_video_controller = self.player_cfg.useVideoController.value
-            self.player = self.player_cls(session, cb, use_video_controller)
-        seekable = self.is_seekable()
-        pausable = self.is_pausable()
-        self.player.setMediaItem(item, seekable=seekable, pausable=pausable)
-        self.player.setContentProvider(self)
+    def play(self, session, item, mode, player_callback=None):
+        import traceback
+        self.player = Player(session, player_callback, self)
         if mode in self.capabilities:
             if mode == 'play':
-                self.player.play()
+                try:
+                    self.player.play_item(item)
+                except:
+                    traceback.print_exc()
             elif mode == 'play_and_download':
-                self.player.playAndDownload()
-            elif mode == 'play_and_download_gst':
-                self.player.playAndDownload(True)
+                try:
+                    self.play_and_download(session, item, "auto", player_callback)
+                except:
+                    traceback.print_exc()
         else:
             log.error('Invalid playing mode - %s', str(mode))
 
+    def play_and_download(self, session, item, mode, player_callback=None, prefill_buffer=20*1024*1024):
 
-class Favorites(object):
+        def stop_etimer():
+            if len(etimer):
+                etimer[0].stop()
+                del etimer[1]
+                del etimer[0]
+
+        def play_video_callback(callback=None):
+            if callback != "error":
+                stop_etimer()
+                download_obj[0].onFinishCB.remove(finish_download_callback)
+                download_obj[0].onFinishCB.append(DownloadManagerMessages.finishDownloadCB)
+                video_item = PVideo()
+                video_item.name = item.name
+                video_item.url = download_obj[0].local
+                # TODO subs should point to local path
+                video_item.subs = item.subs
+                self.player.play_item(video_item)
+
+        def check_prefill_state():
+            status = download_obj[0].status
+            status.update(1)
+            size_kb = util.BtoKB(status.currentLength)
+            prefill_buffer_kb = util.BtoKB(prefill_buffer)
+            percent = size_kb / float(prefill_buffer_kb) * 100
+            speed_kbs = util.BtoKB(status.speed)
+            if size_kb < prefill_buffer_kb:
+                messagebox[0]["text"].setText("%s\n\n%s: %dKB/%dKB (%d%%) %dKB/s\n\n%s"%(
+                    _("Please wait until enough data is downloaded for fluent playback"),
+                    _("Bufferring"), size_kb, prefill_buffer_kb, percent, speed_kbs,
+                    _("You can press any key to stop pre-buffering and start immediately")))
+                etimer[0].start(1000, True)
+            else:
+                messagebox[0].close()
+
+        def start_download_callback(download):
+            download_obj.append(download)
+            messagebox.append(session.openWithCallback(
+                    play_video_callback, MessageBox, "",
+                    MessageBox.TYPE_INFO, close_on_any_key=True))
+            etimer.append(eTimer())
+            etimer.append(eConnectCallback(etimer[0].timeout, check_prefill_state))
+            etimer[0].start(1000, True)
+
+        def finish_download_callback(download):
+            stop_etimer()
+            if not download.downloaded:
+                messagebox[0].close("error")
+                DownloadManagerMessages.finishDownloadCB(download)
+                player_callback and player_callback()
+            else:
+                messagebox[0].close()
+
+        def do_play_and_download():
+            self.download(session, item,
+                    start_callback=start_download_callback,
+                    finish_callback=finish_download_callback,
+                    player_callback = player_callback,
+                    mode = mode)
+
+        def ask_if_play_and_download_callback(answer):
+            if answer:
+                do_play_and_download()
+            else:
+                player_callback and player_callback()
+
+        download_obj = []
+        etimer       = []
+        messagebox   = []
+
+        message = "%s%s\n\n%s"%(
+                _("Play and download mode is not supported by all video formats."),
+                _("Player can start to behave unexpectedly or no to play video at all."),
+                _("Do yo want to continue?"))
+        session.openWithCallback(ask_if_play_and_download_callback, MessageBox,
+                message, MessageBox.TYPE_YESNO)
+
+
+class FavoritesMixin(object):
     def __init__(self, shortcuts_path):
         self.shortcuts = FavoritesIO(os.path.join(shortcuts_path, 'shortcuts'))
         self.capabilities.append('favorites')
@@ -201,7 +269,7 @@ class Favorites(object):
         self.shortcuts.save()
 
 
-class Downloads(object):
+class DownloadsMixin(object):
     def __init__(self, downloads_path, allowed_download):
         self.downloads_path = downloads_path
         if allowed_download:
@@ -243,35 +311,78 @@ class Downloads(object):
 
         return video_lst
 
+    def download(self, session, item, start_callback=None, finish_callback=None,
+            player_callback = None, play_download=False, mode=""):
+        #closure fun :)
+        def do_download():
+            # have to rename to start_cb otherwise python
+            # doesnt see start_callback
+            start_cb = start_callback
+            finish_cb = finish_callback
+            if start_cb is None:
+                start_cb = DownloadManagerMessages.startDownloadCB
+            if finish_cb is None:
+                finish_cb = DownloadManagerMessages.finishDownloadCB
+            override_cb = DownloadManagerMessages.overrideDownloadCB
 
-    def download(self, item, startCB, finishCB, playDownload=False, mode="", overrideCB=None):
-        """Downloads item PVideo itemem calls startCB when download starts
-           and finishCB when download finishes
-        """
-        quiet = False
+            downloadManager = DownloadManager.getInstance()
+            d = downloadManager.createDownload(
+                name=item.name, url=item.url, 
+                stream=item.stream, filename=item.filename,
+                live=item.live, destination=destination[0],
+                startCB=start_cb, finishCB=finish_cb, quiet=False,
+                playDownload=play_download, headers=headers, mode=mode)
+
+            if item.subs:
+                remote = item.subs
+                local = os.path.splitext(d.local)[0] + '.srt'
+                if os.path.isfile(remote):
+                    copyfile(remote, local)
+                elif remote.startswith('http'):
+                    util.download_to_file(remote, local)
+            downloadManager.addDownload(d, override_cb)
+
+        def change_download_path_callback(answer):
+            if answer:
+                destination[0] = answer
+            ask_if_download()
+
+        def ask_if_download_callback(answer):
+            if not answer or answer == "no":
+                player_callback and player_callback()
+            else:
+                if answer == "yes":
+                    do_download()
+                if answer == "change":
+                    downloads_path = (self.downloads_path.endswith("/") and 
+                            self.downloads_path or self.downloads_path + "/")
+                    session.openWithCallback(change_download_path_callback,
+                            LocationBox, _("Select new location"),
+                            currDir=downloads_path)
+
+        def ask_if_download():
+            size_bytes = util.url_get_content_length(item.url, headers)
+            size_mbytes = size_bytes and util.BtoMB(size_bytes) or "???"
+            free_bytes = util.get_free_space(destination[0])
+            free_mbytes = free_bytes and util.BtoMB(free_bytes) or "???"
+
+            message = "%s:\n\n%s:\n%s - %sMB\n\n%s:\n%s - %sMB %s"%(
+                    _("Do you want to download"),
+                    _("Source"), toString(item.name), str(size_mbytes),
+                    _("Destination"), toString(destination[0]), str(free_mbytes), _("free"))
+            choices = [ (_("yes"), "yes"), (_("no"), "no"), (_("change location"), "change")]
+
+            session.openWithCallback(ask_if_download_callback,
+                    MessageBox, message, MessageBox.TYPE_YESNO, list=choices)
+
         headers = item.settings['extra-headers']
-        log.debug("Download headers %s", headers)
-        downloadManager = DownloadManager.getInstance()
-        d = downloadManager.createDownload(name=item.name, url=item.url, stream=item.stream, filename=item.filename,
-                                           live=item.live, destination=self.downloads_path,
-                                           startCB=startCB, finishCB=finishCB, quiet=quiet,
-                                           playDownload=playDownload, headers=headers, mode=mode)
-        if item.subs:
-            log.debug('subtitles link: %s' , item.subs)
-            remote = item.subs
-            local = os.path.splitext(d.local)[0] + '.srt'
-            if os.path.isfile(remote):
-                copyfile(remote, local)
-            elif remote.startswith('http'):
-                util.download_to_file(remote, local)
-        downloadManager.addDownload(d, overrideCB)
+        destination = [self.downloads_path]
+        ask_if_download()
 
     def remove_download(self, item):
-        if item is not None and isinstance(item, PDownload):
+        if item is not None:
             log.debug('removing item %s from disk' % item.name)
-            os.remove(item.path.encode('utf-8'))
-        else:
-            log.error('cannot remove item %s from disk, not PDownload instance', str(item))
+            os.remove(toString(item.path))
 
 
 class ArchivCZSKContentProvider(ContentProvider):
@@ -408,7 +519,7 @@ class ArchivCZSKContentProvider(ContentProvider):
         return addons
 
 
-class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
+class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, FavoritesMixin):
 
     __resolving_provider = None
     __gui_item_list = [[], None, {}] #[0] for items, [1] for command to GUI [2] arguments for command
@@ -430,9 +541,9 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
         allowed_download = not video_addon.get_setting('!download')
         self.video_addon = video_addon
         ContentProvider.__init__(self)
-        Media.__init__(self, Player, allowed_download)
-        Downloads.__init__(self,downloads_path, allowed_download)
-        Favorites.__init__(self,shortcuts_path)
+        PlayMixin.__init__(self, allowed_download)
+        DownloadsMixin.__init__(self, downloads_path, allowed_download)
+        FavoritesMixin.__init__(self, shortcuts_path)
         self._dependencies = []
         self._sys_importer = CustomSysImporter(self.__addon_sys)
         self.on_start.append(self.__clean_sys_modules)
@@ -584,12 +695,6 @@ class VideoAddonContentProvider(ContentProvider, Media, Downloads, Favorites):
             self.content_deferred.callback(lst_itemscp)
         else:
             self.content_deferred.errback(result)
-
-    def is_seekable(self):
-        return self.video_addon.get_setting('seekable')
-
-    def is_pausable(self):
-        return self.video_addon.get_setting('pausable')
 
     def close(self):
         self.video_addon = None

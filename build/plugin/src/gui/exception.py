@@ -122,8 +122,5 @@ class PlayExceptionHandler(GUIExceptionHandler):
                 func(*args, **kwargs) 
             except play.UrlNotExistError, e:
                 self.errorMessage((_("Video url doesnt exist")))
-            except play.RTMPGWMissingError, e:
-                self.errorMessage(_("Cannot found rtmpgw, make sure that you have installed it, or try to use Video player with internal rtmp support"))
-    
         return wrapped
     

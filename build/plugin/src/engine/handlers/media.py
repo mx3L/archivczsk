@@ -7,7 +7,6 @@ from item import ItemHandler
 from folder import FolderItemHandler
 from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectSourceScreen
-from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler, DownloadExceptionHandler, PlayExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
@@ -28,29 +27,18 @@ class MediaItemHandler(ItemHandler):
             self.content_provider.resume()
             self.content_screen.workingFinished()
 
-        @PlayExceptionHandler(self.session)
-        def start_play(item, mode):
-            self.content_provider.pause()
-            try:
-                self.content_provider.play(self.session, item, mode, end_play)
-            except Exception:
-                self.content_provider.resume()
-                raise
         self.content_screen.workingStarted()
-        start_play(item, mode)
+        self.content_provider.pause()
+        self.content_provider.play(self.session, item, mode, end_play)
 
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
         def start_download(mode):
             try:
-                self.content_provider.download(item, startCB=startCB, finishCB=finishCB, mode=mode, overrideCB=overrideCB)
+                self.content_provider.download(self.session, item, mode=mode)
             except Exception:
                 self.content_screen.workingFinished()
                 raise
-
-        startCB = DownloadManagerMessages.startDownloadCB
-        finishCB = DownloadManagerMessages.finishDownloadCB
-        overrideCB = DownloadManagerMessages.overrideDownloadCB
         start_download(mode)
 
     def _init_menu(self, item):
@@ -66,12 +54,6 @@ class MediaItemHandler(ItemHandler):
                                        action=self.play_item,
                                        params={'item':item,
                                                       'mode':'play_and_download'})
-
-        if 'play_and_download_gst' in provider.capabilities:
-            item.add_context_menu_item(_("Play and download (Gstreamer)"),
-                                       action=self.play_item,
-                                       params={'item':item,
-                                                      'mode':'play_and_download_gst'})
 
         if 'download' in provider.capabilities:
             item.add_context_menu_item(_("Download"),

@@ -264,3 +264,30 @@ class VideoAddonManagementScreenContentHandler(ContentHandler):
             self.content_screen.load(parent_content)
         else:
             self.content_screen.close()
+
+
+class ShortcutsContentHandler(ContentHandler):
+
+    def __init__(self, session, content_screen, content_provider):
+        handlers = []
+        handlers.append(FolderItemHandler(session, content_screen, content_provider))
+        handlers.append(VideoNotResolvedItemHandler(session, content_screen, content_provider))
+        ContentHandler.__init__(self, session, content_screen, content_provider, handlers)
+
+    def exit_item(self):
+        parent_content = self.content_screen.popParent()
+        if parent_content is not None:
+            self.content_screen.load(parent_content)
+        else:
+            self.content_screen.close(self.content_provider)
+
+    def _render_content(self, content):
+        if not self.content_screen.refreshing:
+            self.content_screen.save()
+        else:
+            self.content_screen.refreshing = False
+        self.content_screen.load(content)
+
+    def remove_shortcut(self):
+        pass
+

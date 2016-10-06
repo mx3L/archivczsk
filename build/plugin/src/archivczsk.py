@@ -139,9 +139,6 @@ class ArchivCZSK():
 
     def opened_first_time(self):
         os.remove(os.path.join(settings.PLUGIN_PATH, 'firsttime'))
-        config.plugins.archivCZSK.videoPlayer.useDefaultSkin.setValue(False)
-        config.plugins.archivCZSK.videoPlayer.useDefaultSkin.save()
-
         text = _("This is the first time you started archivyCZSK") + "\n\n"
         text += _("For optimal usage of this plugin, you need to check") + "\n"
         text += _("if you have all neccessary video plugins installed") + "."

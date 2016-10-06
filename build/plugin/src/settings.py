@@ -16,7 +16,6 @@ LANGUAGE_SETTINGS_ID = language.getLanguage()[:2]
 ############ STB Info ###############
 
 (MANUFACTURER, MODEL, ARCH, VERSION) = stb.getBoxtype()
-AZBOX = (MODEL == 'Azbox')
 
 ######### Plugin Paths ##############
 
@@ -50,39 +49,12 @@ MEDIA_EXTENSIONS = VIDEO_EXTENSIONS + AUDIO_EXTENSIONS + ARCHIVE_EXTENSIONS + PL
 
 config.plugins.archivCZSK.videoPlayer = ConfigSubsection()
 config.plugins.archivCZSK.videoPlayer.info = NoSave(ConfigNothing())
-playertype = [(videoPlayerInfo.type, videoPlayerInfo.getName())]
-config.plugins.archivCZSK.videoPlayer.exitFix = ConfigYesNo(default=False)
-config.plugins.archivCZSK.videoPlayer.detectedType = ConfigSelection(choices=playertype)
 
 choicelist = [('standard', _('standard player')),
               ('custom', _('custom player (subtitle support)'))]
 config.plugins.archivCZSK.videoPlayer.type = ConfigSelection(default="custom", choices=choicelist)
-config.plugins.archivCZSK.videoPlayer.useVideoController = ConfigYesNo(default=True)
-config.plugins.archivCZSK.videoPlayer.useDefaultSkin = ConfigYesNo(default=False)
 config.plugins.archivCZSK.videoPlayer.autoPlay = ConfigYesNo(default=True)
 config.plugins.archivCZSK.videoPlayer.confirmExit = ConfigYesNo(default=False)
-
-# to use servicemrua instead of servicemp3/servicemp4
-config.plugins.archivCZSK.videoPlayer.servicemrua = ConfigYesNo(default=False)
-
-choicelist = []
-for i in range(500, 20000, 500):
-    choicelist.append(("%d" % i, "%d KB" % i))
-config.plugins.archivCZSK.videoPlayer.bufferSize = ConfigSelection(default="5000", choices=choicelist)
-
-for i in range(1, 100, 1):
-    choicelist.append(("%d" % i, "%d MB" % i))
-config.plugins.archivCZSK.videoPlayer.downloadBufferSize = ConfigSelection(default="8", choices=choicelist)
-
-choicelist = []
-for i in range(1, 50, 1):
-    choicelist.append(("%d" % i, "%d s" % i))
-config.plugins.archivCZSK.videoPlayer.bufferDuration = ConfigSelection(default="5", choices=choicelist)
-
-choicelist = []
-for i in range(0, 250, 1):
-    choicelist.append(("%d" % i, "%d s" % i))
-config.plugins.archivCZSK.videoPlayer.playDelay = ConfigSelection(default="20", choices=choicelist)
 
 choicelist = []
 for i in range(10, 240, 5):
@@ -92,13 +64,7 @@ config.plugins.archivCZSK.videoPlayer.rtmpTimeout = ConfigSelection(default="20"
 choicelist = []
 for i in range(1000, 50000, 1000):
     choicelist.append(("%d" % i, "%d ms" % i))
-config.plugins.archivCZSK.videoPlayer.archiveBuffer = ConfigSelection(default="10000", choices=choicelist)
-
-choicelist = []
-for i in range(1000, 50000, 1000):
-    choicelist.append(("%d" % i, "%d ms" % i))
-config.plugins.archivCZSK.videoPlayer.liveBuffer = ConfigSelection(default="10000", choices=choicelist)
-
+config.plugins.archivCZSK.videoPlayer.rtmpBuffer = ConfigSelection(default="10000", choices=choicelist)
 
 ############ Main config #################
 
@@ -133,29 +99,13 @@ config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
 config.plugins.archivCZSK.showVideoSourceSelection = ConfigYesNo(default=True)
 config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
-config.plugins.archivCZSK.hdmuFix = ConfigYesNo(default=False)
 
 
 def get_player_settings():
     list = []
-    player = config.plugins.archivCZSK.videoPlayer.type.getValue()
-    useServiceMRUA = config.plugins.archivCZSK.videoPlayer.servicemrua.getValue()
     list.append(getConfigListEntry(_("Show more info about player"), config.plugins.archivCZSK.videoPlayer.info))
-    list.append(getConfigListEntry(_("Video player"), config.plugins.archivCZSK.videoPlayer.type))
-    if player == 'custom':
-        list.append(getConfigListEntry(_("Use video controller"), config.plugins.archivCZSK.videoPlayer.useVideoController))
-        list.append(getConfigListEntry(_("Use default skin"), config.plugins.archivCZSK.videoPlayer.useDefaultSkin))
-        if videoPlayerInfo.type != 'gstreamer':
-            list.append(getConfigListEntry(_("Exit fix"), config.plugins.archivCZSK.videoPlayer.exitFix))
-        if videoPlayerInfo.type == 'gstreamer':
-            list.append(getConfigListEntry(_("Buffer size"), config.plugins.archivCZSK.videoPlayer.bufferSize))
-    if player == 'standard' and AZBOX:
-        list.append(getConfigListEntry(_("Use servicemrua (AZBOX)"), config.plugins.archivCZSK.videoPlayer.servicemrua))
     list.append(getConfigListEntry(_("RTMP Timeout"), config.plugins.archivCZSK.videoPlayer.rtmpTimeout))
-    list.append(getConfigListEntry(_("TV archive rtmp buffer"), config.plugins.archivCZSK.videoPlayer.archiveBuffer))
-    list.append(getConfigListEntry(_("Default live rtmp streams buffer"), config.plugins.archivCZSK.videoPlayer.liveBuffer))
-    # if not (videoPlayerInfo.type == 'gstreamer'):
-    list.append(getConfigListEntry(_("Play after"), config.plugins.archivCZSK.videoPlayer.playDelay))
+    list.append(getConfigListEntry(_("RTMP Buffer"), config.plugins.archivCZSK.videoPlayer.rtmpBuffer))
     list.append(getConfigListEntry(_("Confirm exit when closing player"), config.plugins.archivCZSK.videoPlayer.confirmExit))
     return list
 
@@ -185,6 +135,4 @@ def get_misc_settings():
     list.append(getConfigListEntry(_("Show video source selection"), config.plugins.archivCZSK.showVideoSourceSelection))
     list.append(getConfigListEntry(_("Convert captcha images to 8bit"), config.plugins.archivCZSK.convertPNG))
     list.append(getConfigListEntry(_("Drop caches on exit"), config.plugins.archivCZSK.clearMemory))
-    if ARCH == 'sh4':
-        list.append(getConfigListEntry(_("Amiko HDMU fix"), config.plugins.archivCZSK.hdmuFix))
     return list

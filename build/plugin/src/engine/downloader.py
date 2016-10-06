@@ -10,7 +10,7 @@ from exceptions.download import NotSupportedProtocolError
 
 try:
     from enigma import eConsoleAppContainer
-    from Plugins.Extensions.archivCZSK import _
+    from Plugins.Extensions.archivCZSK import _, log
     from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 except ImportError:
     pass
@@ -167,6 +167,7 @@ class DownloadManager(object):
         return None
 
     def createDownload(self, name, url, destination, filename=None, live=False, startCB=None, finishCB=None, quiet=False, stream=None, playDownload=False, headers={}, mode=""):
+        log.info("createDownload(url=%s,mode=%s"%(url, mode))
         d = None
         url = toUTF8(url)
         if not os.path.exists(destination):
@@ -220,10 +221,9 @@ class DownloadManager(object):
 
         else:
             print '[Downloader] cannot create download %s - not supported protocol' % toUTF8(filename)
-            protocol = filename.split('://')[0].upper()
+            protocol = url.split('://')[0].upper()
             raise NotSupportedProtocolError(protocol)
 
-        d.playMode = playDownload
         return d
 
 class DownloadStatus():
@@ -283,7 +283,6 @@ class Download(object):
         self.local = os.path.join(destDir, filename).encode('ascii', 'ignore')
         self.length = 0
         self.quiet = quiet
-        self.playMode = False
         self.running = False
         self.killed = False
         self.paused = False
@@ -529,8 +528,3 @@ class GstDownload(Download):
             self.killed = True
             self.pp.sendCtrlC()
 
-class GStreamerDownload():
-    def __init__(self, path, preBufferPercent=0, preBufferSeconds=0):
-        self.path = path
-        self.preBufferPercent = 0
-        self.preBufferSeconds = 0

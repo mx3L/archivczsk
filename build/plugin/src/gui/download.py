@@ -350,7 +350,7 @@ class ArchivCZSKDownloadListScreen(BaseArchivCZSKMenuListScreen):
     def playDownload(self, callback=None):
         if callback:
             download = self.getSelectedItem()
-            self.player.playDownload(download)
+            self.player.play_item(download)
         else:
             self.workingFinished()
 
@@ -454,11 +454,6 @@ class ArchivCZSKDownloadsScreen(BaseArchivCZSKMenuListScreen, DownloadList):
 
     def ok(self):
         if not self.working and len(self.lst_items) > 0:
-            it = self.getSelectedItem()
-            download = DownloadManager.getInstance().findDownloadByIT(it)
-            if download is not None and download.running:
-                self.player.playDownload(download)
-            else:
-                self.player.setMediaItem(it)
-                self.player.play()
+            item = self.getSelectedItem()
+            self.player.play_item(item)
 

@@ -11,7 +11,7 @@ import stat
 import sys
 import traceback
 import urllib2
-from urlparse import urlsplit
+from urlparse import urlsplit, urlparse
 from xml.etree.cElementTree import ElementTree, fromstring
 
 from enigma import eConsoleAppContainer
@@ -224,13 +224,13 @@ def isSupportedVideo(url):
 
 
 def BtoKB(byte):
-        return int(float(byte) / float(1024))
+        return int(byte / float(1024))
 
 def BtoMB(byte):
-        return int(float(byte) / float(1024 * 1024))
+        return int(byte / float(1024 * 1024))
 
 def BtoGB(byte):
-    return int(float(byte) / float(1024 * 1024 * 1024))
+    return int(byte / float(1024 * 1024 * 1024))
 
 def sToHMS(self, sec):
     m, s = divmod(sec, 60)
@@ -339,61 +339,45 @@ class Language(object):
         else:
             return None
 
+def url_get_content_length(url, headers=None, timeout=5, max_redirects=3):
+    purl = urlparse(url)
+    if  headers is None:
+        headers = {}
+    if purl.scheme.startswith("http"):
+        if purl.path:
+            if purl.query:
+                path = purl.path + "?" + purl.query
+            else:
+                path = purl.path
+        else:
+            path = "/"
+        conn = None
+        try:
+            if purl.scheme == "http":
+                conn = httplib.HTTPConnection(purl.netloc, timeout=timeout)
+            if purl.scheme == "https":
+                conn = httplib.HTTPSConnection(purl.netloc, timeout=timeout)
+            if conn is not None:
+                conn.request("HEAD", path, headers=headers)
+                response = conn.getresponse()
+                if response.status == 200:
+                    return int(response.getheader("Content-Length"))
+                if (response.status in range(300, 309) and max_redirects):
+                    max_redirects -= 1
+                    return url_get_content_length(
+                            response.getheader("Location"), headers,
+                            timeout, max_redirects)
+        except Exception:
+            traceback.print_exc()
+        finally:
+            conn.close()
 
-def url_exist(url, timeout=20):
-    """checks if given url exist
-
-    @return: None if cannot find out, if url exist or not
-    @return: True if url exist
-    @return: False if url not exist
-    """
-    print '[testing]', url
-
-    if url is None:
-        return False
-
-    if os.path.isfile(url):
-        return True
-    # for now we cannot determine existence of url in rtmp or mms protocol
-    if url.startswith(('rtmp', 'rtsp', 'rtp', 'mms')):
-        return None
-
-    if not url.startswith('http'):
-        return False
-
-    if url == '' or url.find(' ') != -1:
-        return False
-
-    scheme, netloc, path, query, fragment = urlsplit(url)
-    # print 'scheme:', scheme
-    # print 'netloc:', netloc
-    # print 'path:', path
-    # print 'query:', query
-    # print 'fragment:', fragment
-
-    if netloc == '':
-        return False
-
-    site = netloc
-
-    if query != '':
-        query = '?' + query
-    path = path + query
-    print site, path
-
-    conn = None
+def get_free_space(location):
     try:
-        conn = httplib.HTTPConnection(site, timeout=timeout)
-        conn.request('HEAD', path)
-        response = conn.getresponse()
-        # print response.getheaders()
-        print response.getheader('accept-ranges')
+        s = os.statvfs(location)
+        return s.f_bavail * s.f_bsize
     except Exception:
         traceback.print_exc()
-        return False
-    finally:
-        if conn: conn.close()
-    return response.status in (200, 301, 302)
 
 def check_program(program):
 
