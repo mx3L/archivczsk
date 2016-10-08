@@ -192,7 +192,7 @@ class ArchivCZSK():
             updated_string = self._update_addons()
             self.session.openWithCallback(self.ask_restart_e2,
                     MessageBox,
-                    "%s:\n\n%s"%(_("Following addons were updated"), toString(update_string)),
+                    "%s:\n\n%s"%(_("Following addons were updated"), toString(updated_string)),
                     type=MessageBox.TYPE_INFO)
 
     def _update_addons(self):
