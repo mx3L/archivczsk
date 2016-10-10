@@ -383,6 +383,9 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
         self.skinName = ["ArchivCZSKMoviePlayer", "MoviePlayer"]
         InfoBarBase.__init__(self)
         InfoBarSeek.__init__(self)
+        # disable slowmotion/fastforward
+        self.seekFwd = self.seekFwdManual
+        self.seekBack = self.seekBackManual
         initSubsSettings()
         SubsSupport.__init__(self, 
                 defaultPath = config_archivczsk.tmpPath.value,
