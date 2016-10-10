@@ -272,23 +272,13 @@ def encodeFilename(s):
     else:
         return s.encode(sys.getfilesystemencoding(), 'ignore')
 
-def sanitize_filename(s):
-    """Sanitizes a string so it could be used as part of a filename."""
-    def replace_insane(char):
-        if char == '?' or ord(char) < 32 or ord(char) == 127:
-            return ''
-        elif char == '"':
-            return '\''
-        elif char == ':':
-            return ' -'
-        elif char in '\\/|*<>':
-            return '-'
-        return char
-
-    result = u''.join(map(replace_insane, s))
-    while '--' in result:
-        result = result.replace('--', '-')
-    return result.strip('-')
+def sanitize_filename(value):
+    import unicodedata
+    value = toUnicode(value)
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = unicode(re.sub('[-\s]+', '-', value))
+    return value
 
 def htmlentity_transform(matchobj):
     """Transforms an HTML entity to a Unicode character.
@@ -339,7 +329,9 @@ class Language(object):
         else:
             return None
 
-def url_get_content_length(url, headers=None, timeout=5, max_redirects=3):
+
+
+def url_get_response_headers(url, headers=None, timeout=5, max_redirects=3):
     purl = urlparse(url)
     if  headers is None:
         headers = {}
@@ -361,16 +353,57 @@ def url_get_content_length(url, headers=None, timeout=5, max_redirects=3):
                 conn.request("HEAD", path, headers=headers)
                 response = conn.getresponse()
                 if response.status == 200:
-                    return int(response.getheader("Content-Length"))
+                    return dict(response.getheaders())
                 if (response.status in range(300, 309) and max_redirects):
                     max_redirects -= 1
-                    return url_get_content_length(
+                    return url_get_response_headers(
                             response.getheader("Location"), headers,
                             timeout, max_redirects)
         except Exception:
             traceback.print_exc()
         finally:
-            conn.close()
+            conn and conn.close()
+
+def url_get_content_length(url, headers=None, timeout=5, max_redirects=5):
+    resp_headers = url_get_response_headers(url, headers, timeout, max_redirects)
+    if resp_headers:
+        length = resp_headers.get('content-length')
+        if length: return int(length)
+
+def url_get_file_info(url, headers=None, timeout=3):
+    purl = urlparse(url)
+    filename = purl.path.split('/')[-1]
+    length = None
+    if url.startswith('rtmp'):
+        url_split = url.split()
+        if len(url_split) > 1:
+            for i in url_split:
+                if i.find('playpath=') == 0:
+                    filename = urlparse(i[len('playpath='):]).path.split('/')[-1]
+
+    elif url.startswith('http') and purl.path.endswith('.m3u8'):
+            filename = purl.path.split('/')[-2]
+
+    elif url.startswith('http'):
+        if headers is None:
+            headers = {}
+        resp_headers = url_get_response_headers(url, headers, timeout=timeout)
+        if resp_headers:
+            content_length = resp_headers.get('content-length')
+            if content_length is not None:
+                content_length = int(content_length)
+            content_disposition = resp_headers.get('content-disposition')
+            if content_disposition is not None:
+                filename_match = re.search(r'''filename=(?:\*=UTF-8'')?['"]?([^'"]+)''', content_disposition)
+                if filename_match is not None:
+                    filename = toString(urllib.unquote_plus(filename_match.group(1)))
+            content_type = resp_headers.get('content-type')
+            if content_type is not None:
+                extension = mimetypes.guess_extension(content_type, False)
+                if extension is not None:
+                    if not os.path.splitext(filename)[1]:
+                        filename += extension
+    return {'filename':sanitize_filename(filename), 'length':length}
 
 def get_free_space(location):
     try:
