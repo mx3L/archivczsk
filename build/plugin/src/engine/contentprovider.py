@@ -12,9 +12,11 @@ from xml.etree.cElementTree import ElementTree
 
 from Screens.LocationBox import LocationBox
 from Screens.MessageBox import MessageBox
+from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.config import config, ConfigSelection
 from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.engine.downloader import getFilenameAndLength
 from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
@@ -342,6 +344,11 @@ class DownloadsMixin(object):
                     util.download_to_file(remote, local)
             downloadManager.addDownload(d, override_cb)
 
+        def change_filename_callback(answer):
+            if answer:
+                filename[0] = answer
+            ask_if_download()
+
         def change_download_path_callback(answer):
             if answer:
                 destination[0] = answer
@@ -359,24 +366,31 @@ class DownloadsMixin(object):
                     session.openWithCallback(change_download_path_callback,
                             LocationBox, _("Select new location"),
                             currDir=downloads_path)
+                if answer == "filename":
+                    session.openWithCallback(change_filename_callback,
+                            VirtualKeyBoard, _("Edit filename"),
+                            text = toString(filename[0]))
 
         def ask_if_download():
-            size_bytes = util.url_get_content_length(item.url, headers)
+            filename[0], size_bytes = getFilenameAndLength(item.url, headers, filename[0])
             size_mbytes = size_bytes and util.BtoMB(size_bytes) or "???"
             free_bytes = util.get_free_space(destination[0])
             free_mbytes = free_bytes and util.BtoMB(free_bytes) or "???"
 
-            message = "%s:\n\n%s:\n%s - %sMB\n\n%s:\n%s - %sMB %s"%(
+            message = "%s:\n\n%s:\n%s - %sMB\n\n%s:\n%s - %sMB %s\n\n%s:\n%s"%(
                     _("Do you want to download"),
                     _("Source"), toString(item.name), str(size_mbytes),
-                    _("Destination"), toString(destination[0]), str(free_mbytes), _("free"))
-            choices = [ (_("yes"), "yes"), (_("no"), "no"), (_("change location"), "change")]
+                    _("Destination"), toString(destination[0]), str(free_mbytes), _("free"),
+                    _("Filename"), toString(filename[0]))
+            choices = [ (_("yes"), "yes"), (_("no"), "no"), 
+                    (_("Change location"), "change"), (_("Edit filename"), "filename") ]
 
             session.openWithCallback(ask_if_download_callback,
                     MessageBox, message, MessageBox.TYPE_YESNO, list=choices)
 
         headers = item.settings['extra-headers']
         destination = [self.downloads_path]
+        filename = [item.filename or item.name]
         ask_if_download()
 
     def remove_download(self, item):
