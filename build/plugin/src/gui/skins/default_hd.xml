@@ -1,5 +1,5 @@
 <skin>
-    <screen name="ArchivCZSKContentScreen" position="center,center" size="900,576" title="ArchivyCZSK" flags="wfBorder" transparent="0">
+    <screen name="ArchivCZSKContentScreen" position="center,center" size="900,576" title="ArchivCZSK" flags="wfBorder" transparent="0">
         <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
         <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="231,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />
         <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="454,5" shadowColor="black" shadowOffset="-2,-2" size="215,45" valign="center" zPosition="1" />

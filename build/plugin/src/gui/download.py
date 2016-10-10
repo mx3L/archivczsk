@@ -42,11 +42,11 @@ class DownloadManagerMessages(object):
             if ArchivCZSKDownloadListScreen.instance is not None:
                 ArchivCZSKDownloadListScreen.instance.refreshList()
         if download.downloaded:
-            session.openWithCallback(updateDownloadList, MessageBox, _("ArchivyCZSK - Download:") + ' ' + \
+            session.openWithCallback(updateDownloadList, MessageBox, _("ArchivCZSK - Download:") + ' ' + \
                                       download.name.encode('utf-8', 'ignore') + ' ' + _("successfully finished."), \
                                       type=MessageBox.TYPE_INFO, timeout=0)
         else:
-            session.openWithCallback(updateDownloadList, MessageBox, _("ArchivyCZSK - Download:") + ' ' + \
+            session.openWithCallback(updateDownloadList, MessageBox, _("ArchivCZSK - Download:") + ' ' + \
                                       download.name.encode('utf-8', 'ignore') + ' ' + _("finished with errors."), \
                                       type=MessageBox.TYPE_ERROR, timeout=0)
     @staticmethod
@@ -284,7 +284,7 @@ class ArchivCZSKDownloadListScreen(BaseArchivCZSKMenuListScreen):
         self.player = Player(session, self.workingFinished)
 
         self.lst_items = []
-        self.title = "ArchivyCZSK" + " - " + _("Recent downloads")
+        self.title = "ArchivCZSK" + " - " + _("Recent downloads")
         self.onClose.append(self.__onClose)
 
         self["actions"] = NumberActionMap(["archivCZSKActions"],
