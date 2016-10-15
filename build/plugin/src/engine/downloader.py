@@ -94,6 +94,10 @@ class DownloadManager(object):
     def createDownload(self, name, url, destination, filename=None, live=False, startCB=None, finishCB=None, stream=None, quiet=False, playDownload=False, headers=None, mode=""):
         log.info("Downloader.createDownload(url=%s,mode=%s"%(toString(url), mode))
         d = None
+        if headers is None:
+            headers = {}
+        headers = headers.copy()
+        headers.setdefault('User-Agent', USER_AGENT)
         filename, length = getFilenameAndLength(url, headers, filename)
         log.info("Downloader.createDownload() filename=%s, length=%s", toString(filename), length)
         if (((url[0:4] == 'rtmp' and mode in ('auto', 'gstreamer')) or
@@ -345,14 +349,15 @@ class HTTPDownloadE2(DownloadProcessMixin, Download):
     def __init__(self, name, url, destDir, filename, quiet=False, headers=None):
         Download.__init__(self, name, url, destDir, filename, quiet)
         DownloadProcessMixin.__init__(self)
-        self.headers = headers
-        if headers:
-            self.headers = '--header ' + ' --header '.join([("'" + key + ': ' + value + "'") for key, value in headers.iteritems()])
-        else: self.headers = ""
+        self.headers = headers or {}
 
     def _buildCmd(self):
-        cmd = WGET_PATH + ' "' + self.url + '"' + ' -O ' + '"' + self.local + '"' ' -U ' + '"' + USER_AGENT + '" ' + self.headers
-        cmd = cmd.encode('utf-8')
+        cmd = "%s '%s' -O '%s'"% (WGET_PATH, self.url, self.local)
+        if "User-Agent" in self.headers:
+            cmd += " -U '%s'"% self.headers.pop("User-Agent")
+        if self.headers:
+            cmd += " --header " + ' --header '.join(["'%s: %s'"%(k, v)
+                for k,v in self.headers.iteritems()])
         if self.quiet:
             cmd += ' -q'
         return cmd
