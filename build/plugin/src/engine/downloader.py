@@ -104,7 +104,7 @@ class DownloadManager(object):
               (url[0:4] == 'http' and mode  in ('auto', 'gstreamer') and isHLSUrl(url)) or
               (url[0:4] == 'http' and mode in ('auto', 'gstreamer') and playDownload) or
               (url[0:4] == 'http' and mode in ('gstreamer',))) and GST_LAUNCH is not None):
-            d = GstDownload(url = url, name = name, destDir = destination, filename=filename)
+            d = GstDownload(url = url, name = name, destDir = destination, filename=filename, headers=headers)
         elif url[0:4]  == 'rtmp' and mode in ('auto', 'rtmpdump'):
             urlList = url.split()
             rtmp_url = []
@@ -364,16 +364,26 @@ class HTTPDownloadE2(DownloadProcessMixin, Download):
 
 
 class GstDownload(DownloadProcessMixin, Download):
-    def __init__(self, name, url, destDir, filename, quiet=False, headers={}):
+    def __init__(self, name, url, destDir, filename, quiet=False, headers=None):
         Download.__init__(self, name, url, destDir, filename, quiet)
         DownloadProcessMixin.__init__(self)
+        self.headers = headers or {}
 
     def _buildCmd(self):
+        cmd = GST_LAUNCH
         if self.url.startswith('rtmp'):
-            cmd = "%s rtmpsrc location='%s' ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
-        elif self.url.startswith('http') and isHLSUrl(self.url):
-            cmd = "%s souphttpsrc location='%s' ! hlsdemux ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
-        elif self.url.startswith('http'):
-            cmd = "%s souphttpsrc location='%s' ! filesink location='%s'"%(GST_LAUNCH, self.url, self.local)
+            cmd += " rtmpsrc location='%s'"%(self.url)
+        if self.url.startswith('http'):
+            cmd += " souphttpsrc location='%s'"%(self.url)
+            if "User-Agent" in self.headers:
+                cmd += " user-agent='%s'"% self.headers.pop("User-Agent")
+            if "Cookie" in self.headers:
+                cmd += " cookie='%s'"% self.headers.pop("Cookie")
+            if self.headers:
+                cmd += " extra-headers='" + ','.join("%s=%s" for k,v in self.headers.iteritems())
+                cmd += "'"
+            if isHLSUrl(self.url):
+                cmd += " ! hlsdemux"
+        cmd += " ! filesink location='%s'"%(self.local)
         return cmd
 
