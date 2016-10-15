@@ -276,8 +276,8 @@ def sanitize_filename(value):
     import unicodedata
     value = toUnicode(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    value = unicode(re.sub('[-\s]+', '-', value))
+    value = unicode(re.sub(r'(?u)[^\w\s.-]', '', value).strip().lower())
+    value = re.sub(r'(?u)[-\s]+', '-', value)
     return value
 
 def htmlentity_transform(matchobj):
@@ -391,7 +391,7 @@ def url_get_file_info(url, headers=None, timeout=3):
         if resp_headers:
             content_length = resp_headers.get('content-length')
             if content_length is not None:
-                content_length = int(content_length)
+                length = int(content_length)
             content_disposition = resp_headers.get('content-disposition')
             if content_disposition is not None:
                 filename_match = re.search(r'''filename=(?:\*=UTF-8'')?['"]?([^'"]+)''', content_disposition)
