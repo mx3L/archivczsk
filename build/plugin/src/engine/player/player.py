@@ -382,6 +382,7 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
         Screen.__init__(self, session)
         self.skinName = ["ArchivCZSKMoviePlayer", "MoviePlayer"]
         InfoBarBase.__init__(self)
+        InfoBarShowHide.__init__(self)
         InfoBarSeek.__init__(self)
         # disable slowmotion/fastforward
         self.seekFwd = self.seekFwdManual
@@ -395,7 +396,6 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
         InfoBarAudioSelection.__init__(self)
         InfoBarNotifications.__init__(self)
         InfoBarSubservicesSupport.__init__(self)
-        InfoBarShowHide.__init__(self)
         InfoBarAspectChange.__init__(self)
         self.postAspectChange.append(self.__aspect_changed)
         HelpableScreen.__init__(self)
