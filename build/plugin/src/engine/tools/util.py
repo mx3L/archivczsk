@@ -9,16 +9,24 @@ import os.path
 import re
 import stat
 import sys
+import socket
 import traceback
 import urllib2
 from urlparse import urlsplit, urlparse
 from xml.etree.cElementTree import ElementTree, fromstring
+
+from twisted.internet import reactor
+from twisted.web.client import Agent, BrowserLikeRedirectAgent, readBody
+from twisted.web.http_headers import Headers
+
 
 from enigma import eConsoleAppContainer
 
 
 supported_video_extensions = ('.avi', '.mp4', '.mkv', '.mpeg', '.mpg')
 
+def is_hls_url(url):
+    return url.startswith('http') and urlparse(url).path.endswith('.m3u8')
 
 def load_module(code_path):
     try:
@@ -329,7 +337,42 @@ class Language(object):
         else:
             return None
 
+def get_streams_from_manifest(url, manifest_data):
+    for m in re.finditer(r'^#EXT-X-STREAM-INF:(?P<info>.+)\n(?P<chunk>.+)',
+            manifest_data, re.MULTILINE):
+        stream_info = {}
+        for info in re.split(r''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', m.group('info')):
+            key, val = info.split('=', 1)
+            stream_info[key.lower()] = val
+        stream_info['url'] = url[:url.rfind('/') + 1] + m.group('chunk')
+        yield stream_info
 
+def url_get_data_async(url, callback=None, data=None, headers=None, timeout=60):
+    def handle_failure(failure):
+        failure.printTraceback()
+        callback(None)
+    def handle_result(data):
+        callback(data)
+
+    assert data is None, "sorry data is currently not supported"
+    if headers is not None:
+        headers = {k:[v] for k,v in headers.items()}
+    agent = BrowserLikeRedirectAgent(Agent(reactor, connectTimeout=timeout))
+    d = agent.request('GET', url, Headers(headers))
+    d.addCallback(readBody)
+    if callback is not None:
+        d.addCallbacks(handle_result, handle_failure)
+    return d
+
+def url_get_data(url, data=None, headers=None, timeout=30):
+    if headers is None:
+        headers = {}
+    request = urllib2.Request(url, data, headers)
+    try:
+        response = urllib2.urlopen(request, timeout=timeout)
+        return response.read()
+    except (urllib2.URLError, urllib2.HTTPError, socket.timeout):
+        traceback.print_exc()
 
 def url_get_response_headers(url, headers=None, timeout=5, max_redirects=3):
     purl = urlparse(url)

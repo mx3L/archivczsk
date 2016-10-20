@@ -6,7 +6,9 @@ Created on 3.10.2012
 import os
 import socket
 import sys
+import operator
 from shutil import copyfile
+from twisted.python import failure
 from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
@@ -22,12 +24,12 @@ from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_E
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
 from Plugins.Extensions.archivCZSK.engine.player.player import Player 
 from Plugins.Extensions.archivCZSK.resources.repositories import repo_modules
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString, is_hls_url, url_get_data_async, get_streams_from_manifest
 from downloader import DownloadManager
 from items import PVideo, PFolder, PPlaylist, PDownload, PCategory, PVideoAddon, \
-    PCategoryVideoAddon, PUserCategory, Stream, RtmpStream
+    PCategoryVideoAddon, PUserCategory, Stream, RtmpStream, PVideoResolved
 from serialize import CategoriesIO, FavoritesIO
 from tools import task, util
-from tools.util import toString
 
 from enigma import eTimer
 PNG_PATH = settings.IMAGE_PATH
@@ -669,6 +671,7 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
         log.info('%s get_content - params: %s' % (self, str(params)))
         self.__clear_list()
         self.content_deferred = defer.Deferred()
+        self.content_deferred.addCallback(self._resolve_video_items)
         self.content_deferred.addCallbacks(successCB, errorCB)
         # setting timeout for resolving content
         loading_timeout = int(self.video_addon.get_setting('loading_timeout'))
@@ -709,6 +712,57 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
             self.content_deferred.callback(lst_itemscp)
         else:
             self.content_deferred.errback(result)
+
+    def _resolve_video_items(self, result):
+
+        def all_done(result_list):
+            for __, (data, item) in result_list:
+                tmp_list = []
+                for stream_dict in get_streams_from_manifest(item.url, data):
+                    video_item = PVideoResolved()
+                    video_item.subs = item.subs
+                    video_item.settings = item.settings.copy()
+                    video_item.url = stream_dict['url']
+                    video_item.quality = "%s b/s"%stream_dict['bandwidth']
+                    video_item.bandwidth = int(stream_dict['bandwidth'])
+                    if 'resolution' in stream_dict:
+                        video_item.quality = stream_dict['resolution'].split('x')[1] + "p"
+                    # TODO remove workaround of embedding
+                    # quality in title in addons
+                    video_item.name = name = item.name
+                    quality = video_item.quality
+                    if quality and quality not in name:
+                        if "[???]" in name:
+                            video_item.name = name.replace("[???]","[%s]"%(quality))
+                        else:
+                            video_item.name = "[%s] %s"%(i.quality, i.name)
+                    tmp_list.append(video_item)
+                tmp_list.sort(key=operator.attrgetter('bandwidth'), reverse=True)
+                if tmp_list:
+                    log.info("%s __resolve_video_items: found %d streams"%(self, len(tmp_list)))
+                    item_list.remove(item)
+                    item_list.extend(tmp_list)
+            return result
+
+        def get_result(res, item):
+            if isinstance(res, failure.Failure):
+                log.error("%s _resolve_video_items: %s - %s"%(
+                    self, item.url, res.value))
+            else:
+                log.debug("%s _resolve_video_items: %s - %dB"%(
+                    self, item.url, len(res)))
+            return res, item
+
+        item_list,__,__ = result
+        video_list = [i for i in item_list if isinstance(i, PVideoResolved) and is_hls_url(i.url)]
+        log.debug("%s _resolve_video_items: found %d resolvable video items"%(self, len(video_list)))
+        d_list = []
+        for item in video_list:
+            d = url_get_data_async(toString(item.url),
+                    headers=item.settings["extra-headers"], timeout=5)
+            d.addBoth(get_result, item)
+            d_list.append(d)
+        return defer.DeferredList(d_list, consumeErrors=True).addCallback(all_done)
 
     def close(self):
         self.video_addon = None
