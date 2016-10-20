@@ -28,14 +28,24 @@ def isDMMImage():
         return False
     return True
 
+def isVTIImage():
+    import inspect
+    argspec = inspect.getargspec(__parseSize)
+    return len(argspec.args) == 2
+
 DMM_IMAGE = isDMMImage()
+VTI_IMAGE = isVTIImage()
 
 def parseSize(s, scale, object = None, desktop = None):
+    if VTI_IMAGE:
+        return __parseSize(s, scale)
     if DMM_IMAGE:
         return __parseSize(s, scale, desktop, object)
     return __parseSize(s, scale, object, desktop)
 
 def parsePosition(s, scale, object = None, desktop = None, size = None):
+    if VTI_IMAGE:
+        return __parsePosition(s, scale, desktop, size)
     if DMM_IMAGE:
         return __parsePosition(s, scale, desktop, object)
     return __parsePosition(s, scale, object, desktop, size)
