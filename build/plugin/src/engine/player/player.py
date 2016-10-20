@@ -112,7 +112,7 @@ class Player(object):
                     self.playlist_item = None
                     self.playlist = [item]
                 play_item = item
-        elif idx is not None and self.playlist and idx >= 0 and idx < len(self.playlist) -1:
+        elif idx is not None and self.playlist and idx >= 0 and idx < len(self.playlist):
             play_item = self.playlist[idx]
 
         if play_item is not None and self._play_item != play_item:
