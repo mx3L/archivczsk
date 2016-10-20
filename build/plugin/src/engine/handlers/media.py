@@ -2,11 +2,11 @@ from twisted.internet import defer
 
 from Components.config import config
 from Screens.MessageBox import MessageBox
+from Screens.ChoiceBox import ChoiceBox
 
 from item import ItemHandler
 from folder import FolderItemHandler
 from Plugins.Extensions.archivCZSK import _, log
-from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectSourceScreen
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler, DownloadExceptionHandler, PlayExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
@@ -101,10 +101,12 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
             self.content_provider.create_shortcut(self.item)
 
     def play_item(self, item, mode='play', *args, **kwargs):
-        def wrapped(res_item):
+
+        def video_selected_callback(res_item):
             MediaItemHandler.play_item(self, res_item, mode)
+
         if config.plugins.archivCZSK.showVideoSourceSelection.value:
-            self._resolve_video(item, wrapped)
+            self._resolve_video(item, video_selected_callback)
         else:
             self._resolve_videos(item)
 
@@ -118,28 +120,39 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
         pass
 
     def _resolve_video(self, item, callback):
-        def selected_source(idx):
-            if idx is not None:
-                item = self.list_items[idx]
-                del self.list_items
-                callback(item)
+
+        def selected_source(answer):
+            if answer is not None:
+                callback(answer[1])
             else:
                 self.content_screen.workingFinished()
+
         def open_item_success_cb(result):
             self.content_screen.stopLoading()
             self.content_screen.showList()
-            list_items, screen_command, args = result
+            list_items, __, __ = result
             self._filter_by_quality(list_items)
-            item = None
             if len(list_items) > 1:
-                self.list_items = list_items
-                self.session.openWithCallback(selected_source, ArchivCZSKSelectSourceScreen, list_items)
+                choices = []
+                for i in list_items:
+                    name = i.name
+                    # TODO remove workaround of embedding
+                    # quality in title in addons
+                    if i.quality and i.quality not in i.name:
+                        if "[???]" in i.name:
+                            name = i.name.replace("[???]","[%s]"%(i.quality))
+                        else:
+                            name = "[%s] %s"%(i.quality, i.name)
+                    choices.append((toString(name), i))
+                self.session.openWithCallback(selected_source,
+                        ChoiceBox, _("Please select source"),
+                        list = choices,
+                        skin_name = ["ArchivCZSKVideoSourceSelection"])
             elif len(list_items) == 1:
                 item = list_items[0]
+                callback(item)
             else: # no video
                 self.content_screen.workingFinished()
-            if item:
-                callback(item)
 
         @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):

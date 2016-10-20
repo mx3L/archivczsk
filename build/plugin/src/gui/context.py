@@ -164,10 +164,6 @@ class ArchivCZSKContextMenuScreen(BaseArchivCZSKScreen):
     def cancel(self):
         self.close(None)
 
-class ArchivCZSKSelectSourceScreen(ArchivCZSKContextMenuScreen):
-    def __init__(self, session, sources):
-        ArchivCZSKContextMenuScreen.__init__(self, session, _("Select source"), None, sources, None)
-
 class ArchivCZSKSelectCategoryScreen(ArchivCZSKContextMenuScreen):
     def __init__(self, session, categories):
         ArchivCZSKContextMenuScreen.__init__(self, session, _("Select category"), None, categories, None)
