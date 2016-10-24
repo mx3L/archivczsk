@@ -165,22 +165,6 @@ class ArchivCZSKConfigScreen(BaseArchivCZSKConfigScreen):
     def buildMenu(self):
         self.refreshConfigList()
 
-    def keyLeft(self):
-        ConfigListScreen.keyLeft(self)
-        current = self["config"].getCurrent()[1]
-        if current in [
-                        config.plugins.archivCZSK.videoPlayer.type,
-                        config.plugins.archivCZSK.videoPlayer.servicemrua]:
-            self.buildMenu()
-
-    def keyRight(self):
-        ConfigListScreen.keyRight(self)
-        current = self["config"].getCurrent()[1]
-        if current in [
-                       config.plugins.archivCZSK.videoPlayer.type,
-                       config.plugins.archivCZSK.videoPlayer.servicemrua]:
-            self.buildMenu()
-
     def keyOk(self):
         current = self["config"].getCurrent()[1]
         if current == config.plugins.archivCZSK.videoPlayer.info:
