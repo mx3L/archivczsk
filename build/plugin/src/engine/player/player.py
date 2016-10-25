@@ -383,6 +383,14 @@ class InfoBarAudioSelectionNoSubtitles(InfoBarAudioSelection):
         def getSubtitleList(instance):
             return []
 
+    def __init__(self):
+        # workaround for VTI image which needs access to this attributes :/
+        # TODO use own audioselection screen, to avoid problems with different
+        # images
+        self.selected_subtitle = None
+        self.subtitles_enabled = False
+        InfoBarAudioSelection.__init__(self)
+
     def audioSelection(self):
         self.session.open(type(self).AudioSelectionNoSubtitles, infobar=self)
 
