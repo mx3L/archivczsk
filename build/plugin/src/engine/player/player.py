@@ -8,6 +8,7 @@ from Components.ServiceEventTracker import InfoBarBase, ServiceEventTracker
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from skin import parseColor
+from Screens.AudioSelection import AudioSelection
 from Screens.ChoiceBox import ChoiceBox
 from Screens.HelpMenu import HelpableScreen
 from Screens.InfoBarGenerics import (InfoBarShowHide,
@@ -372,8 +373,22 @@ class InfoBarSubservicesSupport(object):
             seekToPts(self.session, self.__playpos)
             del self.__playpos
 
+
+class InfoBarAudioSelectionNoSubtitles(InfoBarAudioSelection):
+    class AudioSelectionNoSubtitles(AudioSelection):
+        def __init__(instance, session, infobar):
+            AudioSelection.__init__(instance, session, infobar)
+            instance.skinName = "AudioSelection"
+
+        def getSubtitleList(instance):
+            return []
+
+    def audioSelection(self):
+        self.session.open(type(self).AudioSelectionNoSubtitles, infobar=self)
+
+
 class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBarSeek,
-        InfoBarAudioSelection, InfoBarSubservicesSupport, InfoBarNotifications,
+        InfoBarAudioSelectionNoSubtitles, InfoBarSubservicesSupport, InfoBarNotifications,
         InfoBarShowHide, InfoBarAspectChange, HelpableScreen, Screen):
 
     RESUME_POPUP_ID = "aczsk_resume_popup"
@@ -393,7 +408,7 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
                 forceDefaultPath = True,
                 searchSupport = True)
         SubsSupportStatus.__init__(self)
-        InfoBarAudioSelection.__init__(self)
+        InfoBarAudioSelectionNoSubtitles.__init__(self)
         InfoBarNotifications.__init__(self)
         InfoBarSubservicesSupport.__init__(self)
         InfoBarAspectChange.__init__(self)
