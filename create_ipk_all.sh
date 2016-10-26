@@ -15,10 +15,10 @@ MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
 pushd ${D} &> /dev/null
 
-PVER="0.73"
+PVER="0.74"
 GITVER=$(git log -1 --format="%ci" | awk -F" " '{ print $1 }' | tr -d "-")
 VER=$PVER-$GITVER
-ADDONS_COMMIT="30a66f1e3e649e567cbadd625bd7d1053daee9ed"
+ADDONS_COMMIT="74deb5a789a825639d45a1d92bd04b5411e87a56"
 
 PKG=${D}/enigma2-plugin-extensions-archivczsk_${VER}_all
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
