@@ -1,4 +1,4 @@
-SUBDIRS = mplayer spinner buttons
+SUBDIRS = spinner buttons
 
 installdir = $(libdir)/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon
 
