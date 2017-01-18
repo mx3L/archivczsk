@@ -13,11 +13,10 @@ from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
 from Screens.LocationBox import LocationBox
-from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.config import config, ConfigSelection
 from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk
-from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback, MessageBox
 from Plugins.Extensions.archivCZSK.engine.downloader import getFilenameAndLength
 from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
