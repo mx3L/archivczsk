@@ -93,19 +93,33 @@ def LanguageEntryComponent(file, name, index):
     return res
 
 
-# there is no simple MessageBox in DMM images
-SimpleMessageBox = False
-try:
-    OrigMessageBox("", "", simple=True)
-    SimpleMessageBox = True
-except TypeError:
-    pass
-
 class MessageBox(OrigMessageBox):
     def __init__(self, *args, **kwargs):
-        if kwargs.get('simple') is not None and not SimpleMessageBox:
+        list = None
+        self.dmm_fix = False
+        import inspect
+        argspec = inspect.getargspec(OrigMessageBox.__init__)
+        if kwargs.get('simple') is not None and not 'simple' in argspec.args:
             del kwargs['simple']
+        if kwargs.get('list') is not None and not 'list' in argspec.args:
+            list = kwargs.pop('list')
+            self.dmm_fix = True
         OrigMessageBox.__init__(self, *args, **kwargs)
+        # this is taylored solution for DMM based images, so it might crash elsewhere
+        # or when dreambox changes something in MessageBox
+        if list:
+            self.list = list
+            self["selectedChoice"].setText(self.list[0][0])
+            self["list"] = MenuList(self.list)
+
+    def ok(self):
+        if self.dmm_fix:
+            if self.list:
+                    self.close(self["list"].getCurrent()[1])
+            else:
+                    self.close(True)
+        else:
+            OrigMessageBox.ok(self)
 
 # FileList is sometimes changing -> subclasses stop to work
 class FileList(MenuList):
