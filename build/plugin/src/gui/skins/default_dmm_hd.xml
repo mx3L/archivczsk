@@ -199,63 +199,6 @@
             <widget name="title" position="0,0" size="650,55" valign="center" halign="center" backgroundColor="#28080808" font="Regular; 24" foregroundColor="#e9b253" />
     </screen>
 
-    <screen name="ArchivCZSKMoviePlayer" position="50,550" size="1180,130" title="InfoBar" backgroundColor="transparent" flags="wfNoBorder">
-      <ePixmap position="0,0" size="1180,130" zPosition="-1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/info_bg.png" />
-      <ePixmap position="45,20" size="120,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/movie.png" alphatest="blend" />
-      <eLabel position="180,10" size="2,110" backgroundColor="white" />
-      <widget source="session.CurrentService" render="Label" position="202,11" size="710,40" font="Regular;28" backgroundColor="background" transparent="1">
-            <convert type="ServiceName">Name</convert>
-      </widget>
-      <ePixmap position="215,58" size="677,16" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/prog_bg.png" zPosition="1" alphatest="on" />
-      <widget name="buffer_slider" position="216,58" size="675,16" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/prog_buffer.png" transparent="1" />
-      <widget source="session.CurrentService" render="Progress" position="216,58" size="675,16" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/prog.png" zPosition="3" transparent="1">
-        <convert type="ServicePositionAdj">Position</convert>
-      </widget>
-      <widget source="session.CurrentService" render="PositionGauge" position="216,58" size="675,16" zPosition="4" transparent="1">
-        <convert type="ServicePositionAdj">Gauge</convert>
-      </widget>
-      <widget source="session.CurrentService" render="Label" position="215,90" size="140,28" font="Regular;23" halign="left" backgroundColor="background" shadowColor="black" shadowOffset="-2,-2" transparent="1">
-        <convert type="ServicePositionAdj">Position,ShowHours</convert>
-      </widget>
-      <widget source="session.CurrentService" render="Label" position="335,90" size="435,28" font="Regular;23" halign="center" backgroundColor="background" shadowColor="black" shadowOffset="-2,-2" transparent="1">
-        <convert type="ServicePositionAdj">Length,ShowHours</convert>
-      </widget>
-      <widget source="session.CurrentService" render="Label" position="770,90" size="140,28" font="Regular;23" halign="right" backgroundColor="background" shadowColor="black" shadowOffset="-2,-2" transparent="1">
-        <convert type="ServicePositionAdj">Remaining,Negate,ShowHours</convert>
-      </widget>
-      <eLabel position="930,10" size="2,110" backgroundColor="white" />
-      <widget source="global.CurrentTime" render="Label" position=" 945,10" size="140,24" font="Regular;24" backgroundColor="#25080808" shadowColor="black" shadowOffset="-2,-2" transparent="1">
-        <convert type="ClockToText">Format:%d.%m.%Y</convert>
-      </widget>
-      <widget source="global.CurrentTime" render="Label" position="1095,10" size=" 90,24" font="Regular;24" backgroundColor="#25080808" shadowColor="black" shadowOffset="-2,-2" transparent="1">
-        <convert type="ClockToText">Default</convert>
-      </widget>
-      <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_dolby_off.png" position="975,97" size="57,20" zPosition="1" alphatest="blend" />
-      <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_dolby_on.png" position="975,97" size="57,20" zPosition="2" alphatest="blend">
-        <convert type="ServiceInfo">IsMultichannel</convert>
-        <convert type="ConditionalShowHide" />
-      </widget>
-      <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_format_off.png" position="1052,97" size="36,20" zPosition="1" alphatest="blend" />
-      <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_format_on.png" position="1052,97" size="36,20" zPosition="2" alphatest="blend">
-        <convert type="ServiceInfo">IsWidescreen</convert>
-        <convert type="ConditionalShowHide" />
-      </widget>
-      <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_hd_off.png" position="1108,97" size="29,20" zPosition="1" alphatest="blend">
-        <convert type="ServiceInfo">VideoWidth</convert>
-        <convert type="ValueRange">0,720</convert>
-        <convert type="ConditionalShowHide" />
-      </widget>
-      <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/mplayer/ico_hd_on.png" position="1108,97" size="29,20" zPosition="2" alphatest="blend">
-        <convert type="ServiceInfo">VideoWidth</convert>
-        <convert type="ValueRange">721,1980</convert>
-        <convert type="ConditionalShowHide" />
-      </widget>
-      <widget name="buffer_label" position="960,40" size="120,20" text="Buffer" font="Regular; 16" backgroundColor="background" transparent="1"/>
-      <widget name="buffer_state" position="1070,41" size="80,20" text="N/A" font="Regular; 16" backgroundColor="background" transparent="1" />
-      <widget name="download_label" position="960,65" size="120,20" font="Regular; 16" backgroundColor="background" transparent="1"/>
-      <widget name="download_speed" position="1070,65" size="80,20" text="N/A" font="Regular; 16" backgroundColor="background" transparent="1"/>
-    </screen>
-
 	<screen name="ArchivCZSKChoiceBox" position="center,center" size="550,400" zPosition="1">
 	    <widget name="text" position="10,10" size="550,25" font="Regular;20" />
 	    <widget name="list" position="0,30" size="550,335" scrollbarMode="showOnDemand" />
