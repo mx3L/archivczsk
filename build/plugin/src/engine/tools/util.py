@@ -11,6 +11,7 @@ import stat
 import sys
 import socket
 import traceback
+import urllib
 import urllib2
 from urlparse import urlsplit, urlparse
 from xml.etree.cElementTree import ElementTree, fromstring
