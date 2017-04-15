@@ -2,18 +2,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: archivCZSK 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 12:37+0100\n"
-"PO-Revision-Date: 2014-03-24 20:54+0100\n"
-"Last-Translator: mx3L <mxfitsat@gmail.com>\n"
-"Language-Team: mx3L, Quido56, vlastvs499 <mxfitsat@gmail.com>\n"
-"Language: cs_CZ\n"
+"POT-Creation-Date: 2013-11-09 14:31+0100\n"
+"PO-Revision-Date: 2017-04-15 14:46+0200\n"
+"Last-Translator: brkulin <brkulin1@seznam.cz>\n"
+"Language-Team: mx3L, Quido56, vlastvs499, brkulin <mxfitsat@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"Language: cs_CZ\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "* If some of the tests FAIL you should"
@@ -23,16 +24,16 @@ msgid "* Status UNKNOWN means, that I dont know how to get info,"
 msgstr "* Stav NEZNÁMÝ znamená, že plugin neví, jak získat informace."
 
 msgid "* Videos are encoded by various codecs"
-msgstr "* Videa jsou kódovány různými kodeky"
+msgstr "* Videa jsou kódována různými kodeky"
 
 msgid "1. Press Red, If it doesnt help go to point 2"
-msgstr "1. Stlačte červený. Pokud to nepomůže, jděte na bod 2."
+msgstr "1. Stiskněte červené tl., pokud to nepomůže jděte na bod 2"
 
 msgid "2. Press Green, If it doesnt help go to point 3"
-msgstr "2. Stlačte zelený. Pokud to nepomůže, jděte na bod 3."
+msgstr "2. Stiskněte zelené tl., pokud to nepomůže jděte na bod 3"
 
 msgid "3. Press Yellow"
-msgstr "3. Stlačte žlutý."
+msgstr "3. Stiskněte žluté tlačítko"
 
 msgid "3GP container"
 msgstr "3GP kontejner"
@@ -41,7 +42,7 @@ msgid "ASF(WMV) Container"
 msgstr "ASF(WMV) kontejner"
 
 msgid "ATTENTION: Installation of this plugin can cause"
-msgstr "UPOZORNĚNÍ: Instalace tohoto pluginu může způsobit"
+msgstr "UPOZORNĚNÍ: Instalace tohpto pluginu může způsobit"
 
 msgid "AVI Container"
 msgstr "AVI kontejner"
@@ -65,10 +66,10 @@ msgid "Add to main menu"
 msgstr "Přidat do hlavního menu"
 
 msgid "Addon error"
-msgstr "Chyba archivu"
+msgstr "Chyba archívu"
 
 msgid "Addon info"
-msgstr "Informace o archivu"
+msgstr "Informace o archívu"
 
 msgid "Addon is broken"
 msgstr "Doplňek je nefunkční"
@@ -92,10 +93,10 @@ msgid "ArchivCZSK Changelog"
 msgstr "ArchivCZSK"
 
 msgid "ArchivCZSK Search"
-msgstr "ArchivCZSK vyhledávání"
+msgstr "Vyhledávání v ArchivuCZSK"
 
-msgid "Aspect"
-msgstr ""
+msgid "ArchivyCZSK - Download:"
+msgstr "ArchivCZSK - Stahování:"
 
 msgid "Author of this addon needs to update it"
 msgstr "Autor jej musí opravit."
@@ -103,59 +104,108 @@ msgstr "Autor jej musí opravit."
 msgid "Author: "
 msgstr "Autor:"
 
-msgid "Bufferring"
-msgstr ""
+msgid "Buffer Mode"
+msgstr "Režim zásobníku"
+
+msgid "Buffer duration"
+msgstr "Trvání zásobníku"
+
+msgid "Buffer size"
+msgstr "Velikost zásobníku"
+
+msgid "Buffer size on HDD"
+msgstr "Velikost zásobníku na HDD"
 
 msgid "Cancel"
 msgstr "Zrušit"
 
 msgid "Canceling..."
-msgstr "Přerušuji načítání..."
+msgstr "Ruší se načítání..."
+
+msgid "Cannot decode subtitles. Try another encoding group"
+msgstr "Nelze dekódovat titulky. Vyzkoušejte jinou kódovací skupinu"
 
 msgid "Cannot find searcher"
-msgstr "Nemohu najít vyhledávač"
+msgstr "Nelze najít vyhledávač"
+
+msgid ""
+"Cannot found rtmpgw, make sure that you have installed it, or try to use "
+"Video player with internal rtmp support"
+msgstr ""
+"Nelze najít rtmpgw, ujistěte se, že je nainstalován, nebo použijte video "
+"přehrávač s rtmp podporou. "
+
+msgid "Cannot parse subtitles"
+msgstr "Nelze analyzovat titulky"
 
 msgid "Cannot remove diacritics, missing unicodedata.so"
-msgstr "Nemohu smazat diakritiku, chybí knihovna unicodedata.so"
+msgstr "Nelze smazat diakritiku, chybí knihovna unicodedata.so"
 
 msgid "Cannot search, archivCZSK is not installed"
-msgstr "Nemohu vyhledávat, jedno vyhledávání právě probíhá"
+msgstr "Nelze vyhledávat, ArchivCZSK není nainstalován"
+
+msgid "Cannot seek"
+msgstr "Nelze přetáčet"
+
+msgid "Cannot seek, not enough video is downloaded"
+msgstr "Nelze přetáčet, nedostatek staženého videa"
+
+msgid "Cannot unpause, Video is not buffered yet..."
+msgstr "Nelze odpauzovat. Nedostatek načteného videa"
 
 msgid "Category list"
-msgstr "Seznam kategórií"
+msgstr "Seznam kategorií"
 
-msgid "Change location"
-msgstr ""
+msgid "Central and Eastern Europe"
+msgstr "Střední a Východní Evropa"
+
+msgid "Change encoding"
+msgstr "změnit kódování?"
 
 msgid "Changelog"
 msgstr "Změny"
 
+msgid "Choose Subtitles"
+msgstr "Vybrat titulky"
+
+msgid "Choose subtitles"
+msgstr "Vybrat titulky"
+
+msgid "Color"
+msgstr "Barva"
+
 msgid "Configuration"
 msgstr "Konfigurace"
 
-msgid "Confirm exit when closing player"
-msgstr ""
-
 msgid "Confirm exit when closing plugin"
-msgstr ""
+msgstr "Potvrdit ukončení při opouštění modulu"
+
+msgid "Confirm exit when closing player"
+msgstr "Potvrdit ukončení při opouštění přehrávače"
 
 msgid "Convert captcha images to 8bit"
-msgstr "Konvertovat captcha obrázky"
+msgstr "Konvertovat captcha obrázky na 8bitové"
+
+msgid "Currently choosed subtitles"
+msgstr "Aktuálně vybrané titulky"
 
 msgid "Data path"
 msgstr "Data"
 
 msgid "Debug mode"
-msgstr "Debug mód"
+msgstr "Režim ladění"
 
 msgid "Default category"
 msgstr "Předvolená kategorie"
 
-msgid "Destination"
-msgstr ""
+msgid "Default live rtmp streams buffer"
+msgstr "Výchozí zásobník pro živé vysílání"
+
+msgid "Detected player"
+msgstr "Zjištěný přehrávač"
 
 msgid "Detected player:"
-msgstr "Přehrávač"
+msgstr "Zjištěný přehrávač:"
 
 msgid "Disable"
 msgstr "Vypnout"
@@ -169,6 +219,9 @@ msgstr "Chcete přidat"
 msgid "Do you want to cancel"
 msgstr "Chcete zrušit"
 
+msgid "Do you want to continue downloading"
+msgstr "Chcete pokračovat ve stahování"
+
 msgid "Do you want to continue?"
 msgstr "Chcete pokračovat?"
 
@@ -176,10 +229,7 @@ msgid "Do you want to delete"
 msgstr "Chcete smazat"
 
 msgid "Do you want to disable this addon?"
-msgstr "Chcete vypnout tenhle doplňek?"
-
-msgid "Do you want to download"
-msgstr ""
+msgstr "Chcete vypnout tento doplněk?"
 
 msgid "Do you want to exit ArchivCZSK?"
 msgstr "Chcete ukončit archivCZSK?"
@@ -199,6 +249,9 @@ msgstr "Chcete odstranit"
 msgid "Do you want to restart Enigma2 now?"
 msgstr "Chcete restartovat grafické rozhraní?"
 
+msgid "Do you want to save"
+msgstr "Chcete uložit"
+
 msgid "Do you want to update"
 msgstr "Chcete aktualizovat"
 
@@ -214,11 +267,23 @@ msgstr "Informace o stahování"
 msgid "Download is already running"
 msgstr "Stahování již probíhá"
 
+msgid "Download is not finished yet. Do you want to cancel downloading?"
+msgstr "Stahování není dokončeno. Chcete zrušit stahování?"
+
+msgid "Download is not saved yet. Do you want to save download?"
+msgstr "Stahování není uloženo. Chcete uložit stahování?"
+
 msgid "Download progress"
 msgstr "Průběh stahování"
 
 msgid "Download warning"
 msgstr "Upozornění stahování"
+
+msgid "Download was succesfully saved"
+msgstr "Stahování bylo úspěšně uloženo"
+
+msgid "Downloading succesfully finished"
+msgstr "Stahování bylo úspěšně dokončeno"
 
 msgid "Downloads"
 msgstr "Stažené soubory"
@@ -229,23 +294,26 @@ msgstr "Stahovat do:"
 msgid "Drop caches on exit"
 msgstr "Vymazat mezipamět po ukončení pluginu"
 
-msgid "Edit filename"
-msgstr ""
-
 msgid "Empty search expression"
 msgstr "Žádný hledaný výraz"
 
 msgid "Enable"
 msgstr "Zapnout"
 
+msgid "Encoding"
+msgstr "kódování"
+
 msgid "Error in loading"
-msgstr "Chyba načítaní"
+msgstr "Chyba načítání"
+
+msgid "Error when trying to seek"
+msgstr "Chyba při přetáčení, zkuste znovu."
 
 msgid "Error while trying to retrieve search list"
-msgstr "Chyba při načtení seznamu hledání"
+msgstr "Chyba při pokusu o načtení seznamu hledání"
 
-msgid "Exit player"
-msgstr ""
+msgid "Exit fix"
+msgstr "Oprava ukončení přehrávání"
 
 msgid "FAIL"
 msgstr "NENAINSTALOVÁN"
@@ -253,23 +321,26 @@ msgstr "NENAINSTALOVÁN"
 msgid "FLV Container"
 msgstr "FLV kontejner"
 
-msgid "Filename"
-msgstr ""
-
 msgid "Finish time:"
 msgstr "Konec stahování:"
 
 msgid "Finished:  "
-msgstr "Ukončeno:"
+msgstr "Dokončeno:"
 
 msgid "Following addons were updated"
-msgstr "Následující doplňky byly úspěšně aktualizovány"
+msgstr "Následující doplňky byly úspěšně aktualizovány:"
+
+msgid "Font size"
+msgstr "Velikost písma"
+
+msgid "Font type"
+msgstr "Font"
 
 msgid "For example if you have ASF(WMV) - OK state"
-msgstr "Například jestli máte u ASF(WMV) - NAINSTALOVÁN"
+msgstr "Máte-li například stav ASF(WMV) - NAINSTALOVÁN"
 
 msgid "For optimal usage of this plugin, you need to check"
-msgstr "Pro optimální použití tohoto pluginu zkontrolujte,"
+msgstr "Pro optimální používání je třeba zkontrolovat,"
 
 msgid "Genre: "
 msgstr "Žánr:"
@@ -278,16 +349,20 @@ msgid "HLS Protocol"
 msgstr "HLS protokol"
 
 msgid "HTTP Error"
-msgstr "HTTP chyba"
+msgstr "Chyba HTTP"
 
 msgid "HTTP Protocol"
 msgstr "HTTP protokol"
 
-msgid "If your player cannot decode VC1 codec, than you cannot play this video."
-msgstr "Jestli váš přehrávač neumí dekódovat VC1 kodek, video nepřehraje."
+msgid "HTTP Timeout"
+msgstr "Časový limit HTTP"
+
+msgid ""
+"If your player cannot decode VC1 codec, than you cannot play this video."
+msgstr "Pokud váš přehrávač neumí dekódovat VC1 kodek, video nepřehrajete."
 
 msgid "In WMV container is used VC1 encoded video"
-msgstr "Ve WMV kontejneru je video zakódováno VC1 kodekem "
+msgstr "Ve WMV kontejneru je video zakódováno VC1 kodekem"
 
 msgid "Install GStreamer plugins"
 msgstr "Instalovat GStreamer pluginy"
@@ -295,23 +370,26 @@ msgstr "Instalovat GStreamer pluginy"
 msgid "Install RTMP plugins"
 msgstr "Instalovat RTMP pluginy"
 
+msgid "Invalid Location"
+msgstr "Neplatné umístění"
+
 msgid "It looks like RTMP plugin is already installed"
 msgstr "Zdá se, že RTMP pluginy jsou již nainstalovány."
 
 msgid "Its highly recommended to restart Enigma2"
 msgstr "Doporučujeme restartovat grafické rozhraní"
 
-msgid "Just scale"
-msgstr ""
+msgid "Its not possible to pause this video"
+msgstr "Toto video nelze pozastavit"
 
-msgid "Latest"
-msgstr ""
+msgid "Its not possible to seek in this video"
+msgstr "Toto video není možné přetáčet."
 
-msgid "Letterbox"
-msgstr ""
+msgid "Its not possible to use trick seek in downloading video "
+msgstr "Není možné přetáčet v obraze "
 
-msgid "List of storage devices"
-msgstr ""
+msgid "Live streams"
+msgstr "Živé vysílání"
 
 msgid "Loading"
 msgstr "Načítám..."
@@ -337,14 +415,17 @@ msgstr "Manažér"
 msgid "Misc"
 msgstr "Rùzné"
 
+msgid "N/A"
+msgstr "N/A"
+
 msgid "Next"
 msgstr "Další strana"
 
-msgid "Next Page"
-msgstr ""
+msgid "None"
+msgstr "Žádné"
 
-msgid "Nonlinear"
-msgstr ""
+msgid "Not implemented yet"
+msgstr "Tato funkce není zatím implementována"
 
 msgid "OK"
 msgstr "NAINSTALOVÁN"
@@ -353,13 +434,19 @@ msgid "Open"
 msgstr "Otevřít položku"
 
 msgid "Override existing file"
-msgstr "Přepsat jestvující soubor"
+msgstr "Přepsat stávající soubor"
 
-msgid "Pan&scan"
-msgstr ""
+msgid "PLAY DELAY:"
+msgstr "Přehrávat po:"
 
-msgid "Parent directory"
-msgstr ""
+msgid "PLAYER BUFFER:"
+msgstr "Zásobník přehrávače:"
+
+msgid "PROTOCOL:"
+msgstr "Protokol:"
+
+msgid "Parent Directory"
+msgstr "Nadřízený adresář"
 
 msgid "Path"
 msgstr "Cesta"
@@ -367,29 +454,27 @@ msgstr "Cesta"
 msgid "Path:"
 msgstr "Cesta:"
 
-msgid "PillarBox"
-msgstr ""
-
 msgid "Play"
 msgstr "Přehrát"
+
+msgid "Play after"
+msgstr "Přehrávat po"
 
 msgid "Play and Download"
 msgstr "Přehraj a stahuj"
 
+msgid "Play and Download (GStreamer)"
+msgstr "Přehraj a stahuj (GStreamer)"
+
 msgid "Play and download mode is not supported by all video formats."
-msgstr "Přehrávání a stahování není podporováno pro všechny video formáty."
+msgstr ""
+"Režim přehrávání a stahování není podporován pro všechny video formáty."
 
 msgid "Play error"
-msgstr "Chyba přehrávaní"
+msgstr "Chyba přehrávání"
 
 msgid "Play info"
-msgstr "Informace o přehrávaní"
-
-msgid "Play next entry in playlist"
-msgstr ""
-
-msgid "Play previous entry in playlist"
-msgstr ""
+msgstr "Informace o přehrávání"
 
 msgid "Play warning"
 msgstr "Varování přehrávání"
@@ -397,41 +482,30 @@ msgstr "Varování přehrávání"
 msgid "Player"
 msgstr "Přehrávač"
 
-msgid "Player can start to behave unexpectedly or no to play video at all."
+msgid "Player can start to behave unexpectedly ot no to play video at all."
 msgstr ""
+"Přehrávač se může začít chovat nepředvídatelně, nebo video vůbec nepřehraje."
 
 msgid "Playing CZ/SK archives"
 msgstr "Přehrávání CZ/SK archivů"
 
-msgid "Please select source"
-msgstr ""
-
-msgid "Please select subservice..."
-msgstr ""
-
 msgid "Please set your search expression"
 msgstr "Prosím vložte hledaný výraz"
-
-msgid "Please wait until enough data is downloaded for fluent playback"
-msgstr ""
 
 msgid "Plugin CSFD is not installed."
 msgstr "Doplněk CSFD není nainstalován"
 
-msgid "Policy"
-msgstr ""
+msgid "Position"
+msgstr "Pozice"
 
-msgid "Previous Page"
-msgstr ""
-
-msgid "RTMP Buffer"
-msgstr ""
+msgid "RTMP BUFFER:"
+msgstr "RTMP zásobník:"
 
 msgid "RTMP Protocol"
 msgstr "RTMP protokol"
 
 msgid "RTMP Timeout"
-msgstr "RTMP Timeout"
+msgstr "Časový limit RTMP"
 
 msgid "RTSP Protocol"
 msgstr "RTSP protokol"
@@ -446,7 +520,7 @@ msgid "Reason"
 msgstr "Důvod"
 
 msgid "Recent downloads"
-msgstr "Stahované soubory"
+msgstr "Nejnovější stahování"
 
 msgid "Refresh"
 msgstr "Aktualizovat"
@@ -460,6 +534,9 @@ msgstr "Zmazat z kategorie"
 msgid "Remove shortcut"
 msgstr "Odstranit záložku"
 
+msgid "Russia"
+msgstr "Rusko"
+
 msgid "Rename"
 msgstr "Přejmenovat"
 
@@ -472,23 +549,26 @@ msgstr "Přejmenujte soubor"
 msgid "Resolve videos"
 msgstr "Načítej videa"
 
-msgid "Resuming playback"
-msgstr ""
+msgid "STREAM INFO"
+msgstr "Informace o streamu"
 
 msgid "Save"
 msgstr "Uložit"
 
 msgid "Search in"
-msgstr "Vyhledej v"
+msgstr "Vyhledávat v"
 
 msgid "Search in ArchivCZSK"
-msgstr "ArchivCZSK vyhledávaní"
+msgstr "Vyhledávání v Archivu CZSK"
 
 msgid "Select category"
 msgstr "Vyberte kategorii"
 
-msgid "Select new location"
-msgstr ""
+msgid "Select directory"
+msgstr "Vyberte adresář"
+
+msgid "Select source"
+msgstr "Vyberte zdroj"
 
 msgid "Set category name"
 msgstr "Zvolte jméno kategorie"
@@ -501,6 +581,9 @@ msgstr "Prosím vložte hledaný výraz"
 
 msgid "Settings"
 msgstr "Nastavení"
+
+msgid "Shortcut"
+msgstr "Záložky"
 
 msgid "Shortcuts"
 msgstr "Záložky"
@@ -517,11 +600,8 @@ msgstr "Zobrazit playlist"
 msgid "Show recent downloads"
 msgstr "Zobrazit stahované soubory"
 
-msgid "Show subservices"
-msgstr ""
-
-msgid "Show video source selection"
-msgstr ""
+msgid "Show subtitles"
+msgstr "Zobrazit titulky"
 
 msgid "Size:"
 msgstr "Velikost:"
@@ -529,26 +609,20 @@ msgstr "Velikost:"
 msgid "Size:  "
 msgstr "Velikost:"
 
-msgid "Skin"
-msgstr ""
-
-msgid "Sorry cannot load list, some error occurred"
-msgstr ""
-
 msgid "Sort alphabetically"
-msgstr "Dle abecedy"
+msgstr "Podle abecedy"
 
 msgid "Sort by date"
-msgstr "Dle data"
+msgstr "Podle data"
 
 msgid "Sort by size"
-msgstr "Dle velikosti"
+msgstr "Podle velikosti"
 
 msgid "Sort by state"
-msgstr "Dle stavu"
+msgstr "Podle stavu"
 
-msgid "Source"
-msgstr ""
+msgid "Speed"
+msgstr "Rychlost"
 
 msgid "Speed:"
 msgstr "Rychlost:"
@@ -560,7 +634,22 @@ msgid "State:"
 msgstr "Stav:"
 
 msgid "Stop playing this movie?"
-msgstr "Ukončit přehrávaní videa?"
+msgstr "Ukončit přehrávání videa?"
+
+msgid "Stream player"
+msgstr "Přehrávač streamů"
+
+msgid "Subtitles"
+msgstr "Titulky"
+
+msgid "Subtitles path"
+msgstr "Adresář s titulky:"
+
+msgid "Subtitles setting"
+msgstr "Nastavení titulků"
+
+msgid "Subtitles settings"
+msgstr "Nastavení titulků"
 
 msgid "Supported containers:"
 msgstr "Podporované kontejnery:"
@@ -571,20 +660,17 @@ msgstr "Podporované protokoly:"
 msgid "TV addons"
 msgstr "TV doplňky"
 
-msgid "Temp path"
-msgstr ""
+msgid "TV archive rtmp buffer"
+msgstr "Zásobník pro TV archivy"
 
 msgid "The file"
 msgstr "Soubor"
 
 msgid "This is the first time you started archivyCZSK"
-msgstr "Tohle je poprvé, co jste spustili plugin ArchivyCZSK."
-
-msgid "Top"
-msgstr ""
+msgstr "Toto je první spuštění Archivů CZSK."
 
 msgid "Try to use another name..."
-msgstr "Skuste použít jiné jméno"
+msgstr "Zkuste použít jiné jméno"
 
 msgid "Type text of picture"
 msgstr "Opište text obrázku"
@@ -593,27 +679,40 @@ msgid "UNKNOWN"
 msgstr "NEZNÁMÝ"
 
 msgid "URL Error"
-msgstr "URL Chyba"
+msgstr "Chyba URL"
+
+msgid "Uknown error when processing subtitles"
+msgstr "Neznámá chyba při zpracování titulků"
 
 msgid "Unknown Error"
 msgstr "Neznámá chyba"
 
-#, fuzzy
-msgid "Unknown Info"
-msgstr "Neznámá chyba"
-
-#, fuzzy
-msgid "Unknown Warning"
-msgstr "Upozornění stahování"
-
 msgid "Updater error"
-msgstr "Chyba aktualizování"
+msgstr "Chyba aktualizátoru"
 
 msgid "Updater info"
-msgstr "Informace aktualizování"
+msgstr "Informace aktualizátoru"
 
 msgid "Updater warning"
-msgstr "Upozornění aktualizování"
+msgstr "Upozornění aktualizátoru"
+
+msgid "Use default skin"
+msgstr "Použít původní vzhled"
+
+msgid "Use link verification"
+msgstr "Ověřovat video adresu"
+
+msgid "Use servicemp4"
+msgstr "Použít servicemp4"
+
+msgid "Use servicemrua (AZBOX)"
+msgstr "Použít servicemrua (AZBOX)"
+
+msgid "Use video controller"
+msgstr "Použít video kontrolér"
+
+msgid "Verification timeout"
+msgstr "Časový limit ověřování"
 
 msgid "Version: "
 msgstr "Verze:"
@@ -621,17 +720,29 @@ msgstr "Verze:"
 msgid "Video addons"
 msgstr "Video doplňky"
 
+msgid "Video player"
+msgstr "Video přehrávač"
+
+msgid "Video player with RTMP support"
+msgstr "Video přehrávač s RTMP podporou"
+
+msgid "Video starts playing in"
+msgstr "Video se začne přehrávat za..."
+
 msgid "Video url doesnt exist"
-msgstr "URL adresa pro přehrávání neexistuje"
+msgstr "Adresa videa neexistuje"
 
 msgid "VideoPlayer Info"
-msgstr "Informace o videopřehrávači"
+msgstr "Informace o Video přehrávači"
+
+msgid "Western Europe"
+msgstr "Západní Evropa"
 
 msgid "Year: "
 msgstr "Rok:"
 
-msgid "You can press any key to stop pre-buffering and start immediately"
-msgstr ""
+msgid "You can seek maximum"
+msgstr "Můžete maximálné přetáčet"
 
 msgid "You cannot search, archivCZSK Search is already running"
 msgstr "Nyní nemůžete vyhledávat, vyhledávání právě probíhá!"
@@ -640,16 +751,19 @@ msgid "You need to restart E2. Do you want to restart it now?"
 msgstr "Změny se projeví po restartu E2. Chcete nyní restartovat E2?"
 
 msgid "You need to update archivCZSK at least to"
-msgstr "Musíte aktualizovat archivy alespoň na"
-
-msgid "You've to change download filename. Try again.."
-msgstr ""
+msgstr "Musíte aktualizovat archívy alespoň na"
 
 msgid "addons"
 msgstr "doplňky"
 
 msgid "after installation of gstreamer plugins"
 msgstr "po instalaci Gstreamer pluginů"
+
+msgid "blue"
+msgstr "modrá"
+
+msgid "cannot decode"
+msgstr "nelze dekódovat"
 
 msgid "already exist"
 msgstr "již existuje"
@@ -664,10 +778,10 @@ msgid "category"
 msgstr "kategorii"
 
 msgid "change search expression"
-msgstr "změnit vyhledávaný výraz"
+msgstr "Změnit vyhledávaný výraz"
 
 msgid "choose from EPG"
-msgstr "vybrat z EPG"
+msgstr "Vybrat z EPG"
 
 msgid "crash of Enigma2."
 msgstr "pád Enigmy2."
@@ -675,38 +789,35 @@ msgstr "pád Enigmy2."
 msgid "custom player (subtitle support)"
 msgstr "Upravený přehrávač (podpora titulků)"
 
-msgid "debug"
-msgstr ""
+msgid "decreasing subtitles delay"
+msgstr "zmenšit zpoždění titulků"
 
 msgid "disabled"
 msgstr "vypnutý"
 
 msgid "download"
-msgstr "stahování"
+msgstr "Stahování"
 
 msgid "download path"
 msgstr "Stahovat do"
 
 msgid "downloaded"
-msgstr "stáhnuto"
+msgstr "staženo"
 
 msgid "downloading"
 msgstr "stahuji..."
 
-msgid "enabled"
-msgstr "zapnutý"
+msgid "encoding"
+msgstr "kódování"
 
 msgid "finished"
-msgstr "hotovo"
+msgstr "dokončeno"
 
 msgid "finished with errors"
-msgstr "hotovo s chybami"
+msgstr "dokončeno s chybou"
 
 msgid "finished with errors."
-msgstr "skončeno s chybami."
-
-msgid "free"
-msgstr ""
+msgstr "dokončeno s chybami."
 
 msgid "from disk"
 msgstr "z disku"
@@ -714,49 +825,72 @@ msgstr "z disku"
 msgid "general"
 msgstr "Obecné"
 
+msgid "green"
+msgstr "zelená"
+
 msgid "if you have all neccessary video plugins installed"
-msgstr " zda máte nainstalovány všechny potřebné video pluginy"
+msgstr "zda máte nainstalovány všechny potřebné video pluginy."
 
-#, fuzzy
-msgid "infinite"
-msgstr "hotovo"
-
-#, fuzzy
-msgid "info"
-msgstr "Informace o přehrávaní"
+msgid "increase subtitles delay"
+msgstr "zvětšit zpoždění titulků"
 
 msgid "is not downloaded yet. Do you want to play it anyway?"
 msgstr "zatím není stažen. Chcete i přesto spustit přehrávání?"
 
 msgid "it doesnt already mean that you can play WMV file"
-msgstr "tak to neznamená, že můžete přehrávat WMV soubory"
+msgstr "neznamená to, že můžete přehrávat WMV soubory"
 
 msgid "it doesnt mean that protocol or container isn't supported"
-msgstr "Neznamená to, že protokol nebo kontejner není podporován"
+msgstr "ale neznamená to, že protokol nebo kontejner není podporován"
 
-msgid "it just means that player can open WMV container and get ENCODED video out of it"
-msgstr "znamená to jen, že přehrávač může otevřít WMV kontejner a získat z něj kódované video"
+msgid ""
+"it just means that player can open WMV container and get ENCODED video out "
+"of it"
+msgstr ""
+"znamená to, že přehrávač může otevřít WMV kontejner a získat z něj kódované "
+"video"
+
+msgid "leave player?"
+msgstr "ukončit přehrávač?"
 
 msgid "loading"
 msgstr "Načítání"
 
-msgid "no"
-msgstr ""
+msgid "manual"
+msgstr "manuální"
+
+msgid "minutes forward"
+msgstr "minut dopředu"
+
+msgid "minutes forward not enough video is downloaded.\n"
+msgstr "minut dopředu, nedostatek staženého videa.\n"
 
 msgid "not finished"
-msgstr "neukončeno"
+msgstr "nedokončeno"
 
 msgid "not succesfully finished"
 msgstr "neúspěšně dokončeno"
 
-msgid "nothing connected"
-msgstr ""
+msgid "not succesfully finished download"
+msgstr "neúspěšně dokončené stahování"
+
+msgid "progressive (need HDD)"
+msgstr "progresivní (nutný HDD)"
 
 msgid "protocol is not supported"
 msgstr "protokol není podporován"
 
+msgid "purple"
+msgstr "fialová"
+
+msgid "red"
+msgstr "červená"
+
 msgid "remove diacritic"
-msgstr "odstranit diakritiku"
+msgstr "Odstranit diakritiku"
+
+msgid "seconds."
+msgstr "vteřin."
 
 msgid "shortcut?"
 msgstr "záložku?"
@@ -776,6 +910,9 @@ msgstr "zobrazí informace o doplňku"
 msgid "show menu of current item"
 msgstr "zobrazí informace o vybrané položce"
 
+msgid "show/hide infobar"
+msgstr "zobrazit/skrýt infobar"
+
 msgid "standard player"
 msgstr "Standardní přehrávač"
 
@@ -791,14 +928,20 @@ msgstr "úspěšně dokončeno."
 msgid "timeout"
 msgstr "Časový limit načítání"
 
-msgid "to play them you need to have HW support of your receiver to decode them"
-msgstr " na jejich přehrání je nutné, aby váš příjímač měl hardwarovou podporu na jejich dekódování"
+msgid "to disk?"
+msgstr "na disk?"
+
+msgid ""
+"to play them you need to have HW support of your receiver to decode them"
+msgstr ""
+"a k jejich přehrání je nutné, aby váš příjímač hardwarově podporoval jejich "
+"dekódovaní"
 
 msgid "try to install Gstreamer plugins in following order:"
-msgstr "pokuste se nainstalovat Gstreamer pluginy v nasledujícím pořadí:"
+msgstr "pokuste se nainstalovat Gstreamer pluginy v následujícím pořadí:"
 
 msgid "unknown"
-msgstr "??? MB"
+msgstr "Neznámý"
 
 msgid "unknown error"
 msgstr "Neznámá chyba"
@@ -806,301 +949,62 @@ msgstr "Neznámá chyba"
 msgid "version"
 msgstr "verzi"
 
-msgid "yes"
+msgid "white"
+msgstr "bílá"
+
+msgid "yellow"
+msgstr "žlutá"
+
+msgid "enabled"
+msgstr "zapnuto"
+
+msgid "RTMP Buffer"
+msgstr "RTMP zásobník"
+
+msgid "Temp path"
+msgstr "Dočasný adresář"
+
+msgid "Show video source selection"
+msgstr "Zobrazit výběr zdroje videa"
+
+msgid "Preload"
+msgstr "Předběžné načítání"
+
+msgid "Do you want to download"
+msgstr "Chcete stáhnout"
+
+msgid "Source"
+msgstr "Zdroj"
+
+msgid "Destination"
+msgstr "Cílová složka"
+
+msgid "Filename"
+msgstr "Název souboru"
+
+msgid "Please select source"
+msgstr "Prosím zvolte zdroj"
+
+msgid "Please wait until enough data is downloaded for fluent playback"
+msgstr "Počkejte, dokud se nestáhne dostatek dat pro plynulé přehrávání"
+
+msgid "Bufferring"
+msgstr "Ukládání do vyrovnávací paměti"
+
+msgid "You can press any key to stop pre-buffering and start immediately"
 msgstr ""
+"Můžete stisknout libovolné tlačítko pro zastavení předběžného ukládání\n"
+"do vyrovnávací paměti a okamžité spuštění"
 
-#~ msgid "ArchivyCZSK - Download:"
-#~ msgstr "ArchivCZSK - Stahování:"
+msgid "Player can start to behave unexpectedly or no to play video at all."
+msgstr ""
+"Přehrávač se může začít chovat nepředvídatelně, nebo video vůbec nepřehraje."
 
-#~ msgid "Buffer Mode"
-#~ msgstr "Typ Bufferingu"
+msgid "Select new location"
+msgstr "Vyberte nové umístění"
 
-#~ msgid "Buffer duration"
-#~ msgstr "Buffer(s)"
+msgid "Edit filename"
+msgstr "Upravit název souboru"
 
-#~ msgid "Buffer size"
-#~ msgstr "Velikost bufferu"
-
-#~ msgid "Buffer size on HDD"
-#~ msgstr "Velkost bufferu na HDD"
-
-#~ msgid "Cannot decode subtitles. Try another encoding group"
-#~ msgstr "Nemohu dekódovat titulky, zkuste použít jinou skupinu kódování."
-
-#~ msgid "Cannot found rtmpgw, make sure that you have installed it, or try to use Video player with internal rtmp support"
-#~ msgstr "Nemohu najít rtmpgw, ujistěte se, že jej máte nainstalován, nebo použijte video přehrávač s rtmp podporou. "
-
-#~ msgid "Cannot parse subtitles"
-#~ msgstr "Nemohu odparsovat titulky"
-
-#~ msgid "Cannot seek"
-#~ msgstr "Nemohu přetáčet"
-
-#~ msgid "Cannot seek, not enough video is downloaded"
-#~ msgstr "Nemohu přetáčet, není dostatek staženého videa v paměti"
-
-#~ msgid "Cannot unpause, Video is not buffered yet..."
-#~ msgstr "Nemohu odpauzovat, Nedostatek načteného videa"
-
-#~ msgid "Central and Eastern Europe"
-#~ msgstr "Střední a Východní Evropa"
-
-#~ msgid "Change encoding"
-#~ msgstr "změnit kódování?"
-
-#~ msgid "Choose Subtitles"
-#~ msgstr "Vybrat titulky"
-
-#~ msgid "Choose subtitles"
-#~ msgstr "Vybrat titulky"
-
-#~ msgid "Color"
-#~ msgstr "Barva"
-
-#~ msgid "Currently choosed subtitles"
-#~ msgstr "Momentálně vybrané titulky"
-
-#~ msgid "Default live rtmp streams buffer"
-#~ msgstr "Buffer pro živé vysílání"
-
-#~ msgid "Do you want to continue downloading"
-#~ msgstr "Chcete pokračovat ve stahování"
-
-#~ msgid "Do you want to save"
-#~ msgstr "Chcete uložit"
-
-#~ msgid "Download is not finished yet. Do you want to cancel downloading?"
-#~ msgstr "Stahování není dokončeno. Chcete zrušit stahování?"
-
-#~ msgid "Download is not saved yet. Do you want to save download?"
-#~ msgstr "Stahování není uloženo. Chcete uložit stahování?"
-
-#~ msgid "Download was succesfully saved"
-#~ msgstr "Stahování bylo úspěšně dokončeno"
-
-#~ msgid "Downloading succesfully finished"
-#~ msgstr "Stahování úspěšně skončilo"
-
-#~ msgid "Encoding"
-#~ msgstr "Kódování"
-
-#~ msgid "Error when trying to seek"
-#~ msgstr "Chyba při přetáčení, zkuste znovu."
-
-#~ msgid "Exit fix"
-#~ msgstr "Oprava ukončení přehrávání"
-
-#~ msgid "Font size"
-#~ msgstr "Velikost písma"
-
-#~ msgid "Font type"
-#~ msgstr "Font"
-
-#~ msgid "HTTP Timeout"
-#~ msgstr "HTTP Timeout"
-
-#~ msgid "Invalid Location"
-#~ msgstr "Nesprávné umístění"
-
-#~ msgid "Its not possible to pause this video"
-#~ msgstr "Toto video není možné pozastavit."
-
-#~ msgid "Its not possible to seek in this video"
-#~ msgstr "Toto video není možné přetáčet."
-
-#~ msgid "Its not possible to use trick seek in downloading video "
-#~ msgstr "Není možné přetáčet v obraze "
-
-#~ msgid "Live streams"
-#~ msgstr "Živé vysílání"
-
-#~ msgid "N/A"
-#~ msgstr "N/A"
-
-#, fuzzy
-#~ msgid "No external subtitles loaded"
-#~ msgstr "snížit latenci titulků"
-
-#~ msgid "None"
-#~ msgstr "Žádné"
-
-#~ msgid "Not implemented yet"
-#~ msgstr "Tato funkce zatím není implementována"
-
-#~ msgid "PLAY DELAY:"
-#~ msgstr "Přehrávat po:"
-
-#~ msgid "PLAYER BUFFER:"
-#~ msgstr "Buffer přehrávače:"
-
-#~ msgid "PROTOCOL:"
-#~ msgstr "Protokol:"
-
-#~ msgid "Parent Directory"
-#~ msgstr "Vyšší adresář"
-
-#~ msgid "Play after"
-#~ msgstr "Přehrávat po"
-
-#, fuzzy
-#~ msgid "Play and download (Gstreamer)"
-#~ msgstr "Přehraj a stahuj"
-
-#~ msgid "Player can start to behave unexpectedly ot no to play video at all."
-#~ msgstr "Přehrávač se může začít chovat nepředvídatelně, nebo video vůbec nepřehraje."
-
-#~ msgid "Position"
-#~ msgstr "Pozice"
-
-#~ msgid "RTMP BUFFER:"
-#~ msgstr "RTMP buffer:"
-
-#~ msgid "Russia"
-#~ msgstr "Rusko"
-
-#~ msgid "STREAM INFO"
-#~ msgstr "Informace o streamu"
-
-#~ msgid "Select directory"
-#~ msgstr "Vyberte adresář"
-
-#~ msgid "Select source"
-#~ msgstr "Vyberte zdroj"
-
-#~ msgid "Shortcut"
-#~ msgstr "Záložky"
-
-#~ msgid "Show subtitles"
-#~ msgstr "Zobrazit titulky"
-
-#~ msgid "Speed"
-#~ msgstr "Rychlost"
-
-#~ msgid "Stream player"
-#~ msgstr "Přehrávač streamů"
-
-#~ msgid "Subtitles"
-#~ msgstr "Titulky"
-
-#~ msgid "Subtitles path"
-#~ msgstr "Adresář s titulky:"
-
-#~ msgid "Subtitles setting"
-#~ msgstr "Nastavení titulků"
-
-#~ msgid "Subtitles settings"
-#~ msgstr "Nastavení titulků"
-
-#~ msgid "TV archive rtmp buffer"
-#~ msgstr "Buffer pro TV archivy"
-
-#~ msgid "TV archives"
-#~ msgstr "TV archivy"
-
-#~ msgid "Uknown error when processing subtitles"
-#~ msgstr "Neznámá chyba při načítání titulků"
-
-#~ msgid "Use default skin"
-#~ msgstr "Použij původní skin"
-
-#~ msgid "Use link verification"
-#~ msgstr "Ověřovat video adresu"
-
-#~ msgid "Use servicemp4"
-#~ msgstr "Použít service mp4"
-
-#~ msgid "Use servicemrua (AZBOX)"
-#~ msgstr "Použít service mrua (AZBOX)"
-
-#~ msgid "Use video controller"
-#~ msgstr "Použít video kontrolér"
-
-#~ msgid "Verification timeout"
-#~ msgstr "timeout ověřování"
-
-#~ msgid "Video archives"
-#~ msgstr "Video archivy"
-
-#~ msgid "Video player"
-#~ msgstr "Video přehrávač"
-
-#~ msgid "Video player with RTMP support"
-#~ msgstr "Video přehrávač s RTMP podporou"
-
-#~ msgid "Video starts playing in"
-#~ msgstr "Video se začne přehrávat za..."
-
-#~ msgid "Western Europe"
-#~ msgstr "Z"
-
-#~ msgid "You can seek maximum"
-#~ msgstr "Můžete maximálné přetáčet"
-
-#~ msgid "blue"
-#~ msgstr "modrá"
-
-#~ msgid "cannot decode"
-#~ msgstr "nemohu dekódovat"
-
-#~ msgid "decreasing subtitles delay"
-#~ msgstr "snížit latenci titulků"
-
-#, fuzzy
-#~ msgid "default"
-#~ msgstr "Použij původní skin"
-
-#~ msgid "encoding"
-#~ msgstr "kódování"
-
-#~ msgid "green"
-#~ msgstr "zelená"
-
-#~ msgid "increasing subtitles delay"
-#~ msgstr "zvýšit latenci titulků"
-
-#~ msgid "leave player?"
-#~ msgstr "ukončit přehrávač?"
-
-#~ msgid "manual"
-#~ msgstr "manuální"
-
-#~ msgid "minutes forward"
-#~ msgstr "minut dopředu"
-
-#~ msgid "minutes forward not enough video is downloaded.\n"
-#~ msgstr "minut dopředu, nedostatek stáhnutého videa.\n"
-
-#~ msgid "not succesfully finished download"
-#~ msgstr "neúspěšně dokončené stahování"
-
-#~ msgid "progressive (need HDD)"
-#~ msgstr "progressive (nutný HDD)"
-
-#~ msgid "purple"
-#~ msgstr "fialová"
-
-#~ msgid "red"
-#~ msgstr "červená"
-
-#~ msgid "seconds."
-#~ msgstr "vteřin."
-
-#, fuzzy
-#~ msgid "show audio selection menu"
-#~ msgstr "zobrazit informace"
-
-#~ msgid "show/hide infobar"
-#~ msgstr "zobrazit/skrýt infobar"
-
-#~ msgid "to disk?"
-#~ msgstr "na disk?"
-
-#, fuzzy
-#~ msgid "unsupported archive %s"
-#~ msgstr "Podporované kontejnery:"
-
-#~ msgid "white"
-#~ msgstr "bílá"
-
-#~ msgid "yellow"
-#~ msgstr "žlutá"
+msgid "Change location"
+msgstr "Změnit umístění"
