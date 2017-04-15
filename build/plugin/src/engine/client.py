@@ -199,6 +199,9 @@ def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={
                 settings['user-agent'] = ""
             if 'extra-headers' not in settings:
                 settings['extra-headers'] = {}
+            if not isinstance(settings['extra-headers'], dict):
+                log.error("extra headers is not a dict type!")
+                settings['extra-headers'] = {}
             log.debug("Settings: %s", settings)
             it.settings = settings
     it.resolved = True
