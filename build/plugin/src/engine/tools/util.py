@@ -160,7 +160,12 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
             debugfnc("downloading %s to %s", remote, local)
         else:
             print  "downloading %s to %s", (remote, local)
-        f = urllib2.urlopen(remote)
+        try:
+            import ssl
+            context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+            f = urllib2.urlopen(remote, context = context)
+        except Exception:
+            f = urllib2.urlopen(remote)
         make_path(os.path.dirname(local))
         localFile = open(local, mode)
         localFile.write(f.read())
