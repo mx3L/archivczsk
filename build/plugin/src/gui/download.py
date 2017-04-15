@@ -18,6 +18,7 @@ from Plugins.Extensions.archivCZSK import _
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 from Plugins.Extensions.archivCZSK.engine.tools import util
+from Plugins.Extensions.archivCZSK.engine.items import PVideo
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
 from base import BaseArchivCZSKScreen, BaseArchivCZSKMenuListScreen
 from common import PanelListDownload, PanelListDownloadEntry, \
@@ -350,7 +351,13 @@ class ArchivCZSKDownloadListScreen(BaseArchivCZSKMenuListScreen):
     def playDownload(self, callback=None):
         if callback:
             download = self.getSelectedItem()
-            self.player.play_item(download)
+            video_item = PVideo()
+            video_item.name = download.name
+            video_item.url = download.local
+            subpath = os.path.splitext(download.local)[0] + '.srt'
+            if os.path.isfile(subpath):
+                video_item.subs = subpath
+            self.player.play_item(video_item)
         else:
             self.workingFinished()
 
