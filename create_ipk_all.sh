@@ -50,8 +50,8 @@ rm -rf ${DP}/sh4
 rm -rd ${DP}/mipsel
 
 echo "downloading neccesary sh4/mipsel binaries"
-curl $SH4 -s -o ${DP}/sh4_$SH4_V.tar.gz
-curl $MIPS -s -o ${DP}/mipsel_$MIPS_V.tar.gz 
+curl $SH4 -L -s -o ${DP}/sh4_$SH4_V.tar.gz
+curl $MIPS -L -s -o ${DP}/mipsel_$MIPS_V.tar.gz 
 tar -C ${DP} -xzf ${DP}/sh4_$SH4_V.tar.gz
 tar -C ${DP} -xzf ${DP}/mipsel_$MIPS_V.tar.gz
 
