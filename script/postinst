@@ -186,8 +186,14 @@ then
 	echo "Found categories.xml, restoring..."
 	cp $TMP/categories.xml $ARCHIVCZSK
 fi
+if [ -d $TMP/data/ ];
+then
+	echo "Found DATA, restoring..."
+	rm -rf $ARCHIVCZSK/resources/data
+	cp -R $TMP/data $ARCHIVCZSK/resources/
+fi
 
-echo "Clearing temp folder..."
+echo "Removing temp folder..."
 rm -r $TMP
 
 echo "Installation of archivCZSK was successfull"
