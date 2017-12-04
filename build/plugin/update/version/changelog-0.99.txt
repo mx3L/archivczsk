@@ -1,4 +1,31 @@
-﻿0.76 init test auto update
+archivCZSK 1.0, 03.12.2017
+---------------------------------------------
+    - automaticka aktualizacia pluginu so zachovanim udajov
+    - volba CSFD pluginu
+    - rozsirene informacie o filme (pokial ich doplnok poskytuje)
+    - definovanie vlastneho radenia doplnok (prinosne pri vlastnej kategorii)
+    - predny panel setoboxu zobrazuje co sa prave prehrava
+    - logovanie (default: /tmp/archivCZSK.log)
+    - vylepsena funkcionalita aktualizacie doplnkov
+    - kontrola aktualizacii pri spusteni pluginu resp. po uplynuti 2h od poslednej kontroly
+    - uprava designu skinov
+    - rychlostne vylepsenie pluginu
+    - fix FullHD skinu ktory sposoboval pad systemu
+    - fix virtualnej klavesnice (XcursorX)
+    - fix pridavania do oblubenych poloziek (niekedy to nic nepridalo)
+    - fix pretacania v doplnku Sosac (pri zaplatenom VIP ucte)
+    - fix kompatibility OE2.0 - OE2.5
+    - fix chybajuceho kodovania napr. v OpenAtv6.1 (pad systemu pri stahovani videa)
+    - fix dalsich chyb ktore sposobovali pad systemu
+
+___________________________________________________
+Special thanks for @durinov, @hansolo, @clasicrock
+
+
+***************************************************************************************
+***************************************************************************************
+
+
 
 archivczsk 0.7 alpha_15:
 Vseobecne:
@@ -134,10 +161,10 @@ Archivy:
   - stv - skratenie linku -> funkcne aj na ipbox
   - joj.sk - opravene listovanie, pridany wau
   - ivysilani - fix video linku
-	      - moznost odfiltrovat bonusy
+          - moznost odfiltrovat bonusy
               - zrychlene nacitavanie videii
   - serialycz - pridany dalsi regexp pre videolinky
-	      - aktualizovany videomailresolver
+          - aktualizovany videomailresolver
 
 * dmd xbmc:
   - prima - oprava linkov pre HD videa
@@ -167,7 +194,7 @@ Archivy:
 
 * moje upravy:
   - pridany voyosk - funkcny len pre tych co maju predplatne
-  	           - navod: http://code.google.com/p/archivy-czsk/wiki/voyoskNavod
+               - navod: http://code.google.com/p/archivy-czsk/wiki/voyoskNavod
 
 * xbmc_doplnky:
   - opraveny youtuberesolver -> hejbejse.cz, replay.cz, nastojaka funckne
@@ -184,8 +211,8 @@ moje upravy :) :
       - opraveny problem s prehravanim HD videii
 - prima - moznost pouzit proxy (overte najprv funkcnost proxy, niekedy je potrebne spustit prehravanie viackrat)
 - ivysilani - opravene nacitanie videa pri niektorych relaciach
-	    - pridane oznacenie programov len z bonusmy
- 	    - zrychlene nacitavanie kategorii
+        - pridane oznacenie programov len z bonusmy
+        - zrychlene nacitavanie kategorii
 - voyo - opravene spravy, 
        - opravene listovanie v niektorych relaciach, 
        - zobrazenie kvality prehravaneho videa
@@ -266,9 +293,9 @@ Vseobecne:
   * zobrazi ci su dostupne vsetky potrebne gstreamer kniznice
   * moznost instalacie gstreamer kniznic
    + aktualizovany gstreamer skript
-   	| auto detekcia mispel/misp32el - thx shamann
-   	| pridane dalsie potrebne gst kniznice
-   	| pridane mozne pouzitie openpli feedov, pri neuspesnej instalacii
+    | auto detekcia mispel/misp32el - thx shamann
+    | pridane dalsie potrebne gst kniznice
+    | pridane mozne pouzitie openpli feedov, pri neuspesnej instalacii
 -  pridane automaticke spustenie Informacii o prehravaci po prvom spusteni
 archivov
 
@@ -374,14 +401,14 @@ Prehravac:
       - nastavenie velkosti bufferu prehravaca
       - opravene chyby vo video kontrolery
       - moznost pouzit upravenu openpli gstreamer aplikaciu - servicemp4(sh4 s gstreamer,mips32el):
-	* moznost nastavit tip bufferingu:
-		default- standardne nastavanie -> video sa zacne prehravat okamzite nezavisle na velkosti buffera 
-		prefill- video sa pauzuje pokial sa buffer nezaplni
-		progresive streaming - buffer je umiestneny na hdd
-		manual- to iste ako prefill ale naprogramovane v pythone na zaklade evBufferChange eventov
-	* nastavit pocet sekund bufferu
-	* nastavit http timeout(10s v servicemp3), -> moznost prehravat vytazene streamy
-	* pridat hlavicky pri vytvarani poziadavky na http stream (z befun je mozne prehravat napriamo)
+    * moznost nastavit tip bufferingu:
+        default- standardne nastavanie -> video sa zacne prehravat okamzite nezavisle na velkosti buffera 
+        prefill- video sa pauzuje pokial sa buffer nezaplni
+        progresive streaming - buffer je umiestneny na hdd
+        manual- to iste ako prefill ale naprogramovane v pythone na zaklade evBufferChange eventov
+    * nastavit pocet sekund bufferu
+    * nastavit http timeout(10s v servicemp3), -> moznost prehravat vytazene streamy
+    * pridat hlavicky pri vytvarani poziadavky na http stream (z befun je mozne prehravat napriamo)
 
 - Titulky:
    * moznost dynamicky menit casovanie tituliek
@@ -394,11 +421,11 @@ Prehravac:
 Stahovanie:
 - pridana moznost volby modu stahovania:
     * Twisted - stahovanie pomocou kniznice twisted
-	- automaticky vykonava presmerovanie na platny link (stahovanie  z stream.cz, rutube,... funguje)
-	- priamo spata s e2, ak sa e2 vypne, vypne sa aj stahovanie
+    - automaticky vykonava presmerovanie na platny link (stahovanie  z stream.cz, rutube,... funguje)
+    - priamo spata s e2, ak sa e2 vypne, vypne sa aj stahovanie
     * wget - pomocou programu wget
-  	- nezavisla na e2(stahuje sa aj po vypnuti e2)
- 	- presmerovanie nefunguje(niektore fileservery nefunguju)
+    - nezavisla na e2(stahuje sa aj po vypnuti e2)
+    - presmerovanie nefunguje(niektore fileservery nefunguju)
 - spravne zistenie nazvu suboru(vyuzitie hlavicky Content-Disposition)
 - vylepsene zobrazenie stavu stahovania(zaciatok,koniec stahovania,rychlost,nazov,cesta)
 - resetovanie openera pre urllib2 pri zacati stahovania -> ulozto stahovanie funguje
