@@ -15,7 +15,7 @@ echo " "
 ############ SETTINGS ############
 ##################################
 ADDONS_COMMIT="4bf4e1d76f92d077c690038b75a34034c5d21090"
-PVER="0.98"
+PVER="1.0"
 SH4_V="0.1"
 MIPS_V="0.2"
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
