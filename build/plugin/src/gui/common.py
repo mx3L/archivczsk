@@ -413,10 +413,10 @@ class Tabs(GUIComponent):
         self.tab_params['fontInactive'] = 'Regular;27'
         self.tab_params['halign'] = 'center'
         self.tab_params['valign'] = 'center'
-        self.tab_params['foregroundColorActive'] = 'red'
-        self.tab_params['backgroundColorActive'] = 'black'
-        self.tab_params['foregroundColorInactive'] = 'grey'
-        self.tab_params['backgroundColorInactive'] = 'black'
+        self.tab_params['foregroundColorActive'] = '#FF0000'
+        self.tab_params['backgroundColorActive'] = '#000000'
+        self.tab_params['foregroundColorInactive'] = '#808080'
+        self.tab_params['backgroundColorInactive'] = '#000000'
         self.active_tab_idx = None
 
     GUI_WIDGET = eListbox
@@ -450,7 +450,8 @@ class Tabs(GUIComponent):
             pos       = (x, 0),
             size      = (self.tab_params['size'][0], self.tab_params['size'][1]),
             font      = font,
-            text      = tab.encode('utf-8'),
+            text      = toString(tab),
+            #tab.encode('utf-8'),
             flags     = RT_HALIGN_CENTER | RT_VALIGN_CENTER | RT_WRAP,
             color     = color,
             backcolor = backcolor)

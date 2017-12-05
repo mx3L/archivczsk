@@ -14,12 +14,13 @@ from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, settings
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.engine.items import PVideo
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
+from Plugins.Extensions.archivCZSK.gui import info
 from base import BaseArchivCZSKScreen, BaseArchivCZSKMenuListScreen
 from common import PanelListDownload, PanelListDownloadEntry, \
     PanelListDownloadListEntry, MultiLabelWidget
@@ -260,6 +261,7 @@ class DownloadList:
     def __init__(self):
         try:
             self.ctx_items.append((_("Show recent downloads"), None, self.showDownloadListScreen))
+            self.ctx_items.append((_("ArchivCZSK changelog"), None, self.showArchivChangeLog))
         except AttributeError:
             pass
         self["DownloadListActions"] = HelpableActionMap(self, "DownloadActions",
@@ -270,6 +272,19 @@ class DownloadList:
     def showDownloadListScreen(self):
         self.workingStarted()
         self.session.openWithCallback(self.workingFinished, ArchivCZSKDownloadListScreen)
+
+    def showArchivChangeLog(self):
+        clog = u''
+        changelog_path = os.path.join(settings.PLUGIN_PATH, 'changelog.txt')
+        if os.path.isfile(changelog_path):
+            with open(changelog_path, 'r') as f:
+                text = f.read()
+            try:
+                clog = text
+            except Exception:
+                log.logError('ArchivCZSK changelog cannot be decoded')
+                pass
+        info.showChangelog(self.session, "ArchivCZSK", clog)
 
 class ArchivCZSKDownloadListScreen(BaseArchivCZSKMenuListScreen):
     instance = None

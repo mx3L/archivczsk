@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 # system imports
+import os
 from urllib2 import HTTPError, URLError
 import traceback
 
@@ -14,8 +15,7 @@ from Components.Sources.List import List
 
 # plugin imports
 from common import PanelList
-from Plugins.Extensions.archivCZSK import _
-from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK import _, log
 
 
 class BaseArchivCZSKScreen(Screen):
@@ -87,25 +87,41 @@ class BaseArchivCZSKMenuListScreen(BaseArchivCZSKScreen):
             f()
 
     def updateGUI(self):
-        for f in self.onUpdateGUI:
-            f()
+        try:
+            for f in self.onUpdateGUI:
+                f()
+        except:
+            log.logError("Action [updateGUI] failed.\n%s"%traceback.format_exc())
+            pass
 
     def hideList(self):
-        log.debug('hiding list')
-        self["menu"].hide()
+        try:
+            log.debug('hiding list')
+            self["menu"].hide()
+        except:
+            log.logError("Action [hideList] failed.\n%s"%traceback.format_exc())
+            pass
 
     def showList(self):
-        log.debug('showing list')
-        self["menu"].show()  
+        try:
+            log.debug('showing list')
+            self["menu"].show()  
+        except:
+            log.logError("Action [showList] failed.\n%s"%traceback.format_exc())
+            pass
 
 
     def getSelectedItem(self):
-        if len(self.lst_items) > 0:
-            idx = self["menu"].getSelectedIndex()
-            self.selected_it = self.lst_items[idx]
-            return self.selected_it
-        self.selected_it = None
-        return None
+        try:
+            if len(self.lst_items) > 0:
+                idx = self["menu"].getSelectedIndex()
+                self.selected_it = self.lst_items[idx]
+                return self.selected_it
+            self.selected_it = None
+            return None
+        except:
+            log.logError("Action [getSelectedItem] failed.\n%s"%traceback.format_exc())
+            pass
 
     def updateMenuList(self, idx):
         pass
@@ -114,24 +130,44 @@ class BaseArchivCZSKMenuListScreen(BaseArchivCZSKScreen):
         pass
 
     def cancel(self):
-        if not self.working:
-            self.close()
+        try:
+            if not self.working:
+                self.close()
+        except:
+            log.logError("Action [cancel] failed.\n%s"%traceback.format_exc())
+            pass
 
     def up(self):
-        if not self.working:
-            self["menu"].up()
+        try:
+            if not self.working:
+                self["menu"].up()
+        except:
+            log.logError("Action [up] failed.\n%s"%traceback.format_exc())
+            pass
 
     def down(self):
-        if not self.working:
-            self["menu"].down()
+        try:
+            if not self.working:
+                self["menu"].down()
+        except:
+            log.logError("Action [down] failed.\n%s"%traceback.format_exc())
+            pass
 
     def right(self):
-        if not self.working:
-            self["menu"].right()
+        try:
+            if not self.working:
+                self["menu"].right()
+        except:
+            log.logError("Action [right] failed.\n%s"%traceback.format_exc())
+            pass
 
     def left(self):
-        if not self.working:
-            self["menu"].left()
+        try:
+            if not self.working:
+                self["menu"].left()
+        except:
+            log.logError("Action [left] failed.\n%s"%traceback.format_exc())
+            pass
 
 class BaseArchivCZSKListSourceScreen(BaseArchivCZSKScreen):
     """Base Screen for screens with menu list"""
@@ -190,30 +226,51 @@ class BaseArchivCZSKListSourceScreen(BaseArchivCZSKScreen):
             f()
 
     def updateGUI(self):
-        for f in self.onUpdateGUI:
-            f()
+        try:
+            # fucking enigma call this 3x from mytest.py i dont know why
+            for f in self.onUpdateGUI:
+                f()
+        except:
+            log.logError("Action [updateGUI] failed.\n%s"%traceback.format_exc())
+            pass
 
     def hideList(self):
-        log.debug("<%s>: hideList"%(self.__class__.__name__))
-        self.__listboxRenderer.hide()
+        try:
+            log.debug("<%s>: hideList"%(self.__class__.__name__))
+            self.__listboxRenderer.hide()
+        except:
+            log.logError("Action [hideList] failed.\n%s"%traceback.format_exc())
+            pass
 
     def showList(self):
-        log.debug("<%s>: showList"%(self.__class__.__name__))
-        self.__listboxRenderer.show() 
+        try:
+            log.debug("<%s>: showList"%(self.__class__.__name__))
+            self.__listboxRenderer.show() 
+        except:
+            log.logError("Action [showList] failed.\n%s"%traceback.format_exc())
+            pass
 
     def getSelectedItem(self):
-        if len(self.lst_items) > 0:
-            idx = self["menu"].index
-            if idx is None:
-                self.selected_it = None
+        try:
+            if len(self.lst_items) > 0:
+                idx = self["menu"].index
+                if idx is None:
+                    self.selected_it = None
+                else:
+                    self.selected_it = self.lst_items[idx]
             else:
-                self.selected_it = self.lst_items[idx]
-        else:
-            self.selected_it = None
-        return self.selected_it
+                self.selected_it = None
+            return self.selected_it
+        except:
+            log.logError("Action [getSelectedItem] failed.\n%s"%traceback.format_exc())
+            pass
 
     def getSelectedIndex(self):
-        return self["menu"].index
+        try:
+            return self["menu"].index
+        except:
+            log.logError("Action [getSelectedIndex] failed.\n%s"%traceback.format_exc())
+            pass
 
     def updateMenuList(self, idx=0):
         pass
@@ -222,24 +279,44 @@ class BaseArchivCZSKListSourceScreen(BaseArchivCZSKScreen):
         pass
 
     def cancel(self):
-        if not self.working:
-            self.close()
+        try:
+            if not self.working:
+                self.close()
+        except:
+            log.logError("Action [cancel] failed.\n%s"%traceback.format_exc())
+            pass
 
     def up(self):
-        if not self.working:
-            self["menu"].selectPrevious()
+        try:
+            if not self.working:
+                self["menu"].selectPrevious()
+        except:
+            log.logError("Action [up] failed.\n%s"%traceback.format_exc())
+            pass
 
     def down(self):
-        if not self.working:
-            self["menu"].selectNext()
+        try:
+            if not self.working:
+                self["menu"].selectNext()
+        except:
+            log.logError("Action [down] failed.\n%s"%traceback.format_exc())
+            pass
 
     def right(self):
-        if not self.working:
-            self.__listboxRenderer.move(self.__listboxRenderer.instance.pageDown)
+        try:
+            if not self.working:
+                self.__listboxRenderer.move(self.__listboxRenderer.instance.pageDown)
+        except:
+            log.logError("Action [right] failed.\n%s"%traceback.format_exc())
+            pass
 
     def left(self):
-        if not self.working:
-            self.__listboxRenderer.instance.move(self.__listboxRenderer.instance.pageUp)
+        try:
+            if not self.working:
+                self.__listboxRenderer.instance.move(self.__listboxRenderer.instance.pageUp)
+        except:
+            log.logError("Action [left] failed.\n%s"%traceback.format_exc())
+            pass
 
     ### Messages ###
 

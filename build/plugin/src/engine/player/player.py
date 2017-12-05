@@ -119,9 +119,9 @@ class Player(object):
         if play_item is not None and self._play_item != play_item:
             self._play_item = play_item
             self.curr_idx = self.playlist.index(play_item)
-            self.play_stream(play_item.url, play_item.settings, play_item.subs, play_item.name)
+            self.play_stream(play_item.url, play_item.settings, play_item.subs, play_item.name, play_item)
 
-    def play_stream(self, play_url, play_settings=None, subtitles_url=None, title=None):
+    def play_stream(self, play_url, play_settings=None, subtitles_url=None, title=None, wholeItem=None):
         log.info("play_stream(%s, %s, %s, %s)"%(play_url, play_settings, subtitles_url, title))
         if play_url.startswith("rtmp"):
             rtmp_timeout = int(self.settings.rtmpTimeout.value)
@@ -139,13 +139,26 @@ class Player(object):
             play_url += "#" + "&".join("%s=%s"%(k,v) for k,v in headers.iteritems())
 
         service_ref = eServiceReference(play_settings.get("stype", 4097), 0, toString(play_url))
-        if title is not None:
-            service_ref.setName(toString(title))
-
+        
         if self.video_player is None:
             self.video_player = self.session.openWithCallback(self.player_exit_callback,
                     ArchivCZSKMoviePlayer, self.player_callback)
 
+        # set infobar text
+        titleSet = False
+        if wholeItem is not None:
+            try:
+                if 'title' in  wholeItem.info:
+                    service_ref.setName(toString(wholeItem.info["title"]))
+                    self.video_player.setInfoBarText(toString(wholeItem.info["title"]))
+                    titleSet = True
+            except:
+                log.logError("Set title from item failed (set default).\n%s"%traceback.format_exc())
+
+        if not titleSet:
+            service_ref.setName(toString(title))
+            self.video_player.setInfoBarText(toString(title))
+        
         self.video_player.play_service_ref(service_ref, 
                 self._play_item.subs, play_settings.get("resume_time_sec"))
 
@@ -490,4 +503,11 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
     def doEofInternal(self, playing):
         log.info("doEofInternal(%s)"%playing)
         self.player_callback(("eof", playing))
+
+    def setInfoBarText(self, title):
+        try:
+            self.setTitle(toString(title))
+        except:
+            log.logError("Set info bar text failed.\n%s"%traceback.format_exc())
+            pass
 

@@ -4,6 +4,7 @@ import mimetypes
 import urlparse
 import urllib
 import urllib2
+import traceback
 
 from enigma import eConsoleAppContainer
 
@@ -21,7 +22,6 @@ elif videoPlayerInfo.type =='gstreamer' and videoPlayerInfo.version == '0.10':
 
 RTMP_DUMP_PATH      = '/usr/bin/rtmpdump'
 WGET_PATH           = 'wget'
-USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0'
 
 VIDEO_EXTENSIONS    = ('.3gp', '3g2', '.asf', '.avi', '.flv', '.mp4', '.mkv', '.mpeg', '.mov' '.mpg', '.wmv', '.divx', '.vob', '.iso', '.ts')
 AUDIO_EXTENSIONS    = ('.mp2', '.mp3', '.wma', '.ogg', '.dts', '.flac', '.wave')
@@ -93,10 +93,17 @@ class DownloadManager(object):
 
     def createDownload(self, name, url, destination, filename=None, live=False, startCB=None, finishCB=None, stream=None, quiet=False, playDownload=False, headers=None, mode=""):
         log.info("Downloader.createDownload(url=%s,mode=%s"%(toString(url), mode))
+        log.logDebug("Creating download\name=%s\nurl=%s\ndestination=%s\nfilename=%s\nheaders=%s\nmode=%s" % (name, url, destination, filename, headers, mode))
         d = None
         if headers is None:
             headers = {}
-        headers = headers.copy()
+        try:
+            headers = headers.copy()
+        except:
+            log.logError("Copy headers for download failed, continute download.\n%s"%traceback.format_exc())
+            headers = {}
+            pass
+        from Plugins.Extensions.archivCZSK.settings import USER_AGENT
         headers.setdefault('User-Agent', USER_AGENT)
         filename, length = getFilenameAndLength(url, headers, filename)
         log.info("Downloader.createDownload() filename=%s, length=%s", toString(filename), length)

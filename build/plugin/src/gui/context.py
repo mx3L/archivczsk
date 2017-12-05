@@ -6,7 +6,7 @@ Created on 28.4.2012
 '''
 
 from enigma import (loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, RT_HALIGN_LEFT, RT_HALIGN_RIGHT,
-                    RT_HALIGN_CENTER, RT_VALIGN_CENTER, eListboxPythonMultiContent, gFont)
+                    RT_HALIGN_CENTER, RT_VALIGN_CENTER, eListboxPythonMultiContent, gFont, getDesktop)
 
 from Components.ActionMap import ActionMap
 from Components.Label import Label
@@ -25,10 +25,14 @@ def showContextMenu(session, name, img, items, globalItems, cb):
 
 
 class ContextMenuList(MenuList):
-    def __init__(self):
+    def __init__(self, isFHD):
         MenuList.__init__(self, [], False, eListboxPythonMultiContent)
-        self.l.setItemHeight(24)
-        self.l.setFont(0, gFont("Regular", 19))
+        if isFHD:
+            self.l.setItemHeight(33)
+            self.l.setFont(0, gFont("Regular", 25))
+        else:
+            self.l.setItemHeight(24)
+            self.l.setFont(0, gFont("Regular", 19))
 
 
 def ContextEntry(name, idx, png=''):
@@ -68,7 +72,13 @@ class ArchivCZSKContextMenuScreen(BaseArchivCZSKScreen):
         self.useSeparator = not  self.globalListDisabled
         self["item_pixmap"] = Pixmap()
         self["item_label"] = Label(name)
-        self['list'] = ContextMenuList()
+        self.isFHD = False
+        try:
+            if getDesktop(0).size().width() > 1280:
+                self.isFHD = True
+        except:
+            pass
+        self['list'] = ContextMenuList(self.isFHD)
         self["actions"] = ActionMap(["archivCZSKActions"],
             {"ok": self.ok,
              "cancel": self.cancel,

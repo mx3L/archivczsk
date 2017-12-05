@@ -1,13 +1,20 @@
 '''
 Created on 25.6.2012
+Updated on 28.10.2017 by chaoss
 
 @author: marko
 '''
-import os, shutil
 
+import os
+import shutil
+import traceback
+import threading
 from tools import unzip, util, parser
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
-from Plugins.Extensions.archivCZSK import log
+from Plugins.Extensions.archivCZSK import log, toString, settings
+from Components.Console import Console
+from Components.config import config
+from Screens.MessageBox import MessageBox
 
 def removePyOC(pyfile):
     if os.path.isfile(pyfile + 'c'):
@@ -22,6 +29,255 @@ def removeFiles(files):
         if os.path.isfile(f):
             os.remove(f) 
     
+
+class ArchivUpdater(object):
+    def __init__(self, archivInstance):
+        self.archiv = archivInstance
+        self.tmpPath = config.plugins.archivCZSK.tmpPath.value
+        if not self.tmpPath:
+            self.tmpPath = "/tmp"
+        self.__console = None
+        self.remote_version=""
+        self.commitValue=""
+        self.commitFilePath = ""
+        self.updateXmlFilePath = ""
+        self.updateZipFilePath = ""
+        self.BackupCreate = False
+        self.backupDir = os.path.join(self.tmpPath, "archivCZSK_backup")
+        self.updateXml = "http://cdn.rawgit.com/mx3L/archivczsk/{commit}/build/plugin/update/app.xml"
+        self.updateZip = "http://cdn.rawgit.com/mx3L/archivczsk/{commit}/build/plugin/update/version/archivczsk-{version}.zip"
+        self.commit = "https://raw.githubusercontent.com/mx3L/archivczsk/master/build/plugin/update/commit"
+        self.needUpdate = False
+    
+    def checkUpdate(self):
+        self.downloadCommit()
+
+
+    def downloadCommit(self):
+        try:
+            self.commitFilePath = os.path.join(os.path.dirname(self.tmpPath), 'archivczsk.commit')
+            self.__console = Console()
+            self.__console.ePopen('curl -kfo %s %s' % (self.commitFilePath, self.commit), self.checkCommit)
+        except:
+            log.logError("ArchivUpdater download commit failed.\n%s"%traceback.format_exc())
+            raise
+
+    def checkCommit(self, data, retval, extra_args):
+        try:
+            if retval == 0:
+                self.doWork()
+            else:
+                log.logError("ArchivUpdater check commit failed. %s ### retval=%s"%(data, retval))
+                self.continueToArchiv()
+        except:
+            log.logError("ArchivUpdater check commit failed.\n%s"%traceback.format_exc())
+            self.continueToArchiv()
+    
+    def downloadUpdateXml(self):
+        try:
+            self.commitValue = open(self.commitFilePath).readline()[:-1]
+        except Exception:
+            log.logError("ArchivUpdater get commit value from file failed.\n%s"%traceback.format_exc())
+            return False
+
+        try:
+            self.updateXml = self.updateXml.replace('{commit}', self.commitValue)
+            self.updateXmlFilePath = os.path.join(os.path.dirname(self.tmpPath), 'archivczskupdate.xml')
+            util.download_to_file(self.updateXml, self.updateXmlFilePath)
+            return True
+        except Exception:
+            log.logError("ArchivUpdater download archiv update xml failed.\n%s"%traceback.format_exc())
+            return False
+    def downloadZip(self):
+        try:
+            self.updateZip = self.updateZip.replace('{commit}', self.commitValue)
+            self.updateZip = self.updateZip.replace('{version}', self.remote_version)
+            self.updateZipFilePath = os.path.join(os.path.dirname(self.tmpPath), 'archivczskupdate.zip')
+            log.logDebug("ArchivUpdater downloading zip %s"%self.updateZip)
+            util.download_to_file(self.updateZip, self.updateZipFilePath)
+        except Exception:
+            log.logError("ArchivUpdater download update zip failed.\n%s"%traceback.format_exc())
+            raise
+    def removeArchivTree(self):
+        try:
+            pth = settings.PLUGIN_PATH
+            for i in os.listdir(pth):
+                fullPath1 = os.path.join(pth,i)
+                tmp = i.lower()
+                if tmp=="categories.xml":
+                    log.logDebug("File '%s' skipped."%i)
+                    continue
+                if i=="resources":
+                    for sub in os.listdir(fullPath1):
+                        fullPath2 = os.path.join(fullPath1,sub)
+                        if sub.lower()=="data":
+                            log.logDebug("Dir '%s' skipped."%sub)
+                            continue
+                        if sub.lower()=="repositories":
+                            for sub2 in os.listdir(fullPath2):
+                                fullPath3 = os.path.join(fullPath2, sub2)
+                                if os.path.isdir(fullPath3):
+                                    # remove addon.xml only
+                                    addonXml = os.path.join(fullPath3, "addon.xml")
+                                    log.logDebug("addon xml path %s" % addonXml)
+                                    if os.path.isfile(addonXml):
+                                        os.remove(addonXml)
+                                        log.logDebug("File '%s' removed" % addonXml[-30:])
+                                elif os.path.isfile(fullPath3):
+                                    os.remove(fullPath3)
+                                    log.logDebug("File '%s' removed" % sub2)
+                            # repositories dir skipped partialy
+                            continue
+                        if os.path.isdir(fullPath2):
+                            shutil.rmtree(fullPath2)
+                            log.logDebug("Dir tree '%s' removed" % sub)
+                        elif os.path.isfile(fullPath2):
+                            os.remove(fullPath2)
+                            log.logDebug("File '%s' removed" % sub)
+                    # resources dir partialy skipped
+                    continue
+    
+                if os.path.isdir(fullPath1):
+                    shutil.rmtree(fullPath1)
+                    log.logDebug("Dir tree '%s' removed" % i)
+                elif os.path.isfile(fullPath1):
+                    os.remove(fullPath1)
+                    log.logDebug("File '%s' removed" % i)
+        except:
+            log.logError("ArchivUpdater remove archivCZSK tree failed.\n%s"% traceback.format_exc())
+            raise
+    
+    def backupOrRevertUpdate(self, backup):
+        try:
+            # symlinks not working
+            archivDir = settings.PLUGIN_PATH
+            if backup:
+                log.logDebug("ArchivUpdater creating backup before update...")
+                #backup archiv
+                if os.path.isdir(self.backupDir):
+                    os.rmdir(self.backupDir)
+                shutil.copytree(archivDir, self.backupDir)
+            else:
+                log.logDebug("ArchivUpdater rverting changes after unsuccessfull update...")
+                #revert archiv from backup
+                shutil.rmtree(archivDir)
+                shutil.copytree(self.backupDir, archivDir)
+        except:
+            if backup:
+                log.logError("ArchivUpdater backup before unzip failed.\n%s"%traceback.format_exc())
+            else:
+                log.logError("ArchivUpdater revert after unsuccessfull unzip failed.\n%s"%traceback.format_exc())
+            raise Exception("Bacup/Revert archivCZSK failed.")
+
+    def updateFailed(self, callback=None):
+        self.continueToArchiv()
+        
+    def updateArchiv(self, callback=None, verbose=True):
+        try:
+            if not callback:
+                log.logDebug("ArchivUpdater update canceled.")
+                self.continueToArchiv()
+            else:
+                # copy files
+                self.downloadZip()
+                log.logDebug("ArchivUpdater download zip archivCZSK complete...")
+                # remove tree
+                self.backupOrRevertUpdate(True)
+                self.BackupCreate = True
+                self.removeArchivTree()
+                # maybe zipper replace the file 
+                log.logDebug("ArchivUpdater remove archivCZSK files complete...")
+                # unzip
+                unzipper = unzip.unzip()
+                #.../Plugins/Extensions/
+                log.logDebug("ArchivUpdater extracting to %s" % settings.ENIGMA_PLUGIN_PATH)
+                unzipper.extract(self.updateZipFilePath, settings.ENIGMA_PLUGIN_PATH)
+                log.logDebug("ArchivUpdater unzip archivCZSK complete...")
+                self.removeTempFiles()
+
+                # restart enigma
+                strMsg = "%s" % _("Update archivCZSK complete.")
+                self.archiv.session.openWithCallback(self.archiv.ask_restart_e2,
+                        MessageBox,
+                        strMsg,
+                        type=MessageBox.TYPE_INFO)
+        except:
+            strMsg = "%s" % _("Update archivCZSK failed.")
+            try:
+                if self.BackupCreate:
+                    self.backupOrRevertUpdate(False)
+            except:
+                strMsg = strMsg + "\n\nFATAL ERROR\n\n"+_("Please revert archivCZSK manualy from following location before restart!!!")+"\n\n"+toString(self.backupDir)
+                pass
+            log.logError("ArchivUpdater update archivCZSK from zip failed.\n%s"%traceback.format_exc())
+            
+            self.archiv.session.openWithCallback(self.updateFailed,
+                    MessageBox,
+                    strMsg,
+                    type=MessageBox.TYPE_INFO)
+            pass
+
+    def doWork(self):
+        try:
+            lock = threading.Lock()
+            def check_archiv():
+                try:
+                    if self.downloadUpdateXml():
+                        from Plugins.Extensions.archivCZSK.version import version
+                        local_version = version
+                        xmlroot = util.load_xml(self.updateXmlFilePath).getroot()
+                        self.remote_version = xmlroot.attrib.get('version')
+                        log.logDebug("ArchivUpdater version local/remote: %s/%s" % (local_version, self.remote_version))
+
+                        if util.check_version(local_version, self.remote_version):
+                            self.needUpdate = True
+                        else:
+                            self.needUpdate = False
+                    else:
+                        self.needUpdate = False
+                except:
+                    log.logError("ArchivUpdater compare versions failed.\n%s"%traceback.format_exc())
+
+            thread = threading.Thread(target=check_archiv)
+            thread.start()
+            thread.join()
+
+            if self.needUpdate:
+                log.logInfo("ArchivUpdater update found...%s"%self.remote_version)
+                strMsg = "%s %s?" %(_("Do you want to update archivCZSK to version"), toString(self.remote_version))
+                self.archiv.session.openWithCallback(
+                    self.updateArchiv,
+                    MessageBox,
+                    strMsg,
+                    type = MessageBox.TYPE_YESNO)
+            else:
+                self.continueToArchiv()
+        except:
+            log.logError("ArchivUpdater update failed.\n%s"%traceback.format_exc())
+            self.continueToArchiv()
+
+    def continueToArchiv(self):
+        self.removeTempFiles()
+        if config.plugins.archivCZSK.autoUpdate.value and self.archiv.canCheckUpdate(False):
+            # check plugin updates
+            self.archiv.download_commit()
+        else:
+            self.archiv.open_archive_screen()
+
+    def removeTempFiles(self):
+        try:
+            if os.path.isfile(self.commitFilePath):
+                os.remove(self.commitFilePath)
+            if os.path.isfile(self.updateXmlFilePath):
+                os.remove(self.updateXmlFilePath)
+            if os.path.isfile(self.updateZipFilePath):
+                os.remove(self.updateZipFilePath)
+            if os.path.isdir(self.backupDir):
+                shutil.rmtree(self.backupDir)
+        except:
+            log.logError("ArchivUpdater remove temp files failed.\n%s"%traceback.format_exc())
+            pass
+
 class Updater(object):
     """Updater for updating addons in repository, every repository has its own updater"""
     
@@ -38,22 +294,27 @@ class Updater(object):
         """
         check if addon needs update and if its broken
         """
+        try:
+            log.debug("checking updates for %s", addon.name)
+            self._get_server_addon(addon, update_xml)
         
-        log.debug("checking updates for %s", addon.name)
-        self._get_server_addon(addon, update_xml)
+            broken = self.remote_addons_dict[addon.id]['broken']
+            remote_version = self.remote_addons_dict[addon.id]['version']
+            local_version = addon.version
         
-        broken = self.remote_addons_dict[addon.id]['broken']
-        remote_version = self.remote_addons_dict[addon.id]['version']
-        local_version = addon.version
-        
-        if util.check_version(local_version, remote_version):
-            log.debug("%s local version %s < remote version %s", addon.name, local_version, remote_version)
-            log.debug("%s is not up to date", addon.name)
-            return True, broken
-        else:
-            log.debug("%s local version %s >= remote version %s", addon.name, local_version, remote_version)
-            log.debug("%s is up to date", addon.name)
-        return False, broken
+            if util.check_version(local_version, remote_version):
+                log.logDebug("Addon '%s' need update (local %s < remote %s)." % (addon.name, local_version, remote_version))
+                log.debug("%s local version %s < remote version %s", addon.name, local_version, remote_version)
+                log.debug("%s is not up to date", addon.name)
+                return True, broken
+            else:
+                log.logDebug("Addon '%s' (%s) is up to date." % (addon.name, local_version))
+                log.debug("%s local version %s >= remote version %s", addon.name, local_version, remote_version)
+                log.debug("%s is up to date", addon.name)
+            return False, broken
+        except:
+            log.logError("Check addon '%s' update failed.\n%s" % (addon.name, traceback.format_exc()))
+            raise
           
     def update_addon(self, addon):
         """updates addon"""
@@ -90,6 +351,7 @@ class Updater(object):
                     update_needed.append(local_addon)
             elif new:
                 log.debug("%s not in local repository, adding dummy Addon to update", remote_addon['name'])
+                log.logDebug("'%s' not in local repository, adding Addon to update"%remote_addon['name'])
                 new_addon = DummyAddon(self.repository, remote_addon['id'], remote_addon['name'], remote_addon['version'])
                 update_needed.append(new_addon)
             else:

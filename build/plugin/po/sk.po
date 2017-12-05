@@ -16,6 +16,65 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "List"
+msgstr "Zoznam"
+msgid "Film info"
+msgstr "Info o filme"
+msgid "Comments"
+msgstr "Komentáre"
+msgid "CSFD"
+msgstr "CSFD"
+msgid "CSFDLite"
+msgstr "CSFDLite"
+msgid "Internal"
+msgstr "Interný"
+
+msgid "Posters path"
+msgstr "Plagáty sťahovať do"
+
+msgid "Download complete for"
+msgstr "Sťahovanie dokončené pre"
+msgid "Search results for"
+msgstr "Výsledky hľadania pre"
+msgid "Csfd info for"
+msgstr "Csfd info pre"
+msgid "Searching for"
+msgstr "Hľadám"
+
+
+msgid "ArchivCZSK changelog"
+msgstr "ArchivCZSK zmeny"
+
+msgid "Show CSFD info failed."
+msgstr "Zobrazení CSFD info selhalo."
+
+msgid "Update archivCZSK complete."
+msgstr "Aktualizácia archivCZSK prebehla úspešne."
+
+msgid "Update archivCZSK failed."
+msgstr "Aktualizácia archivCZSK zlyhala."
+
+msgid "Please revert archivCZSK manualy from following location before restart!!!"
+msgstr "Prosím obnovte archivCZSK ručne z uvedenej lokácie pred reštartom zariadenia!!!"
+
+msgid "Do you want to update archivCZSK to version"
+msgstr "Prajete si aktualizovať archivCZSK na verziu"
+
+msgid "Log path"
+msgstr "Logovať do"
+
+msgid "Show movie info"
+msgstr "Zobraziť informácie o filme"
+
+msgid "Show movie poster"
+msgstr "Zobraziť plagát filmu"
+
+msgid "Max posters on HDD"
+msgstr "Max počet plagátov na disku"
+
+msgid "Addon order"
+msgstr "Poradie doplnku"
+
 msgid "* If some of the tests FAIL you should"
 msgstr "* Ak niektoré testy skončia neúspešne"
 
@@ -79,8 +138,12 @@ msgstr "Upozornenie doplnku"
 msgid "All addons"
 msgstr "Všetky doplnky"
 
-msgid "Allow auto-update"
-msgstr "Povoliť automatickú kontrolu aktualizácií"
+msgid "Allow addons auto update"
+msgstr "Povoliť kontrolu aktualizácií doplnkov"
+
+msgid "Allow archivCZSK auto update"
+msgstr "Povoliť kontrolu aktualizácií archívuCZSK"
+
 
 msgid "ArchivCZSK"
 msgstr "ArchívCZSK"
@@ -125,7 +188,7 @@ msgid "Category list"
 msgstr "Zoznam kategórií"
 
 msgid "Change location"
-msgstr ""
+msgstr "Zmeniť umiestnenie"
 
 msgid "Changelog"
 msgstr "Zmeny"
@@ -134,10 +197,10 @@ msgid "Configuration"
 msgstr "Konfigurácia"
 
 msgid "Confirm exit when closing player"
-msgstr ""
+msgstr "Potvrdiť ukončenie prehrávania"
 
 msgid "Confirm exit when closing plugin"
-msgstr ""
+msgstr "Potvrdiť ukončenie archívuCZSK"
 
 msgid "Convert captcha images to 8bit"
 msgstr "Konvertovať captcha obrázky"
@@ -152,7 +215,7 @@ msgid "Default category"
 msgstr "Predvolená kategória"
 
 msgid "Destination"
-msgstr ""
+msgstr "Cieľ"
 
 msgid "Detected player:"
 msgstr "Prehrávač:"
@@ -179,7 +242,7 @@ msgid "Do you want to disable this addon?"
 msgstr "Chcete vypnúť tento doplnok?"
 
 msgid "Do you want to download"
-msgstr ""
+msgstr "Chcete sťiahnuť"
 
 msgid "Do you want to exit ArchivCZSK?"
 msgstr "Chcete ukončiť archivCZSK?"
@@ -224,13 +287,13 @@ msgid "Downloads"
 msgstr "Stiahnuté súbory"
 
 msgid "Downloads path"
-msgstr "Sťahovanie"
+msgstr "Sťahovať do"
 
 msgid "Drop caches on exit"
 msgstr "Vymazať medzipamäť po ukončení"
 
 msgid "Edit filename"
-msgstr ""
+msgstr "Zmeniť názov súboru"
 
 msgid "Empty search expression"
 msgstr "Prosím vložte hľadaný výraz"
@@ -245,7 +308,7 @@ msgid "Error while trying to retrieve search list"
 msgstr "Chyba pri získavaní vyhľadávaného zoznamu"
 
 msgid "Exit player"
-msgstr ""
+msgstr "Ukončiť prehrávač"
 
 msgid "FAIL"
 msgstr "NENAINŠTALOVANÝ"
@@ -254,7 +317,7 @@ msgid "FLV Container"
 msgstr "FLV kontajner"
 
 msgid "Filename"
-msgstr ""
+msgstr "Názov súboru"
 
 msgid "Finish time:"
 msgstr "Koniec sťahovania:"
@@ -341,7 +404,7 @@ msgid "Next"
 msgstr "Ďaľšia strana"
 
 msgid "Next Page"
-msgstr ""
+msgstr "Ďaľšia strana"
 
 msgid "Nonlinear"
 msgstr ""
@@ -422,7 +485,7 @@ msgid "Policy"
 msgstr ""
 
 msgid "Previous Page"
-msgstr ""
+msgstr "Predošlá strana"
 
 msgid "RTMP Buffer"
 msgstr ""
@@ -488,7 +551,7 @@ msgid "Select category"
 msgstr "Vyberte kategóriu"
 
 msgid "Select new location"
-msgstr ""
+msgstr "Vyberte nové umiestnenie"
 
 msgid "Set category name"
 msgstr "Zvoľte meno kategórie"
@@ -521,7 +584,7 @@ msgid "Show subservices"
 msgstr ""
 
 msgid "Show video source selection"
-msgstr ""
+msgstr "Zobrazť výber zdroju videa"
 
 msgid "Size:"
 msgstr "Veľkosť:"
@@ -572,7 +635,7 @@ msgid "TV addons"
 msgstr "TV doplnky"
 
 msgid "Temp path"
-msgstr ""
+msgstr "Dočasný adresár"
 
 msgid "The file"
 msgstr "Súbor"

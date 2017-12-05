@@ -1,3 +1,93 @@
+## Zoznam zmien: 
+
+  * automaticka aktualizacia pluginu so zachovanim udajov
+  * volba CSFD pluginu (+interny)
+  * rozsirene informacie o filme (pokial ich doplnok poskytuje)
+  * definovanie vlastneho radenia doplnok (prinosne pri vlastnej kategorii)
+  * predny panel setoboxu zobrazuje co sa prave prehrava
+  * logovanie (default: /tmp/archivCZSK.log)
+  * vylepsena funkcionalita aktualizacie doplnkov
+  * kontrola aktualizacii pri spusteni pluginu resp. po uplynuti 2h od poslednej kontroly
+  * uprava designu skinov
+  * rychlostne vylepsenie pluginu
+  * fix FullHD skinu ktory sposoboval pad systemu
+  * fix virtualnej klavesnice (XcursorX)
+  * fix pridavania do oblubenych poloziek (niekedy to nic nepridalo)
+  * fix pretacania v doplnku Sosac (pri zaplatenom VIP ucte)
+  * fix kompatibility OE2.0 - OE2.5
+  * fix chybajuceho kodovania napr. v OpenAtv6.1 (pad systemu pri stahovani videa)
+  * fix dalsich chyb ktore sposobovali pad systemu
+
+
+## Install
+Pouzivatelom windows doporucujem stiahnut program[ __putty__](https://the.earth.li/~sgtatham/putty/latest/w32/putty.exe) cez ktory sa pripojite na setobox samozrejme musite poznat IP adresu setoboxu a prihlasovacie meno zvycajne *__root__*
+
+* __SSH telnet__
+
+      opkg install curl
+      opkg install http://github.com/mx3L/archivczsk/releases/download/v1.0/subssupport_1.5.5-20170116_all.ipk
+      opkg install http://github.com/.............ipk
+      init 4
+      init 3
+      (alebo: reboot)
+      
+      -----------------------Debian-----------------------
+
+      dpkg -i curl
+      dpkg -i http://github.com/mx3L/archivczsk/releases/download/v1.0/subssupport_1.5.5-20170116_all.deb
+      dpkg -i http://github.com/.............deb
+      init 4
+      init 3
+      (alebo: reboot)
+      
+* __Manual__ (nedoporucujem, mozne problemy)
+   * stiahnut balicek (*.ipk|*.deb)  a nahrat do setoboxu do adresara __/tmp__
+   * cez software setoboxu najst manualne instalovanie balickov a mal by sa objavit dany nazov balicku
+   * naistalovat a restart setoboxu
+   * *nebude fungovat auto update pokial nie je naistalovany __curl__*
+
+## Re-Install
+Ak uz mate jednu z predoslych verzii naistalovanu obnovia sa kategorie aj data pluginov ktore ste mali pred tym.
+
+* __SSH telnet__
+
+      mkdir -p /tmp/archivczsk
+      cp -R /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/resources/data /tmp/archivczsk
+      opkg remove -force-depends enigma2-plugin-extensions-archivczsk
+      opkg install http://github.com/.............ipk
+      init 4
+      init 3
+            
+      -----------------------Debian-----------------------
+
+      mkdir -p /tmp/archivczsk
+      cp -R /usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/resources/data /tmp/archivczsk
+      dpkg --purge enigma2-plugin-extensions-archivczsk
+      dpkg -i http://github.com/.............deb
+      init 4
+      init 3
+      (alebo: reboot)
+
+## Problem spustenia pluginu (napr. pre Black Hole image)
+- Pokial sa Vam nezobrazi archivCZSK v ponuke resp. pri vstupe do zoznamu modulov Vam vypise "cannot import name BrowserLikeRedirectAgent" tak treba spustit cez telnet tento prikaz a restartnut prijmac (fix zaberie cca +4MB v pamati FLASH ale kto chce moze vymazat zolzku '/twisted_origin_backup' a subory *.py v zlozke '/twisted' __az po restarte prijmaca!!!__). 
+
+  ```
+  opkg install http://github.com/mx3L/archivczsk/releases/download/v1.0/twisted-16-2-0-fix.ipk
+  ```
+
+## Reporting
+Pripadne chyby poprosim hlasit sem na github (__doporucujem pripojit log file__ inac je dost mozne ze nedostanete odpoved)
+
+
+
+
+
+*********************************************************************************************************
+*********************************************************************************************************
+
+
+
+
 ## Verzia 0.73
 **Vseobecne**
 

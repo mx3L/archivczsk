@@ -119,14 +119,26 @@ class Item2XML(BaseXML):
         self.add_item(item)
 
     def create_xml_item(self, item):
+        log.logDebug("%s create xml item - %s"%(self,item))
         log.debug("{0} create xml item - {1}".format(self, toString(item)))
+
+        import time
+        from datetime import datetime
+        t = datetime.now()
+        t1 = t.timetuple()
+        uid = int(time.mktime(t1))
         if item.id:
-            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
-            return
+            item.id = uid
+            #log.logDebug("%s create xml item - %s already exists, skipping"%(self,item))
+            #log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
+            #return
         item_id = item.get_id()
         if self.find_item_by_id(item_id):
-            log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
-            return
+            item_id = uid
+            item.id = uid
+            #log.logDebug("%s create xml item - %s already exists (2), skipping"%(self,item))
+            #log.debug('{0} create xml item - {1} already exists, skipping'.format(self, toString(item)))
+            #return
         addon_id = item.addon_id
         xml_item = SubElement(self.xml_root_element.find('items'), 'item')
         xml_item.set('id', toUnicode(item_id))

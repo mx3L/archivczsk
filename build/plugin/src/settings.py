@@ -12,14 +12,15 @@ from Plugins.Extensions.archivCZSK.engine.tools import stb
 
 
 LANGUAGE_SETTINGS_ID = language.getLanguage()[:2]
+MENU_SEPARATOR = getConfigListEntry("--------------------------------------------------------------------------------------------------------------------------------------------------------", NoSave(ConfigNothing()))
 
 ############ STB Info ###############
 
 (MANUFACTURER, MODEL, ARCH, VERSION) = stb.getBoxtype()
 
 ######### Plugin Paths ##############
-
-PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions', 'archivCZSK')
+ENIGMA_PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions')
+PLUGIN_PATH = os.path.join(ENIGMA_PLUGIN_PATH, 'archivCZSK')
 IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
 SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skins')
 REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories')
@@ -30,7 +31,9 @@ CUSTOM_SIZES_PATH = os.path.join(SKIN_PATH,'sizes.json')
 
 ############ Updater Paths #############
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0'
+
+#USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 
 config.plugins.archivCZSK = ConfigSubsection()
 config.plugins.archivCZSK.archives = ConfigSubsection()
@@ -71,34 +74,48 @@ config.plugins.archivCZSK.videoPlayer.rtmpBuffer = ConfigSelection(default="1000
 config.plugins.archivCZSK.main_menu = ConfigYesNo(default=True)
 config.plugins.archivCZSK.extensions_menu = ConfigYesNo(default=False)
 config.plugins.archivCZSK.epg_menu = ConfigYesNo(default=True)
+config.plugins.archivCZSK.archivAutoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.autoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.preload = ConfigYesNo(default=True)
-config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
+
 
 skinChoices = [os.path.splitext(fname)[0] for fname in os.listdir(SKIN_PATH) if fname.endswith('.xml') ]
 skinChoices.append('auto')
 config.plugins.archivCZSK.skin = ConfigSelection(default="auto", choices=skinChoices)
+config.plugins.archivCZSK.showVideoInfo = ConfigYesNo(default=True)
+config.plugins.archivCZSK.downloadPoster = ConfigYesNo(default=True)
+choicelist = []
+#choicelist.append(("%d" % 0, "%d" % 0))
+for i in range(0, 310, 10):
+    choicelist.append(("%d" % i, "%d" % i))
+config.plugins.archivCZSK.posterImageMax = ConfigSelection(default="20", choices=choicelist)
+
+choicelistCsfd = [('1', _("Internal")), ('2', _("CSFD")), ('3', _("CSFDLite"))]
+config.plugins.archivCZSK.csfdMode = ConfigSelection(default='1', choices=choicelistCsfd)
+
+############ Paths #######################
+
+config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
+config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
+config.plugins.archivCZSK.posterPath = ConfigDirectory(default="/media/hdd")
+config.plugins.archivCZSK.tmpPath = ConfigDirectory(default="/tmp")
+config.plugins.archivCZSK.logPath = ConfigDirectory(default="/tmp")
+
+########### Misc #########################
 
 choicelist = [('1', _("info")), ('2', _("debug"))]
 config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choicelist)
+config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
+config.plugins.archivCZSK.showVideoSourceSelection = ConfigYesNo(default=True)
+config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
+config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
+config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
 
 def changeLogMode(configElement):
     log.changeMode(int(configElement.value))
 
 config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
 
-############ Paths #######################
-
-config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
-config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
-config.plugins.archivCZSK.tmpPath = ConfigDirectory(default="/tmp")
-
-########### Misc #########################
-
-config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
-config.plugins.archivCZSK.showVideoSourceSelection = ConfigYesNo(default=True)
-config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
-config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
 
 
 def get_player_settings():
@@ -112,25 +129,39 @@ def get_player_settings():
 def get_main_settings():
     list = []
     list.append(getConfigListEntry(_("Skin"), config.plugins.archivCZSK.skin))
-    list.append(getConfigListEntry(_("Allow auto-update"), config.plugins.archivCZSK.autoUpdate))
+    list.append(getConfigListEntry(_("Default category"), config.plugins.archivCZSK.defaultCategory))
+    list.append(getConfigListEntry(_("Allow archivCZSK auto update"), config.plugins.archivCZSK.archivAutoUpdate))
+    list.append(getConfigListEntry(_("Allow addons auto update"), config.plugins.archivCZSK.autoUpdate))
+    list.append(MENU_SEPARATOR)
+    list.append(getConfigListEntry(_("Show movie info"), config.plugins.archivCZSK.showVideoInfo))
+    list.append(getConfigListEntry(_("Show movie poster"), config.plugins.archivCZSK.downloadPoster))
+    list.append(getConfigListEntry(_("Max posters on HDD"), config.plugins.archivCZSK.posterImageMax))
+    list.append(MENU_SEPARATOR)
     # list.append(getConfigListEntry(_("Preload"), config.plugins.archivCZSK.preload))
-    list.append(getConfigListEntry(_("Debug mode"), config.plugins.archivCZSK.debugMode))
     list.append(getConfigListEntry(_("Add to extensions menu"), config.plugins.archivCZSK.extensions_menu))
     list.append(getConfigListEntry(_("Add to main menu"), config.plugins.archivCZSK.main_menu))
-    list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
-    list.append(getConfigListEntry(_("Default category"), config.plugins.archivCZSK.defaultCategory))
-    list.append(getConfigListEntry(_("Confirm exit when closing plugin"), config.plugins.archivCZSK.confirmExit))
+    # if i know this is not functional
+    #list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
+    list.append(MENU_SEPARATOR)
+    list.append(getConfigListEntry(_("CSFD plugin"), config.plugins.archivCZSK.csfdMode))
+    
+    
     return list
 
 def get_path_settings():
     list = []
     list.append(getConfigListEntry(_("Data path"), config.plugins.archivCZSK.dataPath))
-    list.append(getConfigListEntry(_("Downloads path"), config.plugins.archivCZSK.downloadsPath))
     list.append(getConfigListEntry(_("Temp path"), config.plugins.archivCZSK.tmpPath))
+    list.append(getConfigListEntry(_("Downloads path"), config.plugins.archivCZSK.downloadsPath))
+    list.append(getConfigListEntry(_("Posters path"), config.plugins.archivCZSK.posterPath))
+    
+    list.append(getConfigListEntry(_("Log path"), config.plugins.archivCZSK.logPath))
     return list
 
 def get_misc_settings():
     list = []
+    list.append(getConfigListEntry(_("Debug mode"), config.plugins.archivCZSK.debugMode))
+    list.append(getConfigListEntry(_("Confirm exit when closing plugin"), config.plugins.archivCZSK.confirmExit))
     list.append(getConfigListEntry(_("Show broken addons"), config.plugins.archivCZSK.showBrokenAddons))
     list.append(getConfigListEntry(_("Show video source selection"), config.plugins.archivCZSK.showVideoSourceSelection))
     list.append(getConfigListEntry(_("Convert captcha images to 8bit"), config.plugins.archivCZSK.convertPNG))

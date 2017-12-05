@@ -66,9 +66,14 @@ def isArchivCZSKRunning(session):
     
 def getArchivCZSK():
     from Plugins.Extensions.archivCZSK.archivczsk import ArchivCZSK
-    from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreen
     from Plugins.Extensions.archivCZSK.engine.tools.task import Task
-    return ArchivCZSK, ArchivCZSKAddonContentScreen, Task
+
+    if config.plugins.archivCZSK.showVideoInfo.getValue():
+        from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreenAdvanced
+        return ArchivCZSK, ArchivCZSKAddonContentScreenAdvanced, Task
+    else:
+        from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreen
+        return ArchivCZSK, ArchivCZSKAddonContentScreen, Task
 
 class ArchivCZSKSeeker():
     instance = None

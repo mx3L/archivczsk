@@ -1,19 +1,21 @@
 # -*- coding: UTF-8 -*-
 import os
+import info
+import traceback
 
 from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
-from Components.config import config, ConfigDirectory, ConfigText
+from Components.config import config, ConfigDirectory, ConfigText, ConfigNumber
 from Screens.LocationBox import LocationBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.archivCZSK import _, settings
+from Plugins.Extensions.archivCZSK import _, settings, log
 from Plugins.Extensions.archivCZSK.resources.repositories import \
     config as addon_config
 from base import BaseArchivCZSKScreen
 from common import Tabs
-import info
+
 
 
 def openArchivCZSKMenu(session):
@@ -107,19 +109,28 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
 
 
     def changelog(self):
+        clog = u''
         changelog_path = os.path.join(settings.PLUGIN_PATH, 'changelog.txt')
         if os.path.isfile(changelog_path):
-            changelog_text = open(changelog_path, "r").read()
-            info.showChangelog(self.session, _('ArchivCZSK Changelog'), changelog_text)
+            with open(changelog_path, 'r') as f:
+                text = f.read()
+            try:
+                clog = text
+            except Exception:
+                log.logError('ArchivCZSK changelog cannot be decoded')
+                pass
+        info.showChangelog(self.session, "ArchivCZSK", clog)
 
     def keyOk(self):
         current = self["config"].getCurrent()[1]
         if isinstance(current, ConfigDirectory):
             self.session.openWithCallback(self.pathSelected, LocationBox, "", "", current.value)
+        elif isinstance(current, ConfigNumber):
+            pass
         elif isinstance(current, ConfigText):
             entryName = self["config"].getCurrent()[0]
             self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoardCFG, entryName, current)
-
+        
     def keySave(self):
         self.saveAll()
         self.close(True)
@@ -141,6 +152,11 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
 
     def virtualKBCB(self, res=None, config_entry=None):
         if res is not None and config_entry is not None:
+            try:
+                if 'XcursorX' in res:
+                    res = res.replace('XcursorX','')
+            except:
+                pass
             config_entry.setValue(res)
 
 
@@ -200,12 +216,26 @@ class ArchivCZSKAddonConfigScreen(BaseArchivCZSKConfigScreen):
 
 class VirtualKeyBoardCFG(VirtualKeyBoard):
     def __init__(self, session, entryName, configEntry):
-        self.configEntry = configEntry
-        VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
-        self.skinName = "VirtualKeyBoard"
+        try:
+            self.configEntry = configEntry
+            
+            VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
+            self.skinName = "VirtualKeyBoard"
+
+            #from Plugins.Extensions.archivCZSK.engine.tools.util import decode_string
+            #VirtualKeyBoard.__init__(self, session, entryName, configEntry.getValue())
+            #self.skinName = "VirtualKeyBoard"
+        except:
+            log.logError("Init VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
+            raise
+        
 
     def ok(self):
-        self.close(self.text.encode("utf-8"), self.configEntry)
+        try:
+            self.close(self.text.encode("utf-8"), self.configEntry)
+        except:
+            log.logError("OK VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
+            raise
 
     def cancel(self):
         self.close(None, None)

@@ -92,6 +92,14 @@ class PVideoAddon(PItem):
         self.description = self.addon.get_info('description')
         self.version = self.addon.get_info('version')
         self.image = self.addon.get_info('image')
+        self.order = 99999
+        try:
+            tmporder = self.addon.get_setting('auto_addon_order')
+            if tmporder and tmporder.strip():
+                self.order = int(tmporder)
+        except:
+            log.logError("Invalid value setting 'auto_addon_order' for addon (%s)."%self.addon_id)
+            pass
 
     def get_id(self):
         return self.addon_id

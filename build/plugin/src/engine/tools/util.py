@@ -16,13 +16,13 @@ import urllib2
 from urlparse import urlsplit, urlparse
 from xml.etree.cElementTree import ElementTree, fromstring
 
+
 from twisted.internet import reactor
 from twisted.web.client import Agent, BrowserLikeRedirectAgent, readBody
 from twisted.web.http_headers import Headers
-
+from Plugins.Extensions.archivCZSK import log
 
 from enigma import eConsoleAppContainer
-
 
 supported_video_extensions = ('.avi', '.mp4', '.mkv', '.mpeg', '.mpg')
 
@@ -42,9 +42,11 @@ def load_module(code_path):
             try: fin.close()
             except: pass
     except ImportError, x:
+        log.logError("ImportError load_module(code_path) failed.\n%s"%traceback.format_exc())
         traceback.print_exc(file=sys.stderr)
         raise
     except:
+        log.logError("Exception load_module(code_path) failed.\n%s"%traceback.format_exc())
         traceback.print_exc(file=sys.stderr)
         raise
 
@@ -166,6 +168,46 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
             f = urllib2.urlopen(remote, context = context)
         except Exception:
             f = urllib2.urlopen(remote)
+        make_path(os.path.dirname(local))
+        localFile = open(local, mode)
+        localFile.write(f.read())
+    except urllib2.HTTPError, e:
+        if debugfnc:
+            debugfnc("HTTP Error: %s %s", e.code, remote)
+        else:
+            print "HTTP Error: %s %s" % (e.code, remote)
+        raise
+    except urllib2.URLError, e:
+        if debugfnc:
+            debugfnc("URL Error: %s %s", e.reason, remote)
+        else:
+            print "URL Error: %s %s" % (e.reason, remote)
+        raise
+    except IOError, e:
+        if debugfnc:
+            debugfnc("I/O error(%d): %s", (e.errno, e.strerror))
+        else:
+            print "I/O error(%d): %s" % (e.errno, e.strerror)
+        raise
+    else:
+        if debugfnc:
+            debugfnc('%s succesfully downloaded', local)
+        else:
+            print local, 'succesfully downloaded'
+    finally:
+        if f:f.close()
+        if localFile:localFile.close()
+def download_web_file(remote, local, mode='wb', debugfnc=None, headers={}):
+    f, localFile = None, None
+    try:
+        if debugfnc:
+            debugfnc("downloading %s to %s", remote, local)
+        else:
+            print  "downloading %s to %s", (remote, local)
+        req = urllib2.Request(remote, headers=headers)
+        from Plugins.Extensions.archivCZSK.settings import USER_AGENT
+        req.add_header('User-Agent', USER_AGENT)
+        f = urllib2.urlopen(req)
         make_path(os.path.dirname(local))
         localFile = open(local, mode)
         localFile.write(f.read())
@@ -554,12 +596,14 @@ class CustomImporter:
             self.log("%s found modul '%s' <filename:%s description:%s>" , self, fullname, self.filename, self.description)
         except ImportError:
             self.log("%s cannot found modul %s" , self, fullname)
+            log.logDebug("%s cannot found modul %s" % (self, fullname))
             if self.__filehandle:
                 self.__filehandle.close()
                 self.__filehandle = None
             return None
         if self.__filehandle is None:
             self.log("%s cannot import package '%s', try to append it to sys.path" , self, fullname)
+            log.logError("%s cannot import package '%s', try to append it to sys.path" % (self, fullname))
             raise ImportError
         self.log("%s trying to load module '%s'" , self, fullname)
         return self
@@ -591,6 +635,7 @@ class CustomImporter:
             exec code in mod.__dict__
             self.log("%s imported modul '%s'", self, fullname)
         except Exception:
+            log.logError("Load module failed %s '%s'.\n%s"%(self,fullname,traceback.format_exc()))
             del self.__modules[fullname]
             raise
         return mod

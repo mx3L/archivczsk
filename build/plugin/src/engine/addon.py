@@ -77,6 +77,9 @@ class Addon(object):
     def get_localized_string(self, id_language):
         return self.language.get_localized_string(id_language)
 
+    def setting_exist(self, setting_id):
+        return self.settings.setting_exist(setting_id)
+
     def get_setting(self, setting_id):
         return self.settings.get_setting(setting_id)
 
@@ -315,6 +318,21 @@ class AddonSettings(object):
             pass
         else:
             self.category_entries = settings_parser.parse()
+            #hard code addon order for each addon
+            try:
+                #list.append(getConfigListEntry(_("Show movie info"), config.plugins.archivCZSK.showVideoInfo))
+                labelInfo = _("Show movie info")
+                obj = {'option': 'false', 'default': 'true', 'label': labelInfo, 'visible': 'true', 'type': 'bool', 'id': 'auto_show_video_info'}
+                self.category_entries[0]['subentries'].append(obj)
+
+                #todo check if exist already
+                labelorder = _("Addon order")
+                obj = {'option': 'false', 'default': '99999', 'label': labelorder, 'visible': 'true', 'type': 'text', 'id': 'auto_addon_order'}
+                self.category_entries[0]['subentries'].append(obj)
+                #if 'auto_addon_order' in self.category_entries[0]['subentries']:
+                #    log.logInfo("############auto_addon_order already exist")
+            except:
+                log.logError("Add addon order (%s) failed.\n%s" % (self.addon, traceback.format_exc()))
             self.initialize_settings()
 
 
@@ -343,11 +361,19 @@ class AddonSettings(object):
     def get_configlist_categories(self):
         return self.categories
 
+    def setting_exist(self, setting_id):
+        try:
+            getattr(self.main, '%s' % setting_id)
+            return True
+        except:
+            return False
+
     def get_setting(self, setting_id):
         try:
             setting = getattr(self.main, '%s' % setting_id)
         except (ValueError, KeyError):
             log.error('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
+            log.logDebug("Cannot retrieve setting '%s' - %s" % (setting_id, self.addon))
             return ""
         else:
             if isinstance(setting, ConfigIP):
@@ -426,8 +452,7 @@ class AddonInfo(object):
 
         pars = parser.XBMCAddonXMLParser(info_file)
         addon_dict = pars.parse()
-
-
+        
         self.id = addon_dict['id']
         self.name = addon_dict['name']
         self.version = addon_dict['version']
@@ -472,7 +497,7 @@ class AddonInfo(object):
             with open(changelog_path, 'r') as f:
                 text = f.read()
             try:
-                self.changelog = text.decode('windows-1250')
+                self.changelog = text
             except Exception:
                 log.error('%s c[C]angleog.txt cannot be decoded', self)
                 self.changelog = u''

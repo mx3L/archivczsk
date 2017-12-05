@@ -17,6 +17,65 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "List"
+msgstr "Seznam"
+msgid "Film info"
+msgstr "Info o filmu"
+msgid "Comments"
+msgstr "Komentáře"
+msgid "CSFD"
+msgstr "CSFD"
+msgid "CSFDLite"
+msgstr "CSFDLite"
+msgid "Internal"
+msgstr "Vnitřní"
+
+msgid "Download complete for"
+msgstr "Stahování dokončeno pro"
+msgid "Search results for"
+msgstr "Výsledky hledání pro"
+msgid "Csfd info for"
+msgstr "Csfd info pro"
+msgid "Searching for"
+msgstr "Hledám"
+
+msgid "Posters path"
+msgstr "Plakáty stahovat do"
+
+msgid "ArchivCZSK changelog"
+msgstr "ArchivCZSK změny"
+
+msgid "Show CSFD info failed."
+msgstr "Plugin CSFDLite není nainstalován nebo selhalo jeho otevření."
+
+msgid "Update archivCZSK complete."
+msgstr "Aktualizace archivCZSK proběhla úspěšně."
+
+msgid "Update archivCZSK failed."
+msgstr "Aktualizace archivCZSK selhala."
+
+msgid "Please revert archivCZSK manualy from following location before restart!!!"
+msgstr "Prosím obnovte archivCZSK ručně z uvedené lokace před restartem zařízení!!!"
+
+msgid "Do you want to update archivCZSK to version"
+msgstr "Přejete si aktualizovat archivCZSK na verzi"
+
+msgid "Log path"
+msgstr "Logovat do"
+
+msgid "Show movie info"
+msgstr "Zobrazit informace o filmu"
+
+msgid "Show movie poster"
+msgstr "Zobrazit plakát filmu"
+
+msgid "Max posters on HDD"
+msgstr "Max počet plakátů na disku"
+
+
+msgid "Addon order"
+msgstr "Pořadí doplňku"
+
 msgid "* If some of the tests FAIL you should"
 msgstr "* Pokud některé testy selžou,"
 
@@ -80,8 +139,11 @@ msgstr "Upozornění doplňku"
 msgid "All addons"
 msgstr "Všechny doplňky"
 
-msgid "Allow auto-update"
-msgstr "Povolit automatickou kontrolu aktualizací"
+msgid "Allow addons auto update"
+msgstr "Povolit kontrolu aktualizací doplňků"
+
+msgid "Allow archivCZSK auto update"
+msgstr "Povolit kontrolu aktualizací archivuCZSK"
 
 msgid "ArchivCZSK"
 msgstr "ArchivCZSK"
@@ -289,7 +351,7 @@ msgid "Downloads"
 msgstr "Stažené soubory"
 
 msgid "Downloads path"
-msgstr "Stahovat do:"
+msgstr "Stahovat do"
 
 msgid "Drop caches on exit"
 msgstr "Vymazat mezipamět po ukončení pluginu"

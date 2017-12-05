@@ -51,7 +51,7 @@ def getTextInput(session, title, text=""):
         else:
             d.callback(word)
     d = defer.Deferred()
-    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=title, text=text)
+    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=toString(title), text=text)
     return d
 
 def getSearch(session):

@@ -7,12 +7,12 @@ from folder import FolderItemHandler
 from category import CategoryItemHandler, UserCategoryItemHandler
 from media import VideoResolvedItemHandler, VideoNotResolvedItemHandler, PlaylistItemHandler
 
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectCategoryScreen
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PRoot, PFolder, PVideoAddon, PCategoryVideoAddon
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
-
+from Components.config import config
 
 class VideoAddonItemHandlerTemplate(ItemHandler):
     def __init__(self, session, content_screen, content_provider):
@@ -57,8 +57,19 @@ class VideoAddonItemHandlerTemplate(ItemHandler):
             get_content(addon, params)
 
     def open_video_addon(self, addon, list_items):
-        from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreen
-        self.session.openWithCallback(self.open_video_addon_cb, ArchivCZSKAddonContentScreen, addon, list_items)
+
+        addonVideoInfoEnabled = True
+        try:
+            addonVideoInfoEnabled = addon.get_setting('auto_show_video_info')
+        except:
+            pass
+
+        if config.plugins.archivCZSK.showVideoInfo.getValue() and addonVideoInfoEnabled:
+            from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreenAdvanced
+            self.session.openWithCallback(self.open_video_addon_cb, ArchivCZSKAddonContentScreenAdvanced, addon, list_items)
+        else:
+            from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKAddonContentScreen
+            self.session.openWithCallback(self.open_video_addon_cb, ArchivCZSKAddonContentScreen, addon, list_items)
 
     def open_video_addon_cb(self, content_provider):
         if isinstance(content_provider, VideoAddonContentProvider):

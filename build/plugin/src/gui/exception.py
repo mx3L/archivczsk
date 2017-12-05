@@ -10,7 +10,7 @@ import urllib2
 from common import showInfoMessage, showWarningMessage, showErrorMessage
 from Plugins.Extensions.archivCZSK.engine.exceptions import addon, download, updater, play
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, log
 
 class GUIExceptionHandler(object):
     errorName = _("Unknown Error")
@@ -50,27 +50,39 @@ class AddonExceptionHandler(GUIExceptionHandler):
     def __call__(self, func):
         def wrapped(*args, **kwargs):
             try:
-                func(*args, **kwargs) 
-            # addon specific exceptions
-            except addon.AddonInfoError as er:
-                self.infoMessage(er.value)
-            except addon.AddonWarningError as er:
-                self.warningMessage(er.value)
-            except addon.AddonError as er:
-                self.errorMessage(er.value)
-            # loading exceptions
-            except urllib2.HTTPError, e:
-                message = "%s %s:%d" % (_("Error in loading"), _("HTTP Error"), e.code)
-                self.errorMessage(message)
-            except urllib2.URLError, e:
-                message = "%s %s:%s" % (_("Error in loading"), _("URL Error"), str(e.reason))
-                self.errorMessage(message)
-            except addon.AddonThreadException:
+                try:
+                    func(*args, **kwargs) 
+                # addon specific exceptions
+                except addon.AddonInfoError as er:
+                    log.logError("Addon (AddonInfoError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
+                    self.infoMessage(er.value)
+                except addon.AddonWarningError as er:
+                    log.logError("Addon (AddonWarningError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
+                    self.warningMessage(er.value)
+                except addon.AddonError as er:
+                    log.logError("Addon (AddonError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
+                    self.errorMessage(er.value)
+                # loading exceptions
+                except urllib2.HTTPError, e:
+                    log.logError("Addon (HTTPError) error '%s'.\n%s"%(e.code,traceback.format_exc()))
+                    message = "%s %s:%d" % (_("Error in loading"), _("HTTP Error"), e.code)
+                    self.errorMessage(message)
+                except urllib2.URLError, e:
+                    log.logError("Addon (URLError) error '%s'.\n%s"%(e.reason,traceback.format_exc()))
+                    message = "%s %s:%s" % (_("Error in loading"), _("URL Error"), str(e.reason))
+                    self.errorMessage(message)
+                except addon.AddonThreadException as er:
+                    log.logError("Addon (AddonThreadException) error.\n%s"%(traceback.format_exc()))
+                    pass
+                # we handle all possible exceptions since we dont want plugin to crash because of addon error..       
+                except Exception, e:
+                    log.logError("Addon error.\n%s"%traceback.format_exc())
+                    self.errorMessage(_("Author of this addon needs to update it"))
+                    traceback.print_exc()
+            except:
+                log.logError("Addon (LOG) error.\n%s"%traceback.format_exc())
+                self.errorMessage("ADDON ERROR")
                 pass
-            # we handle all possible exceptions since we dont want plugin to crash because of addon error..       
-            except Exception, e:
-                self.errorMessage(_("Author of this addon needs to update it"))
-                traceback.print_exc()
         return wrapped
     
     

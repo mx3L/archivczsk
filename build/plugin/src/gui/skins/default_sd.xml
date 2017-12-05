@@ -61,6 +61,34 @@
         <widget name="tip_pixmap" position="5,540" size="35,25" zPosition="2" alphatest="on" />
         <widget name="tip_label" position="45,540" size="535,25" valign="center" halign="left" zPosition="2" font="Regular;18" transparent="1" foregroundColor="white" />
     </screen>
+    <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="720,576" flags="wfNoBorder" title="ArchivCZSK" >
+      <widget name="key_red" position="8,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" shadowOffset="-2,-2" shadowColor="black" />
+      <widget name="key_green" position="186,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" shadowOffset="-2,-2" shadowColor="black" />
+      <widget name="key_yellow" position="364,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" shadowOffset="-2,-2" shadowColor="black" />
+      <widget name="key_blue" position="542,5" zPosition="1" size="170,45" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" shadowOffset="-2,-2" shadowColor="black" />
+
+      <widget name="path_label" position="15,60" size="700,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
+      <eLabel position="15,90" size="700,  1" zPosition="1" backgroundColor="#C4C4C4" />
+
+      <widget name="menu" position="0,95" size="720,405" transparent="1" scrollbarMode="showOnDemand" />
+      <widget source="menu" render="Listbox" position="0,95" size="720,405" transparent="1" >
+        <convert type="TemplatedMultiContent">
+          {"templates":
+          {"default": (29,
+          [
+          MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=0),
+          MultiContentEntryText(pos=(60, 0), size=(950, 30), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+          ]
+          , True, "showOnDemand"),
+          },
+          "fonts": [gFont("Regular", 21)],
+          "itemHeight": 29
+          }
+        </convert>
+      </widget>
+      <widget name="tip_pixmap" position="5,540" size="35,25" zPosition="2" alphatest="on" />
+      <widget name="tip_label" position="45,540" size="535,25" valign="center" halign="left" zPosition="2" font="Regular;18" transparent="1" foregroundColor="white" />
+    </screen>
     
     <screen name="ArchivCZSKItemInfoScreen" position="center,center" size="720,576" title="Info" >
         <widget name="genre" position="320,50" size="400,30" font="Regular;22" transparent="1" foregroundColor="yellow" />
@@ -225,4 +253,28 @@
         <widget name="list" position="0,30" size="550,335" scrollbarMode="showOnDemand" />
     </screen>
 
+
+  <!--CSFD INTERNAL-->
+  <screen name="ArchivCSFD" position="center,center" size="900,588" title="Archiv CSFD" >
+    <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="130,32" valign="center" zPosition="1" />
+    <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="150,6" shadowColor="black" shadowOffset="-2,-2" size="130,32" valign="center" zPosition="1" />
+    <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="290,6" shadowColor="black" shadowOffset="-2,-2" size="130,32" valign="center" zPosition="1" />
+    <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="430,6" shadowColor="black" shadowOffset="-2,-2" size="130,32" valign="center" zPosition="1" />
+
+    <widget name="starsbg" position="660,9" zPosition="0" size="210,21" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/csfd_starsbar_empty.png"  transparent="1" alphatest="on" backgroundColor="#18188b" />
+    <widget name="stars" position="660,9" size="210,21" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/csfd_starsbar_filled.png" transparent="1" backgroundColor="#a08500"/>
+    <widget name="ratinglabel" position="780,40" zPosition="10" size="90,36" halign="center" font="Regular;28" foregroundColor="#f0b400" backgroundColor="#9f1313" transparent="1"/>
+
+    <widget name="poster" position="10,50" size="126,180" alphatest="on" borderWidth="1" borderColor="yellow"/>
+    <widget name="menu" position="10,50" size="880,500" zPosition="3" scrollbarMode="showOnDemand" />
+    <widget name="extralabel" position="10,50" size="880,505" font="Regular;22"/>
+    <widget name="baseFilmInfo" position="145,50" size="745,177" font="Regular;19"/>
+    <widget name="detailslabel" position="10,237" size="880,325" font="Regular;23" />
+
+    <widget name="statusbar" position="10,560" size="880,21" font="Regular;16" foregroundColor="#7a7a52" />
+  </screen>
+  <screen name="ArchivCSFDLCDScreen" position="0,0" size="132,64" title="Archiv CSFD">
+    <widget name="headline" position="4,0" size="128,22" font="Regular;16"/>
+  </screen>
+  
 </skin>

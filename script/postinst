@@ -120,6 +120,16 @@ if [ -d /usr/lib/python2.6 ]
 then
 	echo "Found Python 2.6"
 	cd  $TMP/python2.6
+	install_py ./utf_8.py /usr/lib/python2.6/encodings/utf_8.py
+	install_py ./cp1251.py /usr/lib/python2.6/encodings/cp1251.py
+	install_py ./cp1252.py /usr/lib/python2.6/encodings/cp1252.py
+	install_py ./cp1253.py /usr/lib/python2.6/encodings/cp1253.py
+	install_py ./cp1254.py /usr/lib/python2.6/encodings/cp1254.py
+	install_py ./cp1256.py /usr/lib/python2.6/encodings/cp1256.py
+	install_py ./iso8859_6.py /usr/lib/python2.6/encodings/iso8859_6.py
+	install_py ./iso8859_7.py /usr/lib/python2.6/encodings/iso8859_7.py
+	install_py ./iso8859_9.py /usr/lib/python2.6/encodings/iso8859_9.py
+	install_py ./iso8859_15.py /usr/lib/python2.6/encodings/iso8859_15.py
 	install_py ./hex_codec.py /usr/lib/python2.6/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.6/encodings/latin_1.py
 	install_py ./utf_16.py /usr/lib/python2.6/encodings/utf_16.py
@@ -153,6 +163,16 @@ if [ -d /usr/lib/python2.7 ]
 then
 	echo "Found Python 2.7"
 	cd $TMP/python2.7
+	install_py ./utf_8.py /usr/lib/python2.7/encodings/utf_8.py
+	install_py ./cp1251.py /usr/lib/python2.7/encodings/cp1251.py
+	install_py ./cp1252.py /usr/lib/python2.7/encodings/cp1252.py
+	install_py ./cp1253.py /usr/lib/python2.7/encodings/cp1253.py
+	install_py ./cp1254.py /usr/lib/python2.7/encodings/cp1254.py
+	install_py ./cp1256.py /usr/lib/python2.7/encodings/cp1256.py
+	install_py ./iso8859_6.py /usr/lib/python2.7/encodings/iso8859_6.py
+	install_py ./iso8859_7.py /usr/lib/python2.7/encodings/iso8859_7.py
+	install_py ./iso8859_9.py /usr/lib/python2.7/encodings/iso8859_9.py
+	install_py ./iso8859_15.py /usr/lib/python2.7/encodings/iso8859_15.py
 	install_py ./hex_codec.py /usr/lib/python2.7/encodings/hex_codec.py
 	install_py ./latin_1.py /usr/lib/python2.7/encodings/latin_1.py
 	install_py ./utf_16.py /usr/lib/python2.7/encodings/utf_16.py
@@ -189,12 +209,14 @@ fi
 if [ -d $TMP/data/ ];
 then
 	echo "Found DATA, restoring..."
-	rm -rf $ARCHIVCZSK/resources/data
-	cp -R $TMP/data $ARCHIVCZSK/resources/
+	if [ -d $ARCHIVCZSK/resources/data ]; then
+		rm -rf $ARCHIVCZSK/resources/data
+	fi
+	cp -R $TMP/data $ARCHIVCZSK/resources
 fi
 
 echo "Removing temp folder..."
-rm -r $TMP
+rm -rf $TMP
 
 echo "Installation of archivCZSK was successfull"
 

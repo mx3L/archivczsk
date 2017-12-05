@@ -1,5 +1,8 @@
 import copy
 import os
+import datetime
+import traceback
+import shutil
 
 from Components.ActionMap import ActionMap
 from Components.Label import Label
@@ -19,17 +22,18 @@ from Plugins.Extensions.archivCZSK.engine.handlers import \
     VideoAddonManagementScreenContentHandler
 from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
     PPlaylist, PExit, PVideo, PContextMenuItem, PSearch, PSearchItem, PDownload, \
-    PVideoAddon, Stream, RtmpStream
+    PVideoAddon, Stream, RtmpStream, PVideoNotResolved
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
-from Plugins.Extensions.archivCZSK.engine.tools.util import toString
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString, download_web_file
 from base import BaseArchivCZSKListSourceScreen
 from common import MyConditionalLabel,  PanelColorListEntry2, \
     LoadingScreen, TipBar, CutLabel
 from download import DownloadList
-from enigma import eTimer, eLabel
+from enigma import eTimer, eLabel, ePicLoad
 from menu import ArchivCZSKConfigScreen
 from skin import parseFont
 from webpixmap import WebPixmap
+from Components.AVSwitch import AVSwitch
 
 
 KEY_MENU_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_menu.png'))
@@ -230,34 +234,38 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
         self["menu"].index = index
 
     def updateAddonGUI(self):
-        image = None
-        title = author = version = description = ""
-        item = self.getSelectedItem()
-        if item is not None:
-            title = item.name and toString(item.name) or ""
-            imagePath = item.image and toString(item.image) or ""
-            if imagePath:
-                try:
-                    image = LoadPixmap(path=imagePath, cached=False)
-                except Exception as e:
-                    print '[ArchivCZSKContent] error when loading image', e
-            try:  # addon
-                author = item.author and toString(item.author) or ""
-                version = item.version and toString(item.version) or ""
-                description = item.description and toString(item.description) or ""
-            except AttributeError:  # category
-                pass
-        self["title"].setText(title.strip())
-        if author:
-            self["author"].setText(_("Author: ") + author.strip())
-        else:
-            self["author"].setText("")
-        if version:
-            self["version"].setText(_("Version: ") + version.strip())
-        else:
-            self["version"].setText("")
-        self["about"].setText(description.strip())
-        self["image"].instance.setPixmap(image)
+        try:
+            image = None
+            title = author = version = description = ""
+            item = self.getSelectedItem()
+            if item is not None:
+                title = item.name and toString(item.name) or ""
+                imagePath = item.image and toString(item.image) or ""
+                if imagePath:
+                    try:
+                        image = LoadPixmap(path=imagePath, cached=False)
+                    except Exception as e:
+                        print '[ArchivCZSKContent] error when loading image', e
+                try:  # addon
+                    author = item.author and toString(item.author) or ""
+                    version = item.version and toString(item.version) or ""
+                    description = item.description and toString(item.description) or ""
+                except AttributeError:  # category
+                    pass
+            self["title"].setText(title.strip())
+            if author:
+                self["author"].setText(_("Author: ") + author.strip())
+            else:
+                self["author"].setText("")
+            if version:
+                self["version"].setText(_("Version: ") + version.strip())
+            else:
+                self["version"].setText("")
+            self["about"].setText(description.strip())
+            self["image"].instance.setPixmap(image)
+        except:
+            log.logError("updateAddonGUI failed.\n%s"%traceback.format_exc())
+            pass
 
     def __onClose(self):
         self.updateGUITimer.stop()
@@ -279,7 +287,14 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         if defaultCategory != 'categories':
             categoryItem = provider.get_content({'category':defaultCategory})
             categoryAddons = provider.get_content({'category_addons':defaultCategory})
-            categoryAddons is not None and categoryAddons.insert(0, PExit())
+            # dont add PExit() if default category is user created cat.
+            gotParrent = True
+            try:
+                gotParrent = self.getParent() is not None
+            except:
+                pass
+            if gotParrent and (defaultCategory=='all_addons' or defaultCategory=='tv_addons' or defaultCategory=='video_addons'):
+                categoryAddons is not None and categoryAddons.insert(0, PExit())
         categoryItems = provider.get_content()
         BaseContentScreen.__init__(self, session, contentHandler, categoryItems)
         if categoryItem is not None  and categoryAddons is not None:
@@ -300,6 +315,8 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self.onUpdateGUI.append(self.changeAddon)
         self.onClose.append(self.__onClose)
 
+        from Plugins.Extensions.archivCZSK.version import version
+        self.setTitle("ArchivCZSK ("+toString(version)+")")
         self["image"] = Pixmap()
         self["title"] = Label("")
         self["author"] = Label("")
@@ -331,16 +348,22 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         del self.updateGUITimer
 
     def updateMenuList(self, index=0):
-        itemList = []
-        itemColor = 0xffffff
-        for item in self.lst_items:
-            if getattr(item, "addon", False) and item.addon.get_info('broken'):
-                itemColor = 0xff0000
-            else:
-                itemColor = 0xffffff
-            itemList.append((toString(item.name), itemColor))
-        self["menu"].list = itemList
-        self["menu"].index = index
+        try:
+            if index is None:
+                index = 0
+            itemList = []
+            itemColor = 0xffffff
+            for item in self.lst_items:
+                if getattr(item, "addon", False) and item.addon.get_info('broken'):
+                    itemColor = 0xff0000
+                else:
+                    itemColor = 0xffffff
+                itemList.append((toString(item.name), itemColor))
+            self["menu"].list = itemList
+            self["menu"].index = index
+        except:
+            log.info("update menu failed."+traceback.format_exc())
+            pass
 
     def openSettings(self):
         if not self.working:
@@ -377,34 +400,38 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
             self.updateGUITimer.start(100, True)
 
     def updateAddonGUI(self):
-        image = None
-        title = author = version = description = ""
-        item = self.getSelectedItem()
-        if item is not None:
-            title = item.name and toString(item.name) or ""
-            imagePath = item.image and toString(item.image) or ""
-            if imagePath:
-                try:
-                    image = LoadPixmap(path=imagePath, cached=False)
-                except Exception as e:
-                    print '[ArchivCZSKContent] error when loading image', e
-            try:  # addon
-                author = item.author and toString(item.author) or ""
-                version = item.version and toString(item.version) or ""
-                description = item.description and toString(item.description) or ""
-            except AttributeError:  # category
-                pass
-        self["title"].setText(title.strip())
-        if author:
-            self["author"].setText(_("Author: ") + author.strip())
-        else:
-            self["author"].setText("")
-        if version:
-            self["version"].setText(_("Version: ") + version.strip())
-        else:
-            self["version"].setText("")
-        self["about"].setText(description.strip())
-        self["image"].instance.setPixmap(image)
+        try:
+            image = None
+            title = author = version = description = ""
+            item = self.getSelectedItem()
+            if item is not None:
+                title = item.name and toString(item.name) or ""
+                imagePath = item.image and toString(item.image) or ""
+                if imagePath:
+                    try:
+                        image = LoadPixmap(path=imagePath, cached=False)
+                    except Exception as e:
+                        print '[ArchivCZSKContent] error when loading image', e
+                try:  # addon
+                    author = item.author and toString(item.author) or ""
+                    version = item.version and toString(item.version) or ""
+                    description = item.description and toString(item.description) or ""
+                except AttributeError:  # category
+                    pass
+            self["title"].setText(title.strip())
+            if author:
+                self["author"].setText(_("Author: ") + author.strip())
+            else:
+                self["author"].setText("")
+            if version:
+                self["version"].setText(_("Version: ") + version.strip())
+            else:
+                self["version"].setText("")
+            self["about"].setText(description.strip())
+            self["image"].instance.setPixmap(image)
+        except:
+            log.logError("updateAddonGUI failed.\n%s"%traceback.format_exc())
+            pass
 
     def toggleCancelLoading(self):
         if Task.getInstance() is not None and not Task.getInstance().isCancelling():
@@ -511,6 +538,354 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
         if self.execing:
             self['image'].load(None)
             self.updateGUITimer.start(100, True)
+
+    def updateImage(self):
+        it = self.getSelectedItem()
+        img = it and it.image
+        self['image'].load(img)
+
+    def updateMenuList(self, index=0):
+        self["menu"].list = [(LoadPixmap(toString(item.thumb)), toString(item.name)) for item in self.lst_items]
+        self["menu"].index = index
+
+    def cancel(self):
+        if self.working:
+            self.toggleCancelLoading()
+        else:
+            self.contentHandler.exit_item()
+
+class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipBar):
+
+    CSFD_TIP = (KEY_5_IMG, _("show info in CSFD"))
+    INFO_TIP = (KEY_INFO_IMG, _("show additional info"))
+    CONTEXT_TIP = (KEY_MENU_IMG, _("show menu of current item"))
+
+    def __init__(self, session, addon, lst_items):
+        self.addon = addon
+        contentHandler = VideoAddonContentHandler(session, self, addon.provider)
+        BaseContentScreen.__init__(self, session, contentHandler, lst_items)
+
+        # include DownloadList
+        DownloadList.__init__(self)
+
+        self.updateGUITimer = eTimer()
+        self.updateGUITimer_conn = eConnectCallback(self.updateGUITimer.timeout, self.updateAddonGUI)
+        self.onUpdateGUI.append(self.changeAddon)
+        self.onClose.append(self.__onClose)
+        self.picload = ePicLoad()
+        #self.picload.PictureData.get().append(self.showCoverCallback)
+        # OE2.0 - OE2.5 compatibility
+        self.picload_conn = eConnectCallback(self.picload.PictureData, self.showCoverCallback)
+        self.procPosterImage = False
+        self.posterChanged = False
+        self.lastPoster = "none"
+
+        #settigns
+        self.showImageEnabled = config.plugins.archivCZSK.downloadPoster.getValue()
+        self.maxSavedImages = int(config.plugins.archivCZSK.posterImageMax.getValue())
+        self.imagePosterDir = os.path.join(config.plugins.archivCZSK.posterPath.getValue(),'archivczsk_poster')
+        self.noImage = os.path.join(settings.PLUGIN_PATH, 'gui','icon', 'no_movie_image.png')
+
+        # include TipList
+        TipBar.__init__(self, [self.CSFD_TIP, self.CONTEXT_TIP, self.INFO_TIP], startOnShown=True)
+
+        self["key_red"] = Label("")
+        self["key_green"] = Label(_("Downloads"))
+        self["key_yellow"] = Label(_("Shortcuts"))
+        self["key_blue"] = Label(_("Settings"))
+        self["movie_poster_image"] = Pixmap()
+        self["movie_rating"] = Label("")
+        self["movie_duration"] = Label("")
+        self["movie_plot"] = Label("")
+        
+        self["actions"] = ActionMap(["archivCZSKActions"],
+            {
+                "ok": self.ok,
+                "up": self.up,
+                "down": self.down,
+                "cancel": self.cancel,
+                "green" : self.openAddonDownloads,
+                "blue": self.openAddonSettings,
+                "yellow": self.openAddonShortcuts,
+                "info": self.openInfo,
+                "menu": self.menu,
+                "csfd": self.openCSFD
+            }, -2)
+        #self.onUpdateGUI.append(self.updateFullTitle)
+        self.onLayoutFinish.append(self.setWindowTitle)
+
+    def __onClose(self):
+        self.updateGUITimer.stop()
+        del self.updateGUITimer_conn
+        del self.updateGUITimer
+        # picload_conn this must be, if not than crash system
+        del self.picload_conn
+        del self.picload
+
+
+    def updateAddonGUI(self):
+        try:
+            item = self.getSelectedItem()
+            idur = ""
+            irat = ""
+            iplot = ""
+            image = None
+            ifile = None
+            #props ="";
+            #for property, value in vars(item).iteritems():
+            #    props = props + str(property)+ ": "+ str(value)+"\n"
+            #log.logDebug(props)
+
+            if isinstance(item, PVideoNotResolved):
+                if self.showImageEnabled:
+                    ifile = self.getPosterImage(item)
+
+                try:
+                    if 'rating' in item.info:
+                        if float(item.info['rating']) > 0:
+                            irat = str(item.info['rating'])
+                except:
+                    log.logError("Rating parse failed..\n%s"%traceback.format_exc())
+                    pass
+                try:
+                    if 'duration' in item.info:
+                        durSec = float(item.info['duration'])
+                        if durSec > 0:
+                            hours = int(durSec/60/60)
+                            minutes = int((durSec - hours*60*60)/60)
+                            if len(str(minutes)) == 1:
+                                if hours > 0:
+                                    idur = str(hours)+'h'+'0'+str(minutes)+'min'
+                                else:
+                                    idur = '0'+str(minutes)+'min'
+                            else:
+                                if hours > 0:
+                                    idur = str(hours)+'h'+str(minutes)+'min'
+                                else:
+                                    idur = str(minutes)+'min'
+                except:
+                    log.logError("Duration parse failed..\n%s"%traceback.format_exc())
+                    pass
+                try:
+                    if 'plot' in item.info:
+                        iplot = toString(item.info['plot'])[0:800]
+                except:
+                    log.logError("Plot parse failed..\n%s"%traceback.format_exc())
+                    pass
+            else:
+                if self.lastPoster != "none":
+                    self.posterChanged = True
+                self.lastPoster = "none"
+                
+                
+            if self.showImageEnabled and self.posterChanged:
+                self.setMovieCover(ifile)
+                
+            self["movie_duration"].setText(idur)
+            self["movie_rating"].setText(irat)
+            self["movie_plot"].setText(iplot)
+            
+        except:
+            log.logError("updateAddonGUI fail...\n%s"%traceback.format_exc())
+            pass
+    
+    def getPosterImageName(self, urlPath):
+        isValid=False
+        fimage = self.noImage
+        try:
+            if urlPath:
+                tmp = toString(urlPath)
+                idx = tmp.rindex('/')+1
+                fname = tmp[idx:]
+                idx = fname.rindex('.')
+                ext = fname[idx:][0:4]
+                fname = fname[0:idx] + ext
+                if ext.lower() == '.jpg' or ext.lower() == '.png':
+                    isValid = True
+                    fimage = os.path.join(self.imagePosterDir, fname)
+        except:
+            log.logError("getPosterImageName failed (%s).\n%s"%(urlPath, traceback.format_exc()))
+            pass
+        finally:
+            return fimage, isValid
+
+    def getPosterImage(self, item):
+        if self.procPosterImage:
+            return
+        
+        self.procPosterImage = True
+
+        posterFile = os.path.join(self.imagePosterDir,'poster.dat')
+
+        try:
+            self.posterChanged = False
+            url = item.image
+            log.logDebug("getPosterImage start %s"%url)
+            
+            videoPoster, isValid = self.getPosterImageName(url)
+            #videoPoster = tuple[0]
+            if not isValid:
+                #tuple[1]:
+                if self.lastPoster != self.noImage:
+                    self.posterChanged = True
+                    shutil.copy(videoPoster, posterFile)
+                self.lastPoster = videoPoster
+                return posterFile
+            
+            isDownloaded = False
+            if self.lastPoster != videoPoster:
+                self.posterChanged = True
+            self.lastPoster = videoPoster
+            #videoPoster
+            if not os.path.isfile(videoPoster):
+                isDownloaded = True
+                download_web_file(url, videoPoster)
+
+            # in some case file got 0b then all lod image fail (send imgPath=None)
+            if os.path.getsize(videoPoster) < 100:
+                os.remove(videoPoster)
+                raise Exception("Poster image got less than 100 bytes.")
+
+            # copy current to poster
+            # only this way i can change poster dynamiclly on UI
+            shutil.copy(videoPoster, posterFile)
+
+            log.logDebug('getPosterImage finished (Downloaded=%s)' % isDownloaded)
+            return posterFile
+        except:
+            if self.lastPoster != self.noImage:
+                self.posterChanged = True
+                shutil.copy(self.noImage, posterFile)
+            log.logError("getPosterImage failed (return no image).\n%s"%traceback.format_exc())
+            return posterFile
+            pass
+        finally:
+            # handle no necessary change picture
+            if not self.posterChanged:
+                self.procPosterImage = False
+            # let only max file on hdd
+            self.handleMaxImages()
+
+
+    def setMovieCover(self, imgPath):
+        try:
+            if not imgPath:
+                log.logDebug("setMovieCover empty imgPath")
+                self["movie_poster_image"].instance.setPixmap(None)
+                return
+            
+            log.logDebug("setMovieCover=%s"%imgPath)
+            sc = AVSwitch().getFramebufferScale()
+            size = self["movie_poster_image"].instance.size()
+            if self.picload:
+                self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, "#00000000"))
+                log.logDebug("startDecode...");
+                self.picload.startDecode(imgPath)
+        except:
+            self.procPosterImage = False
+            log.logError("setMovieCover failed.\n%s"%traceback.format_exc())
+            pass
+    def showCoverCallback(self, picInfo=None):
+        try:
+            reupdateImage = False
+            if self.picload and picInfo:
+                actualItem = self.getSelectedItem()
+                try:
+                    fl1 = self.lastPoster
+                    fl2, isValid = self.getPosterImageName(actualItem.image)
+                    if fl1!=fl2:
+                        reupdateImage = True
+                except:
+                    pass
+                log.logDebug("PicLoad getData...")
+                converPtr = self.picload.getData()
+                log.logDebug("PicLoad getData finished")
+                if converPtr != None:
+                    if reupdateImage:
+                        # reinit image
+                        log.logDebug("PicLoad reinit image (image changed)")
+                        self.procPosterImage = False
+                        ifile = self.getPosterImage(actualItem)
+                        if self.posterChanged:
+                            self.setMovieCover(ifile)
+                    else:
+                        log.logDebug("SetPixmap...");
+                        self["movie_poster_image"].instance.setPixmap(converPtr)
+                        log.logDebug("SetPixmap finished");
+                        self.procPosterImage = False
+                    
+                #del self.picload
+        except:
+            self.procPosterImage = False
+            log.logError("showCoverCallback failed.\n%s"%traceback.format_exc())
+            pass
+
+    def handleMaxImages(self):
+        try:
+            dirContent = os.listdir(os.path.join(self.imagePosterDir))
+            if len(dirContent)-1 >= self.maxSavedImages:
+                # 20% or 30% remove
+                removeCnt = int(self.maxSavedImages * 0.3)
+                if self.maxSavedImages <= 40:
+                    removeCnt = int(self.maxSavedImages * 0.2)
+                if self.maxSavedImages == 0:
+                    removeCnt = len(dirContent)-1
+                cnt = 0
+                for x in sorted([(fn, os.stat(os.path.join(self.imagePosterDir,fn))) for fn in dirContent], key = lambda x: x[1].st_mtime):
+                    if cnt >= removeCnt:
+                        break
+                    pth = os.path.join(self.imagePosterDir, x[0])
+                    if x[0]!='poster.dat' and os.path.isfile(pth):
+                        log.logDebug("Deleting poster image... %s"%pth)
+                        os.remove(pth)
+                        cnt = cnt+1
+                if cnt > 0:
+                    log.logDebug("%s poster images deleted"%cnt)
+        except:
+            log.logError("Handle max poster images failed.\n%s"%traceback.format_exc())
+            pass
+
+    def changeAddon(self):
+        # musi to ist cez timer pretoze enigma vola onUpdate 3x upne zbytocne
+        # ak by nebolo cez timer tak by sa cakalo na kazde dobehnutie 3x
+        self.updateGUITimer.start(100, True)
+
+    def setWindowTitle(self):
+        self.setTitle(toString(self.addon.name))
+
+    def openAddonShortcuts(self):
+        if not self.working:
+            self.addon.open_shortcuts(self.session, self.openAddonShortcutsCB)
+
+    def openAddonShortcutsCB(self, it_sc):
+        if it_sc is not None:
+            self.contentHandler.open_item(it_sc)
+
+    def openAddonDownloads(self):
+        if not self.working:
+            self.workingStarted()
+            self.addon.open_downloads(self.session, self.workingFinished)
+
+    def openAddonSettings(self):
+        if not self.working:
+            self.addon.open_settings(self.session)
+
+    def openInfo(self):
+        self.info('item')
+
+    def openCSFD(self):
+        self.info('csfd')
+
+    def toggleCancelLoading(self):
+        if Task.getInstance() is not None and not Task.getInstance().isCancelling():
+            self["status_label"].setText("Canceling...")
+            Task.getInstance().setCancel()
+
+        elif Task.getInstance() is not None and Task.getInstance().isCancelling():
+            self["status_label"].setText("Loading...")
+            Task.getInstance().setResume()
+        else:
+            log.debug("Task is not running")
 
     def updateImage(self):
         it = self.getSelectedItem()

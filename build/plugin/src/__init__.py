@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from Components.Language import language
+from Components.config import config
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
-import os, gettext, sys
+import os, gettext, sys, datetime
 #from logging import StreamHandler
 
 PluginLanguageDomain = "archivCZSK"
@@ -29,15 +30,52 @@ def toString(text):
     elif isinstance(text, str):
         return text
 
+
 class log(object):
     ERROR = 0
     INFO = 1
     DEBUG = 2
     mode = INFO
 
+    logEnabled = True
+    logDebugEnabled = False
+    LOG_FILE = ""
+    
+
+    @staticmethod
+    def logDebug(msg):
+        if log.logDebugEnabled:
+            log.writeLog(msg, 'DEBUG')
+    @staticmethod
+    def logInfo(msg):
+        log.writeLog(msg, 'INFO')
+    @staticmethod
+    def logError(msg):
+        log.writeLog(msg, 'ERROR')
+    @staticmethod
+    def writeLog(msg, type):
+        try:
+            if not log.logEnabled:
+                return
+            #if log.LOG_FILE=="":
+            log.LOG_FILE = os.path.join(config.plugins.archivCZSK.logPath.getValue(),'archivCZSK.log')
+            f = open(log.LOG_FILE, 'a')
+            dtn = datetime.datetime.now()
+            f.write(dtn.strftime("%H:%M:%S.%f")[:-3] +" ["+type+"] %s\n" % msg)
+            f.close()
+        except:
+            log.error("write log failed.")
+            pass
+        finally:
+            print "####ArchivCZSK#### ["+type+"] "+msg
+
     @staticmethod
     def changeMode(mode):
         log.mode = mode
+        if mode == 2:
+            log.logDebugEnabled = True
+        else:
+            log.logDebugEnabled = False
 
     @staticmethod
     def debug(text, *args):

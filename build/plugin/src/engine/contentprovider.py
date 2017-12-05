@@ -7,6 +7,8 @@ import os
 import socket
 import sys
 import operator
+import traceback
+
 from shutil import copyfile
 from twisted.python import failure
 from twisted.internet import defer
@@ -158,7 +160,17 @@ class PlayMixin(object):
             self.capabilities.append('play_and_download')
 
     def play(self, session, item, mode, player_callback=None):
-        import traceback
+        #debug props
+        #try:
+        #    props = ""
+        #    for property, value in vars(item).iteritems():
+        #        props = props + ("%s : %s\n"%(property,value))
+        #    log.logDebug(props)
+        #except:
+        #    log.logError("iter items failed.\n%s"%traceback.format_exc())
+        #    pass
+
+        
         self.player = Player(session, player_callback, self)
         if mode in self.capabilities:
             if mode == 'play':
@@ -318,32 +330,37 @@ class DownloadsMixin(object):
             player_callback = None, play_download=False, mode=""):
         #closure fun :)
         def do_download():
-            # have to rename to start_cb otherwise python
-            # doesnt see start_callback
-            start_cb = start_callback
-            finish_cb = finish_callback
-            if start_cb is None:
-                start_cb = DownloadManagerMessages.startDownloadCB
-            if finish_cb is None:
-                finish_cb = DownloadManagerMessages.finishDownloadCB
-            override_cb = DownloadManagerMessages.overrideDownloadCB
+            try:
+                # have to rename to start_cb otherwise python
+                # doesnt see start_callback
+                start_cb = start_callback
+                finish_cb = finish_callback
+                if start_cb is None:
+                    start_cb = DownloadManagerMessages.startDownloadCB
+                if finish_cb is None:
+                    finish_cb = DownloadManagerMessages.finishDownloadCB
+                override_cb = DownloadManagerMessages.overrideDownloadCB
 
-            downloadManager = DownloadManager.getInstance()
-            d = downloadManager.createDownload(
-                name=item.name, url=item.url, 
-                stream=item.stream, filename=item.filename,
-                live=item.live, destination=destination[0],
-                startCB=start_cb, finishCB=finish_cb, quiet=False,
-                playDownload=play_download, headers=headers, mode=mode)
+                downloadManager = DownloadManager.getInstance()
+                d = downloadManager.createDownload(
+                    name=item.name, url=item.url, 
+                    stream=item.stream, filename=item.filename,
+                    live=item.live, destination=destination[0],
+                    startCB=start_cb, finishCB=finish_cb, quiet=False,
+                    playDownload=play_download, headers=headers, mode=mode)
 
-            if item.subs:
-                remote = item.subs
-                local = os.path.splitext(d.local)[0] + '.srt'
-                if os.path.isfile(remote):
-                    copyfile(remote, local)
-                elif remote.startswith('http'):
-                    util.download_to_file(remote, local)
-            downloadManager.addDownload(d, override_cb)
+                if item.subs:
+                    remote = item.subs
+                    local = os.path.splitext(d.local)[0] + '.srt'
+                    if os.path.isfile(remote):
+                        copyfile(remote, local)
+                    elif remote.startswith('http'):
+                        util.download_to_file(remote, local)
+                downloadManager.addDownload(d, override_cb)
+            except:
+                log.logError("Download '%s' failed.\n%s"%(item.name, traceback.format_exc()))
+                session.openWithCallback(ask_if_download_callback, MessageBox, text=_("Download error, look into the log file."), timeout=10, type=MessageBox.TYPE_ERROR)
+                pass
 
         def change_filename_callback(answer):
             if answer:
@@ -513,6 +530,11 @@ class ArchivCZSKContentProvider(ContentProvider):
         addons = [PCategoryVideoAddon(self._archivczsk.get_addon(addon_id)) for addon_id in self._categories_io.get_category(category_id)]
         if filter_enabled:
             addons = filter(filter_enabled_addons, addons)
+        # order addons by setting 'addonorder'
+        try:
+            addons = sorted(addons, key=lambda x: x.order)
+        except:
+            pass
         return addons
 
     def _get_all_addons(self, filter_enabled=True):
@@ -521,16 +543,33 @@ class ArchivCZSKContentProvider(ContentProvider):
         addons = [PVideoAddon(addon) for addon in self._archivczsk.get_video_addons()]
         if filter_enabled:
             addons = filter(filter_enabled_addons, addons)
+        # order addons by setting 'addonorder'
+        try:
+            addons = sorted(addons, key=lambda x: x.order)
+        except:
+            pass
         return addons
 
     def _get_video_addons(self, filter_enabled=True):
-        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.get_setting('tv_addon')]
-        addons.sort(key=lambda addon: addon.name.lower())
+        #addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.get_setting('tv_addon')]
+        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.setting_exist('tv_addon') or not paddon.addon.get_setting('tv_addon')]
+        #addons.sort(key=lambda addon: addon.name.lower())
+        # order addons by setting 'addonorder'
+        try:
+            addons = sorted(addons, key=lambda x: x.order)
+        except:
+            pass
         return addons
 
     def _get_tv_addons(self, filter_enabled=True):
-        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.get_setting('tv_addon')]
-        addons.sort(key=lambda addon: addon.name.lower())
+        #addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.get_setting('tv_addon')]
+        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.setting_exist('tv_addon') and paddon.addon.get_setting('tv_addon')]
+        #addons.sort(key=lambda addon: addon.name.lower())
+        # order addons by setting 'addonorder'
+        try:
+            addons = sorted(addons, key=lambda x: x.order)
+        except:
+            pass
         return addons
 
 
@@ -553,7 +592,9 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
         return cls.__resolving_provider.video_addon
 
     def __init__(self, video_addon, downloads_path, shortcuts_path):
-        allowed_download = not video_addon.get_setting('!download')
+        allowed_download = True 
+        if video_addon.setting_exist('!download'):
+            allowed_download = not video_addon.get_setting('!download')
         self.video_addon = video_addon
         ContentProvider.__init__(self)
         PlayMixin.__init__(self, allowed_download)
@@ -668,6 +709,7 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
 
     def get_content(self, session, params, successCB, errorCB):
         log.info('%s get_content - params: %s' % (self, str(params)))
+        log.logDebug("Video addon content provider '%s' start..."%self)
         self.__clear_list()
         self.content_deferred = defer.Deferred()
         self.content_deferred.addCallback(self._resolve_video_items)

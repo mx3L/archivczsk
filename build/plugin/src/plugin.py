@@ -12,38 +12,40 @@ NAME = _("ArchivCZSK")
 DESCRIPTION = _("Playing CZ/SK archives")
 
 def sessionStart(reason, session):
-	GlobalSession.setSession(session)
-	# saving active downloads to session
-	if not hasattr(session, 'archivCZSKdownloads'):
-		session.archivCZSKdownloads = []
-	if DownloadManager.getInstance() is None:
-		DownloadManager(session.archivCZSKdownloads)
+    GlobalSession.setSession(session)
+    # saving active downloads to session
+    if not hasattr(session, 'archivCZSKdownloads'):
+        session.archivCZSKdownloads = []
+    if DownloadManager.getInstance() is None:
+        DownloadManager(session.archivCZSKdownloads)
 
 def main(session, **kwargs):
-	ArchivCZSK(session)
+    ArchivCZSK(session)
 
 def menu(menuid, **kwargs):
-	if menuid == "mainmenu":
-		return [(DESCRIPTION, main, menuid, 32)]
-	else:
-		return []
+    if menuid == "mainmenu":
+        #return [(DESCRIPTION, main, menuid, 32)]
+        return [(DESCRIPTION, main, "archivy_czsk", 32)]
+    else:
+        return []
 
 def eventInfo(session, servicelist, **kwargs):
-	ref = session.nav.getCurrentlyPlayingServiceReference()
-	session.open(ArchivCZSKSearchClientScreen, ref)
+    ref = session.nav.getCurrentlyPlayingServiceReference()
+    session.open(ArchivCZSKSearchClientScreen, ref)
 
 def Plugins(path, **kwargs):
-	list = [PluginDescriptor(where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionStart),
-		PluginDescriptor(NAME, description=DESCRIPTION, where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main, icon="czsk.png")]
-	if config.plugins.archivCZSK.extensions_menu.value:
-		list.append(PluginDescriptor(NAME, where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main))
-	if config.plugins.archivCZSK.main_menu.value:
-		list.append(PluginDescriptor(NAME, where=PluginDescriptor.WHERE_MENU, fnc=menu))
-	if config.plugins.archivCZSK.epg_menu.value:
-		list.append(PluginDescriptor(_("Search in ArchivCZSK"), where=PluginDescriptor.WHERE_EVENTINFO, fnc=eventInfo))
-	return list
-
+    list = [PluginDescriptor(where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionStart),
+        PluginDescriptor(NAME, description=DESCRIPTION, where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main, icon="czsk.png")]
+    if config.plugins.archivCZSK.extensions_menu.value:
+        #list.append(PluginDescriptor(NAME, where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main))
+        list.append(PluginDescriptor(NAME, description=DESCRIPTION, where=PluginDescriptor.WHERE_EXTENSIONSMENU, fnc=main))
+    if config.plugins.archivCZSK.main_menu.value:
+        #list.append(PluginDescriptor(NAME, where=PluginDescriptor.WHERE_MENU, fnc=menu))
+        list.append(PluginDescriptor(NAME, description=DESCRIPTION, where=PluginDescriptor.WHERE_MENU, fnc=menu))
+    if config.plugins.archivCZSK.epg_menu.value:
+        list.append(PluginDescriptor(_("Search in ArchivCZSK"), where=PluginDescriptor.WHERE_EVENTINFO, fnc=eventInfo))
+    return list
 
 if config.plugins.archivCZSK.preload.value and not ArchivCZSK.isLoaded():
-	ArchivCZSK.load_repositories()
-	ArchivCZSK.load_skin()
+    ArchivCZSK.load_repositories()
+    ArchivCZSK.load_skin()
