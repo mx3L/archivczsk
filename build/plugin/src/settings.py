@@ -88,7 +88,7 @@ choicelist = []
 #choicelist.append(("%d" % 0, "%d" % 0))
 for i in range(0, 310, 10):
     choicelist.append(("%d" % i, "%d" % i))
-config.plugins.archivCZSK.posterImageMax = ConfigSelection(default="20", choices=choicelist)
+config.plugins.archivCZSK.posterImageMax = ConfigSelection(default="10", choices=choicelist)
 
 choicelistCsfd = [('1', _("Internal")), ('2', _("CSFD")), ('3', _("CSFDLite"))]
 config.plugins.archivCZSK.csfdMode = ConfigSelection(default='1', choices=choicelistCsfd)
@@ -97,7 +97,7 @@ config.plugins.archivCZSK.csfdMode = ConfigSelection(default='1', choices=choice
 
 config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
 config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
-config.plugins.archivCZSK.posterPath = ConfigDirectory(default="/media/hdd")
+config.plugins.archivCZSK.posterPath = ConfigDirectory(default="/tmp")
 config.plugins.archivCZSK.tmpPath = ConfigDirectory(default="/tmp")
 config.plugins.archivCZSK.logPath = ConfigDirectory(default="/tmp")
 

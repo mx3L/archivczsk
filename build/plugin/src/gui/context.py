@@ -19,40 +19,50 @@ from Tools.LoadPixmap import LoadPixmap
 from Plugins.Extensions.archivCZSK import _
 
 
+RATIO = 1
+try:
+    width = getDesktop(0).size().width()
+    if width == 3840:
+        RATIO = 3
+    elif width == 1920:
+        RATIO = 1.5
+except:
+    pass
+
+def resize(t):
+    return int(t*RATIO)
+
+
 from base import  BaseArchivCZSKScreen
 def showContextMenu(session, name, img, items, globalItems, cb):
     session.openWithCallback(cb, ArchivCZSKContextMenuScreen, name, img, items, globalItems)
 
 
 class ContextMenuList(MenuList):
-    def __init__(self, isFHD):
+    def __init__(self):
         MenuList.__init__(self, [], False, eListboxPythonMultiContent)
-        if isFHD:
-            self.l.setItemHeight(33)
-            self.l.setFont(0, gFont("Regular", 25))
-        else:
-            self.l.setItemHeight(24)
-            self.l.setFont(0, gFont("Regular", 19))
+        self.l.setItemHeight(resize(24))
+        self.l.setFont(0, gFont("Regular", resize(19)))
 
 
 def ContextEntry(name, idx, png=''):
     res = [(name, idx)]
     if fileExists(png):
-        res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(24, 24), png=loadPNG(png)))
-        res.append(MultiContentEntryText(pos=(40, 0), size=(455, 24), font=0, flags=RT_VALIGN_CENTER, text=name))
+        res.append(MultiContentEntryPixmapAlphaTest(pos=(resize(5), 0), size=(resize(24), resize(24)), png=loadPNG(png)))
+        res.append(MultiContentEntryText(pos=(resize(40), 0), size=(resize(455), resize(24)), font=0, flags=RT_VALIGN_CENTER, text=name))
     else:
-        res.append(MultiContentEntryText(pos=(5, 0), size=(490, 24), font=0, flags=RT_VALIGN_CENTER, text=name))
+        res.append(MultiContentEntryText(pos=(resize(5), 0), size=(resize(490), resize(24)), font=0, flags=RT_VALIGN_CENTER, text=name))
     return res
 
 def ContextEntryDisabled(name, idx, png='', separator=False):
     res = [(name, idx)]
     if separator:
-        res.append(MultiContentEntryText(pos=(5, 12), size=(490, 1), font=0, flags=RT_VALIGN_CENTER, text=name, backcolor=0xffffff))
+        res.append(MultiContentEntryText(pos=(resize(5), resize(12)), size=(resize(490), resize(1)), font=0, flags=RT_VALIGN_CENTER, text=name, backcolor=0xffffff))
     elif fileExists(png):
-        res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(24, 24), png=loadPNG(png)))
-        res.append(MultiContentEntryText(pos=(40, 0), size=(455, 24), font=0, flags=RT_VALIGN_CENTER, text=name, color=0x696969))
+        res.append(MultiContentEntryPixmapAlphaTest(pos=(resize(5), 0), size=(resize(24), resize(24)), png=loadPNG(png)))
+        res.append(MultiContentEntryText(pos=(resize(40), 0), size=(resize(455), resize(24)), font=0, flags=RT_VALIGN_CENTER, text=name, color=0x696969))
     else:
-        res.append(MultiContentEntryText(pos=(5, 0), size=(490, 24), font=0, flags=RT_VALIGN_CENTER, text=name, color=0x696969))
+        res.append(MultiContentEntryText(pos=(resize(5), 0), size=(resize(490), resize(24)), font=0, flags=RT_VALIGN_CENTER, text=name, color=0x696969))
     return res
 
 
@@ -78,7 +88,7 @@ class ArchivCZSKContextMenuScreen(BaseArchivCZSKScreen):
                 self.isFHD = True
         except:
             pass
-        self['list'] = ContextMenuList(self.isFHD)
+        self['list'] = ContextMenuList()
         self["actions"] = ActionMap(["archivCZSKActions"],
             {"ok": self.ok,
              "cancel": self.cancel,

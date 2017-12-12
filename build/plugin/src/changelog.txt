@@ -1,3 +1,10 @@
+archivCZSK 1.0.1, 12.12.2017
+---------------------------------------------
+    - zmenena predvolena cesta ukladania plagatov (10) (/tmp)
+    - UHD skin thanks @shamann1
+    - logging improvements
+    - fix dotahovania plagatov pri niektorych doplnkoch
+
 archivCZSK 1.0, 05.12.2017
 ---------------------------------------------
     - automaticka aktualizacia pluginu so zachovanim udajov

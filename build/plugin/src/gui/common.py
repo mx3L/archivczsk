@@ -28,6 +28,19 @@ from enigma import loadPNG, RT_HALIGN_RIGHT, RT_VALIGN_TOP, eSize, eListbox, \
 from skin import parseColor, parseFont
 import skin
 
+RATIO = 1
+try:
+    width = getDesktop(0).size().width()
+    if width == 3840:
+        RATIO = 3
+    elif width == 1920:
+        RATIO = 1.5
+except:
+    pass
+
+def resize(t):
+    return int(t*RATIO)
+
 
 try:
     fonts = json.load(settings.CUSTOM_FONTS_PATH)
@@ -125,59 +138,59 @@ def MultiContentEntryFormattedText(pos=(0, 0), size=(0, 0), fontSize=Size.MEDIUM
 class PanelList(MenuList):
     def __init__(self, list, itemHeight=29):
         MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-        self.l.setItemHeight(itemHeight)
-        self.l.setFont(Font.REGULAR_SMALL, gFont(REGULAR_FONT, 18))
-        self.l.setFont(Font.REGULAR_MEDIUM, gFont(REGULAR_FONT, 21))
-        self.l.setFont(Font.REGULAR_BIG, gFont(REGULAR_FONT, 23))
-        self.l.setFont(Font.ITALIC_SMALL, gFont(ITALIC_FONT, 18))
-        self.l.setFont(Font.ITALIC_MEDIUM, gFont(ITALIC_FONT, 21))
-        self.l.setFont(Font.ITALIC_BIG, gFont(ITALIC_FONT, 23))
-        self.l.setFont(Font.BOLD_SMALL, gFont(BOLD_FONT, 18))
-        self.l.setFont(Font.BOLD_MEDIUM, gFont(BOLD_FONT, 21))
-        self.l.setFont(Font.BOLD_BIG, gFont(BOLD_FONT, 23))
+        self.l.setItemHeight(resize(itemHeight))
+        self.l.setFont(Font.REGULAR_SMALL, gFont(REGULAR_FONT, resize(18)))
+        self.l.setFont(Font.REGULAR_MEDIUM, gFont(REGULAR_FONT, resize(21)))
+        self.l.setFont(Font.REGULAR_BIG, gFont(REGULAR_FONT, resize(23)))
+        self.l.setFont(Font.ITALIC_SMALL, gFont(ITALIC_FONT, resize(18)))
+        self.l.setFont(Font.ITALIC_MEDIUM, gFont(ITALIC_FONT, resize(21)))
+        self.l.setFont(Font.ITALIC_BIG, gFont(ITALIC_FONT, resize(23)))
+        self.l.setFont(Font.BOLD_SMALL, gFont(BOLD_FONT, resize(18)))
+        self.l.setFont(Font.BOLD_MEDIUM, gFont(BOLD_FONT, resize(21)))
+        self.l.setFont(Font.BOLD_BIG, gFont(BOLD_FONT, resize(23)))
 
 class PanelListDownload(MenuList):
     def __init__(self, list):
         MenuList.__init__(self, list, False, eListboxPythonMultiContent)
-        self.l.setItemHeight(56)
-        self.l.setFont(Font.REGULAR_MEDIUM, gFont("Regular", 21))
-        self.l.setFont(Font.REGULAR_BIG, gFont("Regular", 23))
-        self.l.setFont(Font.REGULAR_SMALL, gFont("Regular", 17))
+        self.l.setItemHeight(resize(56))
+        self.l.setFont(Font.REGULAR_MEDIUM, gFont("Regular", resize(21)))
+        self.l.setFont(Font.REGULAR_BIG, gFont("Regular", resize(23)))
+        self.l.setFont(Font.REGULAR_SMALL, gFont("Regular", resize(17)))
 
 def PanelListDownloadEntry_SD(name, download):
     res = [(name)]
-    res.append(MultiContentEntryText(pos=(0, 5), size=(610, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name)))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(610), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name)))
     if download.state == 'success_finished':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(570, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('finished'), color=0x00FF00))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(570), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('finished'), color=0x00FF00))
     elif download.state == 'error_finished':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(570, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('finished with errors'), color=0xff0000))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(570), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('finished with errors'), color=0xff0000))
     elif download.state == 'downloading':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(570, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('downloading')))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(570), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=_('downloading')))
     return res
 
 
 def PanelListDownloadEntry(name, download):
     res = [(name)]
-    res.append(MultiContentEntryText(pos=(0, 5), size=(640, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name)))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(640), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name)))
     if download.state == 'success_finished':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(850, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState, color=0x00FF00))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(850), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState, color=0x00FF00))
     elif download.state == 'error_finished':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(850, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState, color=0xff0000))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(850), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState, color=0xff0000))
     elif download.state == 'downloading':
-        res.append(MultiContentEntryText(pos=(0, 5), size=(850, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState))
+        res.append(MultiContentEntryText(pos=(0, resize(5)), size=(resize(850), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=download.textState))
     return res
 
 
 def PanelColorListEntry(name, value, color, sizePanelX):
     res = [(name)]
-    res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=name, color=color))
-    res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=value, color=color))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(sizePanelX, resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=name, color=color))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(sizePanelX, resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=value, color=color))
     return res
 
 def PanelColorListEntry2(name, value, colorName, colorValue, sizePanelX):
     res = [(name)]
-    res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name), color=colorName))
-    res.append(MultiContentEntryText(pos=(0, 5), size=(sizePanelX, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=toString(value), color=colorValue))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(sizePanelX, resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(name), color=colorName))
+    res.append(MultiContentEntryText(pos=(0, resize(5)), size=(sizePanelX, resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_RIGHT, text=toString(value), color=colorValue))
     return res
 
 def PanelListDownloadListEntry(pdownload):
@@ -197,18 +210,18 @@ def PanelListDownloadListEntry(pdownload):
     sizeText = _('Size:  ') + size
     stateText = pdownload.textState
 
-    res.append(MultiContentEntryPixmapAlphaTest(pos=(5, 5), size=(35, 25), png=loadPNG(pdownload.thumb)))
-    res.append(MultiContentEntryText(pos=(60, 5), size=(760, 30), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(pdownload.name)))
-    res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_RIGHT, text=sizeText, color=0xE6A800))
+    res.append(MultiContentEntryPixmapAlphaTest(pos=(resize(5), resize(5)), size=(resize(35), resize(25)), png=loadPNG(pdownload.thumb)))
+    res.append(MultiContentEntryText(pos=(resize(60), resize(5)), size=(resize(760), resize(30)), font=Font.REGULAR_MEDIUM, flags=RT_HALIGN_LEFT, text=toString(pdownload.name)))
+    res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_RIGHT, text=sizeText, color=0xE6A800))
 
     if pdownload.state == 'success_finished':
-        res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=finishText, color=0xE6A800))
-        res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0x00FF00))
+        res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=finishText, color=0xE6A800))
+        res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0x00FF00))
     elif pdownload.state == 'error_finished':
-        res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=finishText, color=0xE6A800))
-        res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0xff0000))
+        res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=finishText, color=0xE6A800))
+        res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0xff0000))
     elif pdownload.state == 'downloading':
-        res.append(MultiContentEntryText(pos=(0, 38), size=(900, 18), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0xE6A800))
+        res.append(MultiContentEntryText(pos=(0, resize(38)), size=(resize(900), resize(18)), font=Font.REGULAR_SMALL, flags=RT_VALIGN_TOP | RT_HALIGN_CENTER, text=stateText, color=0xE6A800))
     return res
 
 

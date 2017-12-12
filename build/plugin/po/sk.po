@@ -311,7 +311,7 @@ msgid "Exit player"
 msgstr "Ukončiť prehrávač"
 
 msgid "FAIL"
-msgstr "NENAINŠTALOVANÝ"
+msgstr "FAIL"
 
 msgid "FLV Container"
 msgstr "FLV kontajner"
@@ -329,7 +329,7 @@ msgid "Following addons were updated"
 msgstr "Nasledúce doplnky boli aktualizované:"
 
 msgid "For example if you have ASF(WMV) - OK state"
-msgstr "Napríklad ak sa vám zobrazuje stav ASF(WMV) - NAINŠTALOVANÝ"
+msgstr "Napríklad ak sa vám zobrazuje stav ASF(WMV) - FAIL"
 
 msgid "For optimal usage of this plugin, you need to check"
 msgstr "Pre optimálne používanie tohto pluginu skontrolujte"
@@ -410,7 +410,7 @@ msgid "Nonlinear"
 msgstr ""
 
 msgid "OK"
-msgstr "NAINŠTALOVANÝ"
+msgstr "OK"
 
 msgid "Open"
 msgstr "Otvoriť položku"
@@ -584,7 +584,7 @@ msgid "Show subservices"
 msgstr ""
 
 msgid "Show video source selection"
-msgstr "Zobrazť výber zdroju videa"
+msgstr "Zobraziť výber zdroju videa"
 
 msgid "Size:"
 msgstr "Veľkosť:"

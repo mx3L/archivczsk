@@ -378,7 +378,7 @@ msgid "Exit fix"
 msgstr "Oprava ukončení přehrávání"
 
 msgid "FAIL"
-msgstr "NENAINSTALOVÁN"
+msgstr "FAIL"
 
 msgid "FLV Container"
 msgstr "FLV kontejner"
@@ -399,7 +399,7 @@ msgid "Font type"
 msgstr "Font"
 
 msgid "For example if you have ASF(WMV) - OK state"
-msgstr "Máte-li například stav ASF(WMV) - NAINSTALOVÁN"
+msgstr "Máte-li například stav ASF(WMV) - FAIL"
 
 msgid "For optimal usage of this plugin, you need to check"
 msgstr "Pro optimální používání je třeba zkontrolovat,"
@@ -490,7 +490,7 @@ msgid "Not implemented yet"
 msgstr "Tato funkce není zatím implementována"
 
 msgid "OK"
-msgstr "NAINSTALOVÁN"
+msgstr "OK"
 
 msgid "Open"
 msgstr "Otevřít položku"

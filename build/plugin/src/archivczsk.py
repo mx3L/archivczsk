@@ -66,11 +66,15 @@ class ArchivCZSK():
                 if DMM_IMAGE:
                     if desktop_width == 1920:
                         skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_fhd.xml")
+                    elif desktop_width == 3840:
+                        skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_uhd.xml")
                     else:
                         skin_default_path = os.path.join(settings.SKIN_PATH, "default_dmm_hd.xml")
                 else:
                     if desktop_width == 1920:
                         skin_default_path = os.path.join(settings.SKIN_PATH, "default_fhd.xml")
+                    elif desktop_width == 3840:
+                        skin_default_path = os.path.join(settings.SKIN_PATH, "default_uhd.xml")
                     else:
                         skin_default_path = os.path.join(settings.SKIN_PATH, "default_hd.xml")
             else:
