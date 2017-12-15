@@ -1,7 +1,7 @@
 archivCZSK 1.0.2, 15.12.2017
 ---------------------------------------------
     - rozsirena funkcionalita
-    - upraveny FHD, UHD pre Dreambox
+    - upraveny FHD, UHD skin pre Dreambox
     - fix logging
 
 archivCZSK 1.0.1, 12.12.2017
