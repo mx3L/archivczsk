@@ -107,6 +107,9 @@ class ContentProvider(object):
           @return: should return list of items created in items module"""
         pass
 
+    def isPaused(self):
+        return self.__paused
+
     def start(self):
         if self.__started:
             log.debug("[%s] cannot start, provider is already started",self)
@@ -160,17 +163,6 @@ class PlayMixin(object):
             self.capabilities.append('play_and_download')
 
     def play(self, session, item, mode, player_callback=None):
-        #debug props
-        #try:
-        #    props = ""
-        #    for property, value in vars(item).iteritems():
-        #        props = props + ("%s : %s\n"%(property,value))
-        #    log.logDebug(props)
-        #except:
-        #    log.logError("iter items failed.\n%s"%traceback.format_exc())
-        #    pass
-
-        
         self.player = Player(session, player_callback, self)
         if mode in self.capabilities:
             if mode == 'play':
@@ -709,7 +701,6 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
 
     def get_content(self, session, params, successCB, errorCB):
         log.info('%s get_content - params: %s' % (self, str(params)))
-        log.logDebug("Video addon content provider '%s' start..."%self)
         self.__clear_list()
         self.content_deferred = defer.Deferred()
         self.content_deferred.addCallback(self._resolve_video_items)

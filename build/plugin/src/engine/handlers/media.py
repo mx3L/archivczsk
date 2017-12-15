@@ -1,3 +1,4 @@
+import traceback
 from twisted.internet import defer
 
 from Components.config import config
@@ -10,6 +11,8 @@ from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler, DownloadExceptionHandler, PlayExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoResolved, PVideoNotResolved, PPlaylist
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
+from enigma import eTimer
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 
 
 class MediaItemHandler(ItemHandler):
@@ -22,14 +25,67 @@ class MediaItemHandler(ItemHandler):
     def _open_item(self, item, mode='play', *args, **kwargs):
         self.play_item(item, mode, args, kwargs)
 
+    
+    # action:
+        #   - play
+        #   - watching /every 10minutes/
+        #   - end
+    def cmdStats(self, item, action, successCB=None, failCB=None):
+        def open_item_success_cb(result):
+            log.logDebug("Stats (%s) call success."%action)
+            if paused:
+                self.content_provider.pause()
+            if successCB is not None:
+                successCB()
+        def open_item_error_cb(failure):
+            log.logDebug("Stats (%s) call failed.\n%s"%(action,failure))
+            if paused:
+                self.content_provider.pause()
+            if failCB is not None:
+                failCB()
+
+        paused = self.content_provider.isPaused()
+        try:
+            if paused:
+                self.content_provider.resume()
+            
+            ppp = { 'cp': 'czsklib', 'stats':action, 'item': item.dataItem }
+            # content provider must be in running state (not paused)
+            self.content_provider.get_content(self.session, params=ppp, successCB=open_item_success_cb, errorCB=open_item_error_cb)
+        except:
+            log.logError("Stats call failed.\n%s"%traceback.format_exc())
+            if paused:
+                self.content_provider.pause()
+            if failCB is not None:
+                failCB()
+            
+
     def play_item(self, item, mode='play', *args, **kwargs):
+        def startWatchingTimer():
+            self.cmdTimer.start(timerPeriod)
+        def timerEvent():
+            self.cmdStats(item, 'watching')
         def end_play():
-            self.content_provider.resume()
+            try:
+                self.cmdTimer.stop()
+                del self.cmdTimer
+                del self.cmdTimer_conn
+            except:
+                log.logDebug("Release cmd timer failed.\n%s" % traceback.format_exc())
             self.content_screen.workingFinished()
+            self.content_provider.resume()
+            self.cmdStats(item, 'end')
+
+        timerPeriod = 10*60*1000 #10min
+        self.cmdTimer = eTimer()
+        self.cmdTimer_conn = eConnectCallback(self.cmdTimer.timeout, timerEvent)
 
         self.content_screen.workingStarted()
         self.content_provider.pause()
         self.content_provider.play(self.session, item, mode, end_play)
+
+        # send command
+        self.cmdStats(item, 'play', successCB=startWatchingTimer)
 
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
@@ -123,6 +179,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
 
         def selected_source(answer):
             if answer is not None:
+                # entry point of play video source
                 callback(answer[1])
             else:
                 self.content_screen.workingFinished()

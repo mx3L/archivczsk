@@ -143,6 +143,7 @@ class PVideoResolved(PVideo):
     def __init__(self):
         PVideo.__init__(self)
         self.thumb  = PNG_PATH + '/play2.png'
+        self.dataItem = None
 
 class PVideoNotResolved(PVideo):
     def __init__(self):

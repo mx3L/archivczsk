@@ -156,7 +156,7 @@ def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}
     return it
 
 
-def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={}, filename=None, live=False, stream=None, settings=None):
+def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={}, filename=None, live=False, stream=None, settings=None, dataItem=None):
     it = PVideoResolved()
 
     it.name = toUnicode(name)
@@ -206,6 +206,8 @@ def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={
             it.settings = settings
     it.resolved = True
 
+    it.dataItem = dataItem
+
     return it
 
 @abortTask
@@ -230,7 +232,7 @@ def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_fol
     GItem_lst[0].append(it)
 
 @abortTask
-def add_video(name, url, subs=None, image=None, infoLabels={}, menuItems={}, filename=None, live=False, stream=None, settings=None):
+def add_video(name, url, subs=None, image=None, infoLabels={}, menuItems={}, filename=None, live=False, stream=None, settings=None, dataItem=None):
 
     """
     adds video item to content screen
@@ -242,7 +244,6 @@ def add_video(name, url, subs=None, image=None, infoLabels={}, menuItems={}, fil
         @param live: is video live stream
         @param settings: dictationary of player/download settings{"user-agent",:"","extra-headers":{}}
     """
-
     video_it = create_video_it(name=name,
                                url=url,
                                subs=subs,
@@ -252,7 +253,8 @@ def add_video(name, url, subs=None, image=None, infoLabels={}, menuItems={}, fil
                                filename=filename,
                                live=live,
                                stream=stream,
-                               settings=settings)
+                               settings=settings,
+                               dataItem=dataItem)
 
     if not isinstance(url, basestring):
         log.info('add_video - ignoring %s, invalid url', repr(video_it))

@@ -118,17 +118,17 @@
   </screen>
 
   <screen name="ArchivCZSKContextMenuScreen" position="center,center" size="642,449">
-    <widget name="item_pixmap" position="12,16" size="44,32" alphatest="on" />
-    <widget name="item_label" position="78,12" size="545,77" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
-    <eLabel position="12,64" size="617,1" backgroundColor="#999999" />
-    <widget name="list" position="1,84" itemHeight="40" scrollbarMode="showOnDemand" size="641,354" />
+    <widget name="item_pixmap" position="12,15" size="44,32" alphatest="on" />
+    <widget name="item_label" position="78,10" size="545,77" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
+    <eLabel position="12,78" size="617,1" backgroundColor="#999999" />
+    <widget name="list" position="1,84" itemHeight="40" scrollbarMode="showOnDemand" size="641,360" />
   </screen>
 
   <screen name="ArchivCZSKSelectSourceScreen" position="center,center" size="642,449">
     <!-- <widget name="item_pixmap" position="12,16" size="44,32" alphatest="on" /> -->
-    <widget name="item_label" position="12,12" size="617,38" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
-    <eLabel position="12,64" size="617,1" backgroundColor="#999999" />
-    <widget name="list" position="1,84" itemHeight="40" scrollbarMode="showOnDemand" size="641,354" />
+    <widget name="item_label" position="12,10" size="617,38" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
+    <eLabel position="12,78" size="617,1" backgroundColor="#999999" />
+    <widget name="list" position="1,84" itemHeight="40" scrollbarMode="showOnDemand" size="641,360" />
   </screen>
 
   <screen name="ArchivCZSKSearchClientScreen" position="center,center" size="642,514">
@@ -192,20 +192,20 @@
     </widget>
   </screen>
 
-  <screen name="ArchivCZSKDownloadListScreen" position="center,center" size="1157,740" title="ShortcutsScreen">
-    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="583,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget name="menu" position="8,70" scrollbarMode="showOnDemand" size="1137,572" transparent="1" />
+  <screen name="ArchivCZSKDownloadListScreen" position="center,center" size="1477,840" title="ShortcutsScreen">
+    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="376,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="742,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="1108,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget name="menu" position="8,70" scrollbarMode="showOnDemand" size="1461,760" transparent="1" />
   </screen>
 
-  <screen name="ArchivCZSKDownloadsScreen" position="center,center" size="1157,740" title="ShortcutsScreen">
-    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="583,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget name="menu" position="8,70" scrollbarMode="showOnDemand" size="1137,572" transparent="1" />
+  <screen name="ArchivCZSKDownloadsScreen" position="center,center" size="1477,840" title="ShortcutsScreen">
+    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="376,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="742,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="1108,6" shadowColor="black" shadowOffset="-2,-2" size="356,57" valign="center" zPosition="1" />
+    <widget name="menu" position="8,70" scrollbarMode="showOnDemand" size="1461,760" transparent="1" />
   </screen>
 
   <screen name="ArchivCZSKDownloadStatusScreen" position="center,140" size="791,559">

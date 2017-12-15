@@ -79,30 +79,39 @@ class log(object):
 
     @staticmethod
     def debug(text, *args):
-        if log.mode == log.DEBUG:
-            if len(args) == 1 and isinstance(args[0], tuple):
-                text = text % args[0]
-            elif len(args) >=1:
-                text = text % args
-            print "[ArchivCZSK] DEBUG:".ljust(20), toString(text)
+        try:
+            if log.mode == log.DEBUG:
+                if len(args) == 1 and isinstance(args[0], tuple):
+                    text = text % args[0]
+                elif len(args) >=1:
+                    text = text % args
+                print "[ArchivCZSK] DEBUG:".ljust(20), toString(text)
+        except:
+            pass
 
     @staticmethod
     def info(text, *args):
-        if log.mode >= log.INFO:
-            if len(args) == 1 and isinstance(args[0], tuple):
-                text = text % args[0]
-            elif len(args) >=1:
-                text = text % args
-            print "[ArchivCZSK] INFO:".ljust(20), toString(text)
+        try:
+            if log.mode >= log.INFO:
+                if len(args) == 1 and isinstance(args[0], tuple):
+                    text = text % args[0]
+                elif len(args) >=1:
+                    text = text % args
+                print "[ArchivCZSK] INFO:".ljust(20), toString(text)
+        except:
+            pass
 
     @staticmethod
     def error(text, *args):
-        if log.mode >= log.ERROR:
-            if len(args) == 1 and isinstance(args[0], tuple):
-                text = text % args[0]
-            elif len(args) >=1:
-                text = text % args
-            print "[ArchivCZSK] ERROR:".ljust(20), toString(text)
+        try:
+            if log.mode >= log.ERROR:
+                if len(args) == 1 and isinstance(args[0], tuple):
+                    text = text % args[0]
+                elif len(args) >=1:
+                    text = text % args
+                print "[ArchivCZSK] ERROR:".ljust(20), toString(text)
+        except:
+            pass
 
 
 
