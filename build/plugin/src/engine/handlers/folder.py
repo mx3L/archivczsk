@@ -1,7 +1,7 @@
 from Screens.MessageBox import MessageBox
 
 from item import ItemHandler
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PFolder, PSearchItem, PSearch
 
@@ -49,6 +49,7 @@ class FolderItemHandler(ItemHandler):
 
         @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):
+            log.logError("Folder get_content error cb.\n%s"%failure)
             self.content_screen.stopLoading()
             self.content_screen.showList()
             self.content_screen.workingFinished()

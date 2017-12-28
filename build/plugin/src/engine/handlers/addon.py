@@ -22,30 +22,31 @@ class VideoAddonItemHandlerTemplate(ItemHandler):
     def _open_item(self, item, *args, **kwargs):
 
         def open_item_success_cb(result):
-                list_items, command, args = result
-                list_items.insert(0, PExit())
-                self.content_screen.resolveCommand(command, args)
-                self.content_screen.stopLoading()
-                self.open_video_addon(item.addon, list_items)
+            list_items, command, args = result
+            list_items.insert(0, PExit())
+            self.content_screen.resolveCommand(command, args)
+            self.content_screen.stopLoading()
+            self.open_video_addon(item.addon, list_items)
 
         @AddonExceptionHandler(self.session)
         def open_item_error_cb(failure):
-                self.open_video_addon_cb(item.addon.provider)
-                self.content_screen.stopLoading()
-                self.content_screen.workingFinished()
-                failure.raiseException()
+            log.logError("Addon get_content error cb.\n%s"%failure)
+            self.open_video_addon_cb(item.addon.provider)
+            self.content_screen.stopLoading()
+            self.content_screen.workingFinished()
+            failure.raiseException()
 
         @AddonExceptionHandler(self.session)
         def get_content(addon, params):
-                try:
-                    content_provider = addon.provider
-                    content_provider.start()
-                    content_provider.get_content(self.session, params, open_item_success_cb, open_item_error_cb)
-                except Exception:
-                    content_provider.stop()
-                    self.content_screen.stopLoading()
-                    self.content_screen.workingFinished()
-                    raise
+            try:
+                content_provider = addon.provider
+                content_provider.start()
+                content_provider.get_content(self.session, params, open_item_success_cb, open_item_error_cb)
+            except Exception:
+                content_provider.stop()
+                self.content_screen.stopLoading()
+                self.content_screen.workingFinished()
+                raise
 
         addon = item.addon
         if addon.get_info('broken'):

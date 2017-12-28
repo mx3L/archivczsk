@@ -20,7 +20,7 @@ from Components.config import config
 from enigma import ePicLoad, getDesktop
 
 from base import BaseArchivCZSKScreen
-from Plugins.Extensions.archivCZSK import _, log
+from Plugins.Extensions.archivCZSK import _, log, removeDiac
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.settings import ARCH,PLUGIN_PATH
 from Plugins.Extensions.archivCZSK.gui.common import showYesNoDialog, showInfoMessage, PanelColorListEntry, PanelList
@@ -32,20 +32,21 @@ def showChangelog(session, changelog_title, changelog_text):
 def showItemInfo(session, item):
     Info(session, item)
     
-def removeDiacriticsCsfd(text):
-    searchExp = text
-    try:
-        import unicodedata
-        searchExp = ''.join((c for c in unicodedata.normalize('NFD', searchExp) 
-                                    if unicodedata.category(c) != 'Mn')).encode('utf-8')
-    except:
-        log.logError("CSFD remove diacritics failed.\n%s"%traceback.format_exc())
+#def removeDiacriticsCsfd(text):
+#    searchExp = text
+#    try:
+#        import unicodedata
+#        searchExp = ''.join((c for c in unicodedata.normalize('NFD', searchExp) 
+#                                    if unicodedata.category(c) != 'Mn')).encode('utf-8')
+#    except:
+#        log.logError("CSFD remove diacritics failed.\n%s"%traceback.format_exc())
         
-    return searchExp
+#    return searchExp
 
 def showCSFDInfo(session, item):
     try:
-        name = removeDiacriticsCsfd(item.name)
+        #name = removeDiacriticsCsfd(item.name)
+        name = removeDiac(item.name)
         name = name.replace('.', ' ').replace('_', ' ').replace('-', ' ')
         
 

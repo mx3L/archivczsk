@@ -230,7 +230,7 @@
   </screen>
 
   <screen name="ArchivCZSKPlaylistScreen" position="center,center" size="1157,740" flags="wfNoBorder" backgroundColor="#48080808">
-    <widget source="title" position="0,0" size="1157,89" valign="center" halign="center" backgroundColor="#28080808" font="Regular;30" foregroundColor="#e9b253" />
+    <widget source="title" render="Label" position="0,0" size="1157,89" valign="center" halign="center" backgroundColor="#28080808" font="Regular;30" foregroundColor="#e9b253" />
     <widget source="list" render = "Listbox" position="0,115" size="1157,625" scrollbarMode="showOnDemand" backgroundColor="#48080808" >
       <convert type="TemplatedMultiContent">
         {"templates":

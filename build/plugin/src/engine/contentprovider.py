@@ -17,7 +17,7 @@ from xml.etree.cElementTree import ElementTree
 from Screens.LocationBox import LocationBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Components.config import config, ConfigSelection
-from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk
+from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk, removeDiac
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback, MessageBox
 from Plugins.Extensions.archivCZSK.engine.downloader import getFilenameAndLength
 from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
@@ -378,8 +378,9 @@ class DownloadsMixin(object):
                             currDir=downloads_path)
                 if answer == "filename":
                     session.openWithCallback(change_filename_callback,
-                            VirtualKeyBoard, _("Edit filename"),
-                            text = toString(filename[0]))
+                            VirtualKeyBoard, title = removeDiac(_("Edit filename")),
+                            text = removeDiac(filename[0]))
+                            #text = toString(filename[0]))
 
         def ask_if_download():
             filename[0], size_bytes = getFilenameAndLength(item.url, headers, filename[0])

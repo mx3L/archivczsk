@@ -6,7 +6,7 @@ from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Screens.ChoiceBox import ChoiceBox
 
-from Plugins.Extensions.archivCZSK import _, log
+from Plugins.Extensions.archivCZSK import _, log, removeDiac
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
     VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonInfoError, \
@@ -51,7 +51,8 @@ def getTextInput(session, title, text=""):
         else:
             d.callback(word)
     d = defer.Deferred()
-    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=toString(title), text=text)
+    #session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=toString(title), text=text)
+    session.openWithCallback(getTextInputCB, VirtualKeyBoard, title=removeDiac(title), text=removeDiac(text))
     return d
 
 def getSearch(session):

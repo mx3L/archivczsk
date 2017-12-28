@@ -136,7 +136,25 @@ class ArchivUpdater(object):
                             log.logDebug("File '%s' removed" % sub)
                     # resources dir partialy skipped
                     continue
-    
+                if i=='gui':
+                    for sub in os.listdir(fullPath1):
+                        fullPath2 = os.path.join(fullPath1,sub)
+                        if sub.lower()=="skins":
+                            for sub2 in os.listdir(fullPath2):
+                                fullPath3 = os.path.join(fullPath2, sub2)
+                                if os.path.isfile(fullPath3) and sub2.startswith("default_"):
+                                    os.remove(fullPath3)
+                                    log.logDebug("File '%s' removed" % sub2)
+                            # skins dir skipped partialy
+                            continue
+                        if os.path.isdir(fullPath2):
+                            shutil.rmtree(fullPath2)
+                            log.logDebug("Dir tree '%s' removed" % sub)
+                        elif os.path.isfile(fullPath2):
+                            os.remove(fullPath2)
+                            log.logDebug("File '%s' removed" % sub)
+                    continue
+
                 if os.path.isdir(fullPath1):
                     shutil.rmtree(fullPath1)
                     log.logDebug("Dir tree '%s' removed" % i)

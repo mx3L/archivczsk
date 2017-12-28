@@ -10,7 +10,7 @@ from Components.config import config, ConfigDirectory, ConfigText, ConfigNumber
 from Screens.LocationBox import LocationBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.archivCZSK import _, settings, log
+from Plugins.Extensions.archivCZSK import _, settings, log, removeDiac
 from Plugins.Extensions.archivCZSK.resources.repositories import \
     config as addon_config
 from base import BaseArchivCZSKScreen
@@ -129,7 +129,7 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
             pass
         elif isinstance(current, ConfigText):
             entryName = self["config"].getCurrent()[0]
-            self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoardCFG, entryName, current)
+            self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoardCFG, entryName=entryName, configEntry=current)
         
     def keySave(self):
         self.saveAll()
@@ -219,7 +219,8 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
         try:
             self.configEntry = configEntry
             
-            VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
+            #VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
+            VirtualKeyBoard.__init__(self, session, title=removeDiac(entryName), text=removeDiac(configEntry.getValue()))
             self.skinName = "VirtualKeyBoard"
 
             #from Plugins.Extensions.archivCZSK.engine.tools.util import decode_string
@@ -232,7 +233,8 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
 
     def ok(self):
         try:
-            self.close(self.text.encode("utf-8"), self.configEntry)
+            #self.close(self.text.encode("utf-8"), self.configEntry)
+            self.close(removeDiac(self.text), self.configEntry)
         except:
             log.logError("OK VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
             raise

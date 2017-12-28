@@ -14,7 +14,7 @@ from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.archivCZSK import _, settings
+from Plugins.Extensions.archivCZSK import _, settings, removeDiac
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 from Plugins.Extensions.archivCZSK.engine.tools import util
@@ -93,7 +93,7 @@ class DownloadManagerMessages(object):
                     except OSError as e:
                         print e
                 elif callback[1] == "rename":
-                    session.openWithCallback(renameCB, VirtualKeyBoard, _("Rename filename"), text=download.filename)
+                    session.openWithCallback(renameCB, VirtualKeyBoard, title=removeDiac(_("Rename filename")), text=removeDiac(download.filename))
 
         if download is not None:
             if dInstance and dInstance.running:

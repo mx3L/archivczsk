@@ -2,7 +2,7 @@
 from Components.Language import language
 from Components.config import config
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
-import os, gettext, sys, datetime
+import os, gettext, sys, datetime, traceback
 #from logging import StreamHandler
 
 PluginLanguageDomain = "archivCZSK"
@@ -23,6 +23,23 @@ def _(txt):
 
 localeInit()
 language.addCallback(localeInit)
+
+def removeDiac(text):
+    searchExp = text
+    try:
+        #log.logDebug("Remove diacritics is '%s'."%type(text))
+        if isinstance(searchExp, str):
+            #log.logDebug("Remove diacritics is str, do nothing return '%s'."%searchExp)
+            return searchExp
+        import unicodedata
+        #searchExp = ''.join((c for c in unicodedata.normalize('NFD', unicode(searchExp, 'utf-8', 'ignore')) 
+        #                              if unicodedata.category(c) != 'Mn')).encode('utf-8')
+        searchExp = ''.join((c for c in unicodedata.normalize('NFD', searchExp) 
+                                    if unicodedata.category(c) != 'Mn')).encode('utf-8')
+    except:
+        log.logError("Remove diacritics '%s' failed.\n%s"%(text,traceback.format_exc()))
+        
+    return searchExp
 
 def toString(text):
     if isinstance(text, unicode):

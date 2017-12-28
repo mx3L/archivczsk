@@ -63,21 +63,21 @@
     <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,548" size="493,25" transparent="1" valign="center" zPosition="2" />
   </screen>
 
-  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1020,630" title="ContentMenuScreen">
+  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1020,620" title="ContentMenuScreen">
     <widget backgroundColor="#9f1313" font="Regular;20" halign="center" name="key_red" position="8,5" shadowColor="black" shadowOffset="-2,-2" size="245,45" valign="center" zPosition="1" />
     <widget backgroundColor="#1f771f" font="Regular;20" halign="center" name="key_green" position="261,5" shadowColor="black" shadowOffset="-2,-2" size="245,45" valign="center" zPosition="1" />
     <widget backgroundColor="#a08500" font="Regular;20" halign="center" name="key_yellow" position="514,5" shadowColor="black" shadowOffset="-2,-2" size="245,45" valign="center" zPosition="1" />
     <widget backgroundColor="#18188b" font="Regular;20" halign="center" name="key_blue" position="767,5" shadowColor="black" shadowOffset="-2,-2" size="245,45" valign="center" zPosition="1" />
 
-    <widget name="path_label" position="15,65" size="990,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
-    <eLabel position="15,95" size="990,1" zPosition="1" backgroundColor="#C4C4C4" />
+    <widget name="path_label" position="15,55" size="990,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
+    <eLabel position="15,85" size="990,1" zPosition="1" backgroundColor="#C4C4C4" />
     <!--<widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >-->
-    <widget alphatest="on" name="movie_poster_image" position="720,100" size="200,300" transparent="1"/>
+    <widget alphatest="on" name="movie_poster_image" position="720,90" size="200,300" transparent="1"/>
 
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="left" name="movie_rating" position="725,403" size="80,22" transparent="1"/>
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="right" name="movie_duration" position="810,403" size="105,22" transparent="1"/>
-    <widget font="Regular;20" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="633,437" size="382,185" transparent="1"/>
-    <widget source="menu" render="Listbox" position="10,100" size="610,465" transparent="1" >
+    <widget font="Regular;19" foregroundColor="#ffffff" halign="left" name="movie_rating" position="725,493" size="80,22" transparent="1"/>
+    <widget font="Regular;19" foregroundColor="#ffffff" halign="right" name="movie_duration" position="810,493" size="105,22" transparent="1"/>
+    <widget font="Regular;20" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="633,427" size="382,185" transparent="1"/>
+    <widget source="menu" render="Listbox" position="10,90" size="610,465" transparent="1" >
       <convert type="ACZSKKodiToE2List">Index:1,ColorCodes,Bold:FCE083,Italic:FCE083</convert>
       <convert type="TemplatedMultiContent">
         {"templates":
@@ -93,9 +93,9 @@
         }
       </convert>
     </widget>
-    <widget font="Regular; 16" foregroundColor="white" halign="left" name="status_label" position="12,599" size="535,25" transparent="1" valign="center" zPosition="2" />
-    <widget alphatest="on" name="tip_pixmap" position="9,599" size="35,25" zPosition="2" />
-    <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,599" size="493,25" transparent="1" valign="center" zPosition="2" />
+    <widget font="Regular; 16" foregroundColor="white" halign="left" name="status_label" position="12,589" size="535,25" transparent="1" valign="center" zPosition="2" />
+    <widget alphatest="on" name="tip_pixmap" position="9,589" size="35,25" zPosition="2" />
+    <widget font="Regular;18" foregroundColor="white" halign="left" name="tip_label" position="55,589" size="493,25" transparent="1" valign="center" zPosition="2" />
   </screen>
   
   <screen name="ArchivCZSKVideoPlayerInfoScreen" position="center,center" size="900,575" title="ContentScreen">

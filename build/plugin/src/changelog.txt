@@ -1,3 +1,10 @@
+archivCZSK 1.0.3, 28.12.2017
+---------------------------------------------
+    - pri aktualizacii sa vymazu len skiny zacinajuce default_* (/gui/skins/)
+    - upraveny DMM skin
+    - fix VK pri vti 13 sposoboval pad systemu
+    - fix sipka hore pri spustenom filme sposobovala pad systemu
+
 archivCZSK 1.0.2, 15.12.2017
 ---------------------------------------------
     - rozsirena funkcionalita

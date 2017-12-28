@@ -16,7 +16,7 @@ from Components.Pixmap import Pixmap
 from Components.config import config
 
 
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, removeDiac
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKScreen
@@ -52,7 +52,7 @@ class Captcha(object):
 class ArchivCZSKCaptchaScreen(BaseArchivCZSKScreen,VirtualKeyBoard):
     def __init__(self, session, captcha_file):  
         BaseArchivCZSKScreen.__init__(self,session,False)
-        VirtualKeyBoard.__init__(self, session, _('Type text of picture'))
+        VirtualKeyBoard.__init__(self, session, title=removeDiac(_('Type text of picture')))
         self["captcha"] = Pixmap()
         self.Scale = AVSwitch().getFramebufferScale()
         self.picPath = captcha_file

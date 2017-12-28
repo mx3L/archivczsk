@@ -644,7 +644,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
             #props ="";
             #for property, value in vars(item).iteritems():
             #    try:
-            #        props = props + str(property)+ ": "+ str(value)+"\n"
+            #        props = props + "%s: %s\n"%(property,value)
             #    except:
             #        props = props +"...some failed..."
             #log.logDebug(props)

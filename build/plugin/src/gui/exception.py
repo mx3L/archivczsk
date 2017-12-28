@@ -81,7 +81,9 @@ class AddonExceptionHandler(GUIExceptionHandler):
                     traceback.print_exc()
             except:
                 log.logError("Addon (LOG) error.\n%s"%traceback.format_exc())
-                self.errorMessage("ADDON ERROR")
+                # this can go to crash because want show modal from screen which is not modal
+                # but this can got to fck
+                #self.errorMessage("ADDON ERROR")
                 pass
         return wrapped
     
