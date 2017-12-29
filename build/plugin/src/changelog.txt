@@ -1,3 +1,6 @@
+archivCZSK 1.0.4, 29.12.2017
+---------------------------------------------
+    - fix default hd skin
 archivCZSK 1.0.3, 28.12.2017
 ---------------------------------------------
     - pri aktualizacii sa vymazu len skiny zacinajuce default_* (/gui/skins/)

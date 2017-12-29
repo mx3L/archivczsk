@@ -74,8 +74,8 @@
     <!--<widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >-->
     <widget alphatest="on" name="movie_poster_image" position="720,90" size="200,300" transparent="1"/>
 
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="left" name="movie_rating" position="725,493" size="80,22" transparent="1"/>
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="right" name="movie_duration" position="810,493" size="105,22" transparent="1"/>
+    <widget font="Regular;19" foregroundColor="#ffffff" halign="left" name="movie_rating" position="725,393" size="80,22" transparent="1"/>
+    <widget font="Regular;19" foregroundColor="#ffffff" halign="right" name="movie_duration" position="810,393" size="105,22" transparent="1"/>
     <widget font="Regular;20" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="633,427" size="382,185" transparent="1"/>
     <widget source="menu" render="Listbox" position="10,90" size="610,465" transparent="1" >
       <convert type="ACZSKKodiToE2List">Index:1,ColorCodes,Bold:FCE083,Italic:FCE083</convert>
