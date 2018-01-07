@@ -336,7 +336,7 @@ class DownloadsMixin(object):
                 downloadManager = DownloadManager.getInstance()
                 d = downloadManager.createDownload(
                     name=item.name, url=item.url, 
-                    stream=item.stream, filename=item.filename,
+                    stream=item.stream, filename=filename[0],
                     live=item.live, destination=destination[0],
                     startCB=start_cb, finishCB=finish_cb, quiet=False,
                     playDownload=play_download, headers=headers, mode=mode)
