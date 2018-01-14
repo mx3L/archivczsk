@@ -1,6 +1,11 @@
+archivCZSK 1.0.5, 14.01.2018
+---------------------------------------------
+    - fix priameho vyhladavania v pluginoch (pridany stream-cinema a Csfd)
+
 archivCZSK 1.0.4, 29.12.2017
 ---------------------------------------------
     - fix default hd skin
+
 archivCZSK 1.0.3, 28.12.2017
 ---------------------------------------------
     - pri aktualizacii sa vymazu len skiny zacinajuce default_* (/gui/skins/)

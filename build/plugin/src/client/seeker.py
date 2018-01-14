@@ -7,8 +7,9 @@ Created on 11.1.2013
 
 import traceback
 from Screens.MessageBox import MessageBox   
-from Plugins.Extensions.archivCZSK import _ 
+from Plugins.Extensions.archivCZSK import _, log, removeDiac
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
+from Components.config import config
 
 
 
@@ -18,14 +19,17 @@ def getCapabilities():
     """
     list = []
     #list.append((_('Search in') + ' ' + 'OnlineFiles', 'plugin.video.online-files', 'all'))
-    list.append((_('Search in') + ' ' + 'Sosac.ph', 'plugin.video.sosac.ph', 'all'))
-    list.append((_('Search in') + ' ' + 'Befun.cz', 'plugin.video.befun.cz', 'all'))
-    list.append((_('Search in') + ' ' + 'Koukni.cz', 'plugin.video.koukni.cz', 'koukni.cz'))
+    list.append((_('Search in') + ' ' + 'Stream Cinema', 'plugin.video.stream-cinema', 'all'))
+    list.append((_('Search in') + ' ' + 'Sosac', 'plugin.video.sosac.ph', 'all'))
+    list.append((_('Search in') + ' ' + 'CSFD', 'csfd', 'all'))
+    #list.append((_('Search in') + ' ' + 'Befun.cz', 'plugin.video.befun.cz', 'all'))
+    #list.append((_('Search in') + ' ' + 'Koukni.cz', 'plugin.video.koukni.cz', 'koukni.cz'))
+    list.append((_('Search in') + ' ' + 'Webshare.cz', 'plugin.video.online-files', 'webshare.cz'))
     list.append((_('Search in') + ' ' + 'Ulozto.cz', 'plugin.video.online-files', 'ulozto.cz'))
     list.append((_('Search in') + ' ' + 'Bezvadata.cz', 'plugin.video.online-files', 'bezvadata.cz'))
     list.append((_('Search in') + ' ' + 'Hellspy.cz', 'plugin.video.online-files', 'hellspy.cz'))
     list.append((_('Search in') + ' ' + 'Fastshare.cz', 'plugin.video.online-files', 'fastshare.cz'))
-    list.append((_('Search in') + ' ' + 'Webshare.cz', 'plugin.video.online-files', 'webshare.cz'))
+    
     return list
 
 #    Napriklad:
@@ -41,13 +45,18 @@ def search(session, search_exp, addon_id, mode=None, cb=None):
     @param : addon_id - id addonu v ktorom chceme vyhladavat
     @param : mode - mod vyhladavania podporovany addonom
     """
-    if search_exp is None or search_exp == "":
-        showInfoMessage(session, _("Empty search expression"))
-        return cb()
+    try:
+        if search_exp is None or search_exp == "":
+            showInfoMessage(session, _("Empty search expression"))
+            return cb()
     
-    archivCZSKSeeker = ArchivCZSKSeeker.getInstance(session, cb)
-    if archivCZSKSeeker is not None:
-        archivCZSKSeeker.search(search_exp, addon_id, mode)
+        archivCZSKSeeker = ArchivCZSKSeeker.getInstance(session, cb)
+        if archivCZSKSeeker is not None:
+            archivCZSKSeeker.search(search_exp, addon_id, mode)
+    except:
+        log.logError("Searching failed.\n%s"%traceback.format_exc())
+        showInfoMessage(session, _("Search fatal error."))
+        return cb()
     
 def searchClose():
     """
@@ -84,10 +93,12 @@ class ArchivCZSKSeeker():
             try:
                 return ArchivCZSKSeeker(session, cb)
             except ImportError:
+                log.logError("Cannot search, archivCZSK is not installed")
                 showInfoMessage(session, _('Cannot search, archivCZSK is not installed'), 5, cb=cb)
                 print 'cannot found archivCZSK'
                 return None
             except Exception:
+                log.logError("ArchivCZSKSeeker fatala error.\n%s"%traceback.format_exc())
                 traceback.print_exc()
                 showErrorMessage(session, _('unknown error'), 5, cb=cb)
                 return None
@@ -137,16 +148,20 @@ class ArchivCZSKSeeker():
             showInfoMessage(self.session, _("You cannot search, archivCZSK Search is already running"))
             print "%s cannot search, searching is not finished" % self
             return
-        searcher = getSearcher(self.session, addon_id, self.archivCZSK, self._successSearch, self._errorSearch)
-        if searcher is not None:
-            self.searcher = searcher
-            self.searching = True
-            self.addon = searcher.addon
-            searcher.start()
-            searcher.search(search_exp, mode)
-        else:
-            showInfoMessage(self.session, _("Cannot find searcher") + ' ' + addon_id.encode('utf-8'))
+        if addon_id.lower() == 'csfd':
+            CsfdSearch().showCSFDInfo(self.session, search_exp)
             return self.cb()
+        else:
+            searcher = getSearcher(self.session, addon_id, self.archivCZSK, self._successSearch, self._errorSearch)
+            if searcher is not None:
+                self.searcher = searcher
+                self.searching = True
+                self.addon = searcher.addon
+                searcher.start()
+                searcher.search(search_exp, mode)
+            else:
+                showInfoMessage(self.session, _("Cannot find searcher") + ' ' + addon_id.encode('utf-8'))
+                return self.cb()
             
     def close(self):
         if self.searching:
@@ -167,6 +182,8 @@ def getSearcher(session, addon_name, archivczsk, succ_cb, err_cb):
         return KoukniSearch(session, archivczsk, succ_cb, err_cb)
     elif addon_name == 'plugin.video.sosac.ph':
         return SosacSearch(session, archivczsk, succ_cb, err_cb)
+    elif addon_name == 'plugin.video.stream-cinema':
+        return StreamCinemaSearch(session, archivczsk, succ_cb, err_cb)
     else:
         return None
             
@@ -257,7 +274,53 @@ class KoukniSearch(Search):
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
         
         
+class StreamCinemaSearch(Search):
+    addon_id = 'plugin.video.stream-cinema'
+    
+    def search(self, search_exp, mode='all'):
+        params = {'search':search_exp, 'search-no-history':True}
+        self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
+class CsfdSearch():
+    def showCSFDInfo(self, session, item):
+        try:
+            #name = removeDiacriticsCsfd(item.name)
+            name = removeDiac(item)
+            year = 0
+            yearStr = ""
+            try:
+                mask = re.compile('[0-9]{4}', re.DOTALL)
+                yearStr = mask.findall(name)[0]
+                year = int(yearStr)
+                name = name.replace(yearStr, '')
+            except:
+                pass
 
+            name = name.strip()
+            log.logDebug("Csfd search '%s', year=%s."%(name,year))
+
+            csfdType = int(config.plugins.archivCZSK.csfdMode.getValue())
+
+            if csfdType == 1:
+                from Plugins.Extensions.archivCZSK.gui.archivcsfd import ArchivCSFD
+                session.open(ArchivCSFD, name, year)
+            elif csfdType == 2:
+                from Plugins.Extensions.CSFD.plugin import CSFD
+                session.open(CSFD, name)
+            elif csfdType == 3:
+                from Plugins.Extensions.CSFDLite.plugin import CSFDLite
+                try:
+                    session.open(CSFDLite, name, yearStr)
+                except:
+                    log.logDebug("Trying CsfdLite older version compatibility...")
+                    session.open(CSFDLite, name)
+            else:
+                raise Exception("CsfdMode '%s' not supported." % csfdType)
+        except:
+            log.logError("Show CSFD info failed (plugin may not be installed).\n%s"%traceback.format_exc())
+            try:
+                showInfoMessage(session, _("Show CSFD info failed."), timeout=6)
+            except:
+                pass
 
 #def main(session, **kwargs):
 #    search_exp = u'Matrix'

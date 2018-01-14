@@ -15,7 +15,7 @@ from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Plugins.Extensions.archivCZSK.client import seeker
 from Plugins.Extensions.archivCZSK.gui.base import BaseArchivCZSKListSourceScreen
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, toString
-from Plugins.Extensions.archivCZSK import removeDiac
+from Plugins.Extensions.archivCZSK import _, removeDiac, log
 
 
 class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
@@ -26,6 +26,7 @@ class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
         self.searchList = seeker.getCapabilities()
         event = EventInfo(session.nav, EventInfo.NOW).getEvent()
         self.searchExp = event and event.getEventName() or ''
+        self.searchExp = removeDiac(self.searchExp)
         self['red_label'] = StaticText(_("change search expression"))
         self['green_label'] = StaticText(_("remove diacritic"))
         self['blue_label'] = StaticText(_("choose from EPG"))
@@ -85,7 +86,7 @@ class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
         
     def changeSearchExpCB(self, word=None):
         if word is not None and len(word) > 0:
-            self.searchExp = word
+            self.searchExp = removeDiac(word)
             self['search'].setText(self.searchExp)
             
     def chooseFromEpg(self):
@@ -96,6 +97,8 @@ class ArchivCZSKSearchClientScreen(BaseArchivCZSKListSourceScreen):
             self.search(entry[1], entry[2])
             
     def search(self, addon, mode):
+        self.removeDiacritics()
+        log.logDebug("Seeker start exp='%s', addon='%s', mode='%s'"%(self.searchExp, addon, mode))
         seeker.search(self.session, self.searchExp, addon, mode, cb=self.searchCB)
         
     def searchCB(self):
