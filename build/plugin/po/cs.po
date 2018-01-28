@@ -17,6 +17,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "Exit"
+msgstr "Ukončit"
+
 msgid "List"
 msgstr "Seznam"
 msgid "Film info"
@@ -113,7 +116,7 @@ msgid "Add Shortcut"
 msgstr "Přidat záložku"
 
 msgid "Add search option in epg menu"
-msgstr "Přidat vyhledávaní do EPG menu"
+msgstr "Přidat vyhledávání v archivu na dlouhé stisknutí EPG/INFO"
 
 msgid "Add to category"
 msgstr "Přidat do kategorie"

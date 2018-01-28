@@ -140,8 +140,7 @@ def get_main_settings():
     # list.append(getConfigListEntry(_("Preload"), config.plugins.archivCZSK.preload))
     list.append(getConfigListEntry(_("Add to extensions menu"), config.plugins.archivCZSK.extensions_menu))
     list.append(getConfigListEntry(_("Add to main menu"), config.plugins.archivCZSK.main_menu))
-    # if i know this is not functional
-    #list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
+    list.append(getConfigListEntry(_("Add search option in epg menu"), config.plugins.archivCZSK.epg_menu))
     list.append(MENU_SEPARATOR)
     list.append(getConfigListEntry(_("CSFD plugin"), config.plugins.archivCZSK.csfdMode))
     

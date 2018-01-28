@@ -11,7 +11,7 @@ import traceback
 import threading
 from tools import unzip, util, parser
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
-from Plugins.Extensions.archivCZSK import log, toString, settings
+from Plugins.Extensions.archivCZSK import _, log, toString, settings
 from Components.Console import Console
 from Components.config import config
 from Screens.MessageBox import MessageBox

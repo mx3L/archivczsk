@@ -16,6 +16,9 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "Exit"
+msgstr "Ukončiť"
+
 msgid "List"
 msgstr "Zoznam"
 msgid "Film info"
@@ -112,7 +115,7 @@ msgid "Add Shortcut"
 msgstr "Pridať záložku"
 
 msgid "Add search option in epg menu"
-msgstr "Pridať vyhľadávanie do EPG menu"
+msgstr "Pridať vyhľadávanie v archive na dlhé stlačenie EPG/INFO"
 
 msgid "Add to category"
 msgstr "Pridať do kategórie"

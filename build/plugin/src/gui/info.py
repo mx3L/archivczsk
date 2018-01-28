@@ -47,11 +47,10 @@ def showCSFDInfo(session, item):
     try:
         #name = removeDiacriticsCsfd(item.name)
         name = removeDiac(item.name)
-        name = name.replace('.', ' ').replace('_', ' ').replace('-', ' ')
+        name = name.replace('.', ' ').replace('_', ' ')
         
-
-        name = name.replace(" CZ ","").replace(" EN ","").replace(" SK ","").replace(" DA ","").replace(" FI ","").replace(" CH ","").replace(" HI ","").replace(" JP ","").replace(" KH ","")
-        name = name.replace(" RU ","").replace(" KO ","").replace(" SP ","")
+        # remove languages ... "Mother - CZ, EN, KO (2017)"
+        name = re.sub("\s-\s[A-Z]{2}(,\s[A-Z]{2})*\s\(", " (", name)
         
         year = 0
         yearStr = ""
@@ -61,9 +60,8 @@ def showCSFDInfo(session, item):
             year = int(yearStr)
         except:
             pass
-
-        if ' (' in name:
-            name = name[0:name.index("(")]
+        # remove year
+        name = re.sub("\([0-9]{4}\)","", name)
 
         name = name.strip()
         log.logDebug("Csfd search '%s', year=%s."%(name,year))

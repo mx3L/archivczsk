@@ -1,3 +1,10 @@
+archivCZSK 1.0.6, 28.1.2018
+---------------------------------------------
+    - kozmeticka uprava skinov
+    - obnovene nastavenie pre rychle vyhladavanie
+    - fix oznamenia o aktualizacii archivu
+    - fix prekryvania okien pre DM (vyber streamu SC, Sosac)
+
 archivCZSK 1.0.5, 14.01.2018
 ---------------------------------------------
     - fix priameho vyhladavania v pluginoch (pridany stream-cinema a Csfd)

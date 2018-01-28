@@ -245,9 +245,9 @@
     </widget>
   </screen>
 
-  <screen name="ArchivCZSKChoiceBox" position="center,center" size="1414,1028" zPosition="1">
-    <widget name="text" position="24,24" size="1414,64" font="Regular;50" />
-    <widget name="list" position="0,76" size="1414,860" scrollbarMode="showOnDemand" font="Regular;50"/>
+  <screen name="ArchivCZSKChoiceBox" position="center,center" size="1414,1028" title="Select source" zPosition="1">
+    <widget name="text" position="0,0" size="0,0" font="Regular;50" />
+    <widget name="list" position="0,20" size="1414,988" scrollbarMode="showOnDemand" font="Regular;50"/>
   </screen>
 
 
