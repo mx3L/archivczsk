@@ -1,3 +1,8 @@
+archivCZSK 1.0.7, 14.2.2018
+---------------------------------------------
+    - stahovanie cez curl pre http download
+    - uprava skinov pre DreamBox
+
 archivCZSK 1.0.6, 28.1.2018
 ---------------------------------------------
     - kozmeticka uprava skinov

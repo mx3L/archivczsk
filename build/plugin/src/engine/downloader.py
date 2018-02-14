@@ -93,7 +93,7 @@ class DownloadManager(object):
 
     def createDownload(self, name, url, destination, filename=None, live=False, startCB=None, finishCB=None, stream=None, quiet=False, playDownload=False, headers=None, mode=""):
         log.info("Downloader.createDownload(url=%s,mode=%s"%(toString(url), mode))
-        log.logDebug("Creating download\name=%s\nurl=%s\ndestination=%s\nfilename=%s\nheaders=%s\nmode=%s" % (name, url, destination, filename, headers, mode))
+        #log.logDebug("Creating download\name=%s\nurl=%s\ndestination=%s\nfilename=%s\nheaders=%s\nmode=%s" % (name, url, destination, filename, headers, mode))
         d = None
         if headers is None:
             headers = {}
@@ -359,16 +359,17 @@ class HTTPDownloadE2(DownloadProcessMixin, Download):
         self.headers = headers or {}
 
     def _buildCmd(self):
-        cmd = "%s '%s' -O '%s'"% (WGET_PATH, self.url, self.local)
+        cmd = "curl -o '%s' -L"% (self.local)
         if "User-Agent" in self.headers:
-            cmd += " -U '%s'"% self.headers.pop("User-Agent")
+            cmd += " -A '%s'"% self.headers.pop("User-Agent")
         if self.headers:
             cmd += " --header " + ' --header '.join(["'%s: %s'"%(k, v)
                 for k,v in self.headers.iteritems()])
         if self.quiet:
             cmd += ' -q'
+        cmd += " '%s'"%self.url
+        #log.logDebug("Download cmd:\n%s"%cmd)
         return cmd
-
 
 class GstDownload(DownloadProcessMixin, Download):
     def __init__(self, name, url, destDir, filename, quiet=False, headers=None):
