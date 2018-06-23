@@ -74,9 +74,9 @@
     <!--<widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >-->
     <widget alphatest="on" name="movie_poster_image" position="720,90" size="200,300" transparent="1"/>
 
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="left" name="movie_rating" position="725,393" size="80,22" transparent="1"/>
-    <widget font="Regular;19" foregroundColor="#ffffff" halign="right" name="movie_duration" position="810,393" size="105,22" transparent="1"/>
-    <widget font="Regular;20" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="633,427" size="382,185" transparent="1"/>
+    <widget font="Regular;19" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="725,393" size="80,22" transparent="1"/>
+    <widget font="Regular;19" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="810,393" size="105,22" transparent="1"/>
+    <widget font="Regular;20" foregroundColor="#ffffff" halign="left" name="movie_plot" position="633,427" size="382,185" transparent="1"/>
     <widget source="menu" render="Listbox" position="10,90" size="610,465" transparent="1" >
       <convert type="ACZSKKodiToE2List">Index:1,ColorCodes,Bold:FCE083,Italic:FCE083</convert>
       <convert type="TemplatedMultiContent">
@@ -112,10 +112,10 @@
     <widget name="info_scrolllabel" position="443,135" size="434,428" valign="top" font="Regular; 19"/>
   </screen>
 
-  <screen name="ArchivCZSKContextMenuScreen" position="center,center" size="500,350">
+  <screen name="ArchivCZSKContextMenuScreen" position="center,center" size="500,400">
     <widget name="item_pixmap" position="10,13" size="35,25" alphatest="on" />
-    <widget name="item_label" position="61,10" size="424,60" halign="center" foregroundColor="#e5b243" font="Regular; 22" />
-    <widget name="list" position="1,81" scrollbarMode="showOnDemand" size="499,276" />
+    <widget name="item_label" position="61,10" size="424,50" halign="center" foregroundColor="#e5b243" font="Regular; 22" />
+    <widget name="list" position="1,71" scrollbarMode="showOnDemand" size="499,300" />
   </screen>
 
   <screen name="ArchivCZSKSelectSourceScreen" position="center,center" size="500,350">

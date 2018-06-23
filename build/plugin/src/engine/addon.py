@@ -367,18 +367,20 @@ class AddonSettings(object):
             return True
         except:
             return False
-
+    
     def get_setting(self, setting_id):
         try:
-            setting = getattr(self.main, '%s' % setting_id)
-        except (ValueError, KeyError, AttributeError):
-            log.error('%s cannot retrieve setting %s,  Invalid setting id', self, setting_id)
-            log.logDebug("Cannot retrieve setting '%s' - %s" % (setting_id, self.addon))
-            return ""
-        else:
-            if isinstance(setting, ConfigIP):
-                return setting.getText()
-            return setting.getValue()
+            if self.setting_exist(setting_id):
+                setting = getattr(self.main, '%s' % setting_id)
+                if isinstance(setting, ConfigIP):
+                    return setting.getText()
+                return setting.getValue()
+            else:
+                log.logDebug("Cannot retrieve setting '%s' - %s" % (setting_id, self.addon))
+        except:
+            log.logError("Cannot retrieve setting '%s' - %s\n%s" % (setting_id, self.addon, traceback.format_exc()))
+
+        return ""
 
     def set_setting(self, setting_id, value):
         try:

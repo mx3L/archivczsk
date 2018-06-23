@@ -9,7 +9,7 @@ from Components.Console import Console
 from Screens.MessageBox import MessageBox
 from skin import loadSkin
 
-from Plugins.Extensions.archivCZSK import _, log, toString, settings
+from Plugins.Extensions.archivCZSK import _, log, toString, settings, UpdateInfo
 from Plugins.Extensions.archivCZSK.engine.addon import VideoAddon, XBMCAddon
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
@@ -20,13 +20,10 @@ from Plugins.Extensions.archivCZSK.compat import DMM_IMAGE
 
 from Plugins.Extensions.archivCZSK.engine.updater import ArchivUpdater
 
-
 class ArchivCZSK():
 
     __loaded = False
     __need_restart = False
-    __check_update_ts = None
-    __check_addon_update_ts = None
 
     __repositories = {}
     __addons = {}
@@ -145,24 +142,24 @@ class ArchivCZSK():
         limitHour = 2
         try:
             if archivUpdate:
-                if ArchivCZSK.__check_update_ts is None:
-                    ArchivCZSK.__check_update_ts = datetime.datetime.now()
+                if UpdateInfo.CHECK_UPDATE_TIMESTAMP is None:
+                    UpdateInfo.CHECK_UPDATE_TIMESTAMP = datetime.datetime.now()
                     return True
                 else:
-                    delta = ArchivCZSK.__check_update_ts + datetime.timedelta(hours=limitHour)
+                    delta = UpdateInfo.CHECK_UPDATE_TIMESTAMP + datetime.timedelta(hours=limitHour)
                     if datetime.datetime.now() > delta:
-                        ArchivCZSK.__check_addon_update_ts = datetime.datetime.now()
+                        UpdateInfo.CHECK_UPDATE_TIMESTAMP = datetime.datetime.now()
                         return True
                     else:
                         return False
             else:
-                if ArchivCZSK.__check_addon_update_ts is None:
-                    ArchivCZSK.__check_addon_update_ts = datetime.datetime.now()
+                if UpdateInfo.CHECK_ADDON_UPDATE_TIMESTAMP is None:
+                    UpdateInfo.CHECK_ADDON_UPDATE_TIMESTAMP = datetime.datetime.now()
                     return True
                 else:
-                    delta = ArchivCZSK.__check_addon_update_ts + datetime.timedelta(hours=limitHour)
+                    delta = UpdateInfo.CHECK_ADDON_UPDATE_TIMESTAMP + datetime.timedelta(hours=limitHour)
                     if datetime.datetime.now() > delta:
-                        ArchivCZSK.__check_addon_update_ts = datetime.datetime.now()
+                        UpdateInfo.CHECK_ADDON_UPDATE_TIMESTAMP = datetime.datetime.now()
                         return True
                     else:
                         return False

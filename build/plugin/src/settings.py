@@ -1,12 +1,11 @@
 import os
-
 from Components.Language import language
 from Components.config import config, ConfigSubsection, ConfigSelection, \
     ConfigDirectory, ConfigYesNo, ConfigNothing, getConfigListEntry, \
     NoSave
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
 
-from Plugins.Extensions.archivCZSK import log, _
+from Plugins.Extensions.archivCZSK import log, UpdateInfo, _
 from Plugins.Extensions.archivCZSK.engine.player.info import videoPlayerInfo
 from Plugins.Extensions.archivCZSK.engine.tools import stb
 
@@ -111,10 +110,15 @@ config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
 config.plugins.archivCZSK.confirmExit = ConfigYesNo(default=False)
 
+
 def changeLogMode(configElement):
     log.changeMode(int(configElement.value))
+def changeAutoUpdate(configElement):
+    UpdateInfo.resetDates()
 
 config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
+config.plugins.archivCZSK.archivAutoUpdate.addNotifier(changeAutoUpdate)
+config.plugins.archivCZSK.autoUpdate.addNotifier(changeAutoUpdate)
 
 
 

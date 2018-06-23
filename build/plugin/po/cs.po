@@ -17,6 +17,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "(Trakt) Add to Watchlist"
+msgstr "(Trakt) Přidat do Watchlistu"
+msgid "(Trakt) Remove from Watchlist"
+msgstr "(Trakt) Vymazat z Watchlist"
+msgid "(Trakt) Mark as watched"
+msgstr "(Trakt) Označit jako viděno"
+msgid "(Trakt) Mark as not watched"
+msgstr "(Trakt) Označit jako neviděno"
+
+
 msgid "Exit"
 msgstr "Ukončit"
 

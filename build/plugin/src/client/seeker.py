@@ -283,17 +283,22 @@ class StreamCinemaSearch(Search):
 class CsfdSearch():
     def showCSFDInfo(self, session, item):
         try:
-            #name = removeDiacriticsCsfd(item.name)
-            name = removeDiac(item)
+            name = removeDiac(item.name)
+            name = name.replace('.', ' ').replace('_', ' ').replace('*','')
+        
+            # remove languages ... "Mother - CZ, EN, KO (2017)"
+            name = re.sub("\s-\s[A-Z]{2}(,\s[A-Z]{2})*\s\(", " (", name)
+        
             year = 0
             yearStr = ""
             try:
-                mask = re.compile('[0-9]{4}', re.DOTALL)
+                mask = re.compile('([0-9]{4})', re.DOTALL)
                 yearStr = mask.findall(name)[0]
                 year = int(yearStr)
-                name = name.replace(yearStr, '')
             except:
                 pass
+            # remove year
+            name = re.sub("\([0-9]{4}\)","", name)
 
             name = name.strip()
             log.logDebug("Csfd search '%s', year=%s."%(name,year))

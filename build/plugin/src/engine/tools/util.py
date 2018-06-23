@@ -20,8 +20,7 @@ from xml.etree.cElementTree import ElementTree, fromstring
 from twisted.internet import reactor
 from twisted.web.client import Agent, BrowserLikeRedirectAgent, readBody
 from twisted.web.http_headers import Headers
-from Plugins.Extensions.archivCZSK import log
-
+from Plugins.Extensions.archivCZSK import log, removeDiac
 from enigma import eConsoleAppContainer
 
 supported_video_extensions = ('.avi', '.mp4', '.mkv', '.mpeg', '.mpg')
@@ -329,12 +328,15 @@ def encodeFilename(s):
         return s.encode(sys.getfilesystemencoding(), 'ignore')
 
 def sanitize_filename(value):
-    import unicodedata
-    value = toUnicode(value)
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub(r'(?u)[^\w\s.-]', '', value).strip().lower())
-    value = re.sub(r'(?u)[-\s]+', '-', value)
-    return value
+    tmp = removeDiac(value)
+    tmp = unicode(re.sub(r'(?u)[^\w\s.-]', '', tmp).strip().lower())
+    return re.sub(r'(?u)[-\s]+', '-', tmp)
+    #import unicodedata
+    #value = toUnicode(value)
+    #value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    #value = unicode(re.sub(r'(?u)[^\w\s.-]', '', value).strip().lower())
+    #value = re.sub(r'(?u)[-\s]+', '-', value)
+    #return value
 
 def htmlentity_transform(matchobj):
     """Transforms an HTML entity to a Unicode character.

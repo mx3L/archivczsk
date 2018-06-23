@@ -47,7 +47,7 @@ def showCSFDInfo(session, item):
     try:
         #name = removeDiacriticsCsfd(item.name)
         name = removeDiac(item.name)
-        name = name.replace('.', ' ').replace('_', ' ')
+        name = name.replace('.', ' ').replace('_', ' ').replace('*','')
         
         # remove languages ... "Mother - CZ, EN, KO (2017)"
         name = re.sub("\s-\s[A-Z]{2}(,\s[A-Z]{2})*\s\(", " (", name)

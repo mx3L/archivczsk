@@ -16,6 +16,16 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
+msgid "(Trakt) Add to Watchlist"
+msgstr "(Trakt) Pridať do Watchlistu"
+msgid "(Trakt) Remove from Watchlist"
+msgstr "(Trakt) Vymazať z Watchlistu"
+msgid "(Trakt) Mark as watched"
+msgstr "(Trakt) Označiť ako videné"
+msgid "(Trakt) Mark as not watched"
+msgstr "(Trakt) Označiť ako nevidené"
+
+
 msgid "Exit"
 msgstr "Ukončiť"
 

@@ -1,3 +1,13 @@
+archivCZSK 1.1.0, 23.6.2018
+---------------------------------------------
+    - podpora funkcie trakt.tv ak to doplnok umoznuje (stream-cinema) aj pre OE2.5
+	- automaticke oznacenie filmu ako videny po zhliadnuti viac ako 80% (trakt)
+    - znovu vyvolanie kontroly aktualizacie bez nutnosti restartovat box alebo uplynutia 2h
+      (zmenit a ulozit nastavenie povolujuce update na NIE 
+       nasledne ho opat zapnut ANO ulozit vypnut a znovu zapnut archivczsk)
+    - drobne opravy (oprava nazvu suboru pri stiahnuti na HDD, skiny, ...)
+    - zmeny v instalacnom balicku (pre openPLi[ATV] 6.2)
+
 archivCZSK 1.0.7, 14.2.2018
 ---------------------------------------------
     - stahovanie cez curl pre http download

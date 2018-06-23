@@ -1,3 +1,5 @@
+# UPDATE PVER to actual version
+# ./create_ipk_new.sh 20180510 ... [date of release]
 if [ ! "`whoami`" = "root" ]
 then
     echo "*************************** Please run script as root ***************************"
@@ -14,7 +16,7 @@ echo " "
 ##################################
 ############ SETTINGS ############
 ##################################
-ADDONS_COMMIT="4bf4e1d76f92d077c690038b75a34034c5d21090"
+ADDONS_COMMIT="5dfe5f501a659b83695b9977dd45fbe463911a0e"
 PVER="1.0"
 SH4_V="0.1"
 MIPS_V="0.2"
@@ -91,7 +93,7 @@ Architecture: all
 Section: extra
 Priority: optional
 Depends: enigma2-plugin-extensions-subssupport (>=1.5.4)
-Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl, gst-plugins-bad-fragmented, gst-plugins-bad-rtmp, rtmpdump
+Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl, rtmpdump
 Maintainer: mxfitsat@gmail.com
 Homepage: https://github.com/mx3L/archivczsk/releases
 Description: prehravanie CZ/SK archivov ${VER}

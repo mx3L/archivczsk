@@ -47,6 +47,14 @@ def toString(text):
     elif isinstance(text, str):
         return text
 
+class UpdateInfo(object):
+    CHECK_UPDATE_TIMESTAMP = None
+    CHECK_ADDON_UPDATE_TIMESTAMP = None
+
+    @staticmethod
+    def resetDates():
+        UpdateInfo.CHECK_UPDATE_TIMESTAMP = None
+        UpdateInfo.CHECK_ADDON_UPDATE_TIMESTAMP = None
 
 class log(object):
     ERROR = 0

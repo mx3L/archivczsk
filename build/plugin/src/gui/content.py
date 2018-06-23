@@ -793,7 +793,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
                 self.posterChanged = True
             self.lastPoster = videoPoster
             #videoPoster
-            if not os.path.isfile(videoPoster):
+            if not os.path.isfile(videoPoster) and url is not None:
                 isDownloaded = True
                 download_web_file(url, videoPoster)
 

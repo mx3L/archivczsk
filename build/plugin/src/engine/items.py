@@ -116,7 +116,7 @@ class PFolder(PItem):
         PItem.__init__(self)
         self.root = False
         self.thumb = PNG_PATH + '/folder.png'
-
+        self.dataItem = None
 
 class PVideo(PItem):
     def __init__(self):
@@ -149,6 +149,7 @@ class PVideoNotResolved(PVideo):
     def __init__(self):
         PVideo.__init__(self)
         self.thumb = PNG_PATH + '/movie.png'
+        self.dataItem = None
 
 class PNotSupportedVideo(PVideo):
     def __init__(self):

@@ -379,7 +379,7 @@ class DownloadsMixin(object):
                 if answer == "filename":
                     session.openWithCallback(change_filename_callback,
                             VirtualKeyBoard, title = removeDiac(_("Edit filename")),
-                            text = removeDiac(filename[0]))
+                            text = filename[0])
                             #text = toString(filename[0]))
 
         def ask_if_download():
@@ -402,6 +402,7 @@ class DownloadsMixin(object):
         headers = item.settings['extra-headers']
         destination = [self.downloads_path]
         filename = [item.filename or item.name]
+        filename[0] = removeDiac(filename[0])
         ask_if_download()
 
     def remove_download(self, item):
@@ -594,6 +595,7 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
         DownloadsMixin.__init__(self, downloads_path, allowed_download)
         FavoritesMixin.__init__(self, shortcuts_path)
         self._dependencies = []
+        
         self._sys_importer = CustomSysImporter(self.__addon_sys)
         self.on_start.append(self.__clean_sys_modules)
         self.on_start.append(self.__set_resolving_provider)
@@ -702,6 +704,15 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
 
     def get_content(self, session, params, successCB, errorCB):
         log.info('%s get_content - params: %s' % (self, str(params)))
+        # add/remove trakt compatibility on every content request
+        if self.video_addon.setting_exist('trakt_enabled'):
+            if self.video_addon.get_setting('trakt_enabled'):
+                if 'trakt' not in self.capabilities:
+                    self.capabilities.append('trakt')
+            else:
+                if 'trakt' in self.capabilities:
+                    self.capabilities.remove('trakt')
+
         self.__clear_list()
         self.content_deferred = defer.Deferred()
         self.content_deferred.addCallback(self._resolve_video_items)

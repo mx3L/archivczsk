@@ -1,5 +1,5 @@
 #### module for addon creators #####
-
+import traceback
 import twisted.internet.defer as defer
 
 from Screens.MessageBox import MessageBox
@@ -128,7 +128,7 @@ def refresh_screen(restoreLastPosition=True):
         set_command('refreshnow_resetpos')
 
 
-def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False):
+def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False, dataItem=None):
     if search_item: it = PSearchItem()
     elif search_folder: it = PSearch()
     elif video_item: it = PVideoNotResolved()
@@ -153,6 +153,8 @@ def create_directory_it(name, params={}, image=None, infoLabels={}, menuItems={}
             params = value[1]
         it.add_context_menu_item(item_name, thumb=thumb, params=params)
 
+    if hasattr(it, 'dataItem'):
+        it.dataItem = dataItem
     it.info = infolabel_uni
     return it
 
@@ -212,7 +214,7 @@ def create_video_it(name, url, subs=None, image=None, infoLabels={}, menuItems={
     return it
 
 @abortTask
-def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False):
+def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_folder=False, search_item=False, video_item=False, dataItem=None):
     """adds directory item to content screen
 
         @param name : name of the directory
@@ -229,7 +231,8 @@ def add_dir(name, params={}, image=None, infoLabels={}, menuItems={}, search_fol
                              menuItems=menuItems,
                              search_folder=search_folder,
                              search_item=search_item,
-                             video_item=video_item)
+                             video_item=video_item,
+                             dataItem=dataItem)
     GItem_lst[0].append(it)
 
 @abortTask
@@ -269,3 +272,13 @@ def add_playlist(name, media_list=[]):
     for media in media_list:
         playlist.add(media)
     GItem_lst[0].append(playlist)
+
+@abortTask
+def add_operation_result(msg, isError=False):
+     GItem_lst[1] = "RESULT_MSG"
+     GItem_lst[2] = {'msg':msg, 'isError':isError}
+
+@abortTask
+def add_operation(cmd, params):
+    GItem_lst[1] = cmd
+    GItem_lst[2] = params

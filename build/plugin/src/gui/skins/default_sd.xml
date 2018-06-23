@@ -71,9 +71,9 @@
     <widget name="path_label" position="13,55" size="959,32" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
     <eLabel position="13,78" size="959,1" zPosition="1" backgroundColor="#C4C4C4" />
     <eLabel position="610,78" size="1,469" zPosition="1" backgroundColor="#C4C4C4" /> <widget alphatest="on" name="movie_poster_image" position="702,78" size="200,267" transparent="1" backgroundColor="#a08500" />
-    <widget font="Regular;17" foregroundColor="#ffffff" halign="left" name="movie_rating" position="713,348" size="53,16" transparent="1" backgroundColor="#18188b"/>
-    <widget font="Regular;17" foregroundColor="#ffffff" halign="right" name="movie_duration" position="822,348" size="70,16" transparent="1" backgroundColor="#C4C4C4"/>
-    <widget font="Regular;17" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="622,368" size="360,180" transparent="1" backgroundColor="#1f771f"/>
+    <widget font="Regular;17" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="713,348" size="53,16" transparent="1" backgroundColor="#18188b"/>
+    <widget font="Regular;17" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="822,348" size="70,16" transparent="1" backgroundColor="#C4C4C4"/>
+    <widget font="Regular;17" foregroundColor="#ffffff" halign="left" name="movie_plot" position="622,368" size="360,180" transparent="1" backgroundColor="#1f771f"/>
     <widget source="menu" render="Listbox" position="8,91" size="593,433" transparent="1" >
       <convert type="TemplatedMultiContent">
         {"templates":

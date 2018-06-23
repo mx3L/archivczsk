@@ -1,4 +1,5 @@
 import traceback
+import datetime
 from twisted.internet import defer
 
 from Components.config import config
@@ -13,6 +14,7 @@ from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoReso
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
 from enigma import eTimer
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
 
 
 class MediaItemHandler(ItemHandler):
@@ -25,25 +27,33 @@ class MediaItemHandler(ItemHandler):
     def _open_item(self, item, mode='play', *args, **kwargs):
         self.play_item(item, mode, args, kwargs)
 
-    
+    def isValidForTrakt(self, item):
+        if hasattr(item, 'dataItem') and item.dataItem is not None:
+           if 'imdb' in item.dataItem or 'tvdb' in item.dataItem or 'trakt' in item.dataItem:
+               return True
+        return False
+
     # action:
-        #   - play
-        #   - watching /every 10minutes/
-        #   - end
-    def cmdStats(self, item, action, successCB=None, failCB=None):
+    #   - play
+    #   - watching /every 10minutes/
+    #   - end
+    def cmdStats(self, item, action, successCB=None, failCB=None, sendTraktWatchedCmd=False):
         def open_item_success_cb(result):
             log.logDebug("Stats (%s) call success."%action)
-            if paused:
+            if paused and not sendTraktWatchedCmd:
                 self.content_provider.pause()
             if successCB is not None:
                 successCB()
+            if sendTraktWatchedCmd:
+                self.cmdTrakt(item, 'watched', True)
         def open_item_error_cb(failure):
             log.logDebug("Stats (%s) call failed.\n%s"%(action,failure))
-            if paused:
+            if paused and not sendTraktWatchedCmd:
                 self.content_provider.pause()
             if failCB is not None:
                 failCB()
-
+            if sendTraktWatchedCmd:
+                self.cmdTrakt(item, 'watched', True)
         paused = self.content_provider.isPaused()
         try:
             if paused:
@@ -59,6 +69,44 @@ class MediaItemHandler(ItemHandler):
             if failCB is not None:
                 failCB()
             
+    # action:
+    #   - add
+    #   - remove
+    #   - watched
+    #   - unwatched
+    def cmdTrakt(self, item, action, suppressMsg=False):
+        def finishCb(result):
+            if paused:
+                self.content_provider.pause()
+        def open_item_success_cb(result):
+            log.logDebug("Trakt (%s) call success. %s"%(action, result))
+            #OK, ERROR
+            list_items, command, args = result
+            if command is not None and command.lower()=='result_msg' and not suppressMsg:
+                #{'msg':msg, 'isError':isError}
+                if args['isError']:
+                    showErrorMessage(self.session, args['msg'], 10, finishCb)
+                else:
+                    showInfoMessage(self.session, args['msg'], 10, finishCb)
+            else:
+                finishCb(None)
+
+        def open_item_error_cb(failure):
+            log.logDebug("Trakt (%s) call failed. %s"%(action,failure))
+            showErrorMessage(self.session, "Operation failed.", 5, finishCb)
+
+        paused = self.content_provider.isPaused()
+        try:
+            if paused:
+                self.content_provider.resume()
+            
+            ppp = { 'cp': 'czsklib', 'trakt':action, 'item': item.dataItem }
+            # content provider must be in running state (not paused)
+            self.content_provider.get_content(self.session, params=ppp, successCB=open_item_success_cb, errorCB=open_item_error_cb)
+        except:
+            log.logError("Trakt call failed.\n%s"%traceback.format_exc())
+            if paused:
+                self.content_provider.pause()
 
     def play_item(self, item, mode='play', *args, **kwargs):
         def startWatchingTimer():
@@ -72,9 +120,22 @@ class MediaItemHandler(ItemHandler):
                 del self.cmdTimer_conn
             except:
                 log.logDebug("Release cmd timer failed.\n%s" % traceback.format_exc())
+            
+            sendTrakt = False
+            try:
+                if 'trakt' in self.content_provider.capabilities and self.isValidForTrakt(item):
+                    totalSec = (datetime.datetime.now()-playStartAt).total_seconds()
+                    durSec = float(item.dataItem['duration'])
+                    # movie time from start play after 80% then mark as watched
+                    if totalSec >= durSec*0.80:
+                        sendTrakt = True
+                    else:
+                        log.logDebug('Movie not mark as watched ( <80% watch time).')
+            except:
+                log.logError("Trakt AUTO mark as watched failed.\n%s"%traceback.format_exc())
             self.content_screen.workingFinished()
             self.content_provider.resume()
-            self.cmdStats(item, 'end')
+            self.cmdStats(item, 'end', sendTraktWatchedCmd=sendTrakt)
 
         timerPeriod = 10*60*1000 #10min
         self.cmdTimer = eTimer()
@@ -85,6 +146,7 @@ class MediaItemHandler(ItemHandler):
         self.content_provider.play(self.session, item, mode, end_play)
 
         # send command
+        playStartAt = datetime.datetime.now()
         self.cmdStats(item, 'play', successCB=startWatchingTimer)
 
     def download_item(self, item, mode="", *args, **kwargs):
@@ -99,24 +161,19 @@ class MediaItemHandler(ItemHandler):
 
     def _init_menu(self, item):
         provider = self.content_provider
-        if 'play' in provider.capabilities:
-            item.add_context_menu_item(_("Play"),
-                                                        action=self.play_item,
-                                                        params={'item':item,
-                                                        'mode':'play'})
-
-        if 'play_and_download' in provider.capabilities:
-            item.add_context_menu_item(_("Play and Download"),
-                                       action=self.play_item,
-                                       params={'item':item,
-                                                      'mode':'play_and_download'})
+        # TRAKT menu (show only if item got data to handle trakt)
+        if 'trakt' in provider.capabilities and self.isValidForTrakt(item):
+            item.add_context_menu_item(_("(Trakt) Add to Watchlist"), action=self.cmdTrakt, params={'item':item, 'action':'add'})
+            item.add_context_menu_item(_("(Trakt) Remove from Watchlist"), action=self.cmdTrakt, params={'item':item, 'action':'remove'})
+            item.add_context_menu_item(_("(Trakt) Mark as watched"), action=self.cmdTrakt, params={'item':item, 'action':'watched'})
+            item.add_context_menu_item(_("(Trakt) Mark as not watched"), action=self.cmdTrakt, params={'item':item, 'action':'unwatched'})
 
         if 'download' in provider.capabilities:
-            item.add_context_menu_item(_("Download"),
-                                       action=self.download_item,
-                                       params={'item':item,
-                                                      'mode':'auto'})
-
+            item.add_context_menu_item(_("Download"), action=self.download_item, params={'item':item, 'mode':'auto'})
+        if 'play' in provider.capabilities:
+            item.add_context_menu_item(_("Play"), action=self.play_item, params={'item':item, 'mode':'play'})
+        if 'play_and_download' in provider.capabilities:
+            item.add_context_menu_item(_("Play and Download"), action=self.play_item, params={'item':item, 'mode':'play_and_download'})
 
 class VideoResolvedItemHandler(MediaItemHandler):
     handles = (PVideoResolved, )

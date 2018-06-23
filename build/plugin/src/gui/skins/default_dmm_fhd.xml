@@ -32,7 +32,7 @@
     <widget font="Regular; 32" foregroundColor="yellow" halign="center" name="title" position="906,130" size="547,36" transparent="1" />
     <widget font="Regular; 30" foregroundColor="yellow" halign="left" name="author" position="926,516" size="547,36" transparent="1" />
     <widget font="Regular;30" foregroundColor="yellow" halign="left" name="version" position="926,564" size="547,36" transparent="1" />
-    <widget font="Regular;28" foregroundColor="white" halign="left" name="about" position="926,610" size="547,228" transparent="1" />
+    <widget font="Regular;28" foregroundColor="white" halign="left" name="about" position="926,610" size="547,227" transparent="1" />
     <widget name="status_label" position="15,804" size="385,32" font="Regular; 22"  transparent="1" halign="left" valign="center" zPosition="2" foregroundColor="white" />
   </screen>
 
@@ -60,7 +60,7 @@
     </widget>
     <widget font = "Regular; 22" foregroundColor = "white" halign = "left" name = "status_label" position = "15,804" size = "687,32" transparent = "1" valign = "center" zPosition = "2" />
     <widget alphatest="on" name="tip_pixmap" position="11,806" size="44,32" zPosition="2" />
-    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="633,32" transparent="1" valign="center" zPosition="2" />
+    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="830,32" transparent="1" valign="center" zPosition="2" />
   </screen>
 
   <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1478,840" title="ContentMenuScreen">
@@ -72,9 +72,9 @@
     <eLabel position="19,117" size="1438,1" zPosition="1" backgroundColor="#C4C4C4" />
     <eLabel position="915,117" size="1,704" zPosition="1" backgroundColor="#C4C4C4" />
     <widget alphatest="on" name="movie_poster_image" position="1053,117" size="300,400" transparent="1" backgroundColor="#a08500" />
-    <widget font="Regular;26" foregroundColor="#ffffff" halign="left" name="movie_rating" position="1070,515" size="80,24" transparent="1" backgroundColor="#18188b"/>
-    <widget font="Regular;26" foregroundColor="#ffffff" halign="right" name="movie_duration" position="1233,515" size="105,24" transparent="1" backgroundColor="#C4C4C4"/>
-    <widget font="Regular;28" foregroundColor="#ccc91c" halign="left" name="movie_plot" position="933,545" size="540,287" transparent="1" backgroundColor="#1f771f"/>
+    <widget font="Regular;26" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="1070,515" size="80,26" transparent="1" backgroundColor="#18188b"/>
+    <widget font="Regular;26" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="1213,515" size="125,26" transparent="1" backgroundColor="#C4C4C4"/>
+    <widget font="Regular;28" foregroundColor="#ffffff" halign="left" name="movie_plot" position="933,547" size="540,287" transparent="1" backgroundColor="#1f771f"/>
     <widget source="menu" render="Listbox" position="12,137" size="890,656" transparent="1" >
       <convert type="TemplatedMultiContent">
         {"templates":
@@ -90,16 +90,16 @@
         }
       </convert>
     </widget>
-    <widget font = "Regular; 22" foregroundColor = "white" halign = "left" name = "status_label" position = "15,804" size = "687,32" transparent = "1" valign = "center" zPosition = "2" />
+    <widget font = "Regular; 22" foregroundColor = "white" halign = "left" name = "status_label" position = "15,804" size = "830,32" transparent = "1" valign = "center" zPosition = "2" />
     <widget alphatest="on" name="tip_pixmap" position="11,806" size="44,32" zPosition="2" />
-    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="633,32" transparent="1" valign="center" zPosition="2" />
+    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="830,32" transparent="1" valign="center" zPosition="2" />
   </screen>
 
   <screen name="ArchivCZSKItemInfoScreen" position="center,100" size="1200,925" title="Info" >
     <widget name="genre" position="505,50" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
     <widget name="year" position="505,110" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
     <widget name="rating" position="505,170" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
-    <widget name="plot" position="10,510" size="1180,385" font="Regular;30" transparent="1"  foregroundColor="white" />
+    <widget name="plot" position="10,510" size="1180,402" font="Regular;30" transparent="1"  foregroundColor="white" />
     <widget name="img" position="10,0" zPosition="2" size="480,480"  alphatest="on"/>
   </screen>
 
@@ -117,21 +117,21 @@
     <widget name="info_scrolllabel" position="699,173" size="657,545" valign="top" font="Regular; 28"/>
   </screen>
 
-  <screen name="ArchivCZSKContextMenuScreen" position="center,center" size="642,449">
+  <screen name="ArchivCZSKContextMenuScreen" position="center,center" size="642,545">
     <widget name="item_pixmap" position="12,15" size="44,32" alphatest="on" />
     <widget name="item_label" position="67,9" size="575,77" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
     <eLabel position="5,78" size="632,1" backgroundColor="#999999" />
-    <widget name="list" position="5,84" itemHeight="40" scrollbarMode="showOnDemand" size="632,360" />
+    <widget name="list" position="5,84" scrollbarMode="showOnDemand" size="632,445" />
   </screen>
 
-  <screen name="ArchivCZSKSelectSourceScreen" position="center,center" size="642,449">
+  <screen name="ArchivCZSKSelectSourceScreen" position="center,center" size="642,545">
     <!-- <widget name="item_pixmap" position="12,16" size="44,32" alphatest="on" /> -->
     <widget name="item_label" position="5,9" size="632,77" halign="center" foregroundColor="#e5b243" font="Regular; 30" />
     <eLabel position="5,78" size="632,1" backgroundColor="#999999" />
-    <widget name="list" position="5,84" itemHeight="40" scrollbarMode="showOnDemand" size="632,360" />
+    <widget name="list" position="5,84" scrollbarMode="showOnDemand" size="632,445" />
   </screen>
 
-  <screen name="ArchivCZSKSearchClientScreen" position="center,center" size="652,520">
+  <screen name="ArchivCZSKSearchClientScreen" position="center,center" size="652,610">
     <ePixmap name="search_pixmap" position="12,16" size="74,64" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/search.png" />
     <widget name="search" position="103,16" size="515,78" foregroundColor="#e5b243" halign="center" font="Regular; 33" />
     <ePixmap name="red_pixmap" position="12,115" size="44,34" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/red.png" />
@@ -140,7 +140,7 @@
     <widget source="green_label" render="Label" position="64,154" size="424,35" font="Regular;29" halign="left" backgroundColor="background"  transparent="1"/>
     <ePixmap name="blue_pixmap" position="12,192" size="44,34" zPosition="0" alphatest="blend" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK/gui/icon/blue.png" />
     <widget source="blue_label" render="Label" position="64,192" size="424,35" font="Regular;29" halign="left" backgroundColor="background"  transparent="1"/>
-    <widget source="menu" render="Listbox" position="10,266" size="632,246" transparent="1" >
+    <widget source="menu" render="Listbox" position="10,266" size="632,330" transparent="1" >
       <convert type="TemplatedMultiContent">
         {"templates":
         {"default": (41,
@@ -163,7 +163,7 @@
     <widget backgroundColor="#18188b" font="Regular;30" halign="center" name="key_blue" position="868,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
     <eLabel position="5,67" size="1468,1" backgroundColor="#ffffff" />
     <widget name="categories" position="10,71" size="1134,57" tab_size="276,57" spaceWidth="10" tab_fontInactive="Regular;28" tab_fontActive="Regular;30" tab_backgroundColorActive="#000000" tab_backgroundColorInactive="#000000" />
-    <widget name="config" position="10,136" size="1134,604" itemHeight="40" scrollbarMode="showOnDemand" />
+    <widget name="config" position="10,136" size="1134,604" scrollbarMode="showOnDemand" />
   </screen>
 
   <screen name="ArchivCZSKChangelogScreen" position="center,center" size="1478,840" title="Info" >
@@ -242,10 +242,10 @@
       <convert type="TemplatedMultiContent">
         {"templates":
         {"default": (41, [
-        MultiContentEntryText(pos=(5,0),size=(1147,45),font=0,flags=RT_HALIGN_LEFT|RT_VALIGN_CENTER,text=0)
+        MultiContentEntryText(pos=(5,-3),size=(1147,45),font=0,flags=RT_HALIGN_LEFT|RT_VALIGN_CENTER,text=0)
         ], True, "showNever")
         },
-        "fonts": [gFont("Regular", 27)],
+        "fonts": [gFont("Regular", 30)],
         "itemHeight": 50
         }
       </convert>
@@ -255,7 +255,7 @@
 
   <screen name="ArchivCZSKChoiceBox" position="center,center" size="907,514">
     <widget name="text" position="12,12" size="897,32" foregroundColor="#e5b243" font="Regular; 30" />
-    <widget name="list" position="5,78" size="897,400" itemHeight="40" scrollbarMode="showOnDemand" />
+    <widget name="list" position="5,78" size="897,400" scrollbarMode="showOnDemand" />
   </screen>
 
 
