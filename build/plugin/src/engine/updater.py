@@ -56,6 +56,8 @@ class ArchivUpdater(object):
     def downloadCommit(self):
         try:
             self.commitFilePath = os.path.join(os.path.dirname(self.tmpPath), 'archivczsk.commit')
+            if os.path.exists(self.commitFilePath):
+                os.remove(self.commitFilePath)
             self.__console = Console()
             self.__console.ePopen('curl -kfo %s %s' % (self.commitFilePath, self.commit), self.checkCommit)
         except:
@@ -64,7 +66,7 @@ class ArchivUpdater(object):
 
     def checkCommit(self, data, retval, extra_args):
         try:
-            if retval == 0:
+            if retval == 0 and os.path.exists(self.commitFilePath):
                 self.doWork()
             else:
                 log.logError("ArchivUpdater check commit failed. %s ### retval=%s"%(data, retval))
