@@ -1,3 +1,8 @@
+archivCZSK 1.1.1, 26.8.2018
+---------------------------------------------
+    - oprava hlasky stahovaneho suboru
+    - oprava kontroly aktualizacii
+
 archivCZSK 1.1.0, 23.6.2018
 ---------------------------------------------
     - podpora funkcie trakt.tv ak to doplnok umoznuje (stream-cinema) aj pre OE2.5

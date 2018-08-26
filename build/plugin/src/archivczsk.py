@@ -182,6 +182,8 @@ class ArchivCZSK():
         try:
             log.logInfo("Checking addons update...")
             path = os.path.join(os.path.dirname(__file__), 'commit')
+            if os.path.exists(path):
+                os.remove(path)
             self.__console = Console()
             self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
         except:
@@ -189,7 +191,7 @@ class ArchivCZSK():
             self.open_archive_screen()
 
     def check_commit_download(self, data, retval, extra_args):
-        if retval == 0:
+        if retval == 0 and os.path.exists(os.path.join(os.path.dirname(__file__), 'commit')):
             self.check_addon_updates()
         else:
             log.error("commit not downloaded")

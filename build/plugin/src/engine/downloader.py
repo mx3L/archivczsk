@@ -192,7 +192,7 @@ class DownloadStatus():
 class Download(object):
     def __init__(self, name, url, destDir, filename, quiet):
         self.url = url
-        self.name = name
+        self.name = toString(filename) #name
         self.filename = toString(filename)
         self.destDir = destDir
         self.local = os.path.join(destDir, filename).encode('ascii', 'ignore')
