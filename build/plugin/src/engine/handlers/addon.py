@@ -12,6 +12,7 @@ from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectCategorySc
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PRoot, PFolder, PVideoAddon, PCategoryVideoAddon
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
 from Components.config import config
 
 class VideoAddonItemHandlerTemplate(ItemHandler):
@@ -22,7 +23,45 @@ class VideoAddonItemHandlerTemplate(ItemHandler):
     def _open_item(self, item, *args, **kwargs):
 
         def open_item_success_cb(result):
+            def continue_cb(res):
+                list_items.insert(0, PExit())
+                self.content_screen.resolveCommand(command, args)
+                self.content_screen.stopLoading()
+                self.open_video_addon(item.addon, list_items)
+
             list_items, command, args = result
+            try:
+                #client.add_operation("SHOW_MSG", {'msg': 'some text'},
+                #                                  'msgType': 'info|error|warning',     #optional
+                #                                  'msgTimeout': 10,                    #optional
+                #                                  'canClose': True                     #optional
+                #                                 })
+
+                if command is not None:
+                   cmd = ("%s"%command).lower()
+                   params = args
+                   if cmd == "show_msg":
+                       #dialogStart = datetime.datetime.now()
+                       self.content_screen.stopLoading()
+                       msgType = 'info'
+                       if 'msgType' in args:
+                           msgType = ("%s"%args['msgType']).lower()
+                       msgTimeout = 15
+                       if 'msgTimeout' in args:
+                           msgTimeout = int(args['msgTimeout'])
+                       canClose = True
+                       if 'canClose' in args:
+                           canClose = args['canClose']
+                       if msgType == 'error':
+                           return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                       if msgType == 'warning':
+                           return showWarningMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                       return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+            except:
+                log.logError("Execute HACK command failed (addon handler).\n%s"%traceback.format_exc())
+                command = None
+                args = {}
+
             list_items.insert(0, PExit())
             self.content_screen.resolveCommand(command, args)
             self.content_screen.stopLoading()

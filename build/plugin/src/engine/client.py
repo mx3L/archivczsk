@@ -280,5 +280,6 @@ def add_operation_result(msg, isError=False):
 
 @abortTask
 def add_operation(cmd, params):
+    log.logDebug("add_operation hit %s"%cmd)
     GItem_lst[1] = cmd
     GItem_lst[2] = params

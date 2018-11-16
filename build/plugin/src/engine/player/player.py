@@ -123,6 +123,7 @@ class Player(object):
 
     def play_stream(self, play_url, play_settings=None, subtitles_url=None, title=None, wholeItem=None):
         log.info("play_stream(%s, %s, %s, %s)"%(play_url, play_settings, subtitles_url, title))
+        log.logDebug("play_stream(%s, %s, %s, %s)"%(play_url, play_settings, subtitles_url, title))
         if play_url.startswith("rtmp"):
             rtmp_timeout = int(self.settings.rtmpTimeout.value)
             rtmp_buffer = int(self.settings.rtmpBuffer.value)
@@ -308,6 +309,7 @@ class InfoBarAspectChange(object):
 
     def setAspect(self, aspect, policy, policy2):
         log.info('aspect: %s policy: %s policy2: %s' % (str(aspect), str(policy), str(policy2)))
+        log.logDebug('aspect: %s policy: %s policy2: %s' % (str(aspect), str(policy), str(policy2)))
         if aspect:
             try:
                 open("/proc/stb/video/aspect", "w").write(aspect)

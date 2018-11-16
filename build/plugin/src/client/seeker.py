@@ -6,10 +6,12 @@ Created on 11.1.2013
 #from Plugins.Plugin import PluginDescriptor
 
 import traceback
+import re
 from Screens.MessageBox import MessageBox   
 from Plugins.Extensions.archivCZSK import _, log, removeDiac
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
 from Components.config import config
+
 
 
 
@@ -151,6 +153,9 @@ class ArchivCZSKSeeker():
         if addon_id.lower() == 'csfd':
             CsfdSearch().showCSFDInfo(self.session, search_exp)
             return self.cb()
+        elif addon_id.lower() == 'internalcsfd':
+
+            return self.cb()
         else:
             searcher = getSearcher(self.session, addon_id, self.archivCZSK, self._successSearch, self._errorSearch)
             if searcher is not None:
@@ -281,9 +286,9 @@ class StreamCinemaSearch(Search):
         params = {'search':search_exp, 'search-no-history':True}
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
 class CsfdSearch():
-    def showCSFDInfo(self, session, item):
+    def showCSFDInfo(self, session, searchExp):
         try:
-            name = removeDiac(item.name)
+            name = removeDiac(searchExp)
             name = name.replace('.', ' ').replace('_', ' ').replace('*','')
         
             # remove languages ... "Mother - CZ, EN, KO (2017)"

@@ -8,14 +8,17 @@ import socket
 import sys
 import operator
 import traceback
+import urllib2
 
 from shutil import copyfile
 from twisted.python import failure
 from twisted.internet import defer
 from xml.etree.cElementTree import ElementTree
 
+
 from Screens.LocationBox import LocationBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
+from Components.Console import Console
 from Components.config import config, ConfigSelection
 from Plugins.Extensions.archivCZSK import _, log, settings, version as aczsk, removeDiac
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback, MessageBox
@@ -25,7 +28,7 @@ from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_E
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
 from Plugins.Extensions.archivCZSK.engine.player.player import Player 
 from Plugins.Extensions.archivCZSK.resources.repositories import repo_modules
-from Plugins.Extensions.archivCZSK.engine.tools.util import toString, is_hls_url, url_get_data_async, get_streams_from_manifest
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString, is_hls_url, url_get_data_async, get_streams_from_manifest, download_web_file
 from downloader import DownloadManager
 from items import PVideo, PFolder, PPlaylist, PDownload, PCategory, PVideoAddon, \
     PCategoryVideoAddon, PUserCategory, Stream, RtmpStream, PVideoResolved
@@ -111,7 +114,9 @@ class ContentProvider(object):
         return self.__paused
 
     def start(self):
+        log.logDebug("ContentProvider start")
         if self.__started:
+            log.logDebug("[%s] cannot start, provider is already started"%self)
             log.debug("[%s] cannot start, provider is already started",self)
             return
         self.__started = True
@@ -121,7 +126,9 @@ class ContentProvider(object):
         log.debug("[%s] started", self)
 
     def stop(self):
+        log.logDebug("ContentProvider stop")
         if not self.__started:
+            log.logDebug("[%s] cannot stop, provider is already stopped"%self)
             log.debug("[%s] cannot stop, provider is already stopped",self)
             return
         self.__started = False
@@ -131,10 +138,13 @@ class ContentProvider(object):
         log.debug("[%s] stopped", self)
 
     def resume(self):
+        log.logDebug("ContentProvider resume")
         if not self.__started:
+            log.logDebug("[%s] cannot resume, provider not started yet"%self)
             log.debug("[%s] cannot resume, provider not started yet",self)
             return
         if not self.__paused:
+            log.logDebug("[%s] cannot resume, provider is already running"%self)
             log.debug("[%s] cannot resume, provider is already running",self)
             return
         self.__paused = False
@@ -143,10 +153,13 @@ class ContentProvider(object):
         log.debug("[%s] resumed", self)
 
     def pause(self):
+        log.logDebug("ContentProvider pause")
         if not self.__started:
+            log.logDebug("[%s] cannot pause, provider not started yet"%self)
             log.debug("[%s] cannot pause, provider not started yet",self)
             return
         if self.__paused:
+            log.logDebug("[%s] cannot pause, provider is already paused"%self)
             log.debug("[%s] cannot pause, provider is already paused",self)
             return
         self.__paused = True
@@ -166,10 +179,11 @@ class PlayMixin(object):
         self.player = Player(session, player_callback, self)
         if mode in self.capabilities:
             if mode == 'play':
-                try:
-                    self.player.play_item(item)
-                except:
-                    traceback.print_exc()
+                self.handle_substitles_and_play(item)
+                #try:
+                #    self.player.play_item(item)
+                #except:
+                #    traceback.print_exc()
             elif mode == 'play_and_download':
                 try:
                     self.play_and_download(session, item, "auto", player_callback)
@@ -177,6 +191,44 @@ class PlayMixin(object):
                     traceback.print_exc()
         else:
             log.error('Invalid playing mode - %s', str(mode))
+
+    def handle_substitles_and_play(self, item):
+        def check_download(self, data, retval, extra_args):
+            self.__console = None
+            log.logDebug("Handle subs check download finish... retval=%s, fname=%s"%(retval, fname))
+            if retval == 0 and os.path.exists(fname):
+                item.subs = fname
+            self.player.play_item(item)
+
+        try:
+            subs = "%s"%item.subs
+            if subs.startswith('http'):
+                spl = subs.split('/')
+                fname = os.path.join(config.plugins.archivCZSK.tmpPath.getValue(), spl[len(spl)-1])
+                try:
+                            
+                    download_web_file(subs, fname)
+                    item.subs = fname
+                    self.player.play_item(item)
+                except urllib2.URLError: #SSL cert problem
+                    if subs.startswith('https:\\'): # only for https
+                        log.logDebug("Handle substitle file failed (try download by CURL).\n%s"%traceback.format_exc())
+                        # download file by CURL
+                        self.__console = Console()
+                        self.__console.ePopen('curl -kfo %s %s' % (fname, subs), check_download)
+                    else:
+                        log.logError("Handle substitle file failed.\n%s"%traceback.format_exc())
+                        self.player.play_item(item)
+                except:
+                    log.logError("Handle substitle file failed.\n%s"%traceback.format_exc())
+                    self.player.play_item(item)
+            else:
+                self.player.play_item(item)
+        except:
+            log.logError("Handle substitle file failed.\n%s"%traceback.format_exc())
+            self.player.play_item(item)
+
+
 
     def play_and_download(self, session, item, mode, player_callback=None, prefill_buffer=20*1024*1024):
 
@@ -194,7 +246,7 @@ class PlayMixin(object):
                 video_item = PVideo()
                 video_item.name = item.name
                 video_item.url = download_obj[0].local
-                # TODO subs should point to local path
+                # TODO subs should point to local path download to path where is movie
                 video_item.subs = item.subs
                 self.player.play_item(video_item)
 

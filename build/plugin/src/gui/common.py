@@ -613,23 +613,23 @@ class ButtonLabel(MultiColorLabel):
         self.setBackgroundColorNum(idx)
 
 
-def showInfoMessage(session, message, timeout=3, cb=None):
+def showInfoMessage(session, message, timeout=3, cb=None, closeOnAnyKey = False, enableInput = True):
     if cb is not None:
-        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_INFO)
+        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_INFO, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
     else:
-        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_INFO)
+        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_INFO, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
 
-def showWarningMessage(session, message, timeout=3, cb=None):
+def showWarningMessage(session, message, timeout=3, cb=None, closeOnAnyKey = False, enableInput = True):
     if cb is not None:
-        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_WARNING)
+        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_WARNING, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
     else:
-        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_WARNING)
+        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_WARNING, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
 
-def showErrorMessage(session, message, timeout=3, cb=None):
+def showErrorMessage(session, message, timeout=3, cb=None, closeOnAnyKey = False, enableInput = True):
     if cb is not None:
-        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_ERROR)
+        session.openWithCallback(cb, MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_ERROR, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
     else:
-        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_ERROR)
+        session.open(MessageBox, text=toString(message), timeout=timeout, type=MessageBox.TYPE_ERROR, close_on_any_key=closeOnAnyKey, enable_input=enableInput)
 
 def showYesNoDialog(session, message, cb):
     session.openWithCallback(cb, MessageBox, text=toString(message), type=MessageBox.TYPE_YESNO)

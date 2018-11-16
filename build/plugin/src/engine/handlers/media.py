@@ -33,27 +33,20 @@ class MediaItemHandler(ItemHandler):
                return True
         return False
 
+    
     # action:
     #   - play
     #   - watching /every 10minutes/
     #   - end
-    def cmdStats(self, item, action, successCB=None, failCB=None, sendTraktWatchedCmd=False):
-        def open_item_success_cb(result):
-            log.logDebug("Stats (%s) call success."%action)
+    def cmdStats(self, item, action, finishCB=None, sendTraktWatchedCmd=False):
+        def open_item_finish(result):
+            log.logDebug("Stats (%s) call finished.\n%s"%(action,result))
             if paused and not sendTraktWatchedCmd:
                 self.content_provider.pause()
-            if successCB is not None:
-                successCB()
             if sendTraktWatchedCmd:
-                self.cmdTrakt(item, 'watched', True)
-        def open_item_error_cb(failure):
-            log.logDebug("Stats (%s) call failed.\n%s"%(action,failure))
-            if paused and not sendTraktWatchedCmd:
-                self.content_provider.pause()
-            if failCB is not None:
-                failCB()
-            if sendTraktWatchedCmd:
-                self.cmdTrakt(item, 'watched', True)
+                return self.cmdTrakt(item, 'watched', finishCB)
+            elif finishCB is not None:
+                finishCB()
         paused = self.content_provider.isPaused()
         try:
             if paused:
@@ -61,39 +54,36 @@ class MediaItemHandler(ItemHandler):
             
             ppp = { 'cp': 'czsklib', 'stats':action, 'item': item.dataItem }
             # content provider must be in running state (not paused)
-            self.content_provider.get_content(self.session, params=ppp, successCB=open_item_success_cb, errorCB=open_item_error_cb)
+            self.content_provider.get_content(self.session, params=ppp, successCB=open_item_finish, errorCB=open_item_finish)
         except:
             log.logError("Stats call failed.\n%s"%traceback.format_exc())
             if paused:
                 self.content_provider.pause()
-            if failCB is not None:
-                failCB()
+            if finishCB is not None:
+                finishCB()
             
     # action:
     #   - add
     #   - remove
     #   - watched
     #   - unwatched
-    def cmdTrakt(self, item, action, suppressMsg=False):
+    def cmdTrakt(self, item, action, finishedCB=None):
         def finishCb(result):
             if paused:
                 self.content_provider.pause()
+            if finishedCB is not None:
+                finishedCB()
         def open_item_success_cb(result):
             log.logDebug("Trakt (%s) call success. %s"%(action, result))
             #OK, ERROR
             list_items, command, args = result
-            if command is not None and command.lower()=='result_msg' and not suppressMsg:
-                #{'msg':msg, 'isError':isError}
-                if args['isError']:
-                    showErrorMessage(self.session, args['msg'], 10, finishCb)
-                else:
-                    showInfoMessage(self.session, args['msg'], 10, finishCb)
+            if args['isError']:
+                return showErrorMessage(self.session, args['msg'], 10, finishCb)
             else:
-                finishCb(None)
-
+                return showInfoMessage(self.session, args['msg'], 10, finishCb)
         def open_item_error_cb(failure):
             log.logDebug("Trakt (%s) call failed. %s"%(action,failure))
-            showErrorMessage(self.session, "Operation failed.", 5, finishCb)
+            return showErrorMessage(self.session, "Operation failed.", 10, finishCb)
 
         paused = self.content_provider.isPaused()
         try:
@@ -107,13 +97,19 @@ class MediaItemHandler(ItemHandler):
             log.logError("Trakt call failed.\n%s"%traceback.format_exc())
             if paused:
                 self.content_provider.pause()
+            if finishedCB is not None:
+                finishedCB()
 
     def play_item(self, item, mode='play', *args, **kwargs):
+        def endPlayFinish():
+            self.content_screen.workingFinished()
+            self.content_provider.resume()
         def startWatchingTimer():
             self.cmdTimer.start(timerPeriod)
         def timerEvent():
             self.cmdStats(item, 'watching')
         def end_play():
+            # @TODO toto sa tak ci tak zjebe ked sa posiela trakt a stlaca sa exit tak to znova zavola dalsie vlakno a potom je crash
             try:
                 self.cmdTimer.stop()
                 del self.cmdTimer
@@ -133,9 +129,10 @@ class MediaItemHandler(ItemHandler):
                         log.logDebug('Movie not mark as watched ( <80% watch time).')
             except:
                 log.logError("Trakt AUTO mark as watched failed.\n%s"%traceback.format_exc())
-            self.content_screen.workingFinished()
-            self.content_provider.resume()
-            self.cmdStats(item, 'end', sendTraktWatchedCmd=sendTrakt)
+
+            # na DEBUG
+            #sendTrakt = True
+            self.cmdStats(item, 'end', finishCB=endPlayFinish, sendTraktWatchedCmd=sendTrakt)
 
         timerPeriod = 10*60*1000 #10min
         self.cmdTimer = eTimer()
@@ -147,7 +144,7 @@ class MediaItemHandler(ItemHandler):
 
         # send command
         playStartAt = datetime.datetime.now()
-        self.cmdStats(item, 'play', successCB=startWatchingTimer)
+        self.cmdStats(item, 'play', finishCB=startWatchingTimer)
 
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
@@ -242,9 +239,66 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
                 self.content_screen.workingFinished()
 
         def open_item_success_cb(result):
+            def continue_cb(res):
+                self._filter_by_quality(list_items)
+                if len(list_items) > 1:
+                    choices = []
+                    for i in list_items:
+                        name = i.name
+                        # TODO remove workaround of embedding
+                        # quality in title in addons
+                        if i.quality and i.quality not in i.name:
+                            if "[???]" in i.name:
+                                name = i.name.replace("[???]","[%s]"%(i.quality))
+                            else:
+                                name = "[%s] %s"%(i.quality, i.name)
+                        choices.append((toString(name), i))
+                    self.session.openWithCallback(selected_source,
+                            ChoiceBox, _("Please select source"),
+                            list = choices,
+                            skin_name = ["ArchivCZSKVideoSourceSelection"])
+                elif len(list_items) == 1:
+                    item = list_items[0]
+                    callback(item)
+                else: # no video
+                    self.content_screen.workingFinished()
+
             self.content_screen.stopLoading()
             self.content_screen.showList()
-            list_items, __, __ = result
+            list_items, command, args = result
+
+            try:
+                #client.add_operation("SHOW_MSG", {'msg': 'some text'},
+                #                                  'msgType': 'info|error|warning',     #optional
+                #                                  'msgTimeout': 10,                    #optional
+                #                                  'canClose': True                     #optional
+                #                                 })
+
+                if command is not None:
+                   cmd = ("%s"%command).lower()
+                   params = args
+                   if cmd == "show_msg":
+                       #dialogStart = datetime.datetime.now()
+                       self.content_screen.stopLoading()
+                       msgType = 'info'
+                       if 'msgType' in args:
+                           msgType = ("%s"%args['msgType']).lower()
+                       msgTimeout = 15
+                       if 'msgTimeout' in args:
+                           msgTimeout = int(args['msgTimeout'])
+                       canClose = True
+                       if 'canClose' in args:
+                           canClose = args['canClose']
+                       if msgType == 'error':
+                           return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                       if msgType == 'warning':
+                           return showWarningMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                       return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+            except:
+                log.logError("Execute HACK command failed (media handler).\n%s"%traceback.format_exc())
+                command = None
+                args = {}
+
             self._filter_by_quality(list_items)
             if len(list_items) > 1:
                 choices = []
@@ -274,6 +328,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
             self.content_screen.showList()
             self.content_screen.workingFinished()
             failure.raiseException()
+
         self.content_screen.hideList()
         self.content_screen.startLoading()
         self.content_screen.workingStarted()

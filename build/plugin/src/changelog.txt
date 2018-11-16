@@ -1,3 +1,10 @@
+archivCZSK 1.1.2, 14.11.2018
+---------------------------------------------
+    - uprava handlingu zobrazovania message boxov
+    - uprava spravania pre Trakt.tv
+    - upravene stahovanie titulkov ak su k streamu poskytnute
+    - oprava priameho hladania v CSFD z EPG
+
 archivCZSK 1.1.1, 26.8.2018
 ---------------------------------------------
     - oprava hlasky stahovaneho suboru
@@ -6,7 +13,7 @@ archivCZSK 1.1.1, 26.8.2018
 archivCZSK 1.1.0, 23.6.2018
 ---------------------------------------------
     - podpora funkcie trakt.tv ak to doplnok umoznuje (stream-cinema) aj pre OE2.5
-	- automaticke oznacenie filmu ako videny po zhliadnuti viac ako 80% (trakt)
+    - automaticke oznacenie filmu ako videny po zhliadnuti viac ako 80% (trakt)
     - znovu vyvolanie kontroly aktualizacie bez nutnosti restartovat box alebo uplynutia 2h
       (zmenit a ulozit nastavenie povolujuce update na NIE 
        nasledne ho opat zapnut ANO ulozit vypnut a znovu zapnut archivczsk)
