@@ -8,6 +8,7 @@ from Plugins.Extensions.archivCZSK.gsession import GlobalSession
 from Plugins.Extensions.archivCZSK.gui.search import ArchivCZSKSearchClientScreen
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 
+
 NAME = _("ArchivCZSK")
 DESCRIPTION = _("Playing CZ/SK archives")
 
@@ -32,6 +33,12 @@ def menu(menuid, **kwargs):
 def eventInfo(session, servicelist, **kwargs):
     ref = session.nav.getCurrentlyPlayingServiceReference()
     session.open(ArchivCZSKSearchClientScreen, ref)
+def osrefresh(session, servicelist, **kwargs):
+    try:
+        from Plugins.Extensions.archivCZSK.osref import OSRefresh
+        OSRefresh(session).refresh()
+    except:
+        pass
 
 def Plugins(path, **kwargs):
     list = [PluginDescriptor(where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionStart),
@@ -44,6 +51,8 @@ def Plugins(path, **kwargs):
         list.append(PluginDescriptor(NAME, description=DESCRIPTION, where=PluginDescriptor.WHERE_MENU, fnc=menu))
     if config.plugins.archivCZSK.epg_menu.value:
         list.append(PluginDescriptor(_("Search in ArchivCZSK"), where=PluginDescriptor.WHERE_EVENTINFO, fnc=eventInfo))
+
+    list.append(PluginDescriptor("OS_refresh", where=PluginDescriptor.WHERE_EVENTINFO, fnc=osrefresh))
     return list
 
 if config.plugins.archivCZSK.preload.value and not ArchivCZSK.isLoaded():
