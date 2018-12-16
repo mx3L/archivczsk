@@ -5,7 +5,7 @@ from item import ItemHandler
 from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PFolder, PSearchItem, PSearch
-from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage, showWarningMessage
 
 
 class FolderItemHandler(ItemHandler):
@@ -143,7 +143,7 @@ class FolderItemHandler(ItemHandler):
                        if 'canClose' in args:
                            canClose = args['canClose']
                        if msgType == 'error':
-                           return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb_normal, enableInput=canClose)
+                           return showErrorMessage(self.session, args['msg'], msgTimeout, continue_cb_normal, enableInput=canClose)
                        if msgType == 'warning':
                            return showWarningMessage(self.session, args['msg'], msgTimeout, continue_cb_normal, enableInput=canClose)
                        return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb_normal, enableInput=canClose)

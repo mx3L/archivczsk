@@ -14,7 +14,7 @@ from Plugins.Extensions.archivCZSK.engine.items import PExit, PVideo, PVideoReso
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString
 from enigma import eTimer
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
-from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage, showWarningMessage
 
 
 class MediaItemHandler(ItemHandler):
@@ -132,7 +132,10 @@ class MediaItemHandler(ItemHandler):
 
             # na DEBUG
             #sendTrakt = True
-            self.cmdStats(item, 'end', finishCB=endPlayFinish, sendTraktWatchedCmd=sendTrakt)
+            if 'stats' in self.content_provider.capabilities:
+                self.cmdStats(item, 'end', finishCB=endPlayFinish, sendTraktWatchedCmd=sendTrakt)
+            else:
+                endPlayFinish()
 
         timerPeriod = 10*60*1000 #10min
         self.cmdTimer = eTimer()
@@ -143,8 +146,9 @@ class MediaItemHandler(ItemHandler):
         self.content_provider.play(self.session, item, mode, end_play)
 
         # send command
-        playStartAt = datetime.datetime.now()
-        self.cmdStats(item, 'play', finishCB=startWatchingTimer)
+        if 'stats' in self.content_provider.capabilities:
+            playStartAt = datetime.datetime.now()
+            self.cmdStats(item, 'play', finishCB=startWatchingTimer)
 
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
@@ -290,7 +294,7 @@ class VideoNotResolvedItemHandler(MediaItemHandler):
                        if 'canClose' in args:
                            canClose = args['canClose']
                        if msgType == 'error':
-                           return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                           return showErrorMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
                        if msgType == 'warning':
                            return showWarningMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
                        return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)

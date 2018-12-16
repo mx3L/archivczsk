@@ -201,7 +201,9 @@ class PlayMixin(object):
             self.player.play_item(item)
 
         try:
-            subs = "%s"%item.subs
+            subs = ''
+            if not isinstance(item, PPlaylist) and hasattr(item, 'subs'):
+                subs = "%s"%item.subs
             if subs.startswith('http'):
                 spl = subs.split('/')
                 fname = os.path.join(config.plugins.archivCZSK.tmpPath.getValue(), spl[len(spl)-1])

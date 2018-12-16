@@ -12,7 +12,7 @@ from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectCategorySc
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PRoot, PFolder, PVideoAddon, PCategoryVideoAddon
 from Plugins.Extensions.archivCZSK.gui.exception import AddonExceptionHandler
-from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showErrorMessage
+from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage, showWarningMessage, showErrorMessage
 from Components.config import config
 
 class VideoAddonItemHandlerTemplate(ItemHandler):
@@ -53,7 +53,7 @@ class VideoAddonItemHandlerTemplate(ItemHandler):
                        if 'canClose' in args:
                            canClose = args['canClose']
                        if msgType == 'error':
-                           return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
+                           return showErrorMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
                        if msgType == 'warning':
                            return showWarningMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
                        return showInfoMessage(self.session, args['msg'], msgTimeout, continue_cb, enableInput=canClose)
