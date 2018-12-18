@@ -132,10 +132,7 @@ class MediaItemHandler(ItemHandler):
 
             # na DEBUG
             #sendTrakt = True
-            if 'stats' in self.content_provider.capabilities:
-                self.cmdStats(item, 'end', finishCB=endPlayFinish, sendTraktWatchedCmd=sendTrakt)
-            else:
-                endPlayFinish()
+            self.cmdStats(item, 'end', finishCB=endPlayFinish, sendTraktWatchedCmd=sendTrakt)
 
         timerPeriod = 10*60*1000 #10min
         self.cmdTimer = eTimer()
@@ -146,9 +143,8 @@ class MediaItemHandler(ItemHandler):
         self.content_provider.play(self.session, item, mode, end_play)
 
         # send command
-        if 'stats' in self.content_provider.capabilities:
-            playStartAt = datetime.datetime.now()
-            self.cmdStats(item, 'play', finishCB=startWatchingTimer)
+        playStartAt = datetime.datetime.now()
+        self.cmdStats(item, 'play', finishCB=startWatchingTimer)
 
     def download_item(self, item, mode="", *args, **kwargs):
         @DownloadExceptionHandler(self.session)
