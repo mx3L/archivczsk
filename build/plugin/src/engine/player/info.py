@@ -165,9 +165,8 @@ class VideoPlayerInfo(object):
         if self.type == 'gstreamer':
             httplib = os.path.join(GSTREAMER_PATH, 'libgstsouphttpsrc.so')
             httplib2 = os.path.join(GSTREAMER10_PATH, 'libgstsouphttpsrc.so')
-            if not os.path.isfile(httplib2):
-                httplib2 = os.path.join(GSTREAMER10_PATH, 'libgstsoup.so')
-            if os.path.isfile(httplib) or os.path.isfile(httplib2):
+            souplib = os.path.join(GSTREAMER10_PATH, 'libgstsoup.so')
+            if os.path.isfile(httplib) or os.path.isfile(httplib2) or os.path.isfile(souplib):
                 log.logDebug("HTTP supported")
                 return True
             log.logDebug("HTTP not supported, missing file '/usr/lib/gstreamer-*/libgstsouphttpsrc.so' or '/usr/lib/gstreamer-*/libgstsoup.so'")
@@ -190,9 +189,8 @@ class VideoPlayerInfo(object):
         if self.type == 'gstreamer':
             fragmentedlib = os.path.join(GSTREAMER_PATH, 'libgstfragmented.so')
             fragmentedlib2 = os.path.join(GSTREAMER10_PATH, 'libgstfragmented.so')
-            if not os.path.isfile(fragmentedlib2):
-                fragmentedlib2 = os.path.join(GSTREAMER10_PATH, 'libgsthls.so')
-            if os.path.isfile(fragmentedlib) or os.path.isfile(fragmentedlib2):
+            hlslib = os.path.join(GSTREAMER10_PATH, 'libgsthls.so')
+            if os.path.isfile(fragmentedlib) or os.path.isfile(fragmentedlib2) or os.path.isfile(hlslib):
                 log.logDebug("HLS supported")
                 return True
             log.logDebug("HLS not supported, missing file '/usr/lib/gstreamer-*/libgstfragmented.so' or '/usr/lib/gstreamer-*/libgsthls.so'")
