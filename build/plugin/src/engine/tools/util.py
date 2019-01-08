@@ -388,8 +388,10 @@ class Language(object):
             return None
 
 def get_streams_from_manifest(url, manifest_data):
+    # make sure manifest_data is a string
+    manifest_data_str = str(manifest_data)
     for m in re.finditer(r'^#EXT-X-STREAM-INF:(?P<info>.+)\n(?P<chunk>.+)',
-            manifest_data, re.MULTILINE):
+            manifest_data_str, re.MULTILINE):
         stream_info = {}
         for info in re.split(r''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', m.group('info')):
             key, val = info.split('=', 1)
