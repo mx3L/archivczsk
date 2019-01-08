@@ -723,7 +723,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
                 ext = ""
                 if '.' in fname:
                     idx = fname.rindex('.')
-                    ext = fname[idx:][0:4]
+                    ext = fname[idx:][0:5]
                     fname = fname[0:idx] + ext
                 else: # url to image got no extension
                     ext = ".jpg"
@@ -732,7 +732,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
                         fname = spl[llen-2]+fname + ext
                     else:
                         fname = fname + ext
-                if ext.lower() == '.jpg' or ext.lower() == '.png':
+                if ext.lower() == '.jpg' or ext.lower() == '.png' or ext.lower() == '.jpeg':
                     isValid = True
                     fimage = os.path.join(self.imagePosterDir, fname)
 
