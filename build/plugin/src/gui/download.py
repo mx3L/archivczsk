@@ -46,11 +46,11 @@ class DownloadManagerMessages(object):
         if download.downloaded:
             session.openWithCallback(updateDownloadList, MessageBox, _("ArchivCZSK - Download:") + ' ' + \
                                       download.name.encode('utf-8', 'ignore') + ' ' + _("successfully finished."), \
-                                      type=MessageBox.TYPE_INFO, timeout=0)
+                                      type=MessageBox.TYPE_INFO, timeout=60)
         else:
             session.openWithCallback(updateDownloadList, MessageBox, _("ArchivCZSK - Download:") + ' ' + \
                                       download.name.encode('utf-8', 'ignore') + ' ' + _("finished with errors."), \
-                                      type=MessageBox.TYPE_ERROR, timeout=0)
+                                      type=MessageBox.TYPE_ERROR, timeout=60)
     @staticmethod
     def startDownloadCB(download):
         session = GlobalSession.getSession()

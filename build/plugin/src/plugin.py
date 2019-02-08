@@ -39,6 +39,26 @@ def osrefresh(session, servicelist, **kwargs):
         OSRefresh(session).refresh()
     except:
         pass
+    try:
+        from Plugins.Extensions.archivCZSK.osrefdsk import OSRefreshDSK
+        OSRefreshDSK(session).refresh()
+    except:
+        pass
+    try:
+        from Plugins.Extensions.archivCZSK.osrefdcz import OSRefreshDCZ
+        OSRefreshDCZ(session).refresh()
+    except:
+        pass
+    try:
+        from Plugins.Extensions.archivCZSK.osrefmg import OSRefreshMG
+        OSRefreshMG(session).refresh()
+    except:
+        pass
+    try:
+        from Plugins.Extensions.archivCZSK.osrefo2 import OSRefreshO2
+        OSRefreshO2(session).refresh()
+    except:
+        pass
 
 def Plugins(path, **kwargs):
     list = [PluginDescriptor(where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionStart),
