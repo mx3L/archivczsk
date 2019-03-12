@@ -63,27 +63,27 @@
     <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,704" size="633,32" transparent="1" valign="center" zPosition="2" />
   </screen>
 
-  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1157,739" title="ContentMenuScreen">
-    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="583,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="870,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
-    <widget name="path_label" position="15,72" size="1118,32" halign="left" font="Regular;24" transparent="1" foregroundColor="#C4C4C4" />
-    <eLabel position="12,104" size="1131,1" zPosition="1" backgroundColor="#C4C4C4" />
+  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1600,739" title="ContentMenuScreen">
+    <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="386,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="406,6" shadowColor="black" shadowOffset="-2,-2" size="386,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#a08500" font="Regular;25" halign="center" name="key_yellow" position="803,6" shadowColor="black" shadowOffset="-2,-2" size="386,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#18188b" font="Regular;25" halign="center" name="key_blue" position="1200,6" shadowColor="black" shadowOffset="-2,-2" size="386,57" valign="center" zPosition="1" />
+    <widget name="path_label" position="15,72" size="1561,32" halign="left" font="Regular;24" transparent="1" foregroundColor="#C4C4C4" />
+    <eLabel position="12,104" size="1574,1" zPosition="1" backgroundColor="#C4C4C4" />
 
-    <widget alphatest="on" name="movie_poster_image" position="833,107" size="200,300" transparent="1" backgroundColor="#a08500" />
-    <widget font="Regular;23" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="838,410" size="80,24" transparent="1" backgroundColor="#18188b"/>
-    <widget font="Regular;23" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="923,410" size="105,24" transparent="1" backgroundColor="#C4C4C4"/>
-    <widget font="Regular;24" foregroundColor="#ffffff" halign="left" name="movie_plot" position="713,452" size="440,268" transparent="1" backgroundColor="#1f771f"/>
+    <widget alphatest="on" name="movie_poster_image" position="1276,107" size="200,300" transparent="1" backgroundColor="#a08500" />
+    <widget font="Regular;23" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="1281,410" size="80,24" transparent="1" backgroundColor="#18188b"/>
+    <widget font="Regular;23" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="1366,410" size="105,24" transparent="1" backgroundColor="#C4C4C4"/>
+    <widget font="Regular;24" foregroundColor="#ffffff" halign="left" name="movie_plot" position="1156,452" size="440,268" transparent="1" backgroundColor="#1f771f"/>
     
-    <widget source="menu" render="Listbox" position="12,114" size="690,555" transparent="1" >
+    <widget source="menu" render="Listbox" position="12,114" size="1133,555" transparent="1" >
       <convert type="ACZSKKodiToE2List">Index:1,ColorCodes,Bold:FCE083,Italic:FCE083</convert>
       <convert type="TemplatedMultiContent">
         {"templates":
         {"default": (35,
         [
         MultiContentEntryPixmapAlphaTest(pos=(6,6), size=(35,25), png=0),
-        MultiContentEntryText(pos=(60,0), size=(1221,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+        MultiContentEntryText(pos=(60,0), size=(1664,38), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
         ]
         , True, "showOnDemand"),
         },

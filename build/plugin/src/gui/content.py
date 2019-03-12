@@ -34,6 +34,7 @@ from menu import ArchivCZSKConfigScreen
 from skin import parseFont
 from webpixmap import WebPixmap
 from Components.AVSwitch import AVSwitch
+import urlparse
 
 
 KEY_MENU_IMG = LoadPixmap(cached=True, path=os.path.join(settings.IMAGE_PATH, 'key_menu.png'))
@@ -716,6 +717,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         try:
             if urlPath:
                 tmp = toString(urlPath)
+                tmp = urlparse.urljoin(urlPath, urlparse.urlparse(urlPath).path) #remove QS
                 spl = tmp.split('/')
                 llen = len(spl)
 

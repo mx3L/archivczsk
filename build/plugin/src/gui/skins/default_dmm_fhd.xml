@@ -63,38 +63,38 @@
     <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="830,32" transparent="1" valign="center" zPosition="2" />
   </screen>
 
-  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1478,840" title="ContentMenuScreen">
-    <widget backgroundColor="#9f1313" font="Regular;30" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="357,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="key_green" position="377,6" shadowColor="black" shadowOffset="-2,-2" size="357,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#a08500" font="Regular;30" halign="center" name="key_yellow" position="744,6" shadowColor="black" shadowOffset="-2,-2" size="357,57" valign="center" zPosition="1" />
-    <widget backgroundColor="#18188b" font="Regular;30" halign="center" name="key_blue" position="1111,6" shadowColor="black" shadowOffset="-2,-2" size="357,57" valign="center" zPosition="1" />
-    <widget name="path_label" position="19,83" size="1438,32" halign="left" font="Regular;28" transparent="1" foregroundColor="#C4C4C4" />
-    <eLabel position="19,117" size="1438,1" zPosition="1" backgroundColor="#C4C4C4" />
-    <eLabel position="915,117" size="1,704" zPosition="1" backgroundColor="#C4C4C4" />
-    <widget alphatest="on" name="movie_poster_image" position="1053,117" size="300,400" transparent="1" backgroundColor="#a08500" />
-    <widget font="Regular;26" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="1070,515" size="80,26" transparent="1" backgroundColor="#18188b"/>
-    <widget font="Regular;26" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="1213,515" size="125,26" transparent="1" backgroundColor="#C4C4C4"/>
-    <widget font="Regular;28" foregroundColor="#ffffff" halign="left" name="movie_plot" position="933,547" size="540,287" transparent="1" backgroundColor="#1f771f"/>
-    <widget source="menu" render="Listbox" position="12,137" size="890,656" transparent="1" >
-      <convert type="TemplatedMultiContent">
-        {"templates":
-        {"default": (41,
-        [
-        MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(70, 39), png=0),
-        MultiContentEntryText(pos=(70, 3), size=(1080, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
-        ]
-        , True, "showOnDemand"),
-        },
-        "fonts": [gFont("Regular", 30)],
-        "itemHeight": 50
-        }
-      </convert>
+  <screen name="ArchivCZSKAddonContentScreenAdvanced" position="center,center" size="1800,840" title="ContentMenuScreen">
+    <widget backgroundColor="#9f1313" font="Regular;30" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="437,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#1f771f" font="Regular;30" halign="center" name="key_green" position="457,6" shadowColor="black" shadowOffset="-2,-2" size="437,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#a08500" font="Regular;30" halign="center" name="key_yellow" position="904,6" shadowColor="black" shadowOffset="-2,-2" size="437,57" valign="center" zPosition="1" />
+    <widget backgroundColor="#18188b" font="Regular;30" halign="center" name="key_blue" position="1351,6" shadowColor="black" shadowOffset="-2,-2" size="437,57" valign="center" zPosition="1" />
+    <widget name="path_label" position="19,83" size="1760,32" halign="left" font="Regular;28" transparent="1" foregroundColor="#C4C4C4" />
+    <eLabel position="19,117" size="1760,1" zPosition="1" backgroundColor="#C4C4C4" />
+    <eLabel position="1237,117" size="1,704" zPosition="1" backgroundColor="#C4C4C4" />
+    <widget alphatest="on" name="movie_poster_image" position="1375,117" size="300,400" transparent="1" backgroundColor="#a08500" />
+    <widget font="Regular;26" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="1392,515" size="80,26" transparent="1" backgroundColor="#18188b"/>
+    <widget font="Regular;26" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="1535,515" size="125,26" transparent="1" backgroundColor="#C4C4C4"/>
+    <widget font="Regular;28" foregroundColor="#ffffff" halign="left" name="movie_plot" position="1255,547" size="540,287" transparent="1" backgroundColor="#1f771f"/>
+    <widget source="menu" render="Listbox" position="12,137" size="1212,656" transparent="1" >
+        <convert type="TemplatedMultiContent">
+            {"templates":
+            {"default": (41,
+            [
+            MultiContentEntryPixmapAlphaTest(pos=(5, 0), size=(70, 39), png=0),
+            MultiContentEntryText(pos=(70, 3), size=(1402, 80), font=0, flags=RT_VALIGN_TOP | RT_HALIGN_LEFT, text=1)
+            ]
+            , True, "showOnDemand"),
+            },
+            "fonts": [gFont("Regular", 30)],
+            "itemHeight": 50
+            }
+        </convert>
     </widget>
-    <widget font = "Regular; 22" foregroundColor = "white" halign = "left" name = "status_label" position = "15,804" size = "830,32" transparent = "1" valign = "center" zPosition = "2" />
+    <widget font = "Regular; 22" foregroundColor = "white" halign = "left" name = "status_label" position = "15,804" size = "1152,32" transparent = "1" valign = "center" zPosition = "2" />
     <widget alphatest="on" name="tip_pixmap" position="11,806" size="44,32" zPosition="2" />
-    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="830,32" transparent="1" valign="center" zPosition="2" />
+    <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,804" size="1152,32" transparent="1" valign="center" zPosition="2" />
   </screen>
-
+  
   <screen name="ArchivCZSKItemInfoScreen" position="center,100" size="1200,925" title="Info" >
     <widget name="genre" position="505,50" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
     <widget name="year" position="505,110" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />

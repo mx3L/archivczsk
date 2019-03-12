@@ -92,8 +92,7 @@ Version: ${PVER}
 Architecture: all
 Section: extra
 Priority: optional
-Depends: enigma2-plugin-extensions-subssupport (>=1.5.4)
-Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, curl, rtmpdump
+Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, python-requests, curl, rtmpdump
 Maintainer: mxfitsat@gmail.com
 Homepage: https://github.com/mx3L/archivczsk/releases
 Description: prehravanie CZ/SK archivov ${VER}
