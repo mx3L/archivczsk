@@ -10,12 +10,14 @@ import shutil
 import traceback
 import threading
 from tools import unzip, util, parser
+from distutils import dir_util
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
 from Plugins.Extensions.archivCZSK import _, log, toString, settings
 from Components.Console import Console
-from Components.config import config
+from Components.config import config, ConfigSubsection, ConfigText, ConfigYesNo
 from Screens.MessageBox import MessageBox
 
+ConfigSubsection
 def removePyOC(pyfile):
     if os.path.isfile(pyfile + 'c'):
         log.debug('removing %s', (pyfile + 'c'))
@@ -48,9 +50,10 @@ class ArchivUpdater(object):
         self.updateZip = "http://cdn.rawgit.com/mx3L/archivczsk/{commit}/build/plugin/update/version/archivczsk-{version}.zip"
         self.commit = "https://raw.githubusercontent.com/mx3L/archivczsk/master/build/plugin/update/commit"
         self.needUpdate = False
+        self.migration = {}
     
     def checkUpdate(self):
-        self.downloadCommit()
+        self.showUpdatePremium()
 
 
     def downloadCommit(self):
@@ -297,6 +300,214 @@ class ArchivUpdater(object):
         except:
             log.logError("ArchivUpdater remove temp files failed.\n%s"%traceback.format_exc())
             pass
+
+    def showUpdatePremium(self):
+        try:
+            if not os.path.isdir(os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium')):
+                strMsg = _('Do you want to try ArchivCZSK premium?')+'\n\n'
+                strMsg += _('More info: ')+'https://czsk.page.link/inf\n'
+                self.archiv.session.openWithCallback(self.showUpdatePremium2,
+                            MessageBox,
+                            strMsg,
+                            type=MessageBox.TYPE_YESNO)
+            else:
+                self.downloadCommit()
+        except:
+            log.logDebug("checkUpdateRequest failed.\n%s"%traceback.format_exc())
+            self.downloadCommit()
+    def showUpdatePremium2(self, callback=None):
+        if not callback:
+            self.downloadCommit()
+        else:
+            strMsg = _('Remove old ArchivCZSK?')+'\n'
+            self.archiv.session.openWithCallback(self.updatePremium,
+                        MessageBox,
+                        strMsg,
+                        type=MessageBox.TYPE_YESNO,
+                        default=False)
+
+    def getSetting(self, addonId, setting_key):
+        try:
+            setattr(config.plugins.archivCZSK.archives, addonId, ConfigSubsection())
+            main = getattr(config.plugins.archivCZSK.archives, addonId)
+            setattr(main, '%s' % setting_key, ConfigText(default=''))
+            setting = getattr(main, '%s' % setting_key)
+            return setting.getValue()
+        except:
+            log.logError("Get setting '%s.%s' failed.%s"%(addonId, setting_key, traceback.format_exc()))
+    def saveSetting(self, addonId, setting_key, val, firstTime=False):
+        try:
+            
+            if firstTime:
+                setattr(config.plugins, 'archivCZSKpremium', ConfigSubsection())
+                root1 = getattr(config.plugins, 'archivCZSKpremium')
+                setattr(root1, 'archives', ConfigSubsection())
+                root = getattr(root1, 'archives')
+                setattr(root, '%s'%addonId, ConfigSubsection())
+                main = getattr(root, '%s'%addonId)
+            else:
+                if addonId not in self.migration.keys():
+                    setattr(config.plugins.archivCZSKpremium.archives, '%s'%addonId, ConfigSubsection())
+                    main = getattr(config.plugins.archivCZSKpremium.archives, '%s'%addonId)
+                else:
+                    main = getattr(config.plugins.archivCZSKpremium.archives, '%s'%addonId)
+
+            if addonId not in self.migration.keys():
+                self.migration[addonId]=1
+
+            setattr(main, '%s'%setting_key, ConfigText(default='', fixed_size=False))
+            sett = getattr(main, '%s'%setting_key)
+            sett.setValue(val)
+            sett.save()
+        except:
+            log.logError("Save setting '%s.%s' failed.%s"%(addonId, setting_key, traceback.format_exc()))
+    def getSettingArchiv(self, setting_key):
+        try:
+            setattr(config.plugins.archivCZSK, '%s' % setting_key, ConfigText(default=''))
+            setting = getattr(config.plugins.archivCZSK, '%s' % setting_key)
+            return setting.getValue()
+        except:
+            log.logError("Get setting '%s' failed.%s"%(setting_key, traceback.format_exc()))
+    def saveSettingArchiv(self, setting_key, val):
+        try:
+            setattr(config.plugins.archivCZSKpremium, '%s'%setting_key, ConfigText(default='', fixed_size=False))
+            sett = getattr(config.plugins.archivCZSKpremium, '%s'%setting_key)
+            sett.setValue(val)
+            sett.save()
+        except:
+            log.logError("Save setting '%s' failed.%s"%(setting_key, traceback.format_exc()))
+
+    def updatePremium(self, callback=None):
+        try:
+            #download ZIP
+            util.download_to_file('https://raw.githubusercontent.com/mtester270/archivczskpremium/master/archiv.zip', '/tmp/archivpremium.zip')
+            #unpack
+            unzipper = unzip.unzip()
+            exDir = '/tmp/archivpremiumuzip'
+            if os.path.isdir(exDir):
+                shutil.rmtree(exDir)
+            os.mkdir(exDir)
+            unzipper.extract('/tmp/archivpremium.zip', exDir)
+            os.remove('/tmp/archivpremium.zip')
+            #copy
+            shutil.copytree(os.path.join(exDir, 'archivCZSKpremium'), os.path.join(settings.ENIGMA_PLUGIN_PATH, 'archivCZSKpremium'))
+            pthsite =os.path.join(exDir, 'site-packages')
+            for i in os.listdir(pthsite):
+                sitepck = os.path.join(pthsite,i)
+                cpDir = os.path.join('/usr/lib/python2.7/site-packages', i)
+                if not os.path.isdir(cpDir):
+                    log.logDebug("UpdatePremium: add site-pckage %s"%i)
+                    shutil.copytree(sitepck, cpDir)
+                else:
+                    log.logDebug("UpdatePremium: site-pckage %s already installed"%i)
+            shutil.rmtree(exDir)
+
+
+            #some custom setting
+            val = self.getSetting('plugin_video_sosac_ph', 'streamujtv_user')
+            self.saveSetting('plugin_video_sosac_ph', 'streamujtv_user', val, True)
+            val = self.getSetting('plugin_video_sosac_ph', 'streamujtv_pass')
+            self.saveSetting('plugin_video_sosac_ph', 'streamujtv_pass', val)
+            val = self.getSetting('plugin_video_sosac_ph', 'auto_addon_order')
+            self.saveSetting('plugin_video_sosac_ph', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_orangetv', 'orangetvuser')
+            self.saveSetting('plugin_video_orangetv', 'orangetvuser', val)
+            val = self.getSetting('plugin_video_orangetv', 'orangetvpwd')
+            self.saveSetting('plugin_video_orangetv', 'orangetvpwd', val)
+            val = self.getSetting('plugin_video_orangetv', 'auto_addon_order')
+            self.saveSetting('plugin_video_orangetv', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'wsuser')
+            self.saveSetting('plugin_video_stream-cinema', 'wsuser', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'wspass')
+            self.saveSetting('plugin_video_stream-cinema', 'wspass', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'trakt_enabled')
+            self.saveSetting('plugin_video_stream-cinema', 'trakt_enabled', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'deviceid')
+            self.saveSetting('plugin_video_stream-cinema', 'deviceid', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'trakt_filter')
+            self.saveSetting('plugin_video_stream-cinema', 'trakt_filter', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'trakt_token')
+            self.saveSetting('plugin_video_stream-cinema', 'trakt_token', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'trakt_refresh_token')
+            self.saveSetting('plugin_video_stream-cinema', 'trakt_refresh_token', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'trakt_token_expire')
+            self.saveSetting('plugin_video_stream-cinema', 'trakt_token_expire', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'use_https')
+            self.saveSetting('plugin_video_stream-cinema', 'use_https', val)
+            val = self.getSetting('plugin_video_stream-cinema', 'auto_addon_order')
+            self.saveSetting('plugin_video_stream-cinema', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_o2tv', 'o2tvuser')
+            self.saveSetting('plugin_video_o2tv', 'o2tvuser', val)
+            val = self.getSetting('plugin_video_o2tv', 'o2tvpwd')
+            self.saveSetting('plugin_video_o2tv', 'o2tvpwd', val)
+            val = self.getSetting('plugin_video_o2tv', 'login_method')
+            self.saveSetting('plugin_video_o2tv', 'login_method', val)
+            val = self.getSetting('plugin_video_o2tv', 'deviceid')
+            self.saveSetting('plugin_video_o2tv', 'deviceid', val)
+            val = self.getSetting('plugin_video_o2tv', 'auto_addon_order')
+            self.saveSetting('plugin_video_o2tv', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_online-files', 'webshare_enabled')
+            self.saveSetting('plugin_video_online-files', 'webshare_enabled', val)
+            val = self.getSetting('plugin_video_online-files', 'webshare_user')
+            self.saveSetting('plugin_video_online-files', 'webshare_user', val)
+            val = self.getSetting('plugin_video_online-files', 'webshare_pass')
+            self.saveSetting('plugin_video_online-files', 'webshare_pass', val)
+            val = self.getSetting('plugin_video_online-files', 'auto_addon_order')
+            self.saveSetting('plugin_video_online-files', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_markiza_sk', 'auto_addon_order')
+            self.saveSetting('plugin_video_markiza_sk', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_joj_sk', 'auto_addon_order')
+            self.saveSetting('plugin_video_joj_sk', 'auto_addon_order', val)
+            val = self.getSetting('plugin_video_rtvs_sk', 'auto_addon_order')
+            self.saveSetting('plugin_video_rtvs_sk', 'auto_addon_order', val)
+
+            self.saveSettingArchiv('skin', self.getSettingArchiv('skin'))
+            self.saveSettingArchiv('showVideoInfo', self.getSettingArchiv('showVideoInfo'))
+            self.saveSettingArchiv('downloadPoster', self.getSettingArchiv('downloadPoster'))
+            self.saveSettingArchiv('posterImageMax', self.getSettingArchiv('posterImageMax'))
+            self.saveSettingArchiv('csfdMode', self.getSettingArchiv('csfdMode'))
+            self.saveSettingArchiv('downloadsPath', self.getSettingArchiv('downloadsPath'))
+            self.saveSettingArchiv('posterPath', self.getSettingArchiv('posterPath'))
+            self.saveSettingArchiv('tmpPath', self.getSettingArchiv('tmpPath'))
+            self.saveSettingArchiv('defaultCategory', self.getSettingArchiv('defaultCategory'))
+            self.saveSettingArchiv('clearMemory', self.getSettingArchiv('clearMemory'))
+            
+            
+            # save settings
+            bcpPath = '/tmp/oldarchivBackup'
+            pth = settings.PLUGIN_PATH
+            if os.path.isdir(bcpPath):
+                shutil.rmtree(bcpPath)
+            os.mkdir(bcpPath)
+            os.mkdir(os.path.join(bcpPath,'resources'))
+            osr = os.path.join(pth, 'osref.pyo')
+            if os.path.isfile(osr):
+                shutil.copyfile(osr, os.path.join(bcpPath, 'osref.pyo'))
+            shutil.copyfile(os.path.join(pth, 'categories.xml'),os.path.join(bcpPath, 'categories.xml'))
+            if os.path.isdir(os.path.join(pth,'resources')):
+                dir_util.copy_tree(os.path.join(pth,'resources','data'),os.path.join(bcpPath,'resources','data')) 
+
+            # remove old archivCZSK
+            if callback:
+                shutil.rmtree(pth)
+        
+            
+            #restore
+            if os.path.isfile(os.path.join(bcpPath, 'osref.pyo')):
+                shutil.copy(os.path.join(bcpPath, 'osref.pyo'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium'))
+            shutil.copy(os.path.join(bcpPath, 'categories.xml'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium'))
+            if os.path.exists(os.path.join(bcpPath,'resources','data')):
+                dir_util.copy_tree(os.path.join(bcpPath,'resources','data'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium','resources','data'))
+            shutil.rmtree(bcpPath)
+
+            strMsg = "%s" % _("Install ArchivCZSK premium complete.")
+            self.archiv.session.openWithCallback(self.archiv.ask_restart_e2,
+                    MessageBox,
+                    strMsg,
+                    type=MessageBox.TYPE_INFO)
+        except:
+            log.logDebug("UpdatePremium failed.\n%s"%traceback.format_exc())
+            self.downloadCommit()
 
 class Updater(object):
     """Updater for updating addons in repository, every repository has its own updater"""

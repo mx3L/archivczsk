@@ -103,7 +103,8 @@ class MediaItemHandler(ItemHandler):
     def play_item(self, item, mode='play', *args, **kwargs):
         def endPlayFinish():
             self.content_screen.workingFinished()
-            self.content_provider.resume()
+            if self.content_provider.isPaused():
+                self.content_provider.resume()
         def startWatchingTimer():
             self.cmdTimer.start(timerPeriod)
         def timerEvent():

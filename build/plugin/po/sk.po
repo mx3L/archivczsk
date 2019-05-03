@@ -25,6 +25,16 @@ msgstr "(Trakt) Označiť ako videné"
 msgid "(Trakt) Mark as not watched"
 msgstr "(Trakt) Označiť ako nevidené"
 
+msgid "Install ArchivCZSK premium complete."
+msgstr "Nainštalovanie ArchivCZSK premium úspešné."
+msgid "Do you want to try ArchivCZSK premium?"
+msgstr "Želáte si vyskúšať ArchivCZSK premium?"
+msgid "More info: "
+msgstr "Viac info: "
+msgid "Remove old ArchivCZSK?"
+msgstr "Vymazať starý ArchivCZSK (väčšina nastavení bude prenesená)?"
+
+
 
 msgid "Exit"
 msgstr "Ukončiť"

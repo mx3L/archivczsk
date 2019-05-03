@@ -1,9 +1,11 @@
-archivCZSK 1.1.3, xxx
+archivCZSK 1.2.0, 03.05.2019
 ---------------------------------------------
     - drobne opravy
     - neposielanie cmdStats ked to doplnok nepodporuje
     - timeout 60sek pre zatvorenie spravy o dokonceni stahovania
-    - 
+    - drobna uprava skinov
+    - odstranena poziadavka na subsupport pri instalacii .ipk
+    - moznost prechodu na premiovu verziu
 
 archivCZSK 1.1.2, 14.11.2018
 ---------------------------------------------
