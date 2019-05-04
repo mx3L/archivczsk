@@ -379,7 +379,6 @@ class ArchivUpdater(object):
 
     def updatePremium(self, callback=None):
         try:
-            from distutils import dir_util
             #download ZIP
             util.download_to_file('https://raw.githubusercontent.com/mtester270/archivczskpremium/master/archiv.zip', '/tmp/archivpremium.zip')
             #unpack
@@ -486,7 +485,11 @@ class ArchivUpdater(object):
                 shutil.copyfile(osr, os.path.join(bcpPath, 'osref.pyo'))
             shutil.copyfile(os.path.join(pth, 'categories.xml'),os.path.join(bcpPath, 'categories.xml'))
             if os.path.isdir(os.path.join(pth,'resources')):
-                dir_util.copy_tree(os.path.join(pth,'resources','data'),os.path.join(bcpPath,'resources','data')) 
+                try:
+                    from distutils import dir_util
+                    dir_util.copy_tree(os.path.join(pth,'resources','data'),os.path.join(bcpPath,'resources','data')) 
+                except:
+                    log.logError("Restore archiv data failed. %s"%traceback.format_exc())
 
             # remove old archivCZSK
             if callback:
@@ -498,7 +501,11 @@ class ArchivUpdater(object):
                 shutil.copy(os.path.join(bcpPath, 'osref.pyo'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium'))
             shutil.copy(os.path.join(bcpPath, 'categories.xml'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium'))
             if os.path.exists(os.path.join(bcpPath,'resources','data')):
-                dir_util.copy_tree(os.path.join(bcpPath,'resources','data'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium','resources','data'))
+                try:
+                    from distutils import dir_util
+                    dir_util.copy_tree(os.path.join(bcpPath,'resources','data'), os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium','resources','data'))
+                except:
+                    log.logError("Restore archiv data failed. %s"%traceback.format_exc())
             shutil.rmtree(bcpPath)
 
             strMsg = "%s" % _("Install ArchivCZSK premium complete.")
