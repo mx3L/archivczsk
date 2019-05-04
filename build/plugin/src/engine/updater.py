@@ -10,7 +10,7 @@ import shutil
 import traceback
 import threading
 from tools import unzip, util, parser
-from distutils import dir_util
+
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
 from Plugins.Extensions.archivCZSK import _, log, toString, settings
 from Components.Console import Console
@@ -379,6 +379,7 @@ class ArchivUpdater(object):
 
     def updatePremium(self, callback=None):
         try:
+            from distutils import dir_util
             #download ZIP
             util.download_to_file('https://raw.githubusercontent.com/mtester270/archivczskpremium/master/archiv.zip', '/tmp/archivpremium.zip')
             #unpack
