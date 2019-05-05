@@ -317,6 +317,9 @@ class ArchivUpdater(object):
             self.downloadCommit()
     def showUpdatePremium2(self, callback=None):
         if not callback:
+            pdir = os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium')
+            if not os.path.isdir(pdir):
+                os.mkdir(pdir)
             self.downloadCommit()
         else:
             strMsg = _('Remove old ArchivCZSK?')+'\n'

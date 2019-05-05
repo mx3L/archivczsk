@@ -1,3 +1,6 @@
+archivCZSK 1.2.2, 05.05.2019
+    - hlaska na vyskusanie premium verzie sa zobrazi len raz (ak uzivatel zvoli nie)
+
 archivCZSK 1.2.0, 03.05.2019
 ---------------------------------------------
     - drobne opravy
