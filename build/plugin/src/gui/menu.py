@@ -234,7 +234,7 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
     def ok(self):
         try:
             #self.close(self.text.encode("utf-8"), self.configEntry)
-            self.close(removeDiac(self.text), self.configEntry)
+            self.close(removeDiac(self["text"].getText()), self.configEntry)
         except:
             log.logError("OK VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
             raise
