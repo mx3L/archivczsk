@@ -833,7 +833,7 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
                         if "[???]" in name:
                             video_item.name = name.replace("[???]","[%s]"%(quality))
                         else:
-                            video_item.name = "[%s] %s"%(i.quality, i.name)
+                            video_item.name = "[%s] %s"%(quality, name)
                     tmp_list.append(video_item)
                 tmp_list.sort(key=operator.attrgetter('bandwidth'), reverse=True)
                 if tmp_list:
