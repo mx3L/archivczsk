@@ -164,9 +164,9 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
         try:
             import ssl
             context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-            f = urllib2.urlopen(remote, context = context)
+            f = urllib2.urlopen(remote, context = context, timeout=10)
         except Exception:
-            f = urllib2.urlopen(remote)
+            f = urllib2.urlopen(remote, timeout = 10)
         make_path(os.path.dirname(local))
         localFile = open(local, mode)
         localFile.write(f.read())
@@ -196,6 +196,8 @@ def download_to_file(remote, local, mode='wb', debugfnc=None):
     finally:
         if f:f.close()
         if localFile:localFile.close()
+    print "download finished"
+
 def download_web_file(remote, local, mode='wb', debugfnc=None, headers={}):
     f, localFile = None, None
     try:
@@ -497,6 +499,22 @@ def url_get_file_info(url, headers=None, timeout=3):
                     if not os.path.splitext(filename)[1]:
                         filename += extension
     return {'filename':sanitize_filename(filename), 'length':length}
+
+def download_to_file_async(url, dest, callback=None, data=None, headers=None, timeout=60):
+    def got_data(data):
+        if data:
+            try:
+                with open(dest, "wb") as f:
+                    f.write(data)
+            except Exception as e:
+                log.logError("download_to_file_async: %s"% toString(e))
+                callback(None, None)
+            else:
+                callback(url, dest)
+        else:
+            callback(None, None)
+    log.logDebug("download_to_file_async: %s -> %s"% (toString(url), toString(dest)))
+    return url_get_data_async(url, got_data, data, headers, timeout)
 
 def get_free_space(location):
     try:

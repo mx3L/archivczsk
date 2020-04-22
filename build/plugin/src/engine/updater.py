@@ -17,7 +17,6 @@ from Components.Console import Console
 from Components.config import config, ConfigSubsection, ConfigText, ConfigYesNo
 from Screens.MessageBox import MessageBox
 
-ConfigSubsection
 def removePyOC(pyfile):
     if os.path.isfile(pyfile + 'c'):
         log.debug('removing %s', (pyfile + 'c'))
@@ -30,7 +29,6 @@ def removeFiles(files):
     for f in files:
         if os.path.isfile(f):
             os.remove(f) 
-    
 
 class ArchivUpdater(object):
     def __init__(self, archivInstance):
@@ -38,6 +36,7 @@ class ArchivUpdater(object):
         self.tmpPath = config.plugins.archivCZSK.tmpPath.value
         if not self.tmpPath:
             self.tmpPath = "/tmp"
+        self.tmpPath = "/tmp"
         self.__console = None
         self.remote_version=""
         self.commitValue=""
@@ -53,7 +52,7 @@ class ArchivUpdater(object):
         self.migration = {}
     
     def checkUpdate(self):
-        self.showUpdatePremium()
+        self.downloadCommit()
 
 
     def downloadCommit(self):
@@ -242,7 +241,6 @@ class ArchivUpdater(object):
 
     def doWork(self):
         try:
-            lock = threading.Lock()
             def check_archiv():
                 try:
                     if self.downloadUpdateXml():
@@ -261,9 +259,10 @@ class ArchivUpdater(object):
                 except:
                     log.logError("ArchivUpdater compare versions failed.\n%s"%traceback.format_exc())
 
-            thread = threading.Thread(target=check_archiv)
-            thread.start()
-            thread.join()
+            check_archiv()
+            #thread = threading.Thread(target=check_archiv)
+            #thread.start()
+            #thread.join()
 
             if self.needUpdate:
                 log.logInfo("ArchivUpdater update found...%s"%self.remote_version)
@@ -300,34 +299,6 @@ class ArchivUpdater(object):
         except:
             log.logError("ArchivUpdater remove temp files failed.\n%s"%traceback.format_exc())
             pass
-
-    def showUpdatePremium(self):
-        try:
-            if not os.path.isdir(os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium')):
-                strMsg = _('Do you want to try ArchivCZSK premium?')+'\n\n'
-                strMsg += _('More info: ')+'https://czsk.page.link/inf\n'
-                self.archiv.session.openWithCallback(self.showUpdatePremium2,
-                            MessageBox,
-                            strMsg,
-                            type=MessageBox.TYPE_YESNO)
-            else:
-                self.downloadCommit()
-        except:
-            log.logDebug("checkUpdateRequest failed.\n%s"%traceback.format_exc())
-            self.downloadCommit()
-    def showUpdatePremium2(self, callback=None):
-        if not callback:
-            pdir = os.path.join(settings.ENIGMA_PLUGIN_PATH,'archivCZSKpremium')
-            if not os.path.isdir(pdir):
-                os.mkdir(pdir)
-            self.downloadCommit()
-        else:
-            strMsg = _('Remove old ArchivCZSK?')+'\n'
-            self.archiv.session.openWithCallback(self.updatePremium,
-                        MessageBox,
-                        strMsg,
-                        type=MessageBox.TYPE_YESNO,
-                        default=False)
 
     def getSetting(self, addonId, setting_key):
         try:
@@ -615,7 +586,9 @@ class Updater(object):
                 
     def _get_server_addons(self):
         """loads info about addons from remote repository to remote_addons_dict"""
+        log.logDebug("pre update xml")
         self._download_update_xml()
+        log.logDebug("post update xml")
             
         pars = parser.XBMCMultiAddonXMLParser(self.update_xml_file)
         self.remote_addons_dict = pars.parse_addons()
@@ -667,15 +640,15 @@ class Updater(object):
         # hack for https github urls
         # since some receivers have have problems with https
         if self.update_xml_url.find('{commit}') != -1:
-            from Plugins.Extensions.archivCZSK.settings import PLUGIN_PATH
             try:
-                commit = open(os.path.join(PLUGIN_PATH, 'commit')).readline()[:-1]
+                commit = open(os.path.join(settings.PLUGIN_PATH, 'commit')).readline()[:-1]
             except Exception:
                 commit = '4ff9ac15d461a885f13125125ea501f3b12eb05d'
             self.update_xml_url = self.update_xml_url.replace('{commit}', commit)
         if self.update_xml_url.find('https://raw.github.com') == 0:
             update_xml_url = self.update_xml_url.replace('https://raw.github.com', 'http://rawgithub.com')
-        else: update_xml_url = self.update_xml_url
+        else:
+            update_xml_url = self.update_xml_url
         try:
             util.download_to_file(update_xml_url, self.update_xml_file, debugfnc=log.debug)
         except Exception:

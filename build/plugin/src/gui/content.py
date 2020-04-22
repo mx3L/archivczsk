@@ -13,6 +13,9 @@ from Screens.InputBox import InputBox
 from Screens.MessageBox import MessageBox
 from Tools.LoadPixmap import LoadPixmap
 
+
+from poster import PosterProcessing, PosterPixmapHandler
+
 from Plugins.Extensions.archivCZSK import _, log, settings
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
@@ -24,7 +27,7 @@ from Plugins.Extensions.archivCZSK.engine.items import PItem, PFolder, PRoot, \
     PPlaylist, PExit, PVideo, PContextMenuItem, PSearch, PSearchItem, PDownload, \
     PVideoAddon, Stream, RtmpStream, PVideoNotResolved
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
-from Plugins.Extensions.archivCZSK.engine.tools.util import toString, download_web_file
+from Plugins.Extensions.archivCZSK.engine.tools.util import toString, download_web_file, download_to_file_async
 from base import BaseArchivCZSKListSourceScreen
 from common import MyConditionalLabel,  PanelColorListEntry2, \
     LoadingScreen, TipBar, CutLabel
@@ -48,7 +51,6 @@ class BaseContentScreen(BaseArchivCZSKListSourceScreen):
         BaseArchivCZSKListSourceScreen.__init__(self, session)
         self.contentHandler = contentHandler
         self.loadingScreen = session.instantiateDialog(LoadingScreen)
-
         self.lst_items = lst_items
         # screen context items
         self.ctx_items = []
@@ -580,16 +582,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         self.updateGUITimer_conn = eConnectCallback(self.updateGUITimer.timeout, self.updateAddonGUI)
         self.onUpdateGUI.append(self.changeAddon)
         self.onClose.append(self.__onClose)
-        self.picload = ePicLoad()
         
-        #self.picload.PictureData.get().append(self.showCoverCallback)
-        # OE2.0 - OE2.5 compatibility
-        self.picload_conn = eConnectCallback(self.picload.PictureData, self.showCoverCallback)
-        self.procPosterImage = False
-        self.posterChanged = False
-        self.lastPoster = "none"
-        self.posterStartProc = datetime.datetime.now()
-
         #settigns
         self.showImageEnabled = config.plugins.archivCZSK.downloadPoster.getValue()
         self.maxSavedImages = int(config.plugins.archivCZSK.posterImageMax.getValue())
@@ -604,6 +597,11 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         self["key_yellow"] = Label(_("Shortcuts"))
         self["key_blue"] = Label(_("Settings"))
         self["movie_poster_image"] = Pixmap()
+        poster_processing = PosterProcessing(self.maxSavedImages,
+                                             self.imagePosterDir)
+        self.poster = PosterPixmapHandler(self["movie_poster_image"], 
+                                          poster_processing,
+                                          self.noImage)
         self["movie_rating"] = Label("")
         self["movie_duration"] = Label("")
         self["movie_plot"] = Label("")
@@ -628,9 +626,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         self.updateGUITimer.stop()
         del self.updateGUITimer_conn
         del self.updateGUITimer
-        # picload_conn this must be, if not than crash system
-        del self.picload_conn
-        del self.picload
+        del self.poster
 
 
     def updateAddonGUI(self):
@@ -639,36 +635,17 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
             idur = ""
             irat = ""
             iplot = ""
-            image = None
-            ifile = None
-
-            #props ="";
-            #for property, value in vars(item).iteritems():
-            #    try:
-            #        props = props + "%s: %s\n"%(property,value)
-            #    except:
-            #        props = props +"...some failed..."
-            #log.logDebug(props)
 
             if isinstance(item, PVideoNotResolved) or isinstance(item, PFolder):
                 if self.showImageEnabled:
-                    if isinstance(item, PFolder):
-                        wtf = "%s"%item.image
-                        if wtf == "None" or len(wtf) < 5: #item.image is None or not item.image: #handle shit folders show image 'series'
-                            self.lastPoster = "none"
-                            self["movie_poster_image"].instance.setPixmap(None)
-                        else:
-                            ifile = self.getPosterImage(item)
-                    else:
-                        ifile = self.getPosterImage(item)
-                        
+                    if not isinstance(item, (PSearch, PSearchItem)):
+                        self.poster.set_image(item.image)
                 try:
                     if 'rating' in item.info:
                         if float(item.info['rating']) > 0:
                             irat = str(item.info['rating'])
                 except:
                     log.logError("Rating parse failed..\n%s"%traceback.format_exc())
-                    pass
                 try:
                     if 'duration' in item.info:
                         durSec = float(item.info['duration'])
@@ -687,230 +664,18 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
                                     idur = str(minutes)+'min'
                 except:
                     log.logError("Duration parse failed..\n%s"%traceback.format_exc())
-                    pass
                 try:
                     if 'plot' in item.info:
                         iplot = toString(item.info['plot'])[0:800]
                 except:
                     log.logError("Plot parse failed..\n%s"%traceback.format_exc())
-                    pass
-            else:
-                if self.lastPoster != "none":
-                    self.posterChanged = True
-                self.lastPoster = "none"
-                
-                
-            if self.showImageEnabled and self.posterChanged:
-                self.setMovieCover(ifile)
-                
+
             self["movie_duration"].setText(idur)
             self["movie_rating"].setText(irat)
             self["movie_plot"].setText(iplot)
             
         except:
             log.logError("updateAddonGUI fail...\n%s"%traceback.format_exc())
-            pass
-    
-    def getPosterImageName(self, urlPath):
-        isValid=False
-        fimage = self.noImage
-        try:
-            if urlPath:
-                tmp = toString(urlPath)
-                tmp = urlparse.urljoin(urlPath, urlparse.urlparse(urlPath).path) #remove QS
-                spl = tmp.split('/')
-                llen = len(spl)
-
-                fname = spl[llen-1]
-                ext = ""
-                if '.' in fname:
-                    idx = fname.rindex('.')
-                    ext = fname[idx:][0:5]
-                    fname = fname[0:idx] + ext
-                else: # url to image got no extension
-                    ext = ".jpg"
-                    if llen > 2:
-                        # fix fucking providers as iPrima same ending '...splash169/p389755-p1609822/l_xhdpi'
-                        fname = spl[llen-2]+fname + ext
-                    else:
-                        fname = fname + ext
-                if ext.lower() == '.jpg' or ext.lower() == '.png' or ext.lower() == '.jpeg':
-                    isValid = True
-                    fimage = os.path.join(self.imagePosterDir, fname)
-
-            #if urlPath:
-            #    tmp = toString(urlPath)
-            #    idx = tmp.rindex('/')+1
-            #    fname = tmp[idx:]
-            #    ext = ""
-            #    if '.' in fname:
-            #        idx = fname.rindex('.')
-            #        ext = fname[idx:][0:4]
-            #        fname = fname[0:idx] + ext
-            #    else: # url to image got no extension
-            #        ext = ".jpg"
-            #        fname = fname + ext
-            #    if ext.lower() == '.jpg' or ext.lower() == '.png':
-            #        isValid = True
-            #        fimage = os.path.join(self.imagePosterDir, fname)
-        except:
-            log.logError("getPosterImageName failed (%s).\n%s"%(urlPath, traceback.format_exc()))
-            pass
-        finally:
-            return fimage, isValid
-
-    def getPosterImage(self, item):
-        log.logDebug("Processing image '%s'"%self.procPosterImage)
-        if self.procPosterImage:
-            # handle if picload.startDecode failed etc. invalid image file, i dont have failed event from picload 
-            delta = self.posterStartProc + datetime.timedelta(seconds=10)
-            if datetime.datetime.now() > delta:
-                log.logDebug("Processing image reset ...")
-                self.procPosterImage = False
-            else:
-                return
-        
-        self.posterStartProc = datetime.datetime.now()
-        self.procPosterImage = True
-
-        posterFile = os.path.join(self.imagePosterDir,'poster.dat')
-
-        try:
-            self.posterChanged = False
-            url = item.image
-            log.logDebug("getPosterImage start '%s'"%url)
-            
-            videoPoster, isValid = self.getPosterImageName(url)
-            #videoPoster = tuple[0]
-            if not isValid:
-                #tuple[1]:
-                if self.lastPoster != self.noImage:
-                    self.posterChanged = True
-                    shutil.copy(videoPoster, posterFile)
-                self.lastPoster = videoPoster
-                return posterFile
-            
-            isDownloaded = False
-            if self.lastPoster != videoPoster:
-                self.posterChanged = True
-            self.lastPoster = videoPoster
-            #videoPoster
-            if not os.path.isfile(videoPoster) and url is not None:
-                isDownloaded = True
-                download_web_file(url, videoPoster)
-
-            # in some case file got 0b then all lod image fail (send imgPath=None)
-            if os.path.getsize(videoPoster) < 100:
-                os.remove(videoPoster)
-                raise Exception("Poster image got less than 100 bytes.")
-
-            # copy current to poster
-            # only this way i can change poster dynamiclly on UI
-            shutil.copy(videoPoster, posterFile)
-
-            log.logDebug('getPosterImage finished (Downloaded=%s, change=%s)' % (isDownloaded, self.posterChanged))
-            return posterFile
-        except:
-            if self.lastPoster != self.noImage:
-                self.posterChanged = True
-                try:
-                    shutil.copy(self.noImage, posterFile)
-                except:
-                    log.logError("Please change path for poster images in plugin settings.\n%s"%traceback.format_exc())
-                    return None
-            log.logError("getPosterImage failed (return no image).\n%s"%traceback.format_exc())
-            return posterFile
-            pass
-        finally:
-            # handle no necessary change picture
-            if not self.posterChanged:
-                self.procPosterImage = False
-            # let only max file on hdd
-            self.handleMaxImages()
-
-
-    def setMovieCover(self, imgPath):
-        try:
-            if not imgPath:
-                log.logDebug("setMovieCover empty imgPath")
-                self["movie_poster_image"].instance.setPixmap(None)
-                return
-            
-            log.logDebug("setMovieCover=%s"%imgPath)
-            sc = AVSwitch().getFramebufferScale()
-            size = self["movie_poster_image"].instance.size()
-            if self.picload:
-                self.picload.setPara((size.width(), size.height(), sc[0], sc[1], False, 1, "#00000000"))
-                log.logDebug("startDecode...");
-                self.picload.startDecode(imgPath)
-        except:
-            self.procPosterImage = False
-            log.logError("setMovieCover failed.\n%s"%traceback.format_exc())
-            pass
-    def showCoverCallback(self, picInfo=None):
-        try:
-            log.logDebug("showCoverCallback start '%s'..."%picInfo)
-            reupdateImage = False
-            if self.picload and picInfo:
-                actualItem = self.getSelectedItem()
-                try:
-                    fl1 = self.lastPoster
-                    fl2, isValid = self.getPosterImageName(actualItem.image)
-                    if fl1!=fl2:
-                        reupdateImage = True
-                except:
-                    pass
-                log.logDebug("PicLoad getData...")
-                converPtr = self.picload.getData()
-                log.logDebug("PicLoad getData finished")
-                if converPtr != None:
-                    if reupdateImage:
-                        # reinit image
-                        log.logDebug("PicLoad reinit image (image changed)")
-                        self.procPosterImage = False
-                        ifile = self.getPosterImage(actualItem)
-                        if self.posterChanged:
-                            self.setMovieCover(ifile)
-                    else:
-                        log.logDebug("SetPixmap...");
-                        self["movie_poster_image"].instance.setPixmap(converPtr)
-                        log.logDebug("SetPixmap finished");
-                        self.procPosterImage = False
-            else:
-                self.procPosterImage = False
-        except:
-            self.procPosterImage = False
-            log.logError("showCoverCallback failed.\n%s"%traceback.format_exc())
-            pass
-
-    def handleMaxImages(self):
-        try:
-            posterDir = os.path.join(self.imagePosterDir)
-            if not os.path.isdir(posterDir):
-                return
-
-            dirContent = os.listdir(posterDir)
-            if len(dirContent)-1 >= self.maxSavedImages:
-                # 20% or 30% remove
-                removeCnt = int(self.maxSavedImages * 0.3)
-                if self.maxSavedImages <= 40:
-                    removeCnt = int(self.maxSavedImages * 0.2)
-                if self.maxSavedImages == 0:
-                    removeCnt = len(dirContent)-1
-                cnt = 0
-                for x in sorted([(fn, os.stat(os.path.join(self.imagePosterDir,fn))) for fn in dirContent], key = lambda x: x[1].st_mtime):
-                    if cnt >= removeCnt:
-                        break
-                    pth = os.path.join(self.imagePosterDir, x[0])
-                    if x[0]!='poster.dat' and os.path.isfile(pth):
-                        log.logDebug("Deleting poster image... %s"%pth)
-                        os.remove(pth)
-                        cnt = cnt+1
-                if cnt > 0:
-                    log.logDebug("%s poster images deleted"%cnt)
-        except:
-            log.logError("Handle max poster images failed.\n%s"%traceback.format_exc())
-            pass
 
     def changeAddon(self):
         # musi to ist cez timer pretoze enigma vola onUpdate 3x upne zbytocne

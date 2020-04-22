@@ -13,7 +13,6 @@ from Plugins.Extensions.archivCZSK import _, log, toString, settings, UpdateInfo
 from Plugins.Extensions.archivCZSK.engine.addon import VideoAddon, XBMCAddon
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
-from Plugins.Extensions.archivCZSK.gui.info import showVideoPlayerInfo
 from Plugins.Extensions.archivCZSK.gui.common import showInfoMessage
 from Plugins.Extensions.archivCZSK.gui.content import ArchivCZSKContentScreen
 from Plugins.Extensions.archivCZSK.compat import DMM_IMAGE
@@ -124,13 +123,10 @@ class ArchivCZSK():
         self.session = session
         self.to_update_addons = []
         self.updated_addons = []
-        self.first_time = os.path.exists(os.path.join(settings.PLUGIN_PATH, 'firsttime'))
 
         if ArchivCZSK.__need_restart:
             self.ask_restart_e2()
 
-        elif self.first_time:
-            self.opened_first_time()
         elif config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
            self.checkArchivUpdate()
         elif config.plugins.archivCZSK.autoUpdate.value and self.canCheckUpdate(False):
@@ -184,6 +180,10 @@ class ArchivCZSK():
             path = os.path.join(os.path.dirname(__file__), 'commit')
             if os.path.exists(path):
                 os.remove(path)
+            self.__updateDialog = self.session.openWithCallback(self.check_updates_finished, MessageBox, 
+                                               _("Checking for updates"), 
+                                               type=MessageBox.TYPE_INFO, 
+                                               enable_input=False)
             self.__console = Console()
             self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
         except:
@@ -197,17 +197,6 @@ class ArchivCZSK():
             log.error("commit not downloaded")
             log.logError("Download addons commit return failed.")
             self.open_archive_screen()
-
-    def opened_first_time(self):
-        os.remove(os.path.join(settings.PLUGIN_PATH, 'firsttime'))
-        text = _("This is the first time you started archivyCZSK") + "\n\n"
-        text += _("For optimal usage of this plugin, you need to check") + "\n"
-        text += _("if you have all neccessary video plugins installed") + "."
-        showInfoMessage(self.session, text, 0, self.open_player_info)
-
-
-    def open_player_info(self, callback=None):
-        showVideoPlayerInfo(self.session, self.download_commit)
 
     def check_addon_updates(self):
         lock = threading.Lock()
@@ -235,12 +224,17 @@ class ArchivCZSK():
         if len(self.to_update_addons) > 5:
             update_string = '\n'.join(addon.name for addon in self.to_update_addons[:6])
             update_string += "\n...\n..."
+        self.__update_string = update_string
 
+        self.session.close(self.__updateDialog)
+
+    def check_updates_finished(self, callback=None):
+        update_string = self.__update_string
+        del self.__update_string
         if update_string != '':
             self.ask_update_addons(update_string)
         else:
             self.open_archive_screen()
-
 
     def ask_update_addons(self, update_string):
         self.session.openWithCallback(
