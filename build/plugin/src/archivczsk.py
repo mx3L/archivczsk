@@ -34,22 +34,12 @@ class ArchivCZSK():
     @staticmethod
     def load_repositories():
         from engine.repository import Repository
-        log.debug('looking for repositories in %s', settings.REPOSITORY_PATH)
-        for repo in os.listdir(settings.REPOSITORY_PATH):
-            repo_path = os.path.join(settings.REPOSITORY_PATH, repo)
-            if os.path.isfile(repo_path):
-                continue
-            log.debug('found repository %s', repo)
-            repo_xml = os.path.join(repo_path, 'addon.xml')
-            try:
-                repository = Repository(repo_xml)
-            except Exception:
-                traceback.print_exc()
-                log.error('cannot load repository %s, skipping..', repo)
-                log.logError('Load repository %s failed, skipping...' % repo)
-                continue
-            else:
-                ArchivCZSK.add_repository(repository)
+        repo_xml = os.path.join(settings.REPOSITORY_PATH, 'addon.xml')
+        try:
+            repository = Repository(repo_xml)
+        except Exception:
+            traceback.print_exc()
+        ArchivCZSK.add_repository(repository)
         ArchivCZSK.__loaded = True
 
     @staticmethod
@@ -185,7 +175,7 @@ class ArchivCZSK():
                                                type=MessageBox.TYPE_INFO, 
                                                enable_input=False)
             self.__console = Console()
-            self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master/commit' % path, self.check_commit_download)
+            self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master-next/commit' % path, self.check_commit_download)
         except:
             log.logError("Download addons commit failed.")
             self.open_archive_screen()

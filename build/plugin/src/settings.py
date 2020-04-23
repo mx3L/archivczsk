@@ -22,7 +22,7 @@ ENIGMA_PLUGIN_PATH = os.path.join(resolveFilename(SCOPE_PLUGINS), 'Extensions')
 PLUGIN_PATH = os.path.join(ENIGMA_PLUGIN_PATH, 'archivCZSK')
 IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
 SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skins')
-REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories')
+REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/addons')
 
 CUSTOM_FONTS_PATH = os.path.join(SKIN_PATH,'font.json')
 CUSTOM_COLORS_PATH = os.path.join(SKIN_PATH,'color.json')

@@ -650,7 +650,7 @@ class Updater(object):
         else:
             update_xml_url = self.update_xml_url
         try:
-            util.download_to_file(update_xml_url, self.update_xml_file, debugfnc=log.debug)
+            util.download_to_file(update_xml_url, self.update_xml_file)
         except Exception:
             log.error('cannot download %s update xml', self.repository.name)
             raise UpdateXMLVersionError()

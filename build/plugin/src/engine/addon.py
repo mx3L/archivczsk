@@ -9,7 +9,7 @@ from Components.config import config, ConfigSubsection, ConfigSelection, ConfigY
 from tools import util, parser
 from Plugins.Extensions.archivCZSK import _, log
 from Plugins.Extensions.archivCZSK import settings
-from Plugins.Extensions.archivCZSK.resources.repositories import config as addon_config
+from Plugins.Extensions.archivCZSK.resources.addons import config as addon_config
 from Plugins.Extensions.archivCZSK.gui import menu
 from Plugins.Extensions.archivCZSK.gui import info
 from Plugins.Extensions.archivCZSK.gui import shortcuts
