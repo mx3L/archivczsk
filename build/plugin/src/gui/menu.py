@@ -11,7 +11,7 @@ from Screens.LocationBox import LocationBox
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Plugins.Extensions.archivCZSK import _, settings, log, removeDiac
-from Plugins.Extensions.archivCZSK.resources.addons import \
+from Plugins.Extensions.archivCZSK.resources.repositories import \
     config as addon_config
 from base import BaseArchivCZSKScreen
 from common import Tabs

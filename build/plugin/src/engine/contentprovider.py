@@ -27,7 +27,7 @@ from Plugins.Extensions.archivCZSK.gui.download import DownloadManagerMessages
 from Plugins.Extensions.archivCZSK.settings import VIDEO_EXTENSIONS, SUBTITLES_EXTENSIONS
 from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonError
 from Plugins.Extensions.archivCZSK.engine.player.player import Player 
-from Plugins.Extensions.archivCZSK.resources.addons import repo_modules
+from Plugins.Extensions.archivCZSK.resources.repositories import repo_modules
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString, is_hls_url, url_get_data_async, get_streams_from_manifest, download_web_file
 from downloader import DownloadManager
 from items import PVideo, PFolder, PPlaylist, PDownload, PCategory, PVideoAddon, \

@@ -67,7 +67,8 @@ class Repository():
             
             addon_info = AddonInfo(os.path.join(addon_path, self.addon_xml_relpath))
             if addon_info.type not in Repository.SUPPORTED_ADDONS:
-                raise Exception("%s '%s' addon not in supported type of addons %s " % (self, addon_info.type, Repository.SUPPORTED_ADDONS))
+                log.logError("Load not supported type of addon %s failed, skipping...\n" % (addon_dir,) )
+                continue
             if addon_info.type == 'video':
                 try:
                     tmp = os.path.join(addon_path, addon_info.script)
