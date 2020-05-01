@@ -5,6 +5,8 @@ import urlparse
 import random
 from datetime import datetime
 
+
+from Plugins.Extensions.archivCZSK import log
 from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 
@@ -37,15 +39,15 @@ class PosterProcessing:
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
             except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
+                log.error('Failed to delete %s. Reason: %s' % (file_path, e))
 
     def _remove_oldest_poster_file(self):
         _, path = self.poster_files.pop(0)
-        print "PosterProcessing._remove_oldest_poster_file: {0}".format(path)
+        log.info("PosterProcessing._remove_oldest_poster_file: {0}".format(path))
         try:
             os.unlink(path)
         except Exception as e:
-            print "PosterProcessing._remove_oldest_poster_file: {0}".format(str(e))
+            log.info("PosterProcessing._remove_oldest_poster_file: {0}".format(str(e)))
 
     def _create_poster_path(self):
         dt = datetime.now()
@@ -59,15 +61,15 @@ class PosterProcessing:
             return
 
         if len(self.poster_files) == self.poster_limit:
-            print "PosterProcessing._image_downloaded: download limit reached({0})".format(self.poster_limit)
+            log.info("PosterProcessing._image_downloaded: download limit reached({0})".format(self.poster_limit))
             self._remove_oldest_poster_file()
-        print "PosterProcessing._image_downloaded: {0}".format(path)
+        log.info("PosterProcessing._image_downloaded: {0}".format(path))
         self.poster_files.append((url, path))
         self.got_image_callback(url, path)
 
     def get_image_file(self, poster_url):
         if os.path.isfile(poster_url):
-            print "PosterProcessing.get_image_file: found poster path (local)"
+            log.info("PosterProcessing.get_image_file: found poster path (local)")
             return poster_url
 
         for idx, (url, path) in enumerate(self.poster_files):
@@ -99,7 +101,7 @@ class PosterPixmapHandler:
         self._retry_times = 0
 
     def __del__(self):
-        print "PosterImageHandler.__del__"
+        log.info("PosterImageHandler.__del__")
         self.retry_timer.stop()
         del self.retry_timer_conn
         del self.retry_timer
@@ -119,14 +121,14 @@ class PosterPixmapHandler:
             self.retry_timer.stop()
 
     def _start_decode_image(self, url, path):
-        print "PosterImageHandler._start_decode_image: {0}".format(path)
+        log.info("PosterImageHandler._start_decode_image: {0}".format(path))
         if self._decode_image(path):
-            print "PosterImageHandler._start_decode_image: started..."
+            log.info("PosterImageHandler._start_decode_image: started...")
             self.retry_timer.stop()
             self._decoding_path = None
             self._decoding_url = url
         else:
-            print "PosterImageHandler._start_decode_image: failed..."
+            log.info("PosterImageHandler._start_decode_image: failed...")
             self._decoding_path = path
             self.retry_timer.start(200)
 
@@ -134,43 +136,42 @@ class PosterPixmapHandler:
         wsize = self.poster_widget.instance.size()
         sc = AVSwitch().getFramebufferScale()
         self.picload.setPara((wsize.width(), wsize.height(),
-                              sc[0], sc[1], False, 1, "#00000000"))
+                              sc[0], sc[1], False, 1, "#ff000000"))
         self.last_decoded_url = None
-        return 0 == self.picload.startDecode(path)
+        return 0 == self.picload.startDecode(util.toString(path))
 
     def _got_picture_data(self, picInfo=None):
         picPtr = self.picload.getData()
         if picPtr is not None:
-            print "PosterImageHandler._got_picture_data, success"
+            log.info("PosterImageHandler._got_picture_data, success")
             self.poster_widget.instance.setPixmap(picPtr)
             self.last_decoded_url = self._decoding_url
         else:
-            print "PosterImageHandler._got_picture_data, failed"
+            log.info("PosterImageHandler._got_picture_data, failed")
             self.last_decoded_url = None
         self._decoding_url = None
 
     def set_image(self, url):
-        print "PosterImageHandler.set_image: {0}".format(url)
+        log.info("PosterImageHandler.set_image: {0}".format(url))
         if self.last_selected_url:
             if self.last_selected_url == url:
-                print "PosterImageHandler.set_image: same url as before"
+                log.info("PosterImageHandler.set_image: same url as before")
                 return
         self.last_selected_url = url
         if self.last_decoded_url:
             if self.last_decoded_url == url:
-                print "PosterImageHandler.set_image: same decoded url as before"
+                log.info("PosterImageHandler.set_image: same decoded url as before")
                 return
 
         self.retry_timer.stop()
 
-        print "PosterImageHandler.set_image: {0}".format(url)
         if url is None:
             imgPtr = LoadPixmap(path=self.no_image_path, cached=True)
             if imgPtr:
                 self.poster_widget.instance.setPixmap(imgPtr)
         else:
             path = self.poster_processing.get_image_file(url)
-            print "PosterImageHandler.set_image: path={0}".format(path)
+            log.info("PosterImageHandler.set_image: path={0}".format(path))
             self.poster_widget.instance.setPixmap(None)
             self.last_decoded_url = None
             # sync 

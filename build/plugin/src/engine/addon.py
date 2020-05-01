@@ -30,6 +30,7 @@ class Addon(object):
         self.changelog = info.changelog
         self.path = info.path
         self.relative_path = os.path.relpath(self.path, repository.path)
+        self.supported = True
 
         log.info("%s - initializing", self)
 

@@ -1,4 +1,5 @@
 from Screens.MessageBox import MessageBox
+import shutil
 
 from item import ItemHandler
 from content import ContentHandler
@@ -8,6 +9,7 @@ from category import CategoryItemHandler, UserCategoryItemHandler
 from media import VideoResolvedItemHandler, VideoNotResolvedItemHandler, PlaylistItemHandler
 
 from Plugins.Extensions.archivCZSK import _, log
+from Plugins.Extensions.archivCZSK.engine.tools import util
 from Plugins.Extensions.archivCZSK.gui.context import ArchivCZSKSelectCategoryScreen
 from Plugins.Extensions.archivCZSK.engine.contentprovider import VideoAddonContentProvider
 from Plugins.Extensions.archivCZSK.engine.items import PExit, PRoot, PFolder, PVideoAddon, PCategoryVideoAddon
@@ -226,6 +228,11 @@ class VideoAddonManagement(ItemHandler):
         item.add_context_menu_item(_("Changelog"),
                                    action=addon.open_changelog,
                                    params={'session':self.session})
+
+        item.add_context_menu_item(_("Remove"),
+                                enabled=not addon.supported,
+                                action=self._remove_addon,
+                                params={'addon':addon})
         ItemHandler._init_menu(self, item)
 
     def _enable_addon(self, addon):
@@ -240,6 +247,28 @@ class VideoAddonManagement(ItemHandler):
         self.content_screen.refreshList()
         self.content_screen.workingFinished()
 
+    def _remove_addon(self, addon):
+
+        def remove_addon_callback(remove):
+            if (remove):
+                log.info("removing addon: %s" % addon.id)
+                try:
+                    shutil.rmtree(addon.path)
+                except Exception as e:
+                    log.error("cannot remove addon: %s" % str(e))
+                    message = ("Unable to remove addon")
+                    self.session.open(MessageBox, message, type=MessageBox.TYPE_WARNING)
+
+                log.info("addon was removed: %s" % addon.id)
+
+                from Plugins.Extensions.archivCZSK.archivczsk import ArchivCZSK
+                ArchivCZSK.remove_addon(addon)
+                self.content_screen.workingStarted()
+                self.content_screen.refreshList()
+                self.content_screen.workingFinished()
+
+        message = _("Do you want to remove") + " " + util.toString(addon.name)
+        self.session.openWithCallback(remove_addon_callback, MessageBox, message, type=MessageBox.TYPE_YESNO,)
 
 
 class ArchivCZSKContentHandler(ContentHandler):
@@ -299,7 +328,7 @@ class VideoAddonManagementScreenContentHandler(ContentHandler):
         if content_provider:
             parent_item = PRoot()
             index = content_screen.getSelectedIndex()
-            list_items = content_provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
+            list_items = content_provider.get_content({'category_addons':'all_addons', 'filter_enabled':False, 'filter_supported': False})
             return {'lst_items':list_items, 'parent_it':parent_item, 'index':index, 'refresh':False}
 
     def _render_content(self, content):

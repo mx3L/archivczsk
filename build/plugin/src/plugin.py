@@ -2,7 +2,7 @@
 from Components.config import config
 from Plugins.Plugin import PluginDescriptor
 
-from Plugins.Extensions.archivCZSK import _
+from Plugins.Extensions.archivCZSK import _, create_rotating_log
 from Plugins.Extensions.archivCZSK.archivczsk import ArchivCZSK
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
 from Plugins.Extensions.archivCZSK.gui.search import ArchivCZSKSearchClientScreen

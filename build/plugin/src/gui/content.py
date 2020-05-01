@@ -35,7 +35,6 @@ from download import DownloadList
 from enigma import eTimer, eLabel, ePicLoad
 from menu import ArchivCZSKConfigScreen
 from skin import parseFont
-from webpixmap import WebPixmap
 from Components.AVSwitch import AVSwitch
 import urlparse
 
@@ -191,8 +190,12 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
     CONTEXT_TIP = (KEY_MENU_IMG, _("show menu of current addon"))
 
     def __init__(self, session, provider):
+
         contentHandler = VideoAddonManagementScreenContentHandler(session, self, provider)
-        addonItems = provider.get_content({'category_addons':'all_addons', 'filter_enabled':False})
+        addonItems = provider.get_content(
+            {'category_addons':'all_addons', 
+            'filter_enabled':False, 
+            'filter_supported': False})
         BaseContentScreen.__init__(self, session, contentHandler, addonItems)
         TipBar.__init__(self, [self.CONTEXT_TIP], startOnShown=False)
         self.skinName = "ArchivCZSKContentScreen"
@@ -234,10 +237,16 @@ class ArchivCZSKVideoAddonsManagementScreen(BaseContentScreen, TipBar):
                 itemColor = 0xff0000
                 addonState = _("broken")
             elif not addon.get_setting('enabled'):
-                itemColor = 0xffff00
+                if addon.supported:
+                    itemColor = 0xffff00
+                else:
+                    itemColor = 0xf5f500
                 addonState = _("disabled")
             else:
-                itemColor = 0x00ff00
+                if addon.supported:
+                    itemColor = 0x00ff00
+                else:
+                    itemColor = 0x00f500
                 addonState = _("enabled")
             itemList.append((toString(item.name), addonState, itemColor))
         self["menu"].list = itemList

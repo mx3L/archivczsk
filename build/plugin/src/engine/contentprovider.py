@@ -117,7 +117,6 @@ class ContentProvider(object):
         log.logDebug("ContentProvider start")
         if self.__started:
             log.logDebug("[%s] cannot start, provider is already started"%self)
-            log.debug("[%s] cannot start, provider is already started",self)
             return
         self.__started = True
         self.__paused = False
@@ -129,7 +128,6 @@ class ContentProvider(object):
         log.logDebug("ContentProvider stop")
         if not self.__started:
             log.logDebug("[%s] cannot stop, provider is already stopped"%self)
-            log.debug("[%s] cannot stop, provider is already stopped",self)
             return
         self.__started = False
         self.__paused = False
@@ -141,11 +139,9 @@ class ContentProvider(object):
         log.logDebug("ContentProvider resume")
         if not self.__started:
             log.logDebug("[%s] cannot resume, provider not started yet"%self)
-            log.debug("[%s] cannot resume, provider not started yet",self)
             return
         if not self.__paused:
             log.logDebug("[%s] cannot resume, provider is already running"%self)
-            log.debug("[%s] cannot resume, provider is already running",self)
             return
         self.__paused = False
         for f in self.on_resume:
@@ -156,11 +152,9 @@ class ContentProvider(object):
         log.logDebug("ContentProvider pause")
         if not self.__started:
             log.logDebug("[%s] cannot pause, provider not started yet"%self)
-            log.debug("[%s] cannot pause, provider not started yet",self)
             return
         if self.__paused:
             log.logDebug("[%s] cannot pause, provider is already paused"%self)
-            log.debug("[%s] cannot pause, provider is already paused",self)
             return
         self.__paused = True
         for f in self.on_pause:
@@ -520,9 +514,7 @@ class ArchivCZSKContentProvider(ContentProvider):
         if 'category' in params:
             return self._get_category(params['category'])
         if 'category_addons' in params:
-            if 'filter_enabled' in params:
-                return self._get_category_addons(params['category_addons'], params['filter_enabled'])
-            return self._get_category_addons(params['category_addons'])
+            return self._get_category_addons(params['category_addons'], params)
         if 'categories_user' in params:
             return self._get_categories(user_only=True)
 
@@ -570,54 +562,49 @@ class ArchivCZSKContentProvider(ContentProvider):
             category_list.extend( [self.default_categories[category_key]['item'] for category_key in self.default_categories_order])
         return category_list
 
-    def _get_category_addons(self, category_id, filter_enabled=True):
+    def _filter_addons(self, addons, params):
         def filter_enabled_addons(paddon):
             return paddon.addon.get_setting('enabled')
+
+        def filter_supported_addons(paddon):
+            return paddon.addon.supported
+
+        if params.get('filter_enabled'):
+            addons = filter(filter_enabled_addons, addons)
+
+        if params.get('filter_supported', config.plugins.archivCZSK.showNotSupportedAddons.value):
+            addons = filter(filter_supported_addons, addons)
+        return addons
+
+    def _sort_addons(self, addons):
+        try:
+            addons = sorted(addons, key=lambda x: x.order)
+        except:
+            pass
+        return addons
+
+
+    def _get_category_addons(self, category_id, params = None):
         if category_id in self.default_categories:
-            return self.default_categories[category_id]['call'](filter_enabled)
+            return self.default_categories[category_id]['call'](params)
         addons = [PCategoryVideoAddon(self._archivczsk.get_addon(addon_id)) for addon_id in self._categories_io.get_category(category_id)]
-        if filter_enabled:
-            addons = filter(filter_enabled_addons, addons)
-        # order addons by setting 'addonorder'
-        try:
-            addons = sorted(addons, key=lambda x: x.order)
-        except:
-            pass
+        addons = self._sort_addons(addons)
         return addons
 
-    def _get_all_addons(self, filter_enabled=True):
-        def filter_enabled_addons(paddon):
-            return paddon.addon.get_setting('enabled')
+    def _get_all_addons(self, params):
         addons = [PVideoAddon(addon) for addon in self._archivczsk.get_video_addons()]
-        if filter_enabled:
-            addons = filter(filter_enabled_addons, addons)
-        # order addons by setting 'addonorder'
-        try:
-            addons = sorted(addons, key=lambda x: x.order)
-        except:
-            pass
+        addons = self._filter_addons(addons, params)
+        addons = self._sort_addons(addons)
         return addons
 
-    def _get_video_addons(self, filter_enabled=True):
-        #addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.get_setting('tv_addon')]
-        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if not paddon.addon.setting_exist('tv_addon') or not paddon.addon.get_setting('tv_addon')]
-        #addons.sort(key=lambda addon: addon.name.lower())
-        # order addons by setting 'addonorder'
-        try:
-            addons = sorted(addons, key=lambda x: x.order)
-        except:
-            pass
+    def _get_video_addons(self, params):
+        addons = [paddon for paddon in self._get_all_addons(params) if not paddon.addon.setting_exist('tv_addon') or not paddon.addon.get_setting('tv_addon')]
+        addons = self._sort_addons(addons)
         return addons
 
-    def _get_tv_addons(self, filter_enabled=True):
-        #addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.get_setting('tv_addon')]
-        addons = [paddon for paddon in self._get_all_addons(filter_enabled) if paddon.addon.setting_exist('tv_addon') and paddon.addon.get_setting('tv_addon')]
-        #addons.sort(key=lambda addon: addon.name.lower())
-        # order addons by setting 'addonorder'
-        try:
-            addons = sorted(addons, key=lambda x: x.order)
-        except:
-            pass
+    def _get_tv_addons(self, params):
+        addons = [paddon for paddon in self._get_all_addons(params) if paddon.addon.setting_exist('tv_addon') and paddon.addon.get_setting('tv_addon')]
+        addons = self._sort_addons(addons)
         return addons
 
 

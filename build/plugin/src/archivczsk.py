@@ -9,7 +9,7 @@ from Components.Console import Console
 from Screens.MessageBox import MessageBox
 from skin import loadSkin
 
-from Plugins.Extensions.archivCZSK import _, log, toString, settings, UpdateInfo
+from Plugins.Extensions.archivCZSK import _, log, toString, settings, UpdateInfo, create_rotating_log
 from Plugins.Extensions.archivCZSK.engine.addon import VideoAddon, XBMCAddon
 from Plugins.Extensions.archivCZSK.engine.exceptions.updater import UpdateXMLVersionError
 from Plugins.Extensions.archivCZSK.engine.tools.task import Task
@@ -107,6 +107,10 @@ class ArchivCZSK():
     @staticmethod
     def add_addon(addon):
         ArchivCZSK.__addons[addon.id] = addon
+
+    @staticmethod
+    def remove_addon(addon):
+        del ArchivCZSK.__addons[addon.id]
 
 
     def __init__(self, session):

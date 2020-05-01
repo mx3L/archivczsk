@@ -72,7 +72,7 @@
     <widget name="path_label" position="15,55" size="1190,25" halign="left" font="Regular;19" transparent="1" foregroundColor="#C4C4C4" />
     <eLabel position="15,85" size="1190,1" zPosition="1" backgroundColor="#C4C4C4" />
     <!--<widget source="menu" render="Listbox" position="10,110" size="880,400" transparent="1" >-->
-    <widget alphatest="on" name="movie_poster_image" position="920,90" size="200,300" transparent="1"/>
+    <widget alphatest="on" name="movie_poster_image" position="790,90" size="412,300" transparent="1"/>
 
     <widget font="Regular;19" foregroundColor="#ccc91c" halign="left" name="movie_rating" position="925,393" size="80,22" transparent="1"/>
     <widget font="Regular;19" foregroundColor="#ccc91c" halign="right" name="movie_duration" position="1010,393" size="105,22" transparent="1"/>

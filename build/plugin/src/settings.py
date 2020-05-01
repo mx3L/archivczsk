@@ -93,18 +93,22 @@ choicelistCsfd = [('1', _("Internal")), ('2', _("CSFD")), ('3', _("CSFDLite"))]
 config.plugins.archivCZSK.csfdMode = ConfigSelection(default='1', choices=choicelistCsfd)
 
 ############ Paths #######################
+def changeLogPath(configElement):
+    log.changePath(configElement.value)
 
 config.plugins.archivCZSK.dataPath = ConfigDirectory(default=os.path.join(PLUGIN_PATH, "resources/data"))
 config.plugins.archivCZSK.downloadsPath = ConfigDirectory(default="/media/hdd")
 config.plugins.archivCZSK.posterPath = ConfigDirectory(default="/tmp")
 config.plugins.archivCZSK.tmpPath = ConfigDirectory(default="/tmp")
 config.plugins.archivCZSK.logPath = ConfigDirectory(default="/tmp")
+config.plugins.archivCZSK.logPath.addNotifier(changeLogPath)
 
 ########### Misc #########################
 
 choicelist = [('1', _("info")), ('2', _("debug"))]
 config.plugins.archivCZSK.debugMode = ConfigSelection(default='1', choices=choicelist)
 config.plugins.archivCZSK.showBrokenAddons = ConfigYesNo(default=True)
+config.plugins.archivCZSK.showNotSupportedAddons = ConfigYesNo(default=False)
 config.plugins.archivCZSK.showVideoSourceSelection = ConfigYesNo(default=True)
 config.plugins.archivCZSK.convertPNG = ConfigYesNo(default=True)
 config.plugins.archivCZSK.clearMemory = ConfigYesNo(default=False)
@@ -166,6 +170,7 @@ def get_misc_settings():
     list.append(getConfigListEntry(_("Debug mode"), config.plugins.archivCZSK.debugMode))
     list.append(getConfigListEntry(_("Confirm exit when closing plugin"), config.plugins.archivCZSK.confirmExit))
     list.append(getConfigListEntry(_("Show broken addons"), config.plugins.archivCZSK.showBrokenAddons))
+    list.append(getConfigListEntry(_("Show not supported addons"), config.plugins.archivCZSK.showNotSupportedAddons))
     list.append(getConfigListEntry(_("Show video source selection"), config.plugins.archivCZSK.showVideoSourceSelection))
     list.append(getConfigListEntry(_("Convert captcha images to 8bit"), config.plugins.archivCZSK.convertPNG))
     list.append(getConfigListEntry(_("Drop caches on exit"), config.plugins.archivCZSK.clearMemory))
