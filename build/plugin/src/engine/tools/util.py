@@ -616,14 +616,12 @@ class CustomImporter:
             self.log("%s found modul '%s' <filename:%s description:%s>" , self, fullname, self.filename, self.description)
         except ImportError:
             self.log("%s cannot found modul %s" , self, fullname)
-            log.logDebug("%s cannot found modul %s" % (self, fullname))
             if self.__filehandle:
                 self.__filehandle.close()
                 self.__filehandle = None
             return None
         if self.__filehandle is None:
             self.log("%s cannot import package '%s', try to append it to sys.path" , self, fullname)
-            log.logError("%s cannot import package '%s', try to append it to sys.path" % (self, fullname))
             raise ImportError
         self.log("%s trying to load module '%s'" , self, fullname)
         return self

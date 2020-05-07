@@ -1,2 +1,2 @@
 installdir = $(libdir)/enigma2/python/Plugins/Extensions/archivCZSK/script
-install_DATA = gst-plugins-archivczsk.sh rtmp-plugin.sh getaddons.py
+install_DATA = getaddons.py

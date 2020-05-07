@@ -14,11 +14,20 @@ from Plugins.Extensions.archivCZSK.engine.exceptions.addon import AddonInfoError
 from Plugins.Extensions.archivCZSK.engine.items import PFolder, PVideo, \
     PVideoResolved, PVideoNotResolved, PPlaylist, PNotSupportedVideo, PSearch, \
     PSearchItem, PContextMenuItem, Stream
+from Plugins.Extensions.archivCZSK.engine.ydl import ydl
 from Plugins.Extensions.archivCZSK.engine.tools.task import callFromThread, Task
 from Plugins.Extensions.archivCZSK.engine.tools.util import toString, toUnicode
 from Plugins.Extensions.archivCZSK.gui.captcha import Captcha
 from Plugins.Extensions.archivCZSK.resources.libraries import simplejson as json
 from Plugins.Extensions.archivCZSK.resources.libraries import m3u8
+
+try:
+    import demjson
+except ImportError:
+    try:
+        import Plugins.Extensions.archivCZSK.resources.libraries.demjson
+    except ImportError:
+        pass
 
 
 GItem_lst = VideoAddonContentProvider.get_shared_itemlist()
@@ -42,6 +51,18 @@ def decode_string(string):
         string = unicode(string, 'utf-8', 'ignore')
         return _(string)
 
+@callFromThread
+def getVideoFormats(url):
+    def initCallback(initialized):
+        if (initialized):
+            return ydl.getVideoLinks(url)
+        return []
+    if ydl.isAvailable() is not None:
+        if ydl.isAvailable():
+            return ydl.getVideoLinks(url)
+        return []
+    if not ydl.isInitialized():
+        return ydl.init().addCallback(initCallback)
 
 @callFromThread
 def getTextInput(session, title, text=""):

@@ -3,9 +3,11 @@ import shutil
 import threading
 import traceback
 import datetime
+import time
 
 from Components.config import config, configfile
 from Components.Console import Console
+from Screens.Console import Console as ConsoleScreen
 from Screens.MessageBox import MessageBox
 from skin import loadSkin
 
@@ -33,6 +35,7 @@ class ArchivCZSK():
 
     @staticmethod
     def load_repositories():
+        start = time.clock()
         from engine.repository import Repository
         repo_xml = os.path.join(settings.REPOSITORY_PATH, 'addon.xml')
         try:
@@ -41,6 +44,13 @@ class ArchivCZSK():
             traceback.print_exc()
         ArchivCZSK.add_repository(repository)
         ArchivCZSK.__loaded = True
+        diff = time.clock() - start
+        log.info("load repositories in {0}".format(diff))
+
+    @staticmethod
+    def start_ydl():
+        from Plugins.Extensions.archivCZSK.engine.ydl import ydl
+        ydl.init()
 
     @staticmethod
     def load_skin():
@@ -70,11 +80,9 @@ class ArchivCZSK():
             if skin_name == 'auto' or not os.path.isfile(skin_path):
                 skin_path = skin_default_path
             log.info("loading skin %s" % skin_path)
-            log.logDebug("loading skin %s" % skin_path)
             loadSkin(skin_path)
         except:
             log.logError("Load plugin skin failed.\n%s"%traceback.format_exc())
-            pass
 
     @staticmethod
     def get_repository(repository_id):
@@ -117,16 +125,26 @@ class ArchivCZSK():
         self.session = session
         self.to_update_addons = []
         self.updated_addons = []
+        self.check_libs_path = os.path.join(settings.PLUGIN_PATH, "libs_checked")
 
         if ArchivCZSK.__need_restart:
             self.ask_restart_e2()
-
-        elif config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
-           self.checkArchivUpdate()
-        elif config.plugins.archivCZSK.autoUpdate.value and self.canCheckUpdate(False):
-            self.download_commit()
         else:
-            self.open_archive_screen()
+            if not os.path.isfile(self.check_libs_path):
+                self.session.openWithCallback(self.onCheckLibsEnded, ConsoleScreen, "Console", [settings.CHECK_LIBS_SCRIPT_PATH])
+            else:
+                if config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
+                    self.checkArchivUpdate()
+                elif config.plugins.archivCZSK.autoUpdate.value and self.canCheckUpdate(False):
+                    self.download_commit()
+                else:
+                    self.open_archive_screen()
+
+    def onCheckLibsEnded(self):
+        open(self.check_libs_path, "w").close()
+
+        ArchivCZSK.__need_restart = True
+        self.ask_restart_e2()
 
     def canCheckUpdate(self, archivUpdate):
         limitHour = 2
@@ -188,7 +206,6 @@ class ArchivCZSK():
         if retval == 0 and os.path.exists(os.path.join(os.path.dirname(__file__), 'commit')):
             self.check_addon_updates()
         else:
-            log.error("commit not downloaded")
             log.logError("Download addons commit return failed.")
             self.open_archive_screen()
 
@@ -201,11 +218,9 @@ class ArchivCZSK():
                 with lock:
                     self.to_update_addons += to_update
             except UpdateXMLVersionError:
-                log.logError('cannot retrieve update xml for repository %s'%repository)
                 log.error('cannot retrieve update xml for repository %s', repository)
             except Exception:
                 traceback.print_exc()
-                log.logError('error when checking updates for repository %s.\n%s' %(repository, traceback.format_exc()))
                 log.error('error when checking updates for repository %s', repository)
         for repo_key in self.__repositories.keys():
             repository = self.__repositories[repo_key]

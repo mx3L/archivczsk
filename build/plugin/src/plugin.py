@@ -78,3 +78,4 @@ def Plugins(path, **kwargs):
 if config.plugins.archivCZSK.preload.value and not ArchivCZSK.isLoaded():
     ArchivCZSK.load_repositories()
     ArchivCZSK.load_skin()
+    ArchivCZSK.start_ydl()

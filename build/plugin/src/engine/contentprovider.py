@@ -61,21 +61,39 @@ class CustomSysImporter(util.CustomImporter):
         util.CustomImporter.__init__(self, 'custom_sys',  log=log.debug)
         self.add_module('sys', custom_sys)
 
+class AddonOutput:
+    def __init__(self):
+        pass
+
+    def write(self, data):
+        log.info(data)
+
+    def flush(self):
+        pass
+
+    def isatty(self):
+        return True
+
+
 class AddonSys():
-    "sys for addons"
     def __init__(self):
         self.addons = []
         self.path = SysPath(self.addons)
+        self.output = AddonOutput()
 
     def __setitem__(self, key, val):
         if key == 'path':
             log.error('you cannot replace AddonSysPath!')
+        elif key == 'stdout':
+            pass
         else:
             dict.__setitem__(self, key, val)
 
     def __getattr__(self, attr):
         if attr=='path':
             return self.path
+        elif attr=='stdout':
+            return self.output
         return getattr(sys, attr)
 
     def add_addon(self, addon):

@@ -43,11 +43,11 @@ class PosterProcessing:
 
     def _remove_oldest_poster_file(self):
         _, path = self.poster_files.pop(0)
-        log.info("PosterProcessing._remove_oldest_poster_file: {0}".format(path))
+        log.debug("PosterProcessing._remove_oldest_poster_file: {0}".format(path))
         try:
             os.unlink(path)
         except Exception as e:
-            log.info("PosterProcessing._remove_oldest_poster_file: {0}".format(str(e)))
+            log.error("PosterProcessing._remove_oldest_poster_file: {0}".format(str(e)))
 
     def _create_poster_path(self):
         dt = datetime.now()
@@ -61,15 +61,15 @@ class PosterProcessing:
             return
 
         if len(self.poster_files) == self.poster_limit:
-            log.info("PosterProcessing._image_downloaded: download limit reached({0})".format(self.poster_limit))
+            log.debug("PosterProcessing._image_downloaded: download limit reached({0})".format(self.poster_limit))
             self._remove_oldest_poster_file()
-        log.info("PosterProcessing._image_downloaded: {0}".format(path))
+        log.debug("PosterProcessing._image_downloaded: {0}".format(path))
         self.poster_files.append((url, path))
         self.got_image_callback(url, path)
 
     def get_image_file(self, poster_url):
         if os.path.isfile(poster_url):
-            log.info("PosterProcessing.get_image_file: found poster path (local)")
+            log.debug("PosterProcessing.get_image_file: found poster path (local)")
             return poster_url
 
         for idx, (url, path) in enumerate(self.poster_files):
@@ -101,7 +101,7 @@ class PosterPixmapHandler:
         self._retry_times = 0
 
     def __del__(self):
-        log.info("PosterImageHandler.__del__")
+        log.debug("PosterImageHandler.__del__")
         self.retry_timer.stop()
         del self.retry_timer_conn
         del self.retry_timer
@@ -121,14 +121,14 @@ class PosterPixmapHandler:
             self.retry_timer.stop()
 
     def _start_decode_image(self, url, path):
-        log.info("PosterImageHandler._start_decode_image: {0}".format(path))
+        log.debug("PosterImageHandler._start_decode_image: {0}".format(path))
         if self._decode_image(path):
-            log.info("PosterImageHandler._start_decode_image: started...")
+            log.debug("PosterImageHandler._start_decode_image: started...")
             self.retry_timer.stop()
             self._decoding_path = None
             self._decoding_url = url
         else:
-            log.info("PosterImageHandler._start_decode_image: failed...")
+            log.debug("PosterImageHandler._start_decode_image: failed...")
             self._decoding_path = path
             self.retry_timer.start(200)
 
@@ -143,24 +143,24 @@ class PosterPixmapHandler:
     def _got_picture_data(self, picInfo=None):
         picPtr = self.picload.getData()
         if picPtr is not None:
-            log.info("PosterImageHandler._got_picture_data, success")
+            log.debug("PosterImageHandler._got_picture_data, success")
             self.poster_widget.instance.setPixmap(picPtr)
             self.last_decoded_url = self._decoding_url
         else:
-            log.info("PosterImageHandler._got_picture_data, failed")
+            log.error("PosterImageHandler._got_picture_data, failed")
             self.last_decoded_url = None
         self._decoding_url = None
 
     def set_image(self, url):
-        log.info("PosterImageHandler.set_image: {0}".format(url))
+        log.debug("PosterImageHandler.set_image: {0}".format(url))
         if self.last_selected_url:
             if self.last_selected_url == url:
-                log.info("PosterImageHandler.set_image: same url as before")
+                log.debug("PosterImageHandler.set_image: same url as before")
                 return
         self.last_selected_url = url
         if self.last_decoded_url:
             if self.last_decoded_url == url:
-                log.info("PosterImageHandler.set_image: same decoded url as before")
+                log.debug("PosterImageHandler.set_image: same decoded url as before")
                 return
 
         self.retry_timer.stop()
@@ -171,7 +171,7 @@ class PosterPixmapHandler:
                 self.poster_widget.instance.setPixmap(imgPtr)
         else:
             path = self.poster_processing.get_image_file(url)
-            log.info("PosterImageHandler.set_image: path={0}".format(path))
+            log.debug("PosterImageHandler.set_image: path={0}".format(path))
             self.poster_widget.instance.setPixmap(None)
             self.last_decoded_url = None
             # sync 
