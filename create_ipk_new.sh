@@ -1,25 +1,23 @@
 # UPDATE PVER to actual version
 # ./create_ipk_new.sh 20180510 ... [date of release]
-if [ ! "`whoami`" = "root" ]
-then
-    echo "*************************** Please run script as root ***************************"
-    exit 1
-fi
-
-echo " "
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-echo "!!!! run command 'sudo su' then run script !!!!"
-echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-echo " "
+#if [ ! "`whoami`" = "root" ]
+#then
+#    echo "*************************** Please run script as root ***************************"
+#    exit 1
+#fi
+#
+#echo " "
+#echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#echo "!!!! run command 'sudo su' then run script !!!!"
+#echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#echo " "
 
 
 ##################################
 ############ SETTINGS ############
 ##################################
-ADDONS_COMMIT="5dfe5f501a659b83695b9977dd45fbe463911a0e"
-PVER="1.0"
-SH4_V="0.1"
-MIPS_V="0.2"
+ADDONS_COMMIT="aa23d87fb48ce9e3fdb65819d35b91b768e0f6f8"
+PVER="1.3.0"
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
 
 
@@ -32,9 +30,6 @@ DP=${D}/ipkg.deps
 
 P26="https://www.python.org/ftp/python/2.6/Python-2.6.tgz"
 P27="https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz"
-
-SH4="http://dl.bintray.com/mx3l/generic/sh4_$SH4_V.tar.gz"
-MIPS="http://dl.bintray.com/mx3l/generic/mipsel_$MIPS_V.tar.gz"
 
 pushd ${D} &> /dev/null
 
@@ -76,24 +71,14 @@ else
 	mv ${DP}/Python-2.7.5 ${DP}/Python-2.7
 fi
 
-rm -rf ${DP}/sh4
-rm -rf ${DP}/mipsel
-
-echo "downloading neccesary sh4/mipsel binaries"
-curl $SH4 -L -s -o ${DP}/sh4_$SH4_V.tar.gz
-curl $MIPS -L -s -o ${DP}/mipsel_$MIPS_V.tar.gz 
-tar -C ${DP} -xzf ${DP}/sh4_$SH4_V.tar.gz
-tar -C ${DP} -xzf ${DP}/mipsel_$MIPS_V.tar.gz
-
-
 cat > ${P}/CONTROL/control << EOF
 Package: enigma2-plugin-extensions-archivczsk
 Version: ${PVER}
 Architecture: all
 Section: extra
 Priority: optional
-Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-youtube-dl, python-requests, curl, rtmpdump
-Maintainer: mxfitsat@gmail.com
+Recommends: python-html, python-threading, python-json, python-zlib, python-compression, python-codecs, python-email, python-requests, curl, rtmpdump
+Maintainer: archivczsk@seznam.cz
 Homepage: https://github.com/mx3L/archivczsk/releases
 Description: prehravanie CZ/SK archivov ${VER}
 EOF
@@ -130,7 +115,6 @@ EOF
 
 cp ${S}/script/postinst ${P}/CONTROL/
 
-
 chmod 755 ${P}/CONTROL/preinst
 chmod 755 ${P}/CONTROL/postinst
 chmod 755 ${P}/CONTROL/prerm
@@ -159,9 +143,7 @@ rm -rf ${P}${PLUGINPATH}/converter
 rm -rf ${P}${PLUGINPATH}/resources/data/*
 
 if ! [ -z "${ADDONS_COMMIT}" ]; then
-	${S}/build/plugin/src/script/getaddons.py xbmc_doplnky ${P} $ADDONS_COMMIT
-	${S}/build/plugin/src/script/getaddons.py dmd_czech ${P} $ADDONS_COMMIT
-	${S}/build/plugin/src/script/getaddons.py custom ${P} $ADDONS_COMMIT
+	${S}/build/plugin/src/script/getaddons.py addons ${P} $ADDONS_COMMIT
 fi
 
 
