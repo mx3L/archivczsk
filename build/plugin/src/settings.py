@@ -2,7 +2,7 @@ import os
 from Components.Language import language
 from Components.config import config, ConfigSubsection, ConfigSelection, \
     ConfigDirectory, ConfigYesNo, ConfigNothing, getConfigListEntry, \
-    NoSave
+    NoSave, ConfigInteger
 from Tools.Directories import SCOPE_PLUGINS, resolveFilename
 
 from Plugins.Extensions.archivCZSK import log, UpdateInfo, _
@@ -79,6 +79,7 @@ config.plugins.archivCZSK.epg_menu = ConfigYesNo(default=True)
 config.plugins.archivCZSK.archivAutoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.autoUpdate = ConfigYesNo(default=True)
 config.plugins.archivCZSK.preload = ConfigYesNo(default=True)
+config.plugins.archivCZSK.lastIconDShowMessage = ConfigInteger(0)
 
 
 skinChoices = [os.path.splitext(fname)[0] for fname in os.listdir(SKIN_PATH) if fname.endswith('.xml') ]
@@ -126,8 +127,6 @@ def changeAutoUpdate(configElement):
 config.plugins.archivCZSK.debugMode.addNotifier(changeLogMode)
 config.plugins.archivCZSK.archivAutoUpdate.addNotifier(changeAutoUpdate)
 config.plugins.archivCZSK.autoUpdate.addNotifier(changeAutoUpdate)
-
-
 
 def get_player_settings():
     list = []

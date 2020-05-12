@@ -13,11 +13,11 @@ from Screens.InputBox import InputBox
 from Screens.MessageBox import MessageBox
 from Tools.LoadPixmap import LoadPixmap
 
-
 from poster import PosterProcessing, PosterPixmapHandler
 
 from Plugins.Extensions.archivCZSK import _, log, settings
 from Plugins.Extensions.archivCZSK.compat import eConnectCallback
+from Plugins.Extensions.archivCZSK.gui.icon import IconD
 from Plugins.Extensions.archivCZSK.engine.contentprovider import \
     VideoAddonContentProvider, ArchivCZSKContentProvider
 from Plugins.Extensions.archivCZSK.engine.handlers import \
@@ -343,7 +343,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
         self["about"] = Label("")
 
         self["key_red"] = Label(_("Manager"))
-        self["key_green"] = Label()
+        self["key_green"] = Label(_("Support us"))
         self["key_yellow"] = Label("")
         self["key_blue"] = Label(_("Settings"))
 
@@ -354,6 +354,7 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
                 "up": self.up,
                 "down": self.down,
                 "blue": self.openSettings,
+                "green": self.showIconD,
                 "red": self.openAddonManagement,
                 "menu" : self.menu
             }, -2)
@@ -476,6 +477,9 @@ class ArchivCZSKContentScreen(BaseContentScreen, DownloadList, TipBar):
     def closePlugin(self, callback=None):
         if callback:
             self.close()
+
+    def showIconD(self):
+        self.session.open(IconD)
 
 
 class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):

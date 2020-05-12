@@ -1,11 +1,14 @@
 # -*- coding: UTF-8 -*-
+import time
+
 from Components.config import config
 from Plugins.Plugin import PluginDescriptor
 
-from Plugins.Extensions.archivCZSK import _, create_rotating_log
+from Plugins.Extensions.archivCZSK import _, settings
 from Plugins.Extensions.archivCZSK.archivczsk import ArchivCZSK
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
 from Plugins.Extensions.archivCZSK.gui.search import ArchivCZSKSearchClientScreen
+from Plugins.Extensions.archivCZSK.gui.icon import IconD
 from Plugins.Extensions.archivCZSK.engine.downloader import DownloadManager
 
 
@@ -21,11 +24,21 @@ def sessionStart(reason, session):
         DownloadManager(session.archivCZSKdownloads)
 
 def main(session, **kwargs):
-    ArchivCZSK(session)
+    def runArchivCZSK(callback = None):
+        ArchivCZSK(session)
+
+    lastIconDUtcCfg = config.plugins.archivCZSK.lastIconDShowMessage
+
+    monthSeconds = 60 * 60 * 24 * 30
+    if lastIconDUtcCfg.value == 0 or (int(time.time()) - lastIconDUtcCfg.value > monthSeconds):
+        lastIconDUtcCfg.value = int(time.time())
+        lastIconDUtcCfg.save()
+        session.openWithCallback(runArchivCZSK, IconD)
+    else:
+        runArchivCZSK()
 
 def menu(menuid, **kwargs):
     if menuid == "mainmenu":
-        #return [(DESCRIPTION, main, menuid, 32)]
         return [(DESCRIPTION, main, "archivy_czsk", 32)]
     else:
         return []
@@ -33,6 +46,7 @@ def menu(menuid, **kwargs):
 def eventInfo(session, servicelist, **kwargs):
     ref = session.nav.getCurrentlyPlayingServiceReference()
     session.open(ArchivCZSKSearchClientScreen, ref)
+
 def osrefresh(session, servicelist, **kwargs):
     try:
         from Plugins.Extensions.archivCZSK.osref import OSRefresh
