@@ -6,8 +6,9 @@ tmp_path=/tmp/archivczsk_libs
 
 module_available()
 {
-    python -c "import sys;sys.path.append("\"\.\/$1\"");import $1" 2> /dev/null
-    if [ $? -eq 0 ]; then
+    #python -c "import sys;sys.path.append("\"\.\/$1\"");import $1" 2> /dev/null
+    #if [ $? -eq 0 ]; then
+    if [ -d $1 ]; then
         if [ "$2" = "f" ]; then
             echo "0"
         else
