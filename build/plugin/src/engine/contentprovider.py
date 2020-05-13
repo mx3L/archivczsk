@@ -587,7 +587,7 @@ class ArchivCZSKContentProvider(ContentProvider):
         def filter_supported_addons(paddon):
             return paddon.addon.supported
 
-        if params.get('filter_enabled'):
+        if params.get('filter_enabled', True):
             addons = filter(filter_enabled_addons, addons)
 
         if params.get('filter_supported', config.plugins.archivCZSK.showNotSupportedAddons.value):
