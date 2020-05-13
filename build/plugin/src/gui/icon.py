@@ -5,6 +5,7 @@ from Components.ActionMap import ActionMap
 from Components.Pixmap import Pixmap
 from Tools.LoadPixmap import LoadPixmap
 from Plugins.Extensions.archivCZSK.settings import IMAGE_PATH
+from Plugins.Extensions.archivCZSK.compat import eConnectCallback
 from enigma import ePicLoad, getDesktop
 
 class IconD(Screen):
@@ -34,8 +35,9 @@ class IconD(Screen):
             "ok": self.close,
             "cancel": self.close
         }, -1)
-        self.PicLoad.PictureData.get().append(self.DecodePicture)
+        self.picLoad_conn = eConnectCallback(self.PicLoad.PictureData, self.DecodePicture)
         self.onLayoutFinish.append(self.ShowPicture)
+        self.onClose.append(self.__onClose)
 
     def ShowPicture(self):
         if self.picPath is not None:
@@ -53,3 +55,7 @@ class IconD(Screen):
         if self.picPath is not None:
             ptr = self.PicLoad.getData()
             self["myPic"].instance.setPixmap(ptr)
+
+    def __onClose(self):
+        del self.picLoad_conn
+        del self.PicLoad
