@@ -47,6 +47,11 @@ class ArchivCZSK():
         diff = time.clock() - start
         log.info("load repositories in {0}".format(diff))
 
+        for repo in ['xbmc_doplnky', 'custom', 'dmd_czech']:
+            repoPath =  os.path.join(settings.PLUGIN_PATH, 'resources', 'repositories', repo)
+            if os.path.isdir(repoPath):
+                shutil.rmtree(repoPath, True)
+
     @staticmethod
     def start_ydl():
         from Plugins.Extensions.archivCZSK.engine.ydl import ydl
