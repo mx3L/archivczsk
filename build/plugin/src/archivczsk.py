@@ -1,4 +1,5 @@
 import os
+import stat
 import shutil
 import threading
 import traceback
@@ -136,6 +137,7 @@ class ArchivCZSK():
             self.ask_restart_e2()
         else:
             if not os.path.isfile(self.check_libs_path):
+                os.chmod(settings.CHECK_LIBS_SCRIPT_PATH, stat.S_IRUSR | stat.S_IXUSR)
                 self.session.openWithCallback(self.onCheckLibsEnded, ConsoleScreen, "Console", [settings.CHECK_LIBS_SCRIPT_PATH])
             else:
                 if config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
