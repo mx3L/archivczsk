@@ -18,7 +18,7 @@ msgstr ""
 
 #: archivczsk.py:196
 msgid "Checking for updates"
-msgstr ""
+msgstr "Kontrolujem aktualizácie"
 
 #: archivczsk.py:252
 msgid "Do you want to update"
