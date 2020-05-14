@@ -526,6 +526,9 @@ class ArchivCZSKContentProvider(ContentProvider):
         self._categories_io.save()
 
     def get_content(self, params=None):
+        f = open("/tmp/archivCZSK.last", "w")
+        f.write('%s - params: %s' % (self, str(params)))
+        f.close()
         log.info('%s get_content - params: %s' % (self, str(params)))
         if not params or 'categories' in params:
             return self._get_categories()
@@ -762,6 +765,9 @@ class VideoAddonContentProvider(ContentProvider, PlayMixin, DownloadsMixin, Favo
         del self._dependencies[:]
 
     def get_content(self, session, params, successCB, errorCB):
+        f = open("/tmp/archivCZSK.last", "w")
+        f.write('%s - params: %s' % (self, str(params)))
+        f.close()
         log.info('%s get_content - params: %s' % (self, str(params)))
         # add/remove trakt compatibility on every content request
         if self.video_addon.setting_exist('trakt_enabled'):
