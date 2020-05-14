@@ -130,7 +130,7 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
         elif isinstance(current, ConfigText):
             entryName = self["config"].getCurrent()[0]
             self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoardCFG, entryName=entryName, configEntry=current)
-        
+
     def keySave(self):
         self.saveAll()
         self.close(True)
@@ -218,7 +218,7 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
     def __init__(self, session, entryName, configEntry):
         try:
             self.configEntry = configEntry
-            
+
             #VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
             VirtualKeyBoard.__init__(self, session, title=removeDiac(entryName), text=removeDiac(configEntry.getValue()))
             self.skinName = "VirtualKeyBoard"
@@ -229,12 +229,11 @@ class VirtualKeyBoardCFG(VirtualKeyBoard):
         except:
             log.logError("Init VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
             raise
-        
 
     def ok(self):
         try:
             #self.close(self.text.encode("utf-8"), self.configEntry)
-            self.close(removeDiac(self["text"].getText()), self.configEntry)
+            self.close(removeDiac(self["text"].getText()).strip().rstrip('|').strip(), self.configEntry)
         except:
             log.logError("OK VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
             raise
