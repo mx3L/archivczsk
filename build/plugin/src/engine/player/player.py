@@ -429,7 +429,9 @@ class ArchivCZSKMoviePlayer(InfoBarBase, SubsSupport, SubsSupportStatus, InfoBar
         SubsSupport.__init__(self, 
                 defaultPath = config_archivczsk.tmpPath.value,
                 forceDefaultPath = True,
-                searchSupport = True)
+                searchSupport = True,
+                embeddedSupport = True,
+                preferEmbedded = True)
         SubsSupportStatus.__init__(self)
         InfoBarAudioSelectionNoSubtitles.__init__(self)
         InfoBarNotifications.__init__(self)
