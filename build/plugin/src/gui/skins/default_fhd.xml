@@ -97,6 +97,14 @@
     <widget font="Regular;23" foregroundColor="white" halign="left" name="tip_label" position="70,704" size="633,32" transparent="1" valign="center" zPosition="2" />
   </screen>
 
+  <screen name="ArchivCZSKItemInfoScreen" position="center,100" size="1200,925" title="Info" >
+    <widget name="genre" position="505,50" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
+    <widget name="year" position="505,110" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
+    <widget name="rating" position="505,170" size="600,36" font="Regular;30" transparent="1" foregroundColor="yellow" />
+    <widget name="plot" position="10,510" size="1180,402" font="Regular;30" transparent="1"  foregroundColor="white" />
+    <widget name="img" position="10,0" zPosition="2" size="480,480"  alphatest="on"/>
+  </screen> 
+
   <screen name="ArchivCZSKVideoPlayerInfoScreen" position="center,center" size="1157,739" title="ContentScreen">
     <widget backgroundColor="#9f1313" font="Regular;25" halign="center" name="key_red" position="10,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />
     <widget backgroundColor="#1f771f" font="Regular;25" halign="center" name="key_green" position="296,6" shadowColor="black" shadowOffset="-2,-2" size="276,57" valign="center" zPosition="1" />

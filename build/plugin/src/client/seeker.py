@@ -21,6 +21,7 @@ def getCapabilities():
     """
     list = []
     #list.append((_('Search in') + ' ' + 'OnlineFiles', 'plugin.video.online-files', 'all'))
+    list.append((_('Search in') + ' ' + 'Stream Cinema 2.0', 'plugin.video.sc2', 'all'))
     list.append((_('Search in') + ' ' + 'Stream Cinema', 'plugin.video.stream-cinema', 'all'))
     list.append((_('Search in') + ' ' + 'Sosac', 'plugin.video.sosac.ph', 'all'))
     list.append((_('Search in') + ' ' + 'CSFD', 'csfd', 'all'))
@@ -189,6 +190,8 @@ def getSearcher(session, addon_name, archivczsk, succ_cb, err_cb):
         return SosacSearch(session, archivczsk, succ_cb, err_cb)
     elif addon_name == 'plugin.video.stream-cinema':
         return StreamCinemaSearch(session, archivczsk, succ_cb, err_cb)
+    elif addon_name == 'plugin.video.sc2':
+        return StreamCinema20Search(session, archivczsk, succ_cb, err_cb)
     else:
         return None
             
@@ -285,6 +288,14 @@ class StreamCinemaSearch(Search):
     def search(self, search_exp, mode='all'):
         params = {'search':search_exp, 'search-no-history':True}
         self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
+
+class StreamCinema20Search(Search):
+    addon_id = 'plugin.video.sc2'
+    
+    def search(self, search_exp, mode='all'):
+        params = {'url': '?action=search&history=0&action_value='+search_exp}
+        self.provider.get_content(self.session, params, self.succ_cb, self.err_cb)
+
 class CsfdSearch():
     def showCSFDInfo(self, session, searchExp):
         try:

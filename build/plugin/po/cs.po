@@ -779,15 +779,15 @@ msgstr "Adresa videa neexistuje"
 
 #: gui/info.py:192
 msgid "Genre: "
-msgstr "Žánr:"
+msgstr "Žánr: "
 
 #: gui/info.py:193
 msgid "Year: "
-msgstr "Rok:"
+msgstr "Rok: "
 
 #: gui/info.py:194
 msgid "Rating: "
-msgstr "Hodnocení:"
+msgstr "Hodnocení: "
 
 #: gui/info.py:246
 msgid "Install GStreamer plugins"
