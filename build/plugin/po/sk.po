@@ -462,11 +462,11 @@ msgstr "ukončené s chybami"
 
 #: gui/common.py:198 gui/common.py:200
 msgid "Finished:  "
-msgstr "Ukončené:"
+msgstr "Ukončené: "
 
 #: gui/common.py:210
 msgid "Size:  "
-msgstr "Veľkosť:"
+msgstr "Veľkosť: "
 
 #: gui/content.py:74
 msgid "Loading"
@@ -490,11 +490,11 @@ msgstr "vypnutý"
 
 #: gui/content.py:276 gui/content.py:443
 msgid "Author: "
-msgstr "Autor:"
+msgstr "Autor: "
 
 #: gui/content.py:280 gui/content.py:447
 msgid "Version: "
-msgstr "Verzia:"
+msgstr "Verzia: "
 
 #: gui/content.py:324
 msgid "Add Category"

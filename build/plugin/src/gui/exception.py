@@ -55,40 +55,32 @@ class AddonExceptionHandler(GUIExceptionHandler):
                     func(*args, **kwargs)
                 # addon specific exceptions
                 except addon.AddonInfoError as er:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "AddonInfoError %s"%traceback.format_exc()})
                     log.logError("Addon (AddonInfoError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
                     self.infoMessage(er.value)
                 except addon.AddonWarningError as er:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "AddonWarningError %s"%traceback.format_exc()})
                     log.logError("Addon (AddonWarningError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
                     self.warningMessage(er.value)
                 except addon.AddonError as er:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "AddonError %s"%traceback.format_exc()})
                     log.logError("Addon (AddonError) error '%s'.\n%s"%(er.value,traceback.format_exc()))
                     self.errorMessage(er.value)
                 # loading exceptions
                 except urllib2.HTTPError, e:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "HTTPError %s"%traceback.format_exc()})
                     log.logError("Addon (HTTPError) error '%s'.\n%s"%(e.code,traceback.format_exc()))
                     message = "%s %s:%d" % (_("Error in loading"), _("HTTP Error"), e.code)
                     self.errorMessage(message)
                 except urllib2.URLError, e:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "URLError %s"%traceback.format_exc()})
                     log.logError("Addon (URLError) error '%s'.\n%s"%(e.reason,traceback.format_exc()))
                     message = "%s %s:%s" % (_("Error in loading"), _("URL Error"), str(e.reason))
                     self.errorMessage(message)
                 except addon.AddonThreadException as er:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "AddonThreadException %s"%traceback.format_exc()})
                     log.logError("Addon (AddonThreadException) error.\n%s"%(traceback.format_exc()))
                     pass
                 # we handle all possible exceptions since we dont want plugin to crash because of addon error...
                 except Exception, e:
-                    req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "Error %s"%traceback.format_exc()})
                     log.logError("Addon error.\n%s"%traceback.format_exc())
                     self.errorMessage(_("Author of this addon needs to update it"))
                     traceback.print_exc()
             except:
-                req = requests.post('http://omegaplus.myftp.biz/czsk/', data={'params': "%s"%params, 'data': "LOG Error %s"%traceback.format_exc()})
                 log.logError("Addon (LOG) error.\n%s"%traceback.format_exc())
                 # this can go to crash because want show modal from screen which is not modal
                 # but this can got to fck
