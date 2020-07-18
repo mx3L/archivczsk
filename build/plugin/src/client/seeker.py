@@ -21,7 +21,7 @@ def getCapabilities():
     """
     list = []
     #list.append((_('Search in') + ' ' + 'OnlineFiles', 'plugin.video.online-files', 'all'))
-    list.append((_('Search in') + ' ' + 'Stream Cinema 2.0', 'plugin.video.sc2', 'all'))
+    list.append((_('Search in') + ' ' + 'Stream Cinema Community', 'plugin.video.sc2', 'all'))
     list.append((_('Search in') + ' ' + 'Stream Cinema', 'plugin.video.stream-cinema', 'all'))
     list.append((_('Search in') + ' ' + 'Sosac', 'plugin.video.sosac.ph', 'all'))
     list.append((_('Search in') + ' ' + 'CSFD', 'csfd', 'all'))
