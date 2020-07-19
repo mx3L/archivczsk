@@ -24,7 +24,6 @@ IMAGE_PATH = os.path.join(PLUGIN_PATH, 'gui/icon')
 SKIN_PATH = os.path.join(PLUGIN_PATH, 'gui/skins')
 REPOSITORY_PATH = os.path.join(PLUGIN_PATH, 'resources/repositories/addons')
 LIBRARIES_PATH = os.path.join(PLUGIN_PATH, 'resources/libraries')
-CHECK_LIBS_SCRIPT_PATH = os.path.join(PLUGIN_PATH, 'resources/libraries/get_libraries.sh')
 YDL_SCRIPT_PATH = os.path.join(PLUGIN_PATH, 'resources/libraries/archivczsk_youtubedl.py')
 
 CUSTOM_FONTS_PATH = os.path.join(SKIN_PATH,'font.json')

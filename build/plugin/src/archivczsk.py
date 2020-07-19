@@ -131,27 +131,16 @@ class ArchivCZSK():
         self.session = session
         self.to_update_addons = []
         self.updated_addons = []
-        self.check_libs_path = os.path.join(settings.PLUGIN_PATH, "libs_checked")
 
         if ArchivCZSK.__need_restart:
             self.ask_restart_e2()
         else:
-            if not os.path.isfile(self.check_libs_path):
-                os.chmod(settings.CHECK_LIBS_SCRIPT_PATH, stat.S_IRUSR | stat.S_IXUSR)
-                self.session.openWithCallback(self.onCheckLibsEnded, ConsoleScreen, "Console", [settings.CHECK_LIBS_SCRIPT_PATH])
+            if config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
+                self.checkArchivUpdate()
+            elif config.plugins.archivCZSK.autoUpdate.value and self.canCheckUpdate(False):
+                self.download_commit()
             else:
-                if config.plugins.archivCZSK.archivAutoUpdate.value and self.canCheckUpdate(True):
-                    self.checkArchivUpdate()
-                elif config.plugins.archivCZSK.autoUpdate.value and self.canCheckUpdate(False):
-                    self.download_commit()
-                else:
-                    self.open_archive_screen()
-
-    def onCheckLibsEnded(self):
-        open(self.check_libs_path, "w").close()
-
-        ArchivCZSK.__need_restart = True
-        self.ask_restart_e2()
+                self.open_archive_screen()
 
     def canCheckUpdate(self, archivUpdate):
         limitHour = 2
