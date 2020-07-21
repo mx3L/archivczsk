@@ -6,7 +6,7 @@ Created on 10.3.2013
 GUI Exception handling
 '''
 import traceback
-import urllib2,requests
+import urllib2
 from common import showInfoMessage, showWarningMessage, showErrorMessage
 from Plugins.Extensions.archivCZSK.engine.exceptions import addon, download, updater, play
 from Plugins.Extensions.archivCZSK.gsession import GlobalSession
