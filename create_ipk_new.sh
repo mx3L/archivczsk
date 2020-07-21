@@ -16,8 +16,8 @@
 ##################################
 ############ SETTINGS ############
 ##################################
-ADDONS_COMMIT="aa23d87fb48ce9e3fdb65819d35b91b768e0f6f8"
-PVER="1.3.0"
+ADDONS_COMMIT="6829bfbb5811e4e580fc4afab5f8404dfb183e84"
+PVER="1.3.5"
 PLUGINPATH=/usr/lib/enigma2/python/Plugins/Extensions/archivCZSK
 
 
