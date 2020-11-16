@@ -53,7 +53,7 @@ def _real_main(argv=None):
 
     workaround_optparse_bug9161()
 
-    setproctitle('youtube-dl')
+    setproctitle('youtube-dlc')
 
     parser, opts, args = parseOpts(argv)
 
@@ -209,6 +209,9 @@ def _real_main(argv=None):
         opts.audioquality = opts.audioquality.strip('k').strip('K')
         if not opts.audioquality.isdigit():
             parser.error('invalid audio quality specified')
+    if opts.remuxvideo is not None:
+        if opts.remuxvideo not in ['mp4', 'mkv']:
+            parser.error('invalid video container format specified')
     if opts.recodevideo is not None:
         if opts.recodevideo not in ['mp4', 'flv', 'webm', 'ogg', 'mkv', 'avi']:
             parser.error('invalid video recode format specified')
@@ -260,6 +263,11 @@ def _real_main(argv=None):
             'preferredcodec': opts.audioformat,
             'preferredquality': opts.audioquality,
             'nopostoverwrites': opts.nopostoverwrites,
+        })
+    if opts.remuxvideo:
+        postprocessors.append({
+            'key': 'FFmpegVideoRemuxer',
+            'preferedformat': opts.remuxvideo,
         })
     if opts.recodevideo:
         postprocessors.append({
@@ -315,6 +323,7 @@ def _real_main(argv=None):
         else match_filter_func(opts.match_filter))
 
     ydl_opts = {
+        'convertsubtitles': opts.convertsubtitles,
         'usenetrc': opts.usenetrc,
         'username': opts.username,
         'password': opts.password,
@@ -381,6 +390,7 @@ def _real_main(argv=None):
         'rejecttitle': decodeOption(opts.rejecttitle),
         'max_downloads': opts.max_downloads,
         'prefer_free_formats': opts.prefer_free_formats,
+        'trim_file_name': opts.trim_file_name,
         'verbose': opts.verbose,
         'dump_intermediate_pages': opts.dump_intermediate_pages,
         'write_pages': opts.write_pages,
@@ -405,7 +415,9 @@ def _real_main(argv=None):
         'prefer_ffmpeg': opts.prefer_ffmpeg,
         'include_ads': opts.include_ads,
         'default_search': opts.default_search,
+        'dynamic_mpd': opts.dynamic_mpd,
         'youtube_include_dash_manifest': opts.youtube_include_dash_manifest,
+        'youtube_include_hls_manifest': opts.youtube_include_hls_manifest,
         'encoding': opts.encoding,
         'extract_flat': opts.extract_flat,
         'mark_watched': opts.mark_watched,
@@ -416,6 +428,7 @@ def _real_main(argv=None):
         'call_home': opts.call_home,
         'sleep_interval': opts.sleep_interval,
         'max_sleep_interval': opts.max_sleep_interval,
+        'sleep_interval_subtitles': opts.sleep_interval_subtitles,
         'external_downloader': opts.external_downloader,
         'list_thumbnails': opts.list_thumbnails,
         'playlist_items': opts.playlist_items,
@@ -455,7 +468,7 @@ def _real_main(argv=None):
             ydl.warn_if_short_id(sys.argv[1:] if argv is None else argv)
             parser.error(
                 'You must provide at least one URL.\n'
-                'Type youtube-dl --help to see a list of all options.')
+                'Type youtube-dlc --help to see a list of all options.')
 
         try:
             if opts.load_info_filename is not None:

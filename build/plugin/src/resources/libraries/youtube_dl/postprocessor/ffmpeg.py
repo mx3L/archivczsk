@@ -349,6 +349,27 @@ class FFmpegExtractAudioPP(FFmpegPostProcessor):
         return [path], information
 
 
+class FFmpegVideoRemuxerPP(FFmpegPostProcessor):
+    def __init__(self, downloader=None, preferedformat=None):
+        super(FFmpegVideoRemuxerPP, self).__init__(downloader)
+        self._preferedformat = preferedformat
+
+    def run(self, information):
+        path = information['filepath']
+        if information['ext'] == self._preferedformat:
+            self._downloader.to_screen('[ffmpeg] Not remuxing video file %s - already is in target format %s' % (path, self._preferedformat))
+            return [], information
+        options = ['-c', 'copy']
+        prefix, sep, ext = path.rpartition('.')
+        outpath = prefix + sep + self._preferedformat
+        self._downloader.to_screen('[' + 'ffmpeg' + '] Remuxing video from %s to %s, Destination: ' % (information['ext'], self._preferedformat) + outpath)
+        self.run_ffmpeg(path, outpath, options)
+        information['filepath'] = outpath
+        information['format'] = self._preferedformat
+        information['ext'] = self._preferedformat
+        return [path], information
+
+
 class FFmpegVideoConvertorPP(FFmpegPostProcessor):
     def __init__(self, downloader=None, preferedformat=None):
         super(FFmpegVideoConvertorPP, self).__init__(downloader)
@@ -391,7 +412,9 @@ class FFmpegEmbedSubtitlePP(FFmpegPostProcessor):
 
         for lang, sub_info in subtitles.items():
             sub_ext = sub_info['ext']
-            if ext != 'webm' or ext == 'webm' and sub_ext == 'vtt':
+            if sub_ext == 'json':
+                self._downloader.to_screen('[ffmpeg] JSON subtitles cannot be embedded')
+            elif ext != 'webm' or ext == 'webm' and sub_ext == 'vtt':
                 sub_langs.append(lang)
                 sub_filenames.append(subtitles_filename(filename, lang, sub_ext, ext))
             else:
@@ -476,7 +499,7 @@ class FFmpegMetadataPP(FFmpegPostProcessor):
         filename = info['filepath']
         temp_filename = prepend_extension(filename, 'temp')
         in_filenames = [filename]
-        options = []
+        options = ['-map', '0']
 
         if info['ext'] == 'm4a':
             options.extend(['-vn', '-acodec', 'copy'])
@@ -518,7 +541,12 @@ class FFmpegMergerPP(FFmpegPostProcessor):
     def run(self, info):
         filename = info['filepath']
         temp_filename = prepend_extension(filename, 'temp')
-        args = ['-c', 'copy', '-map', '0:v:0', '-map', '1:a:0']
+        args = ['-c', 'copy']
+        for (i, fmt) in enumerate(info['requested_formats']):
+            if fmt.get('acodec') != 'none':
+                args.extend(['-map', '%u:a:0' % (i)])
+            if fmt.get('vcodec') != 'none':
+                args.extend(['-map', '%u:v:0' % (i)])
         self._downloader.to_screen('[ffmpeg] Merging formats into "%s"' % filename)
         self.run_ffmpeg_multiple_files(info['__files_to_merge'], temp_filename, args)
         os.rename(encodeFilename(temp_filename), encodeFilename(filename))
@@ -533,7 +561,7 @@ class FFmpegMergerPP(FFmpegPostProcessor):
         if is_outdated_version(
                 self._versions[self.basename], required_version):
             warning = ('Your copy of %s is outdated and unable to properly mux separate video and audio files, '
-                       'youtube-dl will download single file media. '
+                       'youtube-dlc will download single file media. '
                        'Update %s to version %s or newer to fix this.') % (
                            self.basename, self.basename, required_version)
             if self._downloader:
@@ -617,13 +645,18 @@ class FFmpegSubtitlesConvertorPP(FFmpegPostProcessor):
                 self._downloader.to_screen(
                     '[ffmpeg] Subtitle file for %s is already in the requested format' % new_ext)
                 continue
+            elif ext == 'json':
+                self._downloader.to_screen(
+                    '[ffmpeg] You have requested to convert json subtitles into another format, '
+                    'which is currently not possible')
+                continue
             old_file = subtitles_filename(filename, lang, ext, info.get('ext'))
             sub_filenames.append(old_file)
             new_file = subtitles_filename(filename, lang, new_ext, info.get('ext'))
 
             if ext in ('dfxp', 'ttml', 'tt'):
                 self._downloader.report_warning(
-                    'You have requested to convert dfxp (TTML) subtitles into another format, '
+                    '[ffmpeg] You have requested to convert dfxp (TTML) subtitles into another format, '
                     'which results in style information loss')
 
                 dfxp_file = old_file

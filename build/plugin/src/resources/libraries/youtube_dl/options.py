@@ -57,33 +57,33 @@ def parseOpts(overrideArguments=None):
     def _readUserConf():
         xdg_config_home = compat_getenv('XDG_CONFIG_HOME')
         if xdg_config_home:
-            userConfFile = os.path.join(xdg_config_home, 'youtube-dl', 'config')
+            userConfFile = os.path.join(xdg_config_home, 'youtube-dlc', 'config')
             if not os.path.isfile(userConfFile):
-                userConfFile = os.path.join(xdg_config_home, 'youtube-dl.conf')
+                userConfFile = os.path.join(xdg_config_home, 'youtube-dlc.conf')
         else:
-            userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dl', 'config')
+            userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dlc', 'config')
             if not os.path.isfile(userConfFile):
-                userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dl.conf')
+                userConfFile = os.path.join(compat_expanduser('~'), '.config', 'youtube-dlc.conf')
         userConf = _readOptions(userConfFile, None)
 
         if userConf is None:
             appdata_dir = compat_getenv('appdata')
             if appdata_dir:
                 userConf = _readOptions(
-                    os.path.join(appdata_dir, 'youtube-dl', 'config'),
+                    os.path.join(appdata_dir, 'youtube-dlc', 'config'),
                     default=None)
                 if userConf is None:
                     userConf = _readOptions(
-                        os.path.join(appdata_dir, 'youtube-dl', 'config.txt'),
+                        os.path.join(appdata_dir, 'youtube-dlc', 'config.txt'),
                         default=None)
 
         if userConf is None:
             userConf = _readOptions(
-                os.path.join(compat_expanduser('~'), 'youtube-dl.conf'),
+                os.path.join(compat_expanduser('~'), 'youtube-dlc.conf'),
                 default=None)
         if userConf is None:
             userConf = _readOptions(
-                os.path.join(compat_expanduser('~'), 'youtube-dl.conf.txt'),
+                os.path.join(compat_expanduser('~'), 'youtube-dlc.conf.txt'),
                 default=None)
 
         if userConf is None:
@@ -168,14 +168,14 @@ def parseOpts(overrideArguments=None):
     general.add_option(
         '--default-search',
         dest='default_search', metavar='PREFIX',
-        help='Use this prefix for unqualified URLs. For example "gvsearch2:" downloads two videos from google videos for youtube-dl "large apple". Use the value "auto" to let youtube-dl guess ("auto_warning" to emit a warning when guessing). "error" just throws an error. The default value "fixup_error" repairs broken URLs, but emits an error if this is not possible instead of searching.')
+        help='Use this prefix for unqualified URLs. For example "gvsearch2:" downloads two videos from google videos for youtube-dlc "large apple". Use the value "auto" to let youtube-dlc guess ("auto_warning" to emit a warning when guessing). "error" just throws an error. The default value "fixup_error" repairs broken URLs, but emits an error if this is not possible instead of searching.')
     general.add_option(
         '--ignore-config',
         action='store_true',
         help='Do not read configuration files. '
-        'When given in the global configuration file /etc/youtube-dl.conf: '
-        'Do not read the user configuration in ~/.config/youtube-dl/config '
-        '(%APPDATA%/youtube-dl/config.txt on Windows)')
+        'When given in the global configuration file /etc/youtube-dlc.conf: '
+        'Do not read the user configuration in ~/.config/youtube-dlc/config '
+        '(%APPDATA%/youtube-dlc/config.txt on Windows)')
     general.add_option(
         '--config-location',
         dest='config_location', metavar='PATH',
@@ -357,7 +357,7 @@ def parseOpts(overrideArguments=None):
     authentication.add_option(
         '-p', '--password',
         dest='password', metavar='PASSWORD',
-        help='Account password. If this option is left out, youtube-dl will ask interactively.')
+        help='Account password. If this option is left out, youtube-dlc will ask interactively.')
     authentication.add_option(
         '-2', '--twofactor',
         dest='twofactor', metavar='TWOFACTOR',
@@ -383,7 +383,7 @@ def parseOpts(overrideArguments=None):
     adobe_pass.add_option(
         '--ap-password',
         dest='ap_password', metavar='PASSWORD',
-        help='Multiple-system operator account password. If this option is left out, youtube-dl will ask interactively.')
+        help='Multiple-system operator account password. If this option is left out, youtube-dlc will ask interactively.')
     adobe_pass.add_option(
         '--ap-list-mso',
         action='store_true', dest='ap_list_mso', default=False,
@@ -414,6 +414,14 @@ def parseOpts(overrideArguments=None):
         '--youtube-skip-dash-manifest',
         action='store_false', dest='youtube_include_dash_manifest',
         help='Do not download the DASH manifests and related data on YouTube videos')
+    video_format.add_option(
+        '--youtube-include-hls-manifest',
+        action='store_true', dest='youtube_include_hls_manifest', default=True,
+        help=optparse.SUPPRESS_HELP)
+    video_format.add_option(
+        '--youtube-skip-hls-manifest',
+        action='store_false', dest='youtube_include_hls_manifest',
+        help='Do not download the HLS manifests and related data on YouTube videos')
     video_format.add_option(
         '--merge-output-format',
         action='store', dest='merge_output_format', metavar='FORMAT', default=None,
@@ -572,6 +580,10 @@ def parseOpts(overrideArguments=None):
             'Upper bound of a range for randomized sleep before each download '
             '(maximum possible number of seconds to sleep). Must only be used '
             'along with --min-sleep-interval.'))
+    workarounds.add_option(
+        '--sleep-subtitles',
+        dest='sleep_interval_subtitles', default=0, type=int,
+        help='Enforce sleep interval on subtitles as well')
 
     verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
     verbosity.add_option(
@@ -670,11 +682,11 @@ def parseOpts(overrideArguments=None):
     verbosity.add_option(
         '-C', '--call-home',
         dest='call_home', action='store_true', default=False,
-        help='Contact the youtube-dl server for debugging')
+        help='Contact the youtube-dlc server for debugging')
     verbosity.add_option(
         '--no-call-home',
         dest='call_home', action='store_false', default=False,
-        help='Do NOT contact the youtube-dl server for debugging')
+        help='Do NOT contact the youtube-dlc server for debugging')
 
     filesystem = optparse.OptionGroup(parser, 'Filesystem Options')
     filesystem.add_option(
@@ -720,7 +732,7 @@ def parseOpts(overrideArguments=None):
     filesystem.add_option(
         '-c', '--continue',
         action='store_true', dest='continue_dl', default=True,
-        help='Force resume of partially downloaded files. By default, youtube-dl will resume downloads if possible.')
+        help='Force resume of partially downloaded files. By default, youtube-dlc will resume downloads if possible.')
     filesystem.add_option(
         '--no-continue',
         action='store_false', dest='continue_dl',
@@ -755,7 +767,7 @@ def parseOpts(overrideArguments=None):
         help='File to read cookies from and dump cookie jar in')
     filesystem.add_option(
         '--cache-dir', dest='cachedir', default=None, metavar='DIR',
-        help='Location in the filesystem where youtube-dl can store some downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dl or ~/.cache/youtube-dl . At the moment, only YouTube player files (for videos with obfuscated signatures) are cached, but that may change.')
+        help='Location in the filesystem where youtube-dlc can store some downloaded information permanently. By default $XDG_CACHE_HOME/youtube-dlc or ~/.cache/youtube-dlc . At the moment, only YouTube player files (for videos with obfuscated signatures) are cached, but that may change.')
     filesystem.add_option(
         '--no-cache-dir', action='store_const', const=False, dest='cachedir',
         help='Disable filesystem caching')
@@ -763,6 +775,9 @@ def parseOpts(overrideArguments=None):
         '--rm-cache-dir',
         action='store_true', dest='rm_cachedir',
         help='Delete all filesystem cache files')
+    filesystem.add_option(
+        '--trim-file-name', dest='trim_file_name', default=0, type=int,
+        help='Limit the filename length (extension excluded)')
 
     thumbnail = optparse.OptionGroup(parser, 'Thumbnail images')
     thumbnail.add_option(
@@ -790,6 +805,10 @@ def parseOpts(overrideArguments=None):
         '--audio-quality', metavar='QUALITY',
         dest='audioquality', default='5',
         help='Specify ffmpeg/avconv audio quality, insert a value between 0 (better) and 9 (worse) for VBR or a specific bitrate like 128K (default %default)')
+    postproc.add_option(
+        '--remux-video',
+        metavar='FORMAT', dest='remuxvideo', default=None,
+        help='Remux the video to another container format if necessary (currently supported: mp4|mkv, target container format must support video / audio encoding, remuxing may fail)')
     postproc.add_option(
         '--recode-video',
         metavar='FORMAT', dest='recodevideo', default=None,
@@ -859,6 +878,16 @@ def parseOpts(overrideArguments=None):
         metavar='FORMAT', dest='convertsubtitles', default=None,
         help='Convert the subtitles to other format (currently supported: srt|ass|vtt|lrc)')
 
+    extractor = optparse.OptionGroup(parser, 'Extractor Options')
+    extractor.add_option(
+        '--allow-dynamic-mpd',
+        action='store_true', dest='dynamic_mpd', default=True,
+        help=optparse.SUPPRESS_HELP)
+    extractor.add_option(
+        '--ignore-dynamic-mpd',
+        action='store_false', dest='dynamic_mpd',
+        help='Do not process dynamic DASH manifests')
+
     parser.add_option_group(general)
     parser.add_option_group(network)
     parser.add_option_group(geo)
@@ -873,6 +902,7 @@ def parseOpts(overrideArguments=None):
     parser.add_option_group(authentication)
     parser.add_option_group(adobe_pass)
     parser.add_option_group(postproc)
+    parser.add_option_group(extractor)
 
     if overrideArguments is not None:
         opts, args = parser.parse_args(overrideArguments)
@@ -892,14 +922,14 @@ def parseOpts(overrideArguments=None):
         if '--config-location' in command_line_conf:
             location = compat_expanduser(opts.config_location)
             if os.path.isdir(location):
-                location = os.path.join(location, 'youtube-dl.conf')
+                location = os.path.join(location, 'youtube-dlc.conf')
             if not os.path.exists(location):
                 parser.error('config-location %s does not exist.' % location)
             custom_conf = _readOptions(location)
         elif '--ignore-config' in command_line_conf:
             pass
         else:
-            system_conf = _readOptions('/etc/youtube-dl.conf')
+            system_conf = _readOptions('/etc/youtube-dlc.conf')
             if '--ignore-config' not in system_conf:
                 user_conf = _readUserConf()
 

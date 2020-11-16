@@ -13,6 +13,7 @@ from ..utils import (
     encodeFilename,
     PostProcessingError,
     prepend_extension,
+    replace_extension,
     shell_quote
 )
 
@@ -41,6 +42,38 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
                 'Skipping embedding the thumbnail because the file is missing.')
             return [], info
 
+        def is_webp(path):
+            with open(encodeFilename(path), 'rb') as f:
+                b = f.read(12)
+            return b[0:4] == b'RIFF' and b[8:] == b'WEBP'
+
+        # Correct extension for WebP file with wrong extension (see #25687, #25717)
+        _, thumbnail_ext = os.path.splitext(thumbnail_filename)
+        if thumbnail_ext:
+            thumbnail_ext = thumbnail_ext[1:].lower()
+            if thumbnail_ext != 'webp' and is_webp(thumbnail_filename):
+                self._downloader.to_screen(
+                    '[ffmpeg] Correcting extension to webp and escaping path for thumbnail "%s"' % thumbnail_filename)
+                thumbnail_webp_filename = replace_extension(thumbnail_filename, 'webp')
+                os.rename(encodeFilename(thumbnail_filename), encodeFilename(thumbnail_webp_filename))
+                thumbnail_filename = thumbnail_webp_filename
+                thumbnail_ext = 'webp'
+
+        # Convert unsupported thumbnail formats to JPEG (see #25687, #25717)
+        if thumbnail_ext not in ['jpg', 'png']:
+            # NB: % is supposed to be escaped with %% but this does not work
+            # for input files so working around with standard substitution
+            escaped_thumbnail_filename = thumbnail_filename.replace('%', '#')
+            os.rename(encodeFilename(thumbnail_filename), encodeFilename(escaped_thumbnail_filename))
+            escaped_thumbnail_jpg_filename = replace_extension(escaped_thumbnail_filename, 'jpg')
+            self._downloader.to_screen('[ffmpeg] Converting thumbnail "%s" to JPEG' % escaped_thumbnail_filename)
+            self.run_ffmpeg(escaped_thumbnail_filename, escaped_thumbnail_jpg_filename, ['-bsf:v', 'mjpeg2jpeg'])
+            os.remove(encodeFilename(escaped_thumbnail_filename))
+            thumbnail_jpg_filename = replace_extension(thumbnail_filename, 'jpg')
+            # Rename back to unescaped for further processing
+            os.rename(encodeFilename(escaped_thumbnail_jpg_filename), encodeFilename(thumbnail_jpg_filename))
+            thumbnail_filename = thumbnail_jpg_filename
+
         if info['ext'] == 'mp3':
             options = [
                 '-c', 'copy', '-map', '0', '-map', '1',
@@ -52,6 +85,25 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
 
             if not self._already_have_thumbnail:
                 os.remove(encodeFilename(thumbnail_filename))
+            os.remove(encodeFilename(filename))
+            os.rename(encodeFilename(temp_filename), encodeFilename(filename))
+
+        elif info['ext'] == 'mkv':
+            os.rename(encodeFilename(thumbnail_filename), encodeFilename('cover.jpg'))
+            old_thumbnail_filename = thumbnail_filename
+            thumbnail_filename = 'cover.jpg'
+
+            options = [
+                '-c', 'copy', '-attach', thumbnail_filename, '-metadata:s:t', 'mimetype=image/jpeg']
+
+            self._downloader.to_screen('[ffmpeg] Adding thumbnail to "%s"' % filename)
+
+            self.run_ffmpeg_multiple_files([filename], temp_filename, options)
+
+            if not self._already_have_thumbnail:
+                os.remove(encodeFilename(thumbnail_filename))
+            else:
+                os.rename(encodeFilename(thumbnail_filename), encodeFilename(old_thumbnail_filename))
             os.remove(encodeFilename(filename))
             os.rename(encodeFilename(temp_filename), encodeFilename(filename))
 
