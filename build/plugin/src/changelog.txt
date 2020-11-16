@@ -1,5 +1,6 @@
 archivCZSK 1.3.6, 16.11.2020
     - update Youtube knihoven
+    - cervene tlacitko zobrazi Zmeny otevreneho doplnku (Changelog)
 
 archivCZSK 1.3.5, 21.07.2020
     - zruseni kontroly knihoven

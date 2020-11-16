@@ -499,7 +499,7 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
         # include TipList
         TipBar.__init__(self, [self.CSFD_TIP, self.CONTEXT_TIP, self.INFO_TIP], startOnShown=True)
 
-        self["key_red"] = Label("")
+        self["key_red"] = Label(_("Changelog"))
         self["key_green"] = Label(_("Downloads"))
         self["key_yellow"] = Label(_("Shortcuts"))
         self["key_blue"] = Label(_("Settings"))
@@ -509,6 +509,7 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
                 "up": self.up,
                 "down": self.down,
                 "cancel": self.cancel,
+                "red" : self.openChangelog,
                 "green" : self.openAddonDownloads,
                 "blue": self.openAddonSettings,
                 "yellow": self.openAddonShortcuts,
@@ -519,6 +520,11 @@ class ArchivCZSKAddonContentScreen(BaseContentScreen, DownloadList, TipBar):
 
         #self.onUpdateGUI.append(self.updateFullTitle)
         self.onLayoutFinish.append(self.setWindowTitle)
+
+    def openChangelog(self):
+        if not self.working:
+            import info
+            info.showChangelog(self.session, self.addon.name, self.addon.changelog)
 
     def setWindowTitle(self):
         self.setTitle(toString(self.addon.name))
@@ -605,7 +611,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         # include TipList
         TipBar.__init__(self, [self.CSFD_TIP, self.CONTEXT_TIP, self.INFO_TIP], startOnShown=True)
 
-        self["key_red"] = Label("")
+        self["key_red"] = Label(_("Changelog"))
         self["key_green"] = Label(_("Downloads"))
         self["key_yellow"] = Label(_("Shortcuts"))
         self["key_blue"] = Label(_("Settings"))
@@ -625,6 +631,7 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
                 "up": self.up,
                 "down": self.down,
                 "cancel": self.cancel,
+                "red" : self.openChangelog,
                 "green" : self.openAddonDownloads,
                 "blue": self.openAddonSettings,
                 "yellow": self.openAddonShortcuts,
@@ -694,6 +701,11 @@ class ArchivCZSKAddonContentScreenAdvanced(BaseContentScreen, DownloadList, TipB
         # musi to ist cez timer pretoze enigma vola onUpdate 3x upne zbytocne
         # ak by nebolo cez timer tak by sa cakalo na kazde dobehnutie 3x
         self.updateGUITimer.start(100, True)
+
+    def openChangelog(self):
+        if not self.working:
+            import info
+            info.showChangelog(self.session, self.addon.name, self.addon.changelog)
 
     def setWindowTitle(self):
         self.setTitle(toString(self.addon.name))

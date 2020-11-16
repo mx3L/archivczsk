@@ -1,1 +1,2 @@
 https://github.com/ruuk/script.module.youtube.dl/archive/master.zip
+https://github.com/blackjack4494/yt-dlc/archive/master.zip
