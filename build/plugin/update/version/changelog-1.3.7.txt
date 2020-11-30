@@ -1,0 +1,706 @@
+archivCZSK 1.3.6, 16.11.2020
+    - update Youtube knihoven
+    - cervene tlacitko zobrazi Zmeny otevreneho doplnku (Changelog)
+
+archivCZSK 1.3.5, 21.07.2020
+    - zruseni kontroly knihoven
+    - odstranena potreba requests
+
+archivCZSK 1.3.4, 18.07.2020
+    - update youtube_dl, logovani, skinu, prekladu, seekeru pro SCC
+
+archivCZSK 1.3.3, 22.05.2020
+    - oprava vnorenych titulku
+
+archivCZSK 1.3.2, 14.05.2020
+    - oprava virtualni klavesnice
+    - uprava logovani chyb
+
+archivCZSK 1.3.1, 13.05.2020
+    - doplnky ktore su vypnute sa uz nezobrazuju
+    - oprava auto-update
+    - oprava krachu na DM
+    - opravy prekladov
+
+archivCZSK 1.3.0, 12.05.2020
+    - pridana podpora pre prehravanie youtube videii
+    - umoznit nezobrazit uz nepodporovane doplnky
+    - zvacsene obrazky v hd skine
+
+archivCZSK 1.2.3, 22.04.2020
+    - odstranena hlaska na premium
+    - odstranena nepotrebna hlaska o videoprehravaci pri prvotnom spusteni
+    - odstranene zaseky pri pohybe v menu pri stahovani obrazkov
+    - rychlejsia kontrola aktualizacii, zobrazena hlaska pri kontrole 
+    - oprava zobrazenia poloziek pre ivysilani
+
+archivCZSK 1.2.2, 05.05.2019
+    - hlaska na vyskusanie premium verzie sa zobrazi len raz (ak uzivatel zvoli nie)
+
+archivCZSK 1.2.0, 03.05.2019
+---------------------------------------------
+    - drobne opravy
+    - neposielanie cmdStats ked to doplnok nepodporuje
+    - timeout 60sek pre zatvorenie spravy o dokonceni stahovania
+    - drobna uprava skinov
+    - odstranena poziadavka na subsupport pri instalacii .ipk
+    - moznost prechodu na premiovu verziu
+
+archivCZSK 1.1.2, 14.11.2018
+---------------------------------------------
+    - uprava handlingu zobrazovania message boxov
+    - uprava spravania pre Trakt.tv
+    - upravene stahovanie titulkov ak su k streamu poskytnute
+    - oprava priameho hladania v CSFD z EPG
+
+archivCZSK 1.1.1, 26.8.2018
+---------------------------------------------
+    - oprava hlasky stahovaneho suboru
+    - oprava kontroly aktualizacii
+
+archivCZSK 1.1.0, 23.6.2018
+---------------------------------------------
+    - podpora funkcie trakt.tv ak to doplnok umoznuje (stream-cinema) aj pre OE2.5
+    - automaticke oznacenie filmu ako videny po zhliadnuti viac ako 80% (trakt)
+    - znovu vyvolanie kontroly aktualizacie bez nutnosti restartovat box alebo uplynutia 2h
+      (zmenit a ulozit nastavenie povolujuce update na NIE 
+       nasledne ho opat zapnut ANO ulozit vypnut a znovu zapnut archivczsk)
+    - drobne opravy (oprava nazvu suboru pri stiahnuti na HDD, skiny, ...)
+    - zmeny v instalacnom balicku (pre openPLi[ATV] 6.2)
+
+archivCZSK 1.0.7, 14.2.2018
+---------------------------------------------
+    - stahovanie cez curl pre http download
+    - uprava skinov pre DreamBox
+
+archivCZSK 1.0.6, 28.1.2018
+---------------------------------------------
+    - kozmeticka uprava skinov
+    - obnovene nastavenie pre rychle vyhladavanie
+    - fix oznamenia o aktualizacii archivu
+    - fix prekryvania okien pre DM (vyber streamu SC, Sosac)
+
+archivCZSK 1.0.5, 14.01.2018
+---------------------------------------------
+    - fix priameho vyhladavania v pluginoch (pridany stream-cinema a Csfd)
+
+archivCZSK 1.0.4, 29.12.2017
+---------------------------------------------
+    - fix default hd skin
+
+archivCZSK 1.0.3, 28.12.2017
+---------------------------------------------
+    - pri aktualizacii sa vymazu len skiny zacinajuce default_* (/gui/skins/)
+    - upraveny DMM skin
+    - fix VK pri vti 13 sposoboval pad systemu
+    - fix sipka hore pri spustenom filme sposobovala pad systemu
+
+archivCZSK 1.0.2, 15.12.2017
+---------------------------------------------
+    - rozsirena funkcionalita
+    - upraveny FHD, UHD skin pre Dreambox
+    - fix logging
+
+archivCZSK 1.0.1, 12.12.2017
+---------------------------------------------
+    - zmenena predvolena cesta ukladania plagatov (10) (/tmp)
+    - UHD skin thanks @shamann1
+    - logging improvements
+    - fix dotahovania plagatov pri niektorych doplnkoch
+
+archivCZSK 1.0, 05.12.2017
+---------------------------------------------
+    - automaticka aktualizacia pluginu so zachovanim udajov
+    - volba CSFD pluginu (+interny)
+    - rozsirene informacie o filme (pokial ich doplnok poskytuje)
+    - definovanie vlastneho radenia doplnok (prinosne pri vlastnej kategorii)
+    - predny panel setoboxu zobrazuje co sa prave prehrava
+    - logovanie (default: /tmp/archivCZSK.log)
+    - vylepsena funkcionalita aktualizacie doplnkov
+    - kontrola aktualizacii pri spusteni pluginu resp. po uplynuti 2h od poslednej kontroly
+    - uprava designu skinov
+    - rychlostne vylepsenie pluginu
+    - fix FullHD skinu ktory sposoboval pad systemu
+    - fix virtualnej klavesnice (XcursorX)
+    - fix pridavania do oblubenych poloziek (niekedy to nic nepridalo)
+    - fix pretacania v doplnku Sosac (pri zaplatenom VIP ucte)
+    - fix kompatibility OE2.0 - OE2.5
+    - fix chybajuceho kodovania napr. v OpenAtv6.1 (pad systemu pri stahovani videa)
+    - fix dalsich chyb ktore sposobovali pad systemu
+
+___________________________________________________
+Special thanks for @durinov, @hansolo, @clasicrock
+
+
+***************************************************************************************
+***************************************************************************************
+
+
+
+archivczsk 0.7 alpha_15:
+Vseobecne:
+
+- oprava SD skinu + male opravy v HD skine
+- pridane zobrazenie polohy (cesty) v ramci doplnkov
+- pri ceste spat v ramci doplnku sa oznaci polozka, ktora bola pouzita na
+otvorenie aktualneho zoznamu
+- aktualizacia lokalizacie(sk/cz)
+- oprava a optimalizacia nacitavania doplnkov, refactoring
+- vratena moznost - uvolnit medzipamat po ukonceni pluginu
+- po aktualizacii, pouzity spravny typ restartu
+
+- Informacie o prehravaci:
+  * na sh4 sa moznosti instalacie nezobrazia
+  * zmazana moznost pouzit openpli-feedy (pady na OE1.6)
+  * pridana moznost nainstalovat rtmp pluginy
+
+Prehravac:
+
+- oprava GS pri pouziti modu "prehravat a stahovat (Gstreamer)"
+- oprava GS pri rychlom, viacnasobnom pretacani RTMP streamu
+- oprava GS pri sh4(gstreamer) starsia verzia(e2), pri najnovsej nutne vypnut servicemp4
+- vynulovanie hodnot bufferu/rychlosti pri prepnuti streamu
+- oprava zaseku, ktory nastane po zvoleni volby NIE, pri upozorneni pre mod
+"prehravat a stahovat"
+- oprava timeout/buffer parametrov pre rtmpgw
+- pri pouziti rtmpgw nie je mozne pretacat ani pozastavovat stream
+
+Stahovanie:
+- opravene stahovanie rtmp streamov(uz bez zasekov)
+
+Archivy:
+
+- moje upravy:
+  * barrandov - oprava archivu
+  * serialycz - nacitavanie videi z onevision,visionone,scz
+  * stream resolver - pridany publichost,kset resolver
+                    - oprava zkouknito resolver
+  * playserial - pridana podpora pre videomail
+  * ivysilani  - oprava nacitavania videii
+
+- xbmc_doplnky:
+  * eserial - pridana podpora pre videomail
+  * befun - oprava přehrávání (Free) videí
+  * stream resolver - aktualizacia videomail resolver
+
+- dmd_xbmc:
+  * streamcz - oprava archivu
+
+Balicek:
+
+- pridana kniznica zlib.so(mipsel) -> oprava aktualizacii archivov na niektorych DM image
+- oprava detekcie verzii e2 -> instalacia spravnej verzie servicemp4 (mipsel)
+- pridany rtmp plugin -> moznost nainstalovat chybajuci plugin na OE1.6 image
+
+
+verzia 0.7 alpha_14:
+Vseobecne:
+
+- fix FATAL: ebase.cpp:233 ASSERTION m_tid == (pid_t)-1 || m_tid == eThread::gettid() FAILED!
+  * zvysena stabilita pluginu a samotnej enigmy2
+  * okamzite zobrazenie obsahu po jeho nacitani
+
+- nova polozka playlist
+  * mozne prehravat
+  * otvorit cez MENU a zobrazit zoznam videii
+- prerusenie nacitavania archivu, nie je vyhodnotene ako chyba archivu
+
+Prehravac:
+
+- pridana podpora prehravania playlistov (pohadkar.cz)
+  * dynamicka zmena prehravaneho videa priamo v prehravaci (sipka hore/dole)
+  * automaticke prehravanie dalsieho videa v zozname
+
+- prehravat a stahovat
+  * ak sa video nezacne stahovat, nebude sa uz pytat na ulozenie videa
+  * pouzivatela sa spyta na ulozenie videa len raz
+
+- prehravac streamov
+  * prehravanie rtmp streamu nesposobi pad
+  * opravene parametre pre rtmp stream
+  * pridany parameter timeout pre rtmp stream
+  * kategorie su prehravane ako playlisty -> moznost okamzitej zmeny streamu v
+kategorii
+
+- skompilovany servicemp4, pre nove image.
+
+- zjednodusenie kodu/refactoring..
+
+Archivy:
+
+* moje upravy:
+- stv - oprava nastaveni -> nastavte si opravit RTMP pretacanie na ANO, v pripade ze vam nefunguje
+- voyocz - oprava nacitavania videii
+
+* xbmc_doplnky:
+- befun - opravene vyhladavanie pri zadani viacerych slov
+- ulozto -  #155 přidána podpora oblíbených a uživatelských souborů (zatím pouze zobrazení)
+- kouknicz - oprava nacitavania videii
+- pohadkar - je spat :) 
+           - nacitanie jednotlivych kategorii trva aj na najnovsich prijmacoch okolo minuty
+             dalsie nacitania su uz okamzite, kedze sa ukladaju na disk
+
+Balicek:
+
+- pridana kniznica stringprep.py do Python2.7/2.6 instalacie
+- pridany servicemp4 pre nove images, nainstaluje sa na vsetky majove a novsie image.
+- zmeneny nazov balicku (mozne odinstalovat priamo z menu)
+
+
+verzia 0.7 alpha13:
+Prehravac:
+- oprava pretacania/pozastavenia niektorych rtmp streamov (voyosk, voyocz, prima, stv, barrandov ,ivysilani)
+  * tuto moznost je mozne zapnut/vypnut v nastaveniach daneho archivu
+  * standardne zapnuta je pre (voyocz,prima,stv a ivysilani), kedze ostatne mi funguju normalne na gstreamer
+    pri eplayer3 je potrebne zapnut tuto volbu aj pre barrandov aj voyosk v ich nastaveniach
+  * pre funkcnost tejto volby je potrebne mat nastavenie Prehravac s rtmp podporou na ANO.
+  * spravne zobrazenie pozicie po pretacani/pozastaveni RTMP streamu pri pouziti RTMP controller.
+
+- opraveny mod prehravat a stahovat pri rtmp streamoch(test)
+- moznost nastavit timeout rtmp nacitavania, (default - 60 sekund)
+- zvyseny buffer pre tv archivy na 16 sekund
+
+Archivy:
+
+* moje upravy:
+  - pridany barrandov tv
+  - voyosk - pridane filmy
+  - voyocz - aktualizovane kategorie
+           - zrychlene nacitavanie
+           - moznost pouzit prihlasovacie udaje
+  - stv - skratenie linku -> funkcne aj na ipbox
+  - joj.sk - opravene listovanie, pridany wau
+  - ivysilani - fix video linku
+          - moznost odfiltrovat bonusy
+              - zrychlene nacitavanie videii
+  - serialycz - pridany dalsi regexp pre videolinky
+          - aktualizovany videomailresolver
+
+* dmd xbmc:
+  - prima - oprava linkov pre HD videa
+
+* xbmc_doplnky:
+ - befun
+      * nyní se natahují informace o filmu (textový popis)
+      * oprava chyby při listování seriálů
+      
+
+verzia 0.7 alpha12:
+Vseobecne:
+- pridane nastavenie casoveho limitu nacitavania v archivoch
+- pridany fastshare.cz do rychleho vyhladavania
+
+Prehravac:
+- moznost prehravat web TS streamy
+- moznost zobrazit audioinfobar na vsetkych image
+- oprava rtmp linku pre rtmpgw
+
+Stahovanie:
+- oprava stahovania niektorych rtmp streamov
+
+Archivy:
+- zmazane rajserialu, bezvadata(dostupne cez onlinesoubory),markiza(nahradene voyosk)
+- ta3 - pridane logo by shamann
+
+* moje upravy:
+  - pridany voyosk - funkcny len pre tych co maju predplatne
+               - navod: http://code.google.com/p/archivy-czsk/wiki/voyoskNavod
+
+* xbmc_doplnky:
+  - opraveny youtuberesolver -> hejbejse.cz, replay.cz, nastojaka funckne
+  - playserialcz - opravene zobrazenie najnovsich videii
+  - onlinefiles - pridany fastshare.cz
+  - kouknicz - opravene ziskanie videolinku
+  - befun.cz - opravene vyhladavanie
+
+
+verzia 0.7 alpha11:
+Archivy:
+moje upravy :) :
+- joj - dynamicke nacitavanie relacii a serialov z joj.sk/joj.plus.sk/moznost pouzit aj povodne listovanie(JOJ povodne)
+      - opraveny problem s prehravanim HD videii
+- prima - moznost pouzit proxy (overte najprv funkcnost proxy, niekedy je potrebne spustit prehravanie viackrat)
+- ivysilani - opravene nacitanie videa pri niektorych relaciach
+        - pridane oznacenie programov len z bonusmy
+        - zrychlene nacitavanie kategorii
+- voyo - opravene spravy, 
+       - opravene listovanie v niektorych relaciach, 
+       - zobrazenie kvality prehravaneho videa
+- ta3 - pridany archiv televizie TA3, podla mp2online projektu(treba mat nainstalovany HLS plugin)
+- stv - opravene nacitavanie video linku (na IPBOX ABCOM 25.4 image prehravanie RTMP sposobi zelenac [prilis dlhy link] a na HLS nejde zasa zvuk :( )
+
+dmd_xbmc upravy:
+- filmyczcom - oprava resolveru novamov, YT,vmail.ru
+
+
+verzia 0.7 alpha10:
+Vseobecne:
+- fix videoplayerinfo skin
+- textove polozky v menu je mozne zadat aj cez virtualnu klavesnicu
+- oprava precnievajucich tabov v menu(Soubory online,..)
+- oprava GS pri zobrazeni stahovanych suborov >1GB
+- pridany befun.cz do archivczsk vyhladavania
+- pred vypnutim pluginu ulozenie vsetkych zmien v nastaveni - thx shamann
+- fix OE2.0 detekcia - thx petrkl12
+
+Prehravac:
+- Gstreamer
+ * pridana podpora pre HLS streamy(m3u8) (rutube.ru,..)
+ * servicemp4:
+   + fix parsovania zlozitejsich http hlaviciek
+   + servicemp3 uz neni nahradene v MP
+- Eplayer(sh4)
+ * fix pre ukoncenie prehravaca - vypnuty/mozne zapnut manualne..
+ * verifikacia linku defaultne vypnuta (problemy s rtmp)
+
+Archivy:
+xbmc_doplnky:
+ - oprava rutube,pridany videomail(len cez servicemp4) a flashx resolver
+ - serialycz - fixnuto rutube a podpora videomail, zobrazuje uz vsetky videa
+ - sledujuserialy.cz - prehravani opet funkcni
+ - befun.cz - pridana podpora zoradovania filmov, oprava nahladov
+ 
+
+verzia 0.7 alpha9:
+Vseobecne:
+- oprava duplicitnych kategorii a ukladania v nastaveniach archivov
+
+Archivy:
+dmd_xbmc
+- doplněk JOJ aktualizace pořadů
+
+
+verzia 0.7 alpha8:
+Vseobecne:
+- opraveny cesky preklad - thx Quido56
+- oprava nacitania informacii a obrazku o archive po otvoreni archivCZSK - thx shamann
+- zmazany povodny spinner
+- pridana moznost rychleho vyhladavania v OnlineFiles:
+   * spustenie po podrzani tlacidla EPG -> ArchivCZSK vyhladavanie
+   * automaticke nacitanie nazvu aktualne prehravanej relacie pre vyhladavanie
+   * moznost zmenit hladany vyraz
+   * moznost vybrat hladanu relaciu z EPG prave pustenej stanice
+   * vyber typu vyhladavania v OnlineFiles
+
+Prehravac:
+- oprava parsovania niektorych live rtmp streamov
+- oprava zaseku pri ukonceni prehravaca(eplayer3) z predoslej verzie
+
+Archivy:
+xbmc doplnky
+- oprava youtube resolvera(re-play.cz,nastojaka funkcne)
+
+
+verzia 0.7 alpha7
+Vseobecne:
+- fix updater-a
+- opravene chyby v preklade
+- nacitava sa len jazyk, ktory sa bude pouzivat
+- zmazanie nepotrebnych suborov z tmp(RAM) + oprava spinnera - thx shamann
+- zmena nazvu infoscreen, pre koliziu s nazvom screenu v DE image - thx shamann
+- pridany novy spinner - thx shamann
+- pridane Informacie o prehravaci
+  * zobrazi ci su dostupne vsetky potrebne gstreamer kniznice
+  * moznost instalacie gstreamer kniznic
+   + aktualizovany gstreamer skript
+    | auto detekcia mispel/misp32el - thx shamann
+    | pridane dalsie potrebne gst kniznice
+    | pridane mozne pouzitie openpli feedov, pri neuspesnej instalacii
+-  pridane automaticke spustenie Informacii o prehravaci po prvom spusteni
+archivov
+
+Prehravac:
+- titulky
+  * prehravanie tituliek aj z nestandarnou priponou
+  * pridany vacsi casovi limit pre spustenie tituliek
+- pridane User-agent hlavicky pre gstreamer a twisted
+- servicemp4(mips32el a sh4 s gstreamer)
+  * prehravat a sucasne stahovat cez gstreamer (servicemp4) - TEST:
+    - prehravat a stahovat je mozne teraz na viacerych video formatoch (
+avi,mkv..),co doteraz nebolo mozne
+    - zobrazenie prebiehajuceho stahovania v PositionGauge +rychlost stahovania
+    - moznost jednoducheho prebufferingu( pozastavit stream a pockat )
+    - moznost pozastavit stream
+    - pohyb v stahovanom streame
+  * opravene nastavenie UserAgent pre gstreamer
+- fix pre hdmu image(zapnuty len po nastaveni v menu)
+- fix pri opatovnom stlaceni info na niektorych image
+- nastavenia prehravania nie su zavisle na tomto plugine, autory archivov mozu
+pouzit vlastne nastavenie(extra-header,user-agent)
+
+Stahovanie:
+- zlepsena detekcia pripony stahovaneho suboru
+- podrobnejsie zobrazenie stahovanych suborov
+  * stav stahovania, velkost, datum stahovania
+  * moznost zoradenia stahovani podla- abecedy,velkosti,datumu a stavu
+stahovania
+- pridany stav k stahovaniu/ standardne textove spravy o stave stahovania.
+
+Archivy:
+xbmc_doplnky
+- fix serialycz.cz
+- v ulozto je mozne vyhladavat vsetky kategorie suborov, pridana filtracia
+pripon suborov (obidve mozno nastavit v menu)
+- pridane serialy na befun
+- munkvideo - fix adresa tituliek
+- stahovanie docasnych suborov do datapath nastavenych v plugine, namiesto /tmp/
+
+dmd_xbmc
+- vyhledavani v archivu iVysilani nyni zobrazuje max 100 vysledku hledani na 5
+stranach
+- iPrima - oficialne pridana HD kvalita
+- Muvi.cz - oprava parsovani
+
+verzia 0.7 alpha6
+Vseobecne:
+- oprava chyby v skine(Priebeh stahovania)
+
+Prehravac:
+- opravene prehravanie live rtmp streamov cez prehravac s rtmp podporou
+- verifikacia linku uz spravne vypnuta pre gstreamer a nie eplayer.. :)
+- v nastaveniach pridana moznost pre AZBOX - pouzit servicemrua, pri probleme s
+  prehravanim(netestovane)- treba pouzit standardny prehravac
+
+- Upraveny prehravac
+  * po ukonceni prehravania sa nastavi aspect na hodnotu v A/V settings
+  * zamedzenie pretacania v obraze pri streamoch
+  * zmazane niektore nepotrebne casti prehravaca
+  * eventy by uz nemali byt propagovane z predchadzajuceho infobaru(snad oprava niektorych zvlastnych zelenacov)
+
+Stahovanie:
+- pridany handling HTTP/URL vynimiek pri zacati stahovania
+- staci raz potvdit ulozenie stahovania, po prehravani a stahovani
+- stahovanie cez twisted do predvytvoreneho suboru z velkostou videa, uz len cez
+  prehravat a stahovat
+
+Archivy:
+- opravene strankovanie na mispel/mips32el vo filmycz.com
+
+
+verzia 0.7 alpha5
+Vseobecne:
+- vylepsena ponuka kontext menu
+- poopravovane chyby v skine
+- efektivnejsi logging system - nevyhodnocuju sa zbytocne log spravy, pri vypnutom
+   loggingu -> zrychlenie celeho pluginu, citelne hlavne na slabsich strojoch
+- opraveny zelenac pri ukladani zaloziek
+- opravene rychle listovanie v archivoch
+- ignoracia utf-8 encoding chyb
+- opravene chyby v preklade
+- pridane rozhranie, pre vyhladavanie v archivoch
+
+Prehravac:
+- automaticka detekcia prehravaca (Eplayer2, Eplayer3 alebo Gstreamer)
+- vypnuta verifikaciu linku pre GStreamer (Gstreamer sam verifikuje link a nesposobuje zasek e2)
+- automaticke nastavenie podla detekovaneho prehravaca
+- moznost volby len medzi standardnym a upravenym prehravacom
+
+- Standardny prehravac :
+   * pouzije sa standardny prehravac(Movieplayer z InfobarGenerics) bez zmien
+
+- Upraveny prehravac:
+   * zobrazenie nazvu videa na vfd displeji - thx shamann
+   * bindnute tlacidlo INFO/OK pre zobrazenie movieplayer infobaru
+   * pridana moznost zobrazovat/nacitavat lubovolne titulky(TEXT/SUBTITLE)
+   * moznost zmeny aspect ratia(ASPECT/5)
+   * moznost pouzit video kontroler pre kontrolu videa
+   * upraveny skin, ktory zobrazuje informacie o naplneni buffera/rychlosti stahovania
+
+   * Gstreamer:
+      - odladeny na sh4 a mips32el openpli image
+      - nastavenie velkosti bufferu prehravaca
+      - opravene chyby vo video kontrolery
+      - moznost pouzit upravenu openpli gstreamer aplikaciu - servicemp4(sh4 s gstreamer,mips32el):
+    * moznost nastavit tip bufferingu:
+        default- standardne nastavanie -> video sa zacne prehravat okamzite nezavisle na velkosti buffera 
+        prefill- video sa pauzuje pokial sa buffer nezaplni
+        progresive streaming - buffer je umiestneny na hdd
+        manual- to iste ako prefill ale naprogramovane v pythone na zaklade evBufferChange eventov
+    * nastavit pocet sekund bufferu
+    * nastavit http timeout(10s v servicemp3), -> moznost prehravat vytazene streamy
+    * pridat hlavicky pri vytvarani poziadavky na http stream (z befun je mozne prehravat napriamo)
+
+- Titulky:
+   * moznost dynamicky menit casovanie tituliek
+   * zovseobecnene parsovanie tituliek, moznost pridat dalsie parsery
+   * vylepsene zistenie zacatia prehravania tituliek po spusteni videa
+   * opravena strata synchronizacie tituliek s obrazom po pretacani dozadu
+   * refactoring a optimalizacia kodu
+
+  
+Stahovanie:
+- pridana moznost volby modu stahovania:
+    * Twisted - stahovanie pomocou kniznice twisted
+    - automaticky vykonava presmerovanie na platny link (stahovanie  z stream.cz, rutube,... funguje)
+    - priamo spata s e2, ak sa e2 vypne, vypne sa aj stahovanie
+    * wget - pomocou programu wget
+    - nezavisla na e2(stahuje sa aj po vypnuti e2)
+    - presmerovanie nefunguje(niektore fileservery nefunguju)
+- spravne zistenie nazvu suboru(vyuzitie hlavicky Content-Disposition)
+- vylepsene zobrazenie stavu stahovania(zaciatok,koniec stahovania,rychlost,nazov,cesta)
+- resetovanie openera pre urllib2 pri zacati stahovania -> ulozto stahovanie funguje
+
+Archivy:
+- dmd-xbmc projekt:
+ * oprava doplnku huste.sk
+ * oprava chyby casu Live doplnek Huste.sk
+ * oprava iVzsilani (ak vam nefunguje prehravanie streamov, zmente nastavenie opravit rtmp-url)
+ * oprava iPrima, pridan archiv ZOOM
+ * vyhledavani v archivu iVysilani (beta)
+
+- xbmc-doplnky projekt:
+ * plne aktualizovane archivy
+ * befun (prehravanie napriamo funguje len pri pouziti servicemp4)
+
+Balicky:
+- mipsel/mips32el 
+    * potrebne gstreamer kniznice pridane do Depends namiesto ich umiestnenia v baliku ->
+    -> nainstaluju sa aktualne kniznice vytvorene pre konkretny image,
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    - v pripade chyby instalacie pouzite najprv GStreamer skript a potom spustite instalaciu
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    * nastavenie execute prav pre rtmpgw,rtmpdump a pngquant
+- sh4
+    * nastavenie execute prav pre rtmpgw,rtmpdump a pngquant
+    - nahradene python pyc kniznic ich py verziou -> plugin by mal byt funkcny na vsetkych image-och
+
+
+GSteamer skript:
+
+- V pripade ze vam nefunguje prehravanie niektorych streamov mozte skusit
+  preinstalovat potrebne gstreamer balicky pomocou skriptu. 
+
+Skript, ktory nainstaluje/preinstaluje vsetky potrebne kniznice na prehravanie streamov. 
+Treba len vediet ci mate OE1.6(mipsel) alebo OE2.0(mips32el) image.
+
+Postup: 
+prehrat subor z prilohy do prijmaca.
+
+tar -xzvf gst-plugins-archivczsk.tar.gz
+cd gst-plugins-archivczsk
+./gst-plugins-archivczsk.sh
+
+dalej postupovat podla pokynov skriptu..
+
+po skonceni je potrebne restartovat e2.
+
+
+verzia 0.7 alpha4
+- opravena kniznica tituliek- thx petrkl12
+- aktualizovane xbmc_doplnky: najfilmy, playserial,sledujuserialy a stream-resolver
+- opravena nespravne vyhodnotena verifikacia niektorych linkov(stream.cz) - thx Billy
+- pridana moznost zapnut/vypnut verifikaciu + nastavit timeout verifikacie
+- momentalne vypnuta kontrola pretacania pri obycajnom prehravani(nestahuje sa)-> pretacanie rtmp streamov pri podpore prehravaca funguje aj v mipsel aj v upravenom prehravaci - thx 005jon
+- defaultne sa konvertuje captcha vzdy
+
+
+verzia 0.7 alpha3
+- opravene ukladanie nastaveni archivov po restarte, thx Billy
+- pri probleme zo zobrazovanim captchy, je mozne zapnut jej konverziu do 8bit formatu
+- pridana verifikacia existencie http linkov pred spustenim prehravania
+- overenie existencie rtmpgw
+- fixnuty unik pamate pri nacitavani archivov
+- opravene prehravanie stiahnutych suborov, thx Imrisko
+- prehravat po, zmena default nastavenia na 20s
+- prehravanie niektorych zivych streamov uz nesposobuje pad
+- opravene ukoncenie upraveneho/mipsel prehravaca.
+- opraveny mipsel prehravac(stale ale nefunguje pretacanie v rtmp), v ostatnych prehravacoch by malo fungovat - thx 005jon
+- po zmene cesty k zalozkam/stahovanym suborom nie je potrebny k aktualizacii restart
+- pridana moznost zmenit adresar stahovania pre, kazdy archiv zvlast
+- aktualizovany eserial a stream resolver
+
+
+verzia 0.7
+- priprava rozhrania pre podporu jednoducheho vytvarania dalsich pluginov
+- kompletne prepisane rozhranie na ziskavanie archivov z xbmc doplnkov, dynamicke vytvaranie nastaveni zo settings.xml, dynamicke nacitavanie jazykov zo xml
+- pridane nastavenie pravidiel(pretacanie/zastavovanie) prehravania pre kazdy archiv
+- pridany video kontroler - zabezpecuje kontrolu dodrziavania tychto pravidiel, zabezpecuje kontrolu pohybu v streame pocas jeho stahovania.
+- aktualizovany stream player - zobrazenie dodatocnych informacii(protocol, rtmpbuffer, playdelay, videoplayerbuffer, livestream,), moznost ich zmeny
+- opravene prehravanie rtmp streamov, nahravanie streamov je funkcne
+- mipselplayer zobrazuje titulky
+- nacitavanie archivov vykonavane v samostatnom vlakne - moze byt prerusene
+- vytvoreny skin pre HD/SD
+- oprava captchy v ulozto.cz
+- pridany statusbar a tipinfo - inspiracia s CSFD pluginu :)
+- aktualizovane zobrazenie tituliek -pridana moznost zmenit fonty, moznost dynamickej zmeny encodingu pri nespravnom zobrazovani znakov z tituliek, priradenie stylov(italic,bold) a fontov pre ich zobrazenie
+- zjednoteny balik pre mipsel OE1.6 (Python2.6/Python2.7)
+- doplneny mipsel balicke o shutil.py,numbers.py -thx moulikpeta, doplnene kniznice pre titulky
+
+    
+verzia 0.61
+- opravena automaticka aktualizacia archivov
+- aktualizovane archivy - stv,markiza,voyo,ct,movielibrary
+- pridana moznost pridania archivov do hlavneho menu - thx shamman
+- opraveny OE2.0 balicek - thx petrkl12
+- pridana moznost zobrazovat info v CSFD plugine - thx petrkl12
+
+
+verzia 0.6
+- download manager- stahovanie, stahovanie aj pocas vypnuteho pluginu, sledovanie stavu stahovanych suborov, prehravanie pocas stahovania
+- lokalizacia - slovenska, ceska - vytvoril michal47
+- automaticka aktualizacia archivov z googlecode
+- pridane archivy eserial.cz, zkouknito.cz, playserial.cz
+- aktualizovane archivy
+- prehravac- pridana moznost vyberu externych tituliek, ovladanie upravene aj pre mipsel DO(dik 005jon), pridany prehravac pre mipsel s nastavenim bufferu
+- vylepsene graficke rozhranie
+- zdrojove kody na googlecode
+- za test dakujem michal47(sh4) a 005jon(mipsel)
+
+
+verzia 0.51
+- zmenseny skin
+- movielibrary - ulozto vyhladavanie funkcne, opravene strankovanie vo vyhladavani
+- opravena captcha a ine mensie chyby..
+- mipsel verzia vdaka 005jon
+
+
+verzia 0.5
+- pridane nove archivy
+- aktualizovana joj_sk,nova_cz archiv
+- pridana podpora tituliek
+- kazdy tv archiv ma vlastne menu
+- netreba restart pre nacitanie streams.xml
+- optimalizovany kod
+
+
+verzia 0.45
+- odladena na nocturne- testoval a daval navrhy michal47
+- upravene menu - dik michal47
+- prerobeny ipk pre sh4- spolu s michal47
+- ipk pre mipsel- vytvoril 005jon
+- pridana podpora tvorby manualnych zaloziek
+- pridana podpora pretacania pre mipsel- potrebne kniznice doplnil 005jon
+- opravene xml nacitavanie
+
+
+verzia 0.4(beta)
+- pridana podpora automatickych zaloziek, v podobe uchovavania xml suborov archivov a ich opatovne nacitanie
+- pridane menu s moznostami konfiguracie archivov a prehravania
+- pridane archivy stream_cz, nova_cz
+- aktualizovane archivy prima, joj
+- a mnoho malych oprav
+
+
+verzia 0.31:
+- chybove spravy namiesto zelenacov pri nepodporovanych  relaciach
+- aktualizovane archivy huste.tv a prima
+- a vela malych oprav v kode
+- vlastne streamy len na experimentovanie, archivy idu OK
+
+
+verzia 0.3(test):
+len pre tych co chcu experimentovat, vlastne tak ako vsetky verzie :D
+-namiesto rtmpdump pouzite rtmpgw -> nenahrava sa na disk ale priamo sa prehrava
+- prehravanie cez vstavany movieplayer-> zvysena stabilita, zda sa ze ide pozastavit stream, pretacanie nefunguje.
+- zmenena kniznica beautifulsoup-> mala by byt optimalizovana pre rychlejsie parsovanie stranok, ale nevidim moc rozdiel
+- moznost spustat vlastne definovane live streamy(len ty co chcu experimentovat):
+ je to vlastne nstreamplayer+rtmp podpora. Streamy sa zadavaju do /stream/streams.xml
+co som nasiel HD streamy tak sekaju, ale sekaju aj na normal kompe, su vytazene, takze treba najst nejake co nesekaju, pripadne sa pohrat s buffer nastaveniami(timebuffer je neaktivny kedze sa neprehrava z disku).
+
+- pridana mipsel verzia(neotestovane,  rtmpgw som nasiel pre mipsel na nete-> netusim ci ide)
+
+
+verzia 0.2:
+- moznost zobrazit streamy v roznej kvalite
+- Pridane nove archivy
+- doplnene kniznice(sigmllib.pyc,markupbasy.pyc)- dik michal47
