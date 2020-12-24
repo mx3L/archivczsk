@@ -65,7 +65,11 @@ class Repository():
             if os.path.isfile(addon_path):
                 continue
             
-            addon_info = AddonInfo(os.path.join(addon_path, self.addon_xml_relpath))
+            try:
+                addon_info = AddonInfo(os.path.join(addon_path, self.addon_xml_relpath))
+            except Exception:
+                continue
+
             if addon_info.type not in Repository.SUPPORTED_ADDONS:
                 log.logError("Load not supported type of addon %s failed, skipping...\n" % (addon_dir,) )
                 continue
