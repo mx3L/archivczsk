@@ -1,5 +1,7 @@
 # GUI items
 import os
+from Plugins.Extensions.archivCZSK import log
+
 try:
     from Plugins.Extensions.archivCZSK import settings, _
     PNG_PATH = settings.IMAGE_PATH
