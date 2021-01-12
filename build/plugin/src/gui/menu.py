@@ -129,7 +129,7 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
             pass
         elif isinstance(current, ConfigText):
             entryName = self["config"].getCurrent()[0]
-            self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoardCFG, entryName=entryName, configEntry=current)
+            self.session.openWithCallback(self.virtualKBCB, VirtualKeyBoard, title=removeDiac(entryName), text=removeDiac(current.getValue()))
 
     def keySave(self):
         self.saveAll()
@@ -150,14 +150,15 @@ class BaseArchivCZSKConfigScreen(BaseArchivCZSKScreen, ConfigListScreen):
         if path is not None:
             self["config"].getCurrent()[1].value = path
 
-    def virtualKBCB(self, res=None, config_entry=None):
-        if res is not None and config_entry is not None:
+    def virtualKBCB(self, res=None):
+        if res is not None:
+            current = self["config"].getCurrent()[1]
             try:
                 if 'XcursorX' in res:
                     res = res.replace('XcursorX','')
             except:
                 pass
-            config_entry.setValue(res)
+            current.setValue(res)
 
 
 class ArchivCZSKConfigScreen(BaseArchivCZSKConfigScreen):
@@ -212,32 +213,3 @@ class ArchivCZSKAddonConfigScreen(BaseArchivCZSKConfigScreen):
 
     def buildMenu(self):
         self.refreshConfigList()
-
-
-class VirtualKeyBoardCFG(VirtualKeyBoard):
-    def __init__(self, session, entryName, configEntry):
-        try:
-            self.configEntry = configEntry
-
-            #VirtualKeyBoard.__init__(self, session, entryName.encode('utf-8'), configEntry.getValue().encode('utf-8'))
-            VirtualKeyBoard.__init__(self, session, title=removeDiac(entryName), text=removeDiac(configEntry.getValue()))
-            self.skinName = "VirtualKeyBoard"
-
-            #from Plugins.Extensions.archivCZSK.engine.tools.util import decode_string
-            #VirtualKeyBoard.__init__(self, session, entryName, configEntry.getValue())
-            #self.skinName = "VirtualKeyBoard"
-        except:
-            log.logError("Init VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
-            raise
-
-    def ok(self):
-        try:
-            #self.close(self.text.encode("utf-8"), self.configEntry)
-            self.close(removeDiac(self["text"].getText()).strip().rstrip('|').strip(), self.configEntry)
-        except:
-            log.logError("OK VirtualKeyBoardCFG failed.\n%s"%traceback.format_exc())
-            raise
-
-    def cancel(self):
-        self.close(None, None)
-
