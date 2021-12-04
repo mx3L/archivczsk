@@ -2,6 +2,18 @@ import re
 from Components.Converter.Converter import Converter
 from Components.Element import cached
 
+colorFixNeeded = True # old behaviour as default
+
+try:
+    from Tools.Hex2strColor import Hex2strColor
+    if Hex2strColor(0xffffffff) == "\c????????":
+        colorFixNeeded = True
+    else:
+        colorFixNeeded = False
+except:
+    pass
+
+
 def getEscapeColorFromHexString(color):
         if color.startswith('#'):
             color = color[1:]
@@ -10,6 +22,8 @@ def getEscapeColorFromHexString(color):
         if len(color) != 8:
             print 'invalid color %s'
             return getEscapeColorFromHexString("00ffffff")
+        if colorFixNeeded == False:
+            return color
         colorsarray = []
         for x in color:
             if x == "0":
