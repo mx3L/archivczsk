@@ -1,7 +1,11 @@
-archivczsk
-==========
-enigma2 plugin pre prehravanie cz/sk video archivov
+# archivczsk
 
-**Info:** https://github.com/mx3L/archivczsk/releases
+Enigma2 plugin pre prehravanie cz/sk video archivov
 
-**Doplnky:** https://github.com/mx3L/archivczsk-doplnky
+## Tento repositar jiz neni udrzovany! Prosim, pouzijte odkazy nize:
+
+**Repositar:** https://github.com/archivczsk
+
+**Info:** https://github.com/archivczsk/archivczsk/releases
+
+**Doplnky:** https://github.com/archivczsk/archivczsk-doplnky

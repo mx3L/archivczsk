@@ -45,9 +45,9 @@ class ArchivUpdater(object):
         self.updateZipFilePath = ""
         self.BackupCreate = False
         self.backupDir = os.path.join(self.tmpPath, "archivCZSK_backup")
-        self.updateXml = "http://cdn.rawgit.com/mx3L/archivczsk/{commit}/build/plugin/update/app.xml"
-        self.updateZip = "http://cdn.rawgit.com/mx3L/archivczsk/{commit}/build/plugin/update/version/archivczsk-{version}.zip"
-        self.commit = "https://raw.githubusercontent.com/mx3L/archivczsk/master/build/plugin/update/commit"
+        self.updateXml = "http://cdn.rawgit.com/archivczsk/archivczsk/{commit}/build/plugin/update/app.xml"
+        self.updateZip = "http://cdn.rawgit.com/archivczsk/archivczsk/{commit}/build/plugin/update/version/archivczsk-{version}.zip"
+        self.commit = "https://raw.githubusercontent.com/archivczsk/archivczsk/main/build/plugin/update/commit"
         self.needUpdate = False
         self.migration = {}
     

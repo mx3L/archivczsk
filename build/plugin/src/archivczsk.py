@@ -193,7 +193,7 @@ class ArchivCZSK():
                                                type=MessageBox.TYPE_INFO, 
                                                enable_input=False)
             self.__console = Console()
-            self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/mx3L/archivczsk-doplnky/master-next/commit' % path, self.check_commit_download)
+            self.__console.ePopen('curl -kfo %s https://raw.githubusercontent.com/archivczsk/archivczsk-doplnky/main/commit' % path, self.check_commit_download)
         except:
             log.logError("Download addons commit failed.")
             self.open_archive_screen()
